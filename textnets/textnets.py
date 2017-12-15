@@ -4,11 +4,14 @@ import os
 import spacy
 import pandas as pd
 import igraph as ig
+from glob import glob
 from toolz import compose, identity
 
 
 class TextCorpus(object):
     def __init__(self, files, lang='en', group_labels=None):
+        if isinstance(files, str):
+            files = glob(os.path.expanduser(files))
         assert all(os.path.exists(f) for f in files), \
             'Some files in list do not exist.'
         nlp = spacy.load(lang)
@@ -44,11 +47,10 @@ class TextCorpus(object):
     def _read_file(self, file_name):
         return open(file_name, 'rb').read()\
             .decode('utf-8', 'replace')\
-            .strip()\
-            .lower()
+            .strip()
 
     def _noun_chunks(self, doc):
-        return [chunk.text for chunk in doc.noun_chunks]
+        return [chunk.lower_ for chunk in doc.noun_chunks]
 
     def _remove_stop_words(self, doc):
         return [word for word in doc if not word.is_stop]
@@ -67,7 +69,7 @@ class TextCorpus(object):
         return [word.lemma_ for word in doc]
 
     def _as_text(self, doc):
-        return [word.text for word in doc]
+        return [word.lower_ for word in doc]
 
 
 class Textnets(object):

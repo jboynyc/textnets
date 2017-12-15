@@ -8,16 +8,12 @@ from setuptools import setup, find_packages
 with open('README.rst') as readme_file:
     readme = readme_file.read()
 
-with open('HISTORY.rst') as history_file:
-    history = history_file.read()
-
 requirements = [
     'Click>=6.0',
     'pandas==0.21.0',
     'python-igraph==0.7.1.post6',
     'spacy==1.8.2',
     'toolz==0.8.2'
-    # TODO: put package requirements here
 ]
 
 setup_requirements = [
@@ -34,7 +30,7 @@ setup(
     name='textnets',
     version='0.1.0',
     description="Automated text analysis with networks.",
-    long_description=readme + '\n\n' + history,
+    long_description=readme,
     author="John D. Boy",
     author_email='jboy@bius.moe',
     url='https://github.com/jboynyc/textnets',
