@@ -9,8 +9,10 @@ import pytest
 
 from click.testing import CliRunner
 
-from textnets import textnets, TextCorpus, Textnets
+from textnets import TextCorpus, Textnets, cluster_graph
 from textnets import cli
+
+import igraph as ig
 
 
 def test_command_line_interface():
@@ -55,3 +57,10 @@ def test_sotu():
     g_t_words = tn_t.graph(node_type='words')
     assert g_t_words.vcount() > 0
     assert g_t_words.ecount() > 0
+
+def test_cluster_graph():
+    g = ig.Graph.Erdos_Renyi(26, .3)
+    g.vs['label'] = list('abcdefghijklmnopqrstuvwxyz')
+    clustered = cluster_graph(g)
+    assert clustered.vcount() > 0
+    assert clustered.ecount() > 0
