@@ -15,7 +15,7 @@ class Textnets:
             'No valid node_type specified.'
         m = pd.pivot_table(self._df,
                            values='tf_idf',
-                           index='index',
+                           index=self._df.index,
                            columns='word',
                            aggfunc=sum,
                            fill_value=0)
@@ -24,6 +24,7 @@ class Textnets:
         elif node_type == 'words':
             prod = m.T.dot(m)
         g = ig.Graph.Weighted_Adjacency(pd.np.array(prod).tolist(),
+                                        attr='weight',
                                         mode='undirected',
                                         loops=False)
         g.vs['label'] = g.vs['id'] = list(prod.index)
@@ -54,7 +55,7 @@ def _sublinear_scaling(n):
 def _sort_by_centrality(vs, graph):
     sub = graph.subgraph(vs)
     lookup = {i: n for n, i in enumerate(vs)}
-    centrality = sub.pagerank()
+    centrality = sub.strength(weights='weight')
     centrality_values = [centrality[lookup[v]] for v in vs]
     sorted_values = reversed(sorted(zip(centrality_values, vs)))
     return [v for _, v in sorted_values]
@@ -77,7 +78,7 @@ def cluster_graph(graph, method=louvain.ModularityVertexPartition, min_size=1):
                'Surprise': louvain.SurpriseVertexPartition}
     if isinstance(method, str):
         method = methods[method]
-    part = louvain.find_partition(graph, method)
+    part = louvain.find_partition(graph, method, weights='weight')
     cluster_g = part.cluster_graph(combine_edges=sum)
     pruned_cluster_vs = cluster_g.vs.select(
         [v for v, s in enumerate(part.sizes()) if s >= min_size])

@@ -9,6 +9,8 @@ Automated text analysis with networks.
 This is a Python implementation of `Chris Bail's textnets package for R`_.  It
 is free software under the terms of the GNU General Public License v3.
 
+.. _`Chris Bail's textnets package for R`: https://github.com/cbail/textnets/
+
 The underlying idea behind textnets is presented in this paper:
 
   Christopher A. Bail, "`Combining natural language processing and network
@@ -46,11 +48,17 @@ be used as a command-line tool to generate network graphs from text corpora.
 
 Run ``textnets --help`` for usage instructions.
 
+Installing
+----------
+
+In a `virtual environment`_, run ``python setup.py install`` followed by ``python -m spacy download en``.
+
+.. _`virtual environment`: https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments
+
 Credits
 ---------
 
 This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
 
-.. _`Chris Bail's textnets package for R`: https://github.com/cbail/textnets/
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
