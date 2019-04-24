@@ -14,7 +14,7 @@ requirements = [
     'python-igraph==0.7.1.post6',
     'spacy==1.8.2',
     'toolz==0.8.2',
-    'louvain==0.6.1'
+    'leidenalg==0.7.0'
 ]
 
 setup_requirements = [

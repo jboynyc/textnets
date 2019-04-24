@@ -2,7 +2,7 @@
 
 import pandas as pd
 import igraph as ig
-import louvain
+import leidenalg
 
 
 class Textnets:
@@ -71,14 +71,14 @@ def _cluster_labels(graph, partition, min_size):
     return labels
 
 
-def cluster_graph(graph, method=louvain.ModularityVertexPartition, min_size=1):
-    '''Create cluster graph using Louvain modularity method by default.'''
-    methods = {'Modularity': louvain.ModularityVertexPartition,
-               'CPM': louvain.CPMVertexPartition,
-               'Surprise': louvain.SurpriseVertexPartition}
+def cluster_graph(graph, method=leidenalg.ModularityVertexPartition, min_size=1):
+    '''Create cluster graph using Leiden modularity algorithm by default.'''
+    methods = {'Modularity': leidenalg.ModularityVertexPartition,
+               'CPM': leidenalg.CPMVertexPartition,
+               'Surprise': leidenalg.SurpriseVertexPartition}
     if isinstance(method, str):
         method = methods[method]
-    part = louvain.find_partition(graph, method, weights='weight')
+    part = leidenalg.find_partition(graph, method, weights='weight')
     cluster_g = part.cluster_graph(combine_edges=sum)
     pruned_cluster_vs = cluster_g.vs.select(
         [v for v, s in enumerate(part.sizes()) if s >= min_size])
