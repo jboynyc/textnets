@@ -61,6 +61,7 @@ def test_sotu():
 def test_cluster_graph():
     g = ig.Graph.Erdos_Renyi(26, .3)
     g.vs['label'] = list('abcdefghijklmnopqrstuvwxyz')
+    g.es['weight'] = 1
     clustered = cluster_graph(g)
     assert clustered.vcount() > 0
     assert clustered.ecount() > 0
