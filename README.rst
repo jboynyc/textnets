@@ -51,7 +51,7 @@ Run ``textnets --help`` for usage instructions.
 Installing
 ----------
 
-In a `virtual environment`_, run ``python setup.py install`` followed by ``python -m spacy download en``.
+In a `virtual environment`_, run ``python setup.py install`` followed by ``python -m spacy download en_core_web_sm``.
 
 .. _`virtual environment`: https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments
 

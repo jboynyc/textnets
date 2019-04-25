@@ -8,7 +8,7 @@ from toolz import compose, identity
 
 
 class TextCorpus:
-    def __init__(self, files, lang='en', group_labels=None):
+    def __init__(self, files, lang='en_core_web_sm', group_labels=None):
         if isinstance(files, str):
             files = glob(os.path.expanduser(files))
         assert all(os.path.exists(f) for f in files), \
