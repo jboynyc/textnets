@@ -47,7 +47,7 @@ def _tf_idf(tidy_text, sublinear):
     tt['tf_idf'] = tt['tf'] * tt['idf']
     wc = tt.groupby('word').count()['total']
     tt.merge(wc > 1, on='word').rename(columns={'total_y': 'keep'})
-    return tt[tt['keep'][['word', 'n', 'tf_idf']]
+    return tt[tt['keep']][['word', 'n', 'tf_idf']]
 
 
 def _sublinear_scaling(n):
