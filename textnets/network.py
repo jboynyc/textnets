@@ -45,8 +45,10 @@ def _tf_idf(tidy_text, sublinear):
                          right_index=True)\
                      .rename(columns={'word_y': 'idf'})
     tt['tf_idf'] = tt['tf'] * tt['idf']
-    wc = tt.groupby('word').count()['total']
-    tt.merge(wc > 1, on='word').rename(columns={'total_y': 'keep'})
+    wc = tt.groupby('word').count()['tf']
+    tt = tt.reset_index().merge(wc > 1, on='word', how='left')\
+                     .rename(columns={'tf_y': 'keep'})\
+                     .set_index('index')
     return tt[tt['keep']][['word', 'n', 'tf_idf']]
 
 
