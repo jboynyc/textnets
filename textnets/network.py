@@ -44,6 +44,7 @@ def _tf_idf(tidy_text, sublinear):
                          left_on='word',
                          right_index=True)\
                      .rename(columns={'word_y': 'idf'})
+    tt = tt[tt['n'] > 1]
     tt['tf_idf'] = tt['tf'] * tt['idf']
     return tt[['word', 'n', 'tf_idf']]
 
