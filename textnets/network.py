@@ -6,9 +6,9 @@ import leidenalg
 
 
 class Textnets:
-    def __init__(self, tidy_text, sublinear=True):
+    def __init__(self, tidy_text, sublinear=True, min_docs=2):
         assert set(tidy_text.columns) == {'word', 'n'}
-        self._df = _tf_idf(tidy_text, sublinear)
+        self._df = _tf_idf(tidy_text, sublinear, min_docs)
 
     def graph(self, node_type):
         assert node_type in ('groups', 'words'), \
@@ -31,7 +31,7 @@ class Textnets:
         return g
 
 
-def _tf_idf(tidy_text, sublinear):
+def _tf_idf(tidy_text, sublinear, min_docs):
     if sublinear:
         tidy_text['tf'] = tidy_text['n'].map(_sublinear_scaling)
     else:
@@ -46,7 +46,7 @@ def _tf_idf(tidy_text, sublinear):
                      .rename(columns={'word_y': 'idf'})
     tt['tf_idf'] = tt['tf'] * tt['idf']
     wc = tt.groupby('word').count()['tf']
-    tt = tt.reset_index().merge(wc > 1, on='word', how='left')\
+    tt = tt.reset_index().merge(wc >= min_docs, on='word', how='left')\
                      .rename(columns={'tf_y': 'keep'})\
                      .set_index('index')
     return tt[tt['keep']][['word', 'n', 'tf_idf']]
