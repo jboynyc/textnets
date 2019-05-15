@@ -53,7 +53,8 @@ def _read_file(file_name):
 
 
 def _noun_chunks(doc):
-    return [chunk.lower_ for chunk in doc.noun_chunks]
+    return [chunk.lower_ for chunk in doc.noun_chunks
+            if not all(token.is_stop for token in chunk)]
 
 
 def _remove_stop_words(doc):
