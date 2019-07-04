@@ -9,7 +9,7 @@ import pytest
 
 from click.testing import CliRunner
 
-from textnets import TextCorpus, Textnets, cluster_graph
+from textnets import TextCorpus, Textnets
 from textnets import cli
 
 import igraph as ig
@@ -32,36 +32,31 @@ def test_sotu():
             os.path.expanduser('~/nltk_data/corpora/state_union/*.txt'))[:5]
 
     c = TextCorpus(corpus_files)
-    assert isinstance(c, TextCorpus)
     assert c._df.shape[0] == len(corpus_files)
     assert c._df.shape[1] == 3
 
     noun_phrases = c.noun_phrases()
     assert set(noun_phrases.columns) == {'word', 'n'}
     tn_np = Textnets(noun_phrases)
+    assert tn_np.graph.vcount() > 0
+    assert tn_np.graph.ecount() > 0
     assert set(tn_np._df.columns) == {'word', 'n', 'tf_idf'}
-    g_np_groups = tn_np.graph(node_type='groups')
+    g_np_groups = tn_np.project(node_type='doc')
     assert g_np_groups.vcount() > 0
     assert g_np_groups.ecount() > 0
-    g_np_words = tn_np.graph(node_type='words')
+    g_np_words = tn_np.project(node_type='term')
     assert g_np_words.vcount() > 0
     assert g_np_words.ecount() > 0
 
     tokenized = c.tokenized()
     assert set(tokenized.columns) == {'word', 'n'}
     tn_t = Textnets(tokenized)
+    assert tn_t.graph.vcount() > 0
+    assert tn_t.graph.ecount() > 0
     assert set(tn_t._df.columns) == {'word', 'n', 'tf_idf'}
-    g_t_groups = tn_t.graph(node_type='groups')
+    g_t_groups = tn_t.project(node_type='doc')
     assert g_t_groups.vcount() > 0
     assert g_t_groups.ecount() > 0
-    g_t_words = tn_t.graph(node_type='words')
+    g_t_words = tn_t.project(node_type='term')
     assert g_t_words.vcount() > 0
     assert g_t_words.ecount() > 0
-
-def test_cluster_graph():
-    g = ig.Graph.Erdos_Renyi(26, .3)
-    g.vs['label'] = list('abcdefghijklmnopqrstuvwxyz')
-    g.es['weight'] = 1
-    clustered = cluster_graph(g)
-    assert clustered.vcount() > 0
-    assert clustered.ecount() > 0
