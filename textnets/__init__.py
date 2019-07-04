@@ -3,7 +3,7 @@
 """Top-level package for Textnets."""
 
 from .corpus import TextCorpus
-from .network import Textnets, cluster_graph
+from .network import Textnets
 
 
 __author__ = """John D. Boy"""
