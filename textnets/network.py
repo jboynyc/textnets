@@ -27,19 +27,20 @@ class Textnets:
     def project(self, node_type):
         assert node_type in ('doc', 'term'), \
             'No valid node_type specified.'
-        # TODO: check that this which=0 returns doc graph and which=1 returns term graph
+        node_types = [True if t == 'term' else False for t in self.graph.vs['type']]
         graph_to_return = 0
         if node_type == 'term':
             graph_to_return = 1
-        return self.graph.bipartite_projection(multiplicity=True,
+        return self.graph.bipartite_projection(types=node_types,
+                                               multiplicity=True,
                                                which=graph_to_return)
 
 
     def cluster(self, resolution=1):
         h_docs = self.graph.subgraph_edges([], delete_vertices=False)
-        h_docs.vs['node_sizes'] = [1 if v['type'] == 'doc' else 0 for v in H_docs.vs]
+        h_docs.vs['node_sizes'] = [1 if v['type'] == 'doc' else 0 for v in h_docs.vs]
         h_terms = self.graph.subgraph_edges([], delete_vertices=False)
-        h_terms.vs['node_sizes'] = [1 if v['type'] == 'term' else 0 for v in H_terms.vs]
+        h_terms.vs['node_sizes'] = [1 if v['type'] == 'term' else 0 for v in h_terms.vs]
         partition = la.CPMVertexPartition(self.graph,
                                           weights='weight',
                                           resolution_parameter=resolution)
