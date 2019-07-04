@@ -1,34 +1,64 @@
 # -*- coding: utf-8 -*-
 
+import numpy as np
 import pandas as pd
 import igraph as ig
-import leidenalg
+import leidenalg as la
 
 
 class Textnets:
     def __init__(self, tidy_text, sublinear=True, min_docs=2):
         assert set(tidy_text.columns) == {'word', 'n'}
         self._df = _tf_idf(tidy_text, sublinear, min_docs)
+        im = pd.pivot_table(self._df,
+                            values='tf_idf',
+                            index=self._df.index,
+                            columns='word',
+                            aggfunc=sum,
+                            fill_value=0)
+        g = ig.Graph.Incidence(np.array(im).tolist(),
+                                   directed=False)
+        g.vs['id'] = np.append(im.index, im.columns).tolist()
+        g.es['weight'] = np.array(im).flatten()[np.flatnonzero(im)]
+        g.vs['type'] = ['term' if t else 'doc' for t in g.vs['type']]
+        self.graph = g
 
-    def graph(self, node_type):
-        assert node_type in ('groups', 'words'), \
+
+    def project(self, node_type):
+        assert node_type in ('doc', 'term'), \
             'No valid node_type specified.'
-        m = pd.pivot_table(self._df,
-                           values='tf_idf',
-                           index=self._df.index,
-                           columns='word',
-                           aggfunc=sum,
-                           fill_value=0)
-        if node_type == 'groups':
-            prod = m.dot(m.T)
-        elif node_type == 'words':
-            prod = m.T.dot(m)
-        g = ig.Graph.Weighted_Adjacency(pd.np.array(prod).tolist(),
-                                        attr='weight',
-                                        mode='undirected',
-                                        loops=False)
-        g.vs['label'] = g.vs['id'] = list(prod.index)
-        return g
+        # TODO: check that this which=0 returns doc graph and which=1 returns term graph
+        graph_to_return = 0
+        if node_type == 'term':
+            graph_to_return = 1
+        return self.graph.bipartite_projection(multiplicity=True,
+                                               which=graph_to_return)
+
+
+    def cluster(self, resolution=1):
+        h_docs = self.graph.subgraph_edges([], delete_vertices=False)
+        h_docs.vs['node_sizes'] = [1 if v['type'] == 'doc' else 0 for v in H_docs.vs]
+        h_terms = self.graph.subgraph_edges([], delete_vertices=False)
+        h_terms.vs['node_sizes'] = [1 if v['type'] == 'term' else 0 for v in H_terms.vs]
+        partition = la.CPMVertexPartition(self.graph,
+                                          weights='weight',
+                                          resolution_parameter=resolution)
+        partition_docs = la.CPMVertexPartition(h_docs,
+                                               weights='weight',
+                                               node_sizes=h_docs.vs['node_sizes'],
+                                               resolution_parameter=resolution)
+        partition_terms = la.CPMVertexPartition(h_terms,
+                                                weights='weight',
+                                                node_sizes=h_terms.vs['node_sizes'],
+                                                resolution_parameter=resolution)
+        optimiser = la.Optimiser()
+        optimiser.optimise_partition_multiplex([partition,
+                                                partition_docs,
+                                                partition_terms],
+                                               layer_weights=[1,-1,-1],
+                                               n_iterations=100)
+        return partition
+
 
 
 def _tf_idf(tidy_text, sublinear, min_docs):
@@ -54,39 +84,3 @@ def _tf_idf(tidy_text, sublinear, min_docs):
 
 def _sublinear_scaling(n):
     return 1 + pd.np.log10(n) if n > 0 else 0
-
-
-def _sort_by_centrality(vs, graph):
-    sub = graph.subgraph(vs)
-    lookup = {i: n for n, i in enumerate(vs)}
-    centrality = sub.strength(weights='weight')
-    centrality_values = [centrality[lookup[v]] for v in vs]
-    sorted_values = reversed(sorted(zip(centrality_values, vs)))
-    return [v for _, v in sorted_values]
-
-
-def _cluster_labels(graph, partition, min_size):
-    label_lists = []
-    for cluster in partition:
-        if len(cluster) >= min_size:
-            sorted_vs = _sort_by_centrality(cluster, graph)
-            label_lists.append([graph.vs['label'][n] for n in sorted_vs])
-    labels = ['\x1f'.join(lbl) for lbl in label_lists]
-    return labels
-
-
-def cluster_graph(graph, method=leidenalg.ModularityVertexPartition, min_size=1):
-    '''Create cluster graph using Leiden modularity algorithm by default.'''
-    methods = {'Modularity': leidenalg.ModularityVertexPartition,
-               'CPM': leidenalg.CPMVertexPartition,
-               'Surprise': leidenalg.SurpriseVertexPartition}
-    if isinstance(method, str):
-        method = methods[method]
-    part = leidenalg.find_partition(graph, method, weights='weight')
-    cluster_g = part.cluster_graph(combine_edges=sum)
-    pruned_cluster_vs = cluster_g.vs.select(
-        [v for v, s in enumerate(part.sizes()) if s >= min_size])
-    pruned_cluster_g = cluster_g.subgraph(pruned_cluster_vs)
-    pruned_cluster_g.vs['size'] = [s for s in part.sizes() if s >= min_size]
-    pruned_cluster_g.vs['label'] = _cluster_labels(graph, part, min_size)
-    return pruned_cluster_g
