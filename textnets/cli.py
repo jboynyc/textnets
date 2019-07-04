@@ -40,7 +40,7 @@ def main(corpus, lex, node_type, format, output):
         g = tn.project(node_type=node_type)
     else:
         g = tn.graph
-        g['cluster'] = tn.cluster().membership
+        g.vs['cluster'] = tn.cluster().membership
     with output as f:
         g.write(f, format=format)
 
