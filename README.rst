@@ -25,7 +25,7 @@ Features
 
 .. code:: python
 
-    from textnets import TextCorpus, Textnets, cluster_graph
+    from textnets import TextCorpus, Textnets
 
 
     c = TextCorpus('~/nltk_data/corpora/state_union/*.txt')
