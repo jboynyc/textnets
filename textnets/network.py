@@ -17,7 +17,7 @@ class Textnets:
                             aggfunc=sum,
                             fill_value=0)
         g = ig.Graph.Incidence(np.array(im).tolist(),
-                                   directed=False)
+                               directed=False)
         g.vs['id'] = np.append(im.index, im.columns).tolist()
         g.es['weight'] = np.array(im).flatten()[np.flatnonzero(im)]
         g.vs['type'] = ['term' if t else 'doc' for t in g.vs['type']]
