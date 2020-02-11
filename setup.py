@@ -35,7 +35,7 @@ test_requirements = [
 
 setup(
     name='textnets',
-    version='0.1.0',
+    version='0.2.0',
     description="Automated text analysis with networks.",
     long_description=readme,
     author="John D. Boy",
