@@ -61,7 +61,6 @@ class Textnets:
         return partition
 
 
-
 def _tf_idf(tidy_text, sublinear, min_docs):
     if sublinear:
         tidy_text['tf'] = tidy_text['n'].map(_sublinear_scaling)

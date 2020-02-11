@@ -77,7 +77,6 @@ def _remove_punctuation(doc):
     return [word for word in doc if not word.is_punct]
 
 
-
 def _stem(doc):
     return [word.lemma_ for word in doc]
 
