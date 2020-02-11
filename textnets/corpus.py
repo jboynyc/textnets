@@ -19,7 +19,7 @@ class TextCorpus:
         self._df = pd.DataFrame({'path': files},
                                 index=doc_labels)
         self._df['raw'] = self._df['path'].map(_read_file)
-        self._df['nlp'] = self._df['raw'].map.(_normalize_whitespace).map(nlp)
+        self._df['nlp'] = self._df['raw'].map(_normalize_whitespace).map(nlp)
 
     def tokenized(self, remove_stop_words=True, remove_urls=True,
                   remove_numbers=True, remove_punctuation=True, stem=True):
