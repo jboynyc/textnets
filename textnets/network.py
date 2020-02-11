@@ -69,7 +69,7 @@ def _tf_idf(tidy_text, sublinear, min_docs):
             .rename(columns={'n': 'total'})
         tidy_text = tidy_text.merge(totals, right_index=True, left_index=True)
         tidy_text['tf'] = tidy_text['n'] / tidy_text['total']
-    idfs = pd.np.log10(len(tidy_text.index) / tidy_text['word'].value_counts())
+    idfs = pd.np.log10(len(set(tidy_text.index)) / tidy_text['word'].value_counts())
     tt = tidy_text.merge(pd.DataFrame(idfs),
                          left_on='word',
                          right_index=True)\
