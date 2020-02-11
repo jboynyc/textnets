@@ -24,6 +24,12 @@ setup_requirements = [
 
 test_requirements = [
     'pytest',
+    'Click',
+    'pandas',
+    'python-igraph',
+    'spacy',
+    'toolz',
+    'leidenalg'
     # TODO: put package test requirements here
 ]
 
