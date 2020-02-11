@@ -29,7 +29,7 @@ def test_sotu():
     """Test main classes using SOTU test corpus."""
 
     corpus_files = glob(
-            os.path.expanduser('~/nltk_data/corpora/state_union/*.txt'))[:5]
+            os.path.expanduser('state_union/*.txt'))[:5]
 
     c = TextCorpus(corpus_files)
     assert c._df.shape[0] == len(corpus_files)
