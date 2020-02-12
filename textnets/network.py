@@ -32,29 +32,14 @@ class Textnets:
                                                which=graph_to_return)
 
 
-    def cluster(self, resolution=1):
-        h_docs = self.graph.subgraph_edges([], delete_vertices=False)
-        h_docs.vs['node_sizes'] = [1 if v['type'] == 'doc' else 0 for v in h_docs.vs]
-        h_terms = self.graph.subgraph_edges([], delete_vertices=False)
-        h_terms.vs['node_sizes'] = [1 if v['type'] == 'term' else 0 for v in h_terms.vs]
-        partition = la.CPMVertexPartition(self.graph,
-                                          weights='weight',
-                                          resolution_parameter=resolution)
-        partition_docs = la.CPMVertexPartition(h_docs,
-                                               weights='weight',
-                                               node_sizes=h_docs.vs['node_sizes'],
-                                               resolution_parameter=resolution)
-        partition_terms = la.CPMVertexPartition(h_terms,
-                                                weights='weight',
-                                                node_sizes=h_terms.vs['node_sizes'],
-                                                resolution_parameter=resolution)
-        optimiser = la.Optimiser()
-        optimiser.optimise_partition_multiplex([partition,
-                                                partition_docs,
-                                                partition_terms],
-                                               layer_weights=[1,-1,-1],
-                                               n_iterations=100)
-        return partition
+    def cluster(self, resolution=0.5):
+        part, part0, part1 = la.CPMVertexPartition.Bipartite(self.graph,
+                                                             resolution_parameter_01=resolution)
+        opt = la.Optimiser()
+        opt.optimise_partition_multiplex([part, part0, part1],
+                                         layer_weights=[1,-1,-1],
+                                         n_iterations=100)
+        return part
 
 
 def _tf_idf(tidy_text, sublinear, min_docs):
