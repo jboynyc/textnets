@@ -10,10 +10,10 @@ with open('README.rst') as readme_file:
 
 requirements = [
     'Click>=6.0',
-    'pandas==0.24.2',
+    'pandas==0.25.3',
     'python-igraph==0.7.1.post6',
-    'spacy==2.0.17',
-    'toolz==0.9.0',
+    'spacy==2.2.3',
+    'toolz==0.10.0',
     'leidenalg==0.7.0'
 ]
 
@@ -24,12 +24,18 @@ setup_requirements = [
 
 test_requirements = [
     'pytest',
+    'Click',
+    'pandas',
+    'python-igraph',
+    'spacy',
+    'toolz',
+    'leidenalg'
     # TODO: put package test requirements here
 ]
 
 setup(
     name='textnets',
-    version='0.1.0',
+    version='0.2.0',
     description="Automated text analysis with networks.",
     long_description=readme,
     author="John D. Boy",

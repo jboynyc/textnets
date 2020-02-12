@@ -8,24 +8,23 @@ from toolz import compose, identity
 
 
 class TextCorpus:
-    def __init__(self, files, lang='en_core_web_sm', group_labels=None):
+    def __init__(self, files, lang='en_core_web_sm', doc_labels=None):
         if isinstance(files, str):
             files = glob(os.path.expanduser(files))
         assert all(os.path.exists(f) for f in files), \
             'Some files in list do not exist.'
         nlp = spacy.load(lang)
-        if not group_labels:
-            group_labels = [os.path.basename(f).split('.')[0] for f in files]
+        if not doc_labels:
+            doc_labels = [os.path.basename(f).split('.')[0] for f in files]
         self._df = pd.DataFrame({'path': files},
-                                index=group_labels)
+                                index=doc_labels)
         self._df['raw'] = self._df['path'].map(_read_file)
-        self._df['nlp'] = self._df['raw'].map(nlp)
+        self._df['nlp'] = self._df['raw'].map(_normalize_whitespace).map(nlp)
 
     def tokenized(self, remove_stop_words=True, remove_urls=True,
                   remove_numbers=True, remove_punctuation=True, stem=True):
         func = compose(
             _stem if stem else _as_text,
-            _remove_whitespace,
             _remove_stop_words if remove_stop_words else identity,
             _remove_urls if remove_urls else identity,
             _remove_numbers if remove_numbers else identity,
@@ -52,6 +51,10 @@ def _read_file(file_name):
         .strip()
 
 
+def _normalize_whitespace(doc):
+    return ' '.join(doc.split())
+
+
 def _noun_chunks(doc):
     return [chunk.lower_ for chunk in doc.noun_chunks
             if not all(token.is_stop for token in chunk)]
@@ -72,10 +75,6 @@ def _remove_numbers(doc):
 
 def _remove_punctuation(doc):
     return [word for word in doc if not word.is_punct]
-
-
-def _remove_whitespace(doc):
-    return [word for word in doc if not word.is_space]
 
 
 def _stem(doc):

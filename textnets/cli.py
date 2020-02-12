@@ -13,9 +13,9 @@ from textnets import TextCorpus, Textnets
 @click.option('--lex', '-l', help='How to lex the corpus.',
               type=click.Choice(['noun_phrases', 'tokenized']),
               required=True)
-@click.option('--node-type', '-n', help='Generate network of this node type.',
-              type=click.Choice(['groups', 'words']),
-              required=True)
+@click.option('--node-type', '-n', help='Project network of this node type.',
+              type=click.Choice(['doc', 'term']),
+              required=False)
 @click.option('--format', '-f', help='Output format (defaults to graphml).',
               type=click.Choice(['graphml', 'gml', 'pajek', 'graphviz']),
               default='graphml')
@@ -26,7 +26,7 @@ def main(corpus, lex, node_type, format, output):
     """textnets - Automated text analysis using network techniques.
 
     This command takes a corpus of texts as its argument and outputs
-    a network graph of either group of word nodes.
+    a network graph of either document or term nodes.
 
     CORPUS: Path containing corpus files.
     """
@@ -35,7 +35,12 @@ def main(corpus, lex, node_type, format, output):
     else:
         c = TextCorpus(corpus)
     tt = getattr(c, lex)()
-    g = Textnets(tt).graph(node_type=node_type)
+    tn = Textnets(tt)
+    if node_type:
+        g = tn.project(node_type=node_type)
+    else:
+        g = tn.graph
+        g.vs['cluster'] = tn.cluster().membership
     with output as f:
         g.write(f, format=format)
 
