@@ -10,12 +10,8 @@ class Textnets:
     def __init__(self, tidy_text, sublinear=True, min_docs=2):
         assert set(tidy_text.columns) == {'word', 'n'}
         self._df = _tf_idf(tidy_text, sublinear, min_docs)
-        im = pd.pivot_table(self._df,
-                            values='tf_idf',
-                            index=self._df.index,
-                            columns='word',
-                            aggfunc=sum,
-                            fill_value=0)
+        im = self._df.pivot(values='tf_idf',
+                            columns='word').fillna(0)
         g = ig.Graph.Incidence(np.array(im).tolist(),
                                directed=False)
         g.vs['id'] = np.append(im.index, im.columns).tolist()
