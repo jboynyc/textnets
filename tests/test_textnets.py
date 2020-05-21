@@ -9,7 +9,7 @@ import pytest
 
 from click.testing import CliRunner
 
-from textnets import TextCorpus, Textnets
+from textnets import Corpus, Textnet
 from textnets import cli
 
 import igraph as ig
@@ -31,13 +31,13 @@ def test_sotu():
     corpus_files = glob(
             os.path.expanduser('state_union/*.txt'))[:5]
 
-    c = TextCorpus.from_files(corpus_files)
+    c = Corpus.from_files(corpus_files)
     assert c._df.shape[0] == len(corpus_files)
     assert c._df.shape[1] == 3
 
     noun_phrases = c.noun_phrases()
     assert set(noun_phrases.columns) == {'word', 'n'}
-    tn_np = Textnets(noun_phrases)
+    tn_np = Textnet(noun_phrases)
     assert tn_np.graph.vcount() > 0
     assert tn_np.graph.ecount() > 0
     assert set(tn_np._df.columns) == {'word', 'n', 'tf_idf'}
@@ -50,7 +50,7 @@ def test_sotu():
 
     tokenized = c.tokenized()
     assert set(tokenized.columns) == {'word', 'n'}
-    tn_t = Textnets(tokenized)
+    tn_t = Textnet(tokenized)
     assert tn_t.graph.vcount() > 0
     assert tn_t.graph.ecount() > 0
     assert set(tn_t._df.columns) == {'word', 'n', 'tf_idf'}
