@@ -40,7 +40,7 @@ detection on the bipartite (word--group) network.
     c = TextCorpus.from_files('~/nltk_data/corpora/state_union/*.txt')
     tn = Textnets(c.noun_phrases())
     g_bipartite = tn.graph
-    g_bipartite.vs['cluster'] = tn.cluster().membership
+    g_bipartite.vs['cluster'] = tn.clusters.membership
     g_groups = tn.project(node_type='doc')
     g_words = tn.project(node_type='term')
 

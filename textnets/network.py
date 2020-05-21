@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from functools import cached_property
 import numpy as np
 import pandas as pd
 import igraph as ig
@@ -32,7 +33,13 @@ class Textnets:
                                                which=graph_to_return)
 
 
-    def cluster(self, resolution=0.5):
+    @cached_property
+    def clusters(self):
+        return self._partition_graph()
+
+
+    def _partition_graph(self, resolution=0.5):
+        #TODO: fix random seed
         part, part0, part1 = la.CPMVertexPartition.Bipartite(self.graph,
                                                              resolution_parameter_01=resolution)
         opt = la.Optimiser()
