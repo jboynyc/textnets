@@ -9,10 +9,10 @@ with open('README.rst') as readme_file:
     readme = readme_file.read()
 
 requirements = [
-    'Click>=6.0',
-    'pandas==0.25.3',
+    'Click>=7.0',
+    'pandas==1.0.1',
     'python-igraph==0.8.2',
-    'spacy==2.2.4',
+    'spacy==2.2.3',
     'toolz==0.10.0',
     'leidenalg==0.8.0'
 ]
