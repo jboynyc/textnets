@@ -4,7 +4,7 @@
 
 import os
 import click
-from textnets import TextCorpus, Textnets
+from textnets import Corpus, Textnet
 
 
 @click.command()
@@ -31,11 +31,11 @@ def main(corpus, lex, node_type, format, output):
     CORPUS: Path containing corpus files.
     """
     if len(corpus) == 1 and os.path.isdir(corpus[0]):
-        c = TextCorpus.from_files(os.path.join(corpus[0], '*'))
+        c = Corpus.from_files(os.path.join(corpus[0], '*'))
     else:
-        c = TextCorpus.from_files(corpus)
+        c = Corpus.from_files(corpus)
     tt = getattr(c, lex)()
-    tn = Textnets(tt)
+    tn = Textnet(tt)
     if node_type:
         g = tn.project(node_type=node_type)
     else:

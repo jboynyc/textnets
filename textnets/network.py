@@ -7,7 +7,7 @@ import igraph as ig
 import leidenalg as la
 
 
-class Textnets:
+class Textnet:
     def __init__(self, tidy_text, sublinear=True, min_docs=2):
         assert set(tidy_text.columns) == {'word', 'n'}
         self._df = _tf_idf(tidy_text, sublinear, min_docs)

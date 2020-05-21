@@ -7,7 +7,7 @@ from glob import glob
 from toolz import compose, identity
 
 
-class TextCorpus:
+class Corpus:
     def __init__(self, data, doc_col=None, lang='en_core_web_sm'):
         nlp = spacy.load(lang, disable=['ner', 'textcat'])
         self._df = data
