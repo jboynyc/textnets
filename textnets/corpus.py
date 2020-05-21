@@ -26,7 +26,7 @@ class TextCorpus:
         df = pd.DataFrame({'path': files},
                           index=doc_labels)
         df['raw'] = self._df['path'].map(_read_file)
-        return cls(df, 'raw', lang)
+        return cls(df, doc_col='raw', lang=lang)
 
     def tokenized(self, remove_stop_words=True, remove_urls=True,
                   remove_numbers=True, remove_punctuation=True, stem=True):
