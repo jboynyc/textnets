@@ -31,9 +31,9 @@ def main(corpus, lex, node_type, format, output):
     CORPUS: Path containing corpus files.
     """
     if len(corpus) == 1 and os.path.isdir(corpus[0]):
-        c = TextCorpus(os.path.join(corpus[0], '*'))
+        c = TextCorpus.from_files(os.path.join(corpus[0], '*'))
     else:
-        c = TextCorpus(corpus)
+        c = TextCorpus.from_files(corpus)
     tt = getattr(c, lex)()
     tn = Textnets(tt)
     if node_type:
