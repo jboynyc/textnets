@@ -31,7 +31,7 @@ def test_sotu():
     corpus_files = glob(
             os.path.expanduser('state_union/*.txt'))[:5]
 
-    c = TextCorpus(corpus_files)
+    c = TextCorpus.from_files(corpus_files)
     assert c._df.shape[0] == len(corpus_files)
     assert c._df.shape[1] == 3
 
