@@ -8,18 +8,25 @@ from toolz import compose, identity
 
 
 class TextCorpus:
-    def __init__(self, files, lang='en_core_web_sm', doc_labels=None):
-        if isinstance(files, str):
-            files = glob(os.path.expanduser(files))
+    def __init__(self, data, doc_col=None, lang='en_core_web_sm'):
+        nlp = spacy.load(lang)
+        self._df = data
+        if not doc_col:
+            doc_col = self._df.columns[0]
+        self._df['nlp'] = self._df[doc_col].map(_normalize_whitespace).map(nlp)
+
+    @classmethod
+    def from_files(cls, files, doc_labels=None, lang='en_core_web_sm'):
+        if isinstance(files, str)
+            files = glob(os.path.expanduser(data))
         assert all(os.path.exists(f) for f in files), \
             'Some files in list do not exist.'
-        nlp = spacy.load(lang)
         if not doc_labels:
             doc_labels = [os.path.basename(f).split('.')[0] for f in files]
-        self._df = pd.DataFrame({'path': files},
-                                index=doc_labels)
-        self._df['raw'] = self._df['path'].map(_read_file)
-        self._df['nlp'] = self._df['raw'].map(_normalize_whitespace).map(nlp)
+        df = pd.DataFrame({'path': files},
+                          index=doc_labels)
+        df['raw'] = self._df['path'].map(_read_file)
+        return cls(df, 'raw', lang)
 
     def tokenized(self, remove_stop_words=True, remove_urls=True,
                   remove_numbers=True, remove_punctuation=True, stem=True):
