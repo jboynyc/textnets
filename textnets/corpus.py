@@ -9,7 +9,7 @@ from toolz import compose, identity
 
 class TextCorpus:
     def __init__(self, data, doc_col=None, lang='en_core_web_sm'):
-        nlp = spacy.load(lang)
+        nlp = spacy.load(lang, disable=['ner', 'textcat'])
         self._df = data
         self._df.index = self._df.index.set_names(['label'])
         if not doc_col:
