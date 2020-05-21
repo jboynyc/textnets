@@ -21,16 +21,42 @@ class Textnets:
         self.graph = g
 
 
+    @cached_property
+    def node_types(self):
+        return [True if t == 'term' else False for t in self.graph.vs['type']]
+
+
     def project(self, node_type):
         assert node_type in ('doc', 'term'), \
             'No valid node_type specified.'
-        node_types = [True if t == 'term' else False for t in self.graph.vs['type']]
         graph_to_return = 0
         if node_type == 'term':
             graph_to_return = 1
-        return self.graph.bipartite_projection(types=node_types,
+        return self.graph.bipartite_projection(types=self.node_types(),
                                                multiplicity=True,
                                                which=graph_to_return)
+
+
+    def plot(self, mark_groups=False, bipartite_layout=False, label_nodes=('term')):
+        if bipartite_layout:
+            layout = self.graph.layout_bipartite(types=self.node_types)
+        else:
+            layout = self.graph.layout_fruchterman_reingold(weights='weight',
+                                                            grid=False)
+        return ig.plot(self.graph,
+                       layout=layout,
+                       margin=50,
+                       autocurve=True,
+                       vertex_shape=['circle' if v else 'square'
+                                     for v in self.node_types],
+                       vertex_color=['orangered' if v else 'dodgerblue'
+                                     for v in self.node_types],
+                       vertex_frame_color=['black' if v else 'white'
+                                           for v in self.node_types],
+                       vertex_frame_width=.2,
+                       mark_groups=self.clusters if mark_groups else False,
+                       vertex_label=[v['id'] if v['type'] in label_nodes else None
+                                     for v in self.graph.vs])
 
 
     @cached_property
