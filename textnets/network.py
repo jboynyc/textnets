@@ -59,7 +59,7 @@ def _tf_idf(tidy_text, sublinear, min_docs):
     wc = tt.groupby('word').count()['tf']
     tt = tt.reset_index().merge(wc >= min_docs, on='word', how='left')\
                      .rename(columns={'tf_y': 'keep'})\
-                     .set_index('index')
+                     .set_index('label')
     return tt[tt['keep']][['word', 'n', 'tf_idf']]
 
 
