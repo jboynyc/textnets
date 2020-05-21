@@ -12,7 +12,7 @@ class TextCorpus:
         nlp = spacy.load(lang)
         self._df = data
         if not doc_col:
-            doc_col = self._df.columns[0]
+            doc_col = self._df.select_dtypes(include='object').columns[0]
         self._df['nlp'] = self._df[doc_col].map(_normalize_whitespace).map(nlp)
 
     @classmethod
