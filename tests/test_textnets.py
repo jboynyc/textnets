@@ -3,8 +3,6 @@
 
 """Tests for `textnets` package."""
 
-import os
-from glob import glob
 import pytest
 
 from click.testing import CliRunner
@@ -26,17 +24,32 @@ def test_command_line_interface():
     assert 'Show this message and exit.' in help_result.output
 
 def test_sotu():
-    """Test main classes using SOTU test corpus."""
+    """Test main classes using small data frame."""
 
-    corpus_files = glob(
-            os.path.expanduser('state_union/*.txt'))[:5]
+    moon_landing = pd.DataFrame(
+        {'paper': ['The Guardian',
+                   'New York Times',
+                   'Boston Globe',
+                   'Houston Chronicle',
+                   'Washington Post',
+                   'Chicago Tribune',
+                   'Los Angeles Times'],
+         'headline': ['3:29 am Man Steps Onto the Moon',
+                      'Men Walk on Moon -- Astronauts Land on Plain, Collect Rocks, Plant Flag',
+                      'Man Walks on Moon',
+                      'Armstrong and Aldrich Take One Small Step for Man on the Moon',
+                      'The Eagle Has Landed Two Men Walk on the Moon',
+                      'Giant Leap for Mankind',
+                      'Walk on Moon That\'s on Small Step for Man, One Giant Leap for Mankind']
+        }).set_index('paper')
 
-    c = Corpus.from_files(corpus_files)
-    assert c._df.shape[0] == len(corpus_files)
-    assert c._df.shape[1] == 3
+    c = Corpus(moon_landing)
+    assert c._df.shape[0] == 7
+    assert c._df.shape[1] == 2
 
     noun_phrases = c.noun_phrases()
     assert set(noun_phrases.columns) == {'word', 'n'}
+
     tn_np = Textnet(noun_phrases)
     assert tn_np.graph.vcount() > 0
     assert tn_np.graph.ecount() > 0
@@ -50,6 +63,7 @@ def test_sotu():
 
     tokenized = c.tokenized()
     assert set(tokenized.columns) == {'word', 'n'}
+
     tn_t = Textnet(tokenized)
     assert tn_t.graph.vcount() > 0
     assert tn_t.graph.ecount() > 0
