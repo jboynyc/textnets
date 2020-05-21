@@ -47,7 +47,7 @@ class TextCorpus:
         return pd.melt(self._df['nlp'].map(func).apply(pd.Series)
                        .reset_index(), id_vars='label', value_name='word')\
             .rename(columns={'variable': 'n'})\
-            .groupby(['index', 'word'])\
+            .groupby(['label', 'word'])\
             .count()\
             .reset_index()\
             .set_index('label')
