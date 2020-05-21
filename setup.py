@@ -19,7 +19,6 @@ requirements = [
 
 setup_requirements = [
     'pytest-runner',
-    # TODO(jboynyc): put setup requirements (distutils extensions, etc.) here
 ]
 
 test_requirements = [
@@ -30,7 +29,6 @@ test_requirements = [
     'spacy',
     'toolz',
     'leidenalg'
-    # TODO: put package test requirements here
 ]
 
 setup(
