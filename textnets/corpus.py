@@ -11,6 +11,7 @@ class TextCorpus:
     def __init__(self, data, doc_col=None, lang='en_core_web_sm'):
         nlp = spacy.load(lang)
         self._df = data
+        self._df.index = self._df.index.set_names(['label'])
         if not doc_col:
             doc_col = self._df.select_dtypes(include='object').columns[0]
         self._df['nlp'] = self._df[doc_col].map(_normalize_whitespace).map(nlp)
@@ -44,12 +45,12 @@ class TextCorpus:
 
     def _return_tidy_text(self, func):
         return pd.melt(self._df['nlp'].map(func).apply(pd.Series)
-                       .reset_index(), id_vars='index', value_name='word')\
+                       .reset_index(), id_vars='label', value_name='word')\
             .rename(columns={'variable': 'n'})\
             .groupby(['index', 'word'])\
             .count()\
             .reset_index()\
-            .set_index('index')
+            .set_index('label')
 
 
 def _read_file(file_name):
