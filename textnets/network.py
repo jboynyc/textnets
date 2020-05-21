@@ -50,7 +50,7 @@ def _tf_idf(tidy_text, sublinear, min_docs):
             .rename(columns={'n': 'total'})
         tidy_text = tidy_text.merge(totals, right_index=True, left_index=True)
         tidy_text['tf'] = tidy_text['n'] / tidy_text['total']
-    idfs = pd.np.log10(len(set(tidy_text.index)) / tidy_text['word'].value_counts())
+    idfs = np.log10(len(set(tidy_text.index)) / tidy_text['word'].value_counts())
     tt = tidy_text.merge(pd.DataFrame(idfs),
                          left_on='word',
                          right_index=True)\
@@ -64,4 +64,4 @@ def _tf_idf(tidy_text, sublinear, min_docs):
 
 
 def _sublinear_scaling(n):
-    return 1 + pd.np.log10(n) if n > 0 else 0
+    return 1 + np.log10(n) if n > 0 else 0
