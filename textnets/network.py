@@ -13,6 +13,7 @@ class Textnet:
         self._df = _tf_idf(tidy_text, sublinear, min_docs)
         im = self._df.pivot(values='tf_idf',
                             columns='word').fillna(0)
+        self.im = im
         g = ig.Graph.Incidence(np.array(im).tolist(),
                                directed=False)
         g.vs['id'] = np.append(im.index, im.columns).tolist()
