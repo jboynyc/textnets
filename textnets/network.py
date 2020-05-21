@@ -32,7 +32,7 @@ class Textnets:
         graph_to_return = 0
         if node_type == 'term':
             graph_to_return = 1
-        return self.graph.bipartite_projection(types=self.node_types(),
+        return self.graph.bipartite_projection(types=self.node_types,
                                                multiplicity=True,
                                                which=graph_to_return)
 
