@@ -11,6 +11,7 @@ from textnets import Corpus, Textnet
 from textnets import cli
 
 import igraph as ig
+import pandas as pd
 
 
 def test_command_line_interface():
