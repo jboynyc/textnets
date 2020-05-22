@@ -28,6 +28,7 @@ class Textnet:
 
 
     def project(self, node_type):
+        #TODO: handle weights properly
         assert node_type in ('doc', 'term'), \
             'No valid node_type specified.'
         graph_to_return = 0
