@@ -56,7 +56,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Textnets'
-copyright = u"2017, John D. Boy"
+copyright = u"2017-2020, John D. Boy"
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
