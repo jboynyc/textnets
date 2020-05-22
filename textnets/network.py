@@ -26,7 +26,6 @@ class Textnet:
 
 
     def project(self, node_type):
-        #TODO: make sure we are handling weights properly
         assert node_type in ('doc', 'term'), \
             'No valid node_type specified.'
         graph_to_return = 0
@@ -39,7 +38,6 @@ class Textnet:
         weights = np.triu(weights)
         weights = weights.flatten()[np.flatnonzero(weights)]
         graph = self.graph.bipartite_projection(types=self.node_types,
-                                                multiplicity=True,
                                                 which=graph_to_return)
         graph.es['weight'] = weights
         return graph
