@@ -70,6 +70,11 @@ class Textnet:
         return self._partition_graph()
 
 
+    @cached_property
+    def context(self):
+        return self._formal_context(cutoff=0.3)
+
+
     def _partition_graph(self, resolution=0.5):
         #TODO: fix random seed
         part, part0, part1 = la.CPMVertexPartition.Bipartite(self.graph,
@@ -79,6 +84,16 @@ class Textnet:
                                          layer_weights=[1,-1,-1],
                                          n_iterations=100)
         return part
+
+
+    def _formal_context(self, cutoff=0.3):
+        # The incidence matrix is a "fuzzy formal context." We can binarize it
+        # by using a cutoff. This is known as the alpha-cut.
+        # See doi:10.1016/j.knosys.2012.10.005 and doi:10.1016/j.asoc.2017.05.028
+        objects = self.im.index.tolist()
+        properties = self.im.columns.tolist()
+        bools = self.im.applymap(lambda x: True if x > cutoff else False).to_numpy()
+        return objects, properties, bools
 
 
 def _tf_idf(tidy_text, sublinear, min_docs):
