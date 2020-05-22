@@ -48,12 +48,12 @@ def test_sotu():
     assert c._df.shape[1] == 2
 
     noun_phrases = c.noun_phrases()
-    assert set(noun_phrases.columns) == {'word', 'n'}
+    assert set(noun_phrases.columns) == {'term', 'n'}
 
     tn_np = Textnet(noun_phrases)
     assert tn_np.graph.vcount() > 0
     assert tn_np.graph.ecount() > 0
-    assert set(tn_np._df.columns) == {'word', 'n', 'tf_idf'}
+    assert set(tn_np._df.columns) == {'term', 'n', 'tf_idf'}
     g_np_groups = tn_np.project(node_type='doc')
     assert g_np_groups.vcount() > 0
     assert g_np_groups.ecount() > 0
@@ -62,12 +62,12 @@ def test_sotu():
     assert g_np_words.ecount() > 0
 
     tokenized = c.tokenized()
-    assert set(tokenized.columns) == {'word', 'n'}
+    assert set(tokenized.columns) == {'term', 'n'}
 
     tn_t = Textnet(tokenized)
     assert tn_t.graph.vcount() > 0
     assert tn_t.graph.ecount() > 0
-    assert set(tn_t._df.columns) == {'word', 'n', 'tf_idf'}
+    assert set(tn_t._df.columns) == {'term', 'n', 'tf_idf'}
     g_t_groups = tn_t.project(node_type='doc')
     assert g_t_groups.vcount() > 0
     assert g_t_groups.ecount() > 0

@@ -45,9 +45,9 @@ class Corpus:
 
     def _return_tidy_text(self, func):
         return pd.melt(self._df['nlp'].map(func).apply(pd.Series)
-                       .reset_index(), id_vars='label', value_name='word')\
+                       .reset_index(), id_vars='label', value_name='term')\
             .rename(columns={'variable': 'n'})\
-            .groupby(['label', 'word'])\
+            .groupby(['label', 'term'])\
             .count()\
             .reset_index()\
             .set_index('label')

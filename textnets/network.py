@@ -9,10 +9,9 @@ import leidenalg as la
 
 class Textnet:
     def __init__(self, tidy_text, sublinear=True, min_docs=2):
-        assert set(tidy_text.columns) == {'word', 'n'}
         self._df = _tf_idf(tidy_text, sublinear, min_docs)
         im = self._df.pivot(values='tf_idf',
-                            columns='word').fillna(0)
+                            columns='term').fillna(0)
         self.im = im
         g = ig.Graph.Incidence(np.array(im).tolist(),
                                directed=False)
@@ -85,17 +84,17 @@ def _tf_idf(tidy_text, sublinear, min_docs):
             .rename(columns={'n': 'total'})
         tidy_text = tidy_text.merge(totals, right_index=True, left_index=True)
         tidy_text['tf'] = tidy_text['n'] / tidy_text['total']
-    idfs = np.log10(len(set(tidy_text.index)) / tidy_text['word'].value_counts())
+    idfs = np.log10(len(set(tidy_text.index)) / tidy_text['term'].value_counts())
     tt = tidy_text.merge(pd.DataFrame(idfs),
-                         left_on='word',
+                         left_on='term',
                          right_index=True)\
-                     .rename(columns={'word_y': 'idf'})
+                     .rename(columns={'term_y': 'idf'})
     tt['tf_idf'] = tt['tf'] * tt['idf']
-    wc = tt.groupby('word').count()['tf']
-    tt = tt.reset_index().merge(wc >= min_docs, on='word', how='left')\
+    wc = tt.groupby('term').count()['tf']
+    tt = tt.reset_index().merge(wc >= min_docs, on='term', how='left')\
                      .rename(columns={'tf_y': 'keep'})\
                      .set_index('label')
-    return tt[tt['keep']][['word', 'n', 'tf_idf']]
+    return tt[tt['keep']][['term', 'n', 'tf_idf']]
 
 
 def _sublinear_scaling(n):
