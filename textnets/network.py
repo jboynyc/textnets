@@ -27,15 +27,23 @@ class Textnet:
 
 
     def project(self, node_type):
-        #TODO: handle weights properly
+        #TODO: make sure we are handling weights properly
         assert node_type in ('doc', 'term'), \
             'No valid node_type specified.'
         graph_to_return = 0
         if node_type == 'term':
             graph_to_return = 1
-        return self.graph.bipartite_projection(types=self.node_types,
-                                               multiplicity=True,
-                                               which=graph_to_return)
+            weights = self.im.T.dot(self.im).to_numpy()
+        else:
+            weights = self.im.dot(self.im.T).to_numpy()
+        np.fill_diagonal(weights, 0)
+        weights = np.triu(w)
+        weights = weights.flatten()[np.flatnonzero(weights)]
+        graph = self.graph.bipartite_projection(types=self.node_types,
+                                                multiplicity=True,
+                                                which=graph_to_return)
+        graph.es['weight'] = weights
+        return graph
 
 
     def plot(self, mark_groups=False, bipartite_layout=False, label_nodes=('term')):
