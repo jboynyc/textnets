@@ -13,13 +13,12 @@ class Textnet:
         im = self._df.pivot(values='tf_idf',
                             columns='term').fillna(0)
         self.im = im
-        g = ig.Graph.Incidence(np.array(im).tolist(),
+        g = ig.Graph.Incidence(im.to_numpy().tolist(),
                                directed=False)
         g.vs['id'] = np.append(im.index, im.columns).tolist()
-        g.es['weight'] = np.array(im).flatten()[np.flatnonzero(im)]
+        g.es['weight'] = im.to_numpy().flatten()[np.flatnonzero(im)]
         g.vs['type'] = ['term' if t else 'doc' for t in g.vs['type']]
         self.graph = g
-
 
     @cached_property
     def node_types(self):
