@@ -57,7 +57,9 @@ setup(
         'Natural Language :: English',
         'Programming Language :: Python :: 3 :: Only',
         'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9'
+        'Programming Language :: Python :: 3.9',
+        'Topic :: Scientific/Engineering :: Visualization',
+        'Topic :: Sociology',
     ],
     test_suite='tests',
     tests_require=test_requirements,
