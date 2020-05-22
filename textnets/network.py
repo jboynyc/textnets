@@ -36,7 +36,7 @@ class Textnet:
         else:
             weights = self.im.dot(self.im.T).to_numpy()
         np.fill_diagonal(weights, 0)
-        weights = np.triu(w)
+        weights = np.triu(weights)
         weights = weights.flatten()[np.flatnonzero(weights)]
         graph = self.graph.bipartite_projection(types=self.node_types,
                                                 multiplicity=True,
