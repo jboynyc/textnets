@@ -86,13 +86,15 @@ class Textnet:
         return part
 
 
-    def _formal_context(self, cutoff=0.3):
+    def _formal_context(self, cutoff):
         # The incidence matrix is a "fuzzy formal context." We can binarize it
-        # by using a cutoff. This is known as the alpha-cut.
+        # by using a cutoff. This is known as an alpha-cut.
         # See doi:10.1016/j.knosys.2012.10.005 and doi:10.1016/j.asoc.2017.05.028
-        objects = self.im.index.tolist()
-        properties = self.im.columns.tolist()
-        bools = self.im.applymap(lambda x: True if x > cutoff else False).to_numpy()
+        cut = self.im.applymap(lambda x: True if x > cutoff else False)
+        reduced = cut[cut.any(axis=1)].loc[:, cut.any(axis=0)]
+        objects = reduced.index.tolist()
+        properties = reduced.columns.tolist()
+        bools = reduced.to_numpy()
         return objects, properties, bools
 
 
