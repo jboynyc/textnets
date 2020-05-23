@@ -67,7 +67,7 @@ class Textnet:
 
     @cached_property
     def clusters(self):
-        return self._partition_graph()
+        return self._partition_graph(resolution=0.5)
 
 
     @cached_property
@@ -75,7 +75,7 @@ class Textnet:
         return self._formal_context(cutoff=0.3)
 
 
-    def _partition_graph(self, resolution=0.5):
+    def _partition_graph(self, resolution):
         #TODO: fix random seed
         part, part0, part1 = la.CPMVertexPartition.Bipartite(self.graph,
                                                              resolution_parameter_01=resolution)
