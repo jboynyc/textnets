@@ -4,7 +4,7 @@ import os
 import spacy
 import pandas as pd
 from glob import glob
-from toolz import compose, identity
+from toolz import compose, partial, identity
 
 
 class Corpus:
@@ -29,18 +29,23 @@ class Corpus:
         df['raw'] = self._df['path'].map(_read_file)
         return cls(df, doc_col='raw', lang=lang)
 
-    def tokenized(self, remove_stop_words=True, remove_urls=True,
-                  remove_numbers=True, remove_punctuation=True, stem=True):
+    def tokenized(self, remove=[], stem=True, remove_stop_words=True,
+                  remove_urls=True, remove_numbers=True,
+                  remove_punctuation=True, lower=True):
         func = compose(
-            _stem if stem else _as_text,
-            _remove_stop_words if remove_stop_words else identity,
-            _remove_urls if remove_urls else identity,
-            _remove_numbers if remove_numbers else identity,
-            _remove_punctuation if remove_punctuation else identity)
+                _lower if lower else identity,
+                _stem if stem else identity,
+                partial(_remove_additional, lst=remove) if remove else identity,
+                _remove_stop_words if remove_stop_words else identity,
+                _remove_urls if remove_urls else identity,
+                _remove_numbers if remove_numbers else identity,
+                _remove_punctuation if remove_punctuation else identity)
         return self._return_tidy_text(func)
 
-    def noun_phrases(self):
-        func = _noun_chunks
+    def noun_phrases(self, remove=[]):
+        func = compose(
+                _noun_chunks,
+                partial(_remove_additional, lst=remove) if remove else identity)
         return self._return_tidy_text(func)
 
     def _return_tidy_text(self, func):
@@ -89,5 +94,9 @@ def _stem(doc):
     return [word.lemma_ for word in doc]
 
 
-def _as_text(doc):
+def _lower(doc):
     return [word.lower_ for word in doc]
+
+
+def _remove_additional(doc, lst):
+    return [word for word in doc if word.lower_ not in lst]
