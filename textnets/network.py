@@ -75,7 +75,7 @@ class Textnet:
 
     @cached_property
     def context(self):
-        return self._formal_context(cutoff=0.3)
+        return self._formal_context(alpha=0.3)
 
 
     def _partition_graph(self, resolution):
@@ -89,12 +89,12 @@ class Textnet:
         return part
 
 
-    def _formal_context(self, cutoff):
+    def _formal_context(self, alpha):
         # The incidence matrix is a "fuzzy formal context." We can binarize it
         # by using a cutoff. This is known as an alpha-cut.
         # See doi:10.1016/j.knosys.2012.10.005 and doi:10.1016/j.asoc.2017.05.028
-        cut = self.im.applymap(lambda x: True if x > cutoff else False)
-        reduced = cut[cut.any(axis=1)].loc[:, cut.any(axis=0)]
+        crisp = self.im.applymap(lambda x: True if x > alpha else False)
+        reduced = crisp[crisp.any(axis=1)].loc[:, crisp.any(axis=0)]
         objects = reduced.index.tolist()
         properties = reduced.columns.tolist()
         bools = reduced.to_numpy()
