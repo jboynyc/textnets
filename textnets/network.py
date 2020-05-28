@@ -31,15 +31,18 @@ class Textnet:
         graph_to_return = 0
         if node_type == 'term':
             graph_to_return = 1
-            weights = self.im.T.dot(self.im).to_numpy()
+            weights = self.im.T.dot(self.im)
         else:
-            weights = self.im.dot(self.im.T).to_numpy()
-        np.fill_diagonal(weights, 0)
-        weights = np.triu(weights)
-        weights = weights.flatten()[np.flatnonzero(weights)]
+            weights = self.im.dot(self.im.T)
         graph = self.graph.bipartite_projection(types=self.node_types,
                                                 which=graph_to_return)
-        graph.es['weight'] = weights
+        for i in graph.es.indices:
+            edge = graph.es[i]
+            source, target = edge.source_vertex['id'], edge.target_vertex['id']
+            if source == target:
+                edge['weight'] = 0
+            else:
+                edge['weight'] = weights.loc[source, target]
         return graph
 
 
