@@ -19,7 +19,7 @@ class Textnet:
         g.es['weight'] = im.to_numpy().flatten()[np.flatnonzero(im)]
         g.vs['type'] = ['term' if t else 'doc' for t in g.vs['type']]
         if doc_attrs:
-            for name, attr in doc_attrs:
+            for name, attr in doc_attrs.items():
                 g.vs[name] = [attr.get(doc) for doc in g.vs['id']]
         self.graph = g
 
