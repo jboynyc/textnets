@@ -97,7 +97,7 @@ def _stem(doc):
 
 
 def _lower(doc):
-    return [word.lower_ for word in doc]
+    return [s.lower() for s in doc]
 
 
 def _remove_additional(doc, token_list):
