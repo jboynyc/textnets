@@ -34,8 +34,8 @@ class Corpus:
                   remove_punctuation=True, lower=True):
         func = compose(
                 _lower if lower else identity,
-                _stem if stem else identity,
                 partial(_remove_additional, token_list=remove) if remove else identity,
+                _stem if stem else identity,
                 _remove_stop_words if remove_stop_words else identity,
                 _remove_urls if remove_urls else identity,
                 _remove_numbers if remove_numbers else identity,
