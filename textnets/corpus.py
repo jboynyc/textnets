@@ -87,7 +87,9 @@ def _remove_numbers(doc):
 
 
 def _remove_punctuation(doc):
-    return [word for word in doc if not word.is_punct]
+    return [word for word in doc if not word.is_punct
+            and not word.is_bracket
+            and not word.is_quote]
 
 
 def _stem(doc):
