@@ -56,20 +56,19 @@ class Textnet:
         else:
             layout = self.graph.layout_fruchterman_reingold(weights='weight',
                                                             grid=False)
+        kwargs.setdefault('layout', layout)
+        kwargs.setdefault('margin', 50)
+        kwargs.setdefault('vertex_shape', ['circle' if v else 'square'
+                                           for v in self.node_types])
+        kwargs.setdefault('vertex_color', ['orangered' if v else 'dodgerblue'
+                                           for v in self.node_types])
+        kwargs.setdefault('vertex_frame_color', ['black' if v else 'white'
+                                                 for v in self.node_types])
+        kwargs.setdefault('vertex_frame_width', .2)
+        kwargs.setdefault('vertex_label', [v['id'] if v['type'] in label_nodes
+                                           else None for v in self.graph.vs])
         return ig.plot(self.graph,
-                       layout=layout,
-                       margin=50,
-                       autocurve=True,
-                       vertex_shape=['circle' if v else 'square'
-                                     for v in self.node_types],
-                       vertex_color=['orangered' if v else 'dodgerblue'
-                                     for v in self.node_types],
-                       vertex_frame_color=['black' if v else 'white'
-                                           for v in self.node_types],
-                       vertex_frame_width=.2,
                        mark_groups=self.clusters if mark_groups else False,
-                       vertex_label=[v['id'] if v['type'] in label_nodes else None
-                                     for v in self.graph.vs],
                        **kwargs)
 
 
