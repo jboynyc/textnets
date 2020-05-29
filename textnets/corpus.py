@@ -35,7 +35,7 @@ class Corpus:
         func = compose(
                 _lower if lower else identity,
                 _stem if stem else identity,
-                partial(_remove_additional, lst=remove) if remove else identity,
+                partial(_remove_additional, token_list=remove) if remove else identity,
                 _remove_stop_words if remove_stop_words else identity,
                 _remove_urls if remove_urls else identity,
                 _remove_numbers if remove_numbers else identity,
@@ -45,7 +45,7 @@ class Corpus:
     def noun_phrases(self, remove=[]):
         func = compose(
                 _noun_chunks,
-                partial(_remove_additional, lst=remove) if remove else identity)
+                partial(_remove_additional, token_list=remove) if remove else identity)
         return self._return_tidy_text(func)
 
     def _return_tidy_text(self, func):
@@ -98,5 +98,5 @@ def _lower(doc):
     return [word.lower_ for word in doc]
 
 
-def _remove_additional(doc, lst):
-    return [word for word in doc if word.lower_ not in lst]
+def _remove_additional(doc, token_list):
+    return [word for word in doc if word.text not in token_list]
