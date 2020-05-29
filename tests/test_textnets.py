@@ -34,8 +34,20 @@ def test_corpus():
     noun_phrases = c.noun_phrases()
     assert set(noun_phrases.columns) == {'term', 'n'}
 
+    noun_phrases_remove = c.noun_phrases(remove=['moon'])
+    assert set(noun_phrases_remove.columns) == {'term', 'n'}
+
     tokenized = c.tokenized()
     assert set(tokenized.columns) == {'term', 'n'}
+
+    nostem = c.tokenized(stem=False)
+    assert set(nostem.columns) == {'term', 'n'}
+
+    nopunct = c.tokenized(remove_punctuation=False)
+    assert set(nopunct.columns) == {'term', 'n'}
+
+    upper = c.tokenized(lower=False)
+    assert set(upper.columns) == {'term', 'n'}
 
 def test_textnet():
     """Test Textnet class using small data frame."""
