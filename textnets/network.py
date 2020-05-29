@@ -46,7 +46,8 @@ class Textnet:
         return graph
 
 
-    def plot(self, mark_groups=False, bipartite_layout=False, label_nodes=('term')):
+    def plot(self, mark_groups=False, bipartite_layout=False,
+             label_nodes=('term'), **kwargs):
         if bipartite_layout:
             layout = self.graph.layout_bipartite(types=self.node_types)
         else:
@@ -65,7 +66,8 @@ class Textnet:
                        vertex_frame_width=.2,
                        mark_groups=self.clusters if mark_groups else False,
                        vertex_label=[v['id'] if v['type'] in label_nodes else None
-                                     for v in self.graph.vs])
+                                     for v in self.graph.vs],
+                       **kwargs)
 
 
     @cached_property
