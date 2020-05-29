@@ -19,7 +19,7 @@ class Corpus:
     @classmethod
     def from_files(cls, files, doc_labels=None, lang='en_core_web_sm'):
         if isinstance(files, str):
-            files = glob(os.path.expanduser(data))
+            files = glob(os.path.expanduser(files))
         assert all(os.path.exists(f) for f in files), \
             'Some files in list do not exist.'
         if not doc_labels:
