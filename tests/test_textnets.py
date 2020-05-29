@@ -3,15 +3,10 @@
 
 """Tests for `textnets` package."""
 
-import pytest
-
 from click.testing import CliRunner
 
 from textnets import Corpus, Textnet
 from textnets import cli, examples
-
-import igraph as ig
-import pandas as pd
 
 
 def test_command_line_interface():
