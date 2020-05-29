@@ -58,6 +58,7 @@ class Textnet:
                                                             grid=False)
         kwargs.setdefault('layout', layout)
         kwargs.setdefault('margin', 50)
+        kwargs.setdefault('edge_color', 'lightgray')
         kwargs.setdefault('vertex_shape', ['circle' if v else 'square'
                                            for v in self.node_types])
         kwargs.setdefault('vertex_color', ['orangered' if v else 'dodgerblue'
