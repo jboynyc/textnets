@@ -8,7 +8,7 @@ import pytest
 from click.testing import CliRunner
 
 from textnets import Corpus, Textnet
-from textnets import cli
+from textnets import cli, examples
 
 import igraph as ig
 import pandas as pd
@@ -24,27 +24,10 @@ def test_command_line_interface():
     assert help_result.exit_code == 0
     assert 'Show this message and exit.' in help_result.output
 
-def test_sotu():
+def test_corpus():
     """Test main classes using small data frame."""
 
-    moon_landing = pd.DataFrame(
-        {'paper': ['The Guardian',
-                   'New York Times',
-                   'Boston Globe',
-                   'Houston Chronicle',
-                   'Washington Post',
-                   'Chicago Tribune',
-                   'Los Angeles Times'],
-         'headline': ['3:29 am Man Steps Onto the Moon',
-                      'Men Walk on Moon -- Astronauts Land on Plain, Collect Rocks, Plant Flag',
-                      'Man Walks on Moon',
-                      'Armstrong and Aldrich Take One Small Step for Man on the Moon',
-                      'The Eagle Has Landed Two Men Walk on the Moon',
-                      'Giant Leap for Mankind',
-                      'Walk on Moon That\'s on Small Step for Man, One Giant Leap for Mankind']
-        }).set_index('paper')
-
-    c = Corpus(moon_landing)
+    c = Corpus(examples.moon_landing)
     assert c._df.shape[0] == 7
     assert c._df.shape[1] == 2
 
