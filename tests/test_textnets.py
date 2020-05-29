@@ -25,7 +25,7 @@ def test_command_line_interface():
     assert 'Show this message and exit.' in help_result.output
 
 def test_corpus():
-    """Test main classes using small data frame."""
+    """Test Corpus class using small data frame."""
 
     c = Corpus(examples.moon_landing)
     assert c._df.shape[0] == 7
@@ -33,6 +33,15 @@ def test_corpus():
 
     noun_phrases = c.noun_phrases()
     assert set(noun_phrases.columns) == {'term', 'n'}
+
+    tokenized = c.tokenized()
+    assert set(tokenized.columns) == {'term', 'n'}
+
+def test_textnet():
+    """Test Textnet class using small data frame."""
+
+    c = Corpus(examples.moon_landing)
+    noun_phrases = c.noun_phrases()
 
     tn_np = Textnet(noun_phrases)
     assert tn_np.graph.vcount() > 0
@@ -45,16 +54,13 @@ def test_corpus():
     assert g_np_words.vcount() > 0
     assert g_np_words.ecount() > 0
 
-    tokenized = c.tokenized()
-    assert set(tokenized.columns) == {'term', 'n'}
+def test_plotting(tmpdir):
+    """Test Textnet plotting."""
 
-    tn_t = Textnet(tokenized)
-    assert tn_t.graph.vcount() > 0
-    assert tn_t.graph.ecount() > 0
-    assert set(tn_t._df.columns) == {'term', 'n', 'tf_idf'}
-    g_t_groups = tn_t.project(node_type='doc')
-    assert g_t_groups.vcount() > 0
-    assert g_t_groups.ecount() > 0
-    g_t_words = tn_t.project(node_type='term')
-    assert g_t_words.vcount() > 0
-    assert g_t_words.ecount() > 0
+    c = Corpus(examples.moon_landing)
+    noun_phrases = c.noun_phrases()
+    tn_np = Textnet(noun_phrases)
+    out = tmpdir.join('plot.png')
+    plot = tn_np.plot(target=str(out))
+    assert len(plot._objects) > 0
+    assert len(tmpdir.listdir()) == 1
