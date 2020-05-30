@@ -50,6 +50,9 @@ clean-test: ## remove test and coverage artifacts
 lint: ## check style with flake8
 	flake8 textnets tests
 
+format: ## format code with black
+	black textnets tests
+
 test: ## run tests quickly with the default Python
 	pytest
 
