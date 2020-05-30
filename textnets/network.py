@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from typing import Dict, Optional, List, Literal
 from functools import cached_property
+
 import numpy as np
 import pandas as pd
 import igraph as ig
@@ -8,7 +10,37 @@ import leidenalg as la
 
 
 class Textnet:
-    def __init__(self, tidy_text, sublinear=True, doc_attrs=None, min_docs=2):
+    """
+    Textnet for the relational analysis of meanings.
+
+    A textnet is a bipartite network of documents and terms. Links exist
+    only between the two types of nodes. Documents have a tie with terms
+    they contain; the tie is weighted by tf-idf.
+
+    The bipartite network can be projected into two different kinds of
+    single-mode networks: document-to-document, and term-to-term.
+
+    Parameters
+    ----------
+    tidy_text : DataFrame
+        DataFrame of tokens with per-document counts, as created by
+        `Corpus` methods `tokenized()` and `noun_phrases()`.
+    sublinear : bool, optional
+        Apply sublinear scaling to tf-idf values (default: True).
+    doc_attrs : dict of dict, optional
+        Additional attributes of document nodes.
+    min_docs : int, optional
+        Minimum number of documents a term must appear in to be included
+        in the network (default: 2).
+    """
+
+    def __init__(
+        self,
+        tidy_text: pd.DataFrame,
+        sublinear: bool = True,
+        doc_attrs: Optional[Dict[str, Dict[str, str]]] = None,
+        min_docs: int = 2,
+    ):
         self._df = _tf_idf(tidy_text, sublinear, min_docs)
         im = self._df.pivot(values="tf_idf", columns="term").fillna(0)
         self.im = im
@@ -22,10 +54,11 @@ class Textnet:
         self.graph = g
 
     @cached_property
-    def node_types(self):
+    def node_types(self) -> List[bool]:
+        """Returns boolean list to distinguish node types."""
         return [True if t == "term" else False for t in self.graph.vs["type"]]
 
-    def project(self, node_type):
+    def project(self, node_type: Literal["doc", "term"]) -> ig.Graph:
         assert node_type in ("doc", "term"), "No valid node_type specified."
         graph_to_return = 0
         if node_type == "term":
@@ -46,8 +79,29 @@ class Textnet:
         return graph
 
     def plot(
-        self, mark_groups=False, bipartite_layout=False, label_nodes=("term"), **kwargs
+        self,
+        mark_groups: bool = False,
+        bipartite_layout: bool = False,
+        label_nodes: tuple = ("term",),
+        **kwargs
     ):
+        """Plot the bipartite graph.
+
+        Parameters
+        ----------
+        mark_groups : bool, optional
+            Mark clusters detected by Leiden algorithm (default: False).
+        bipartite_layout : bool, optional
+            Use a bipartite graph layout (default: False, in which case a
+            weighted Fruchterman-Reingold layout is used).
+        label_nodes : tuple, optional
+            Node type to label. Tuple of "term," "doc," or both. Default:
+            term only.
+
+        Returns
+        -------
+        TK
+        """
         if bipartite_layout:
             layout = self.graph.layout_bipartite(types=self.node_types)
         else:
@@ -79,10 +133,12 @@ class Textnet:
 
     @cached_property
     def clusters(self):
+        """Return partition of bipartite graph detected by Leiden algorithm."""
         return self._partition_graph(resolution=0.5)
 
     @cached_property
     def context(self):
+        """Return formal context of terms and documents."""
         return self._formal_context(alpha=0.3)
 
     def _partition_graph(self, resolution):
@@ -108,7 +164,8 @@ class Textnet:
         return objects, properties, bools
 
 
-def _tf_idf(tidy_text, sublinear, min_docs):
+def _tf_idf(tidy_text: pd.DataFrame, sublinear: bool, min_docs: int):
+    """Calculate term frequency/inverse document frequency."""
     if sublinear:
         tidy_text["tf"] = tidy_text["n"].map(_sublinear_scaling)
     else:
