@@ -1,11 +1,10 @@
 .PHONY: clean clean-test clean-pyc clean-build docs help
 .DEFAULT_GOAL := help
+
 define BROWSER_PYSCRIPT
 import os, webbrowser, sys
-try:
-	from urllib import pathname2url
-except:
-	from urllib.request import pathname2url
+
+from urllib.request import pathname2url
 
 webbrowser.open("file://" + pathname2url(os.path.abspath(sys.argv[1])))
 endef
@@ -21,13 +20,13 @@ for line in sys.stdin:
 		print("%-20s %s" % (target, help))
 endef
 export PRINT_HELP_PYSCRIPT
+
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
-
 
 clean-build: ## remove build artifacts
 	rm -fr build/
@@ -46,13 +45,13 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr .tox/
 	rm -f .coverage
 	rm -fr htmlcov/
+	rm -fr .pytest_cache
 
 lint: ## check style with flake8
 	flake8 textnets tests
 
 test: ## run tests quickly with the default Python
-	py.test
-	
+	pytest
 
 test-all: ## run tests on every Python version with tox
 	tox
@@ -74,9 +73,8 @@ docs: ## generate Sphinx HTML documentation, including API docs
 servedocs: docs ## compile the docs watching for changes
 	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
 
-release: clean ## package and upload a release
-	python setup.py sdist upload
-	python setup.py bdist_wheel upload
+release: dist ## package and upload a release
+	twine upload dist/*
 
 dist: clean ## builds source and wheel package
 	python setup.py sdist
