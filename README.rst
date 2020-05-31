@@ -6,6 +6,9 @@ Textnets
 Automated text analysis with networks.
 --------------------------------------
 
+.. image:: https://zenodo.org/badge/114368834.svg
+   :target: https://zenodo.org/badge/latestdoi/114368834
+
 This is a Python implementation of `Chris Bail's textnets package for R`_.  It
 is free software under the terms of the GNU General Public License v3.
 
