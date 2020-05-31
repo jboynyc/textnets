@@ -8,9 +8,6 @@ from setuptools import setup, find_packages
 with open("README.rst") as readme_file:
     readme = readme_file.read()
 
-with open('HISTORY.rst') as history_file:
-    history = history_file.read()
-
 requirements = [
     "Click>=7.0",
     "pandas==1.0.3",
@@ -41,7 +38,7 @@ setup(
     name="textnets",
     version="0.3.0",
     description="Automated text analysis with networks",
-    long_description=readme + '\n\n' + history,
+    long_description=readme,
     url="https://github.com/jboynyc/textnets",
     packages=find_packages(include=["textnets", "textnets.*"]),
     entry_points={"console_scripts": ["textnets=textnets.cli:main"]},
