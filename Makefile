@@ -55,6 +55,7 @@ format: ## format code with black
 
 test: ## run tests quickly with the default Python
 	pytest
+	mypy --ignore-missing-imports textnets
 
 test-all: ## run tests on every Python version with tox
 	tox
