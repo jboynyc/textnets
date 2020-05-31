@@ -18,7 +18,8 @@ requirements = [
     "spacy==2.2.4",
     "toolz==0.10.0",
     "leidenalg==0.8.0",
-    "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz"
+    "en_core_web_sm",
+    "pycairo"
 ]
 
 setup_requirements = ["pytest-runner"]
@@ -31,7 +32,6 @@ test_requirements = [
     "spacy",
     "toolz",
     "leidenalg",
-    "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz"
 ]
 
 setup(
@@ -47,6 +47,7 @@ setup(
     entry_points={"console_scripts": ["textnets=textnets.cli:main"]},
     include_package_data=True,
     install_requires=requirements,
+    dependency_links = ["https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz"],
     license="GNU General Public License v3",
     zip_safe=False,
     keywords="textnets",
