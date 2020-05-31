@@ -23,29 +23,29 @@ __ https://doi.org/10.1073/pnas.1607151113
 Features
 --------
 
-.. code:: python
-
-    from textnets import TextCorpus, Textnets
-
-
-    c = TextCorpus('~/nltk_data/corpora/state_union/*.txt')
-    tn = Textnets(c.noun_phrases())
-    g_bipartite = tn.graph
-    g_bipartite.vs['cluster'] = tn.cluster().membership
-    g_groups = tn.project(node_type='doc')
-    g_words = tn.project(node_type='term')
-
 The library builds on the state-of-the-art library `spacy`_ for
 natural-language processing and `igraph`_ for network analysis. It uses the
 `Leiden algorithm`_ for community detection, which is able to perform community
 detection on the bipartite (word--group) network.
 
-In addition to providing a Python library, textnets can also be used as a
-command-line tool to generate network graphs from text corpora.
-
 .. _`Leiden algorithm`: https://arxiv.org/abs/1810.08473
 .. _`igraph`: http://igraph.org/python/
 .. _`spacy`: http://spacy.io/
+
+.. code:: python
+
+    from textnets import Corpus, Textnet
+
+
+    c = Corpus.from_files('~/nltk_data/corpora/state_union/*.txt')
+    tn = Textnet(c.noun_phrases())
+    g_bipartite = tn.graph
+    g_bipartite.vs['cluster'] = tn.clusters.membership
+    g_groups = tn.project(node_type='doc')
+    g_words = tn.project(node_type='term')
+
+In addition to providing a Python library, textnets can also be used as a
+command-line tool to generate network graphs from text corpora.
 
 .. code:: bash
 
