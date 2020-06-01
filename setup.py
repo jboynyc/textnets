@@ -39,7 +39,7 @@ setup(
     version="version='0.3.1'",
     description="Automated text analysis with networks",
     long_description=readme,
-    url="https://github.com/jboynyc/textnets",
+    url="https://textnets.readthedocs.io",
     packages=find_packages(include=["textnets", "textnets.*"]),
     entry_points={"console_scripts": ["textnets=textnets.cli:main"]},
     include_package_data=True,
