@@ -7,7 +7,7 @@ dependencies:
   - leidenalg>=0.8.0
   - pandas>=1.0.3
   - spacy>=2.2.4
-  - spacy-model-en_core_web-sm
+  - spacy-model-en_core_web_sm
   - toolz
   - click
   - sphinx
