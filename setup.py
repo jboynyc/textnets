@@ -36,7 +36,7 @@ setup(
     author_email="jboy@bius.moe",
     python_requires='>=3.5',
     name="textnets",
-    version="0.3.0",
+    version="version='0.3.1'",
     description="Automated text analysis with networks",
     long_description=readme,
     url="https://github.com/jboynyc/textnets",
