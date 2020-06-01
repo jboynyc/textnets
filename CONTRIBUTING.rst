@@ -70,28 +70,35 @@ Ready to contribute? Here's how to set up `textnets` for local development.
     $ cd textnets/
     $ python setup.py develop
 
+   If you use nix, you can also invoke nix-shell in the repository to quickly
+   create a development environment with the included `default.nix` file.
+
 4. Create a branch for local development::
 
     $ git checkout -b name-of-your-bugfix-or-feature
 
    Now you can make your changes locally.
 
-5. When you're done making changes, check that your changes pass flake8 and the
-   tests, including testing other Python versions with tox::
+5. When you're done making changes, format and lint your changes and run the
+   unit tests::
 
-    $ flake8 textnets tests
-    $ python setup.py test or pytest
-    $ tox
+    $ make lint
+    $ make test
+    $ make test-all # to test other Python versions with tox
 
    To get flake8 and tox, just pip install them into your virtualenv.
 
-6. Commit your changes and push your branch to GitHub::
+6. Commit your changes::
 
     $ git add .
     $ git commit -m "Your detailed description of your changes."
+
+7. Push you changes and submit a pull request through GitHub::
+
     $ git push origin name-of-your-bugfix-or-feature
 
-7. Submit a pull request through the GitHub website.
+   Alternately, if you'd rather avoid using GitHub, email a patch to the
+   maintainer. See https://git-send-email.io/ for instructions.
 
 Pull Request Guidelines
 -----------------------
@@ -102,17 +109,9 @@ Before you submit a pull request, check that it meets these guidelines:
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
    feature to the list in README.rst.
-3. The pull request should work for Python 3.5, 3.6, 3.7 and 3.8, and for PyPy. Check
+3. The pull request should work for Python 3.5, 3.6, 3.7 and 3.8. Check
    https://travis-ci.com/jboynyc/textnets/pull_requests
    and make sure that the tests pass for all supported Python versions.
-
-Tips
-----
-
-To run a subset of tests::
-
-$ pytest tests.test_textnets
-
 
 Deploying
 ---------

@@ -1,6 +1,11 @@
+# -*- coding: utf-8 -*-
+
+"""Example data for feature demnstrations."""
+
 import pandas as pd
 
 
+#: Example dataset with newspaper headlines about the Apollo 11 landing.
 moon_landing = pd.DataFrame(
     {
         "paper": [
