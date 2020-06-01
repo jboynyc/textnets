@@ -1,0 +1,15 @@
+version: 2
+
+conda:
+  environment: docs/conda-env.yml
+
+# Optionally set the version of Python and requirements required to build your docs
+python:
+  version: 3.8
+  install:
+    - method: pip
+      path: .
+
+# Build documentation in the doc/source directory with Sphinx
+sphinx:
+  configuration: docs/conf.py
