@@ -29,23 +29,17 @@ Features
 The library builds on the state-of-the-art library `spacy`_ for
 natural-language processing and `igraph`_ for network analysis. It uses the
 `Leiden algorithm`_ for community detection, which is able to perform community
-detection on the bipartite (word--group) network.
+detection on the bipartite (word–group) network. Textnets seamlessly integrates
+with Pandas and other parts of Python's scientific stack.
 
 .. _`Leiden algorithm`: https://arxiv.org/abs/1810.08473
 .. _`igraph`: http://igraph.org/python/
 .. _`spacy`: http://spacy.io/
 
-.. code:: python
+For a demonstration of this package's features, take a look at `this
+notebook`_.
 
-    from textnets import Corpus, Textnet
-
-
-    c = Corpus.from_files('~/nltk_data/corpora/state_union/*.txt')
-    tn = Textnet(c.noun_phrases())
-    g_bipartite = tn.graph
-    g_bipartite.vs['cluster'] = tn.clusters.membership
-    g_groups = tn.project(node_type='doc')
-    g_words = tn.project(node_type='term')
+.. _`this notebook`: https://gist.github.com/jboynyc/d5a850c04c5ef8d9007a27bf22112212
 
 In addition to providing a Python library, textnets can also be used as a
 command-line tool to generate network graphs from text corpora.
@@ -59,6 +53,12 @@ Run ``textnets --help`` for usage instructions.
 Installing
 ----------
 
-In a `virtual environment`_, run ``python setup.py install`` followed by ``python -m spacy download en_core_web_sm``.
+Textnets is now on the `Python Package Index`_, so it can be installed using ``pip``. In a `virtual environment`_, run ``pip install textnets``. You may also have to install an appropriate `language model`_ by issuing a command like:: 
 
+.. code:: bash
+
+    $ python -m spacy download en_core_web_sm
+
+.. _`Python Package Index`: https://pypi.org/project/textnets/
 .. _`virtual environment`: https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments
+.. _`language model`: https://spacy.io/usage/models#download
