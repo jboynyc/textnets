@@ -42,9 +42,7 @@ notebook`_.
 .. _`this notebook`: https://gist.github.com/jboynyc/d5a850c04c5ef8d9007a27bf22112212
 
 In addition to providing a Python library, textnets can also be used as a
-command-line tool to generate network graphs from text corpora.
-
-.. code:: bash
+command-line tool to generate network graphs from text corpora::
 
     $ textnets --lex noun_phrases --node-type groups ~/nltk_data/corpora/state_union | gzip > sotu_groups.graphmlz
 
@@ -54,8 +52,6 @@ Installing
 ----------
 
 Textnets is now on the `Python Package Index`_, so it can be installed using ``pip``. In a `virtual environment`_, run ``pip install textnets``. You may also have to install an appropriate `language model`_ by issuing a command like:: 
-
-.. code:: bash
 
     $ python -m spacy download en_core_web_sm
 
