@@ -14,6 +14,9 @@ with import <nixpkgs> {};
     python38Packages.pycairo
     python38Packages.spacy
     python38Packages.toolz
+
+    python38Packages.jupyter
+    python38Packages.matplotlib
   ];
   postShellHook = ''
     pip install -e ".[dev,doc]"
