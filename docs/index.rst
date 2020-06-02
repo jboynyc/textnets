@@ -16,7 +16,6 @@ API Reference
    :maxdepth: 2
 
    textnets
-   modules
 
 Project Information
 ===================
