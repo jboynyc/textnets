@@ -89,7 +89,7 @@ A textnet is a `bipartite network <https://en.wikipedia.org/wiki/Bipartite_graph
 
 A boolean argument, ``sublinear``, decides whether to use sublinear (logarithmic) scaling when calculating tf-idf for edge weights. The default is ``True`` because sublinear scaling is considered good practice in the information retrieval literature, but there may be good reason to disable it.
 
-``doc_attr`` allows setting additional attributes for documents that become node attributes in the resulting network graph. For instance, if texts represent views of members of different parties, we can set a party attribute. 
+``doc_attr`` allows setting additional attributes for documents that become node attributes in the resulting network graph. For instance, if texts represent views of members of different parties, we can set a party attribute.
 
 .. code:: python
 
@@ -99,5 +99,17 @@ Seeing Results
 --------------
 
 You are now ready to see the first results. `Textnet` comes with a utility method, `plot`, which allows you to quickly visualize the bipartite graph.
+
+Projecting
+----------
+
+Depending on your research question, you may be interested either in how terms or documents are connected. For that purpose, you can project the bipartite network into a single-mode network.
+
+.. code:: python
+
+   groups = tn.project(node_type='doc')
+   groups.summary()
+
+The resulting network will only contain nodes of one type. Edge weights are calculated, and node attributes are maintained.
 
 *to be continued*
