@@ -97,6 +97,7 @@ todo_include_todos = False
 #
 if not os.environ.get('READTHEDOCS'):
     html_theme = 'alabaster'
+    html_theme_options = {'logo_only': True}
 
 html_logo = 'textnets-logo.svg'
 
@@ -104,7 +105,7 @@ html_logo = 'textnets-logo.svg'
 # theme further.  For a list of options available for each theme, see the
 # documentation.
 #
-html_theme_options = {'logo_only': True}
+#html_theme_options = {}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
