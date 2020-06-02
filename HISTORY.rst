@@ -2,6 +2,12 @@
 History
 =======
 
+0.3.3 (2020-06-02)
+------------------
+
+* More documentation.
+* Attempt to get automatic deployments to PyPI working.
+
 0.3.2 (2020-06-02)
 ------------------
 
