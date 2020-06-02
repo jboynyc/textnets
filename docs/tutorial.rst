@@ -2,10 +2,6 @@
 Tutorial
 ========
 
-To use **textnets** in a project, you need the following import::
-
-    from textnets import Corpus, Textnet
-
 Wrangling Text & Mangling Data
 ------------------------------
 
@@ -110,6 +106,86 @@ Depending on your research question, you may be interested either in how terms o
    groups = tn.project(node_type='doc')
    groups.summary()
 
-The resulting network will only contain nodes of one type. Edge weights are calculated, and node attributes are maintained.
+The resulting network will only contain nodes of the chosen type. Edge weights are calculated, and node attributes are maintained.
+
+Example
+-------
+
+To use **textnets** in a project, you typically need the following imports:
+
+.. jupyter-execute::
+
+   import pandas as pd
+   from textnets import Corpus, Textnet
+
+For the purposes of demonstration, we also import the bundled example data:
+
+.. jupyter-execute::
+
+   from textnets import examples
+
+We construct the corpus from the example data:
+
+.. jupyter-execute::
+
+   corpus = Corpus(examples.moon_landing)
+
+What is this `moon_landing` example all about?
+
+.. jupyter-execute::
+
+   display(examples.moon_landing)
+
+.. note::
+
+   Hat tip to Chris Bail for this example data!
+
+Next, we create the textnet:
+
+.. jupyter-execute::
+
+   tn = Textnet(corpus.tokenized(), min_docs=1)
+
+We're using `tokenized` with all defaults, so **textnets** is removing stop words, applying stemming, and removing punctuation marks and numbers. However, we're overriding the default setting for ``min_docs``, opting to keep even words that appear in only one document (i.e., newspaper headline).
+
+Let's take a look:
+
+.. jupyter-execute::
+
+   tn.plot(label_nodes=('term', 'doc'),
+           mark_groups=True)
+
+The ``mark_group`` options marks the partitions found by the Leiden community detection algorithm. It identifies document-term groups that appear to form part of the same theme in the texts.
+
+You may be wondering: Why is the moon drifting off by itself in the network plot? That's because the word moon appears exactly once in each document, so its tf-idf value for each document is 0.
+
+We can also visualize the projected networks.
+
+First, the network of newspapers:
+
+.. jupyter-execute::
+
+    papers = tn.project(node_type='doc')
+    ig.plot(papers,
+            layout=papers.layout_fruchterman_reingold(weights='weight'),
+            margin=100,
+            vertex_shape='box',
+            vertex_color='dodgerblue',
+            vertex_label=papers.vs['id'])
+
+As before in the bipartite projection, we can see the East Coast papers cluster more closely together.
+
+Next, the term network:
+
+.. jupyter-execute::
+
+   words = tn.project(node_type='term')
+   ig.plot(words,
+           layout=words.layout_fruchterman_reingold(weights='weight'),
+           margin=100,
+           vertex_label=words.vs['id'],
+           mark_groups=words.community_leiden(weights='weight'))
+
+Download this example as a Jupyter notebook: :jupyter-download:notebook:`tutorial`.
 
 *to be continued*

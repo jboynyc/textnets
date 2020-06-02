@@ -10,6 +10,6 @@ dependencies:
   - spacy-model-en_core_web_sm
   - toolz
   - click
+  - jupyter-sphinx
   - sphinx
-  - pip:
-      - sphinx-typlog-theme
+  - sphinx-rtd-theme
