@@ -1,5 +1,5 @@
-Welcome to the Textnets documentation
-=====================================
+Textnets Documentation
+======================
 
 .. toctree::
    :maxdepth: 2
@@ -7,7 +7,7 @@ Welcome to the Textnets documentation
 
    readme
    installation
-   usage
+   tutorial
    modules
    contributing
    authors

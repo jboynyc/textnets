@@ -5,7 +5,7 @@ Credits
 Development Lead
 ----------------
 
-* John D. Boy <jboy@bius.moe>
+-  `John D. Boy <https://www.jboy.space>`__, Leiden University
 
 Contributors
 ------------

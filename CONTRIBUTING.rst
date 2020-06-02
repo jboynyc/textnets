@@ -57,9 +57,9 @@ If you are proposing a feature:
 Get Started!
 ------------
 
-Ready to contribute? Here's how to set up `textnets` for local development.
+Ready to contribute? Here's how to set up **textnets** for local development.
 
-1. Fork the `textnets` repo on GitHub.
+1. Fork the ``textnets`` repo on GitHub.
 2. Clone your fork locally::
 
     $ git clone git@github.com:your_name_here/textnets.git
@@ -71,7 +71,7 @@ Ready to contribute? Here's how to set up `textnets` for local development.
     $ python setup.py develop
 
    If you use nix, you can also invoke nix-shell in the repository to quickly
-   create a development environment with the included `default.nix` file.
+   create a development environment with the included ``default.nix`` file.
 
 4. Create a branch for local development::
 
@@ -109,9 +109,9 @@ Before you submit a pull request, check that it meets these guidelines:
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
    feature to the list in README.rst.
-3. The pull request should work for Python 3.5, 3.6, 3.7 and 3.8. Check
-   https://travis-ci.com/jboynyc/textnets/pull_requests
-   and make sure that the tests pass for all supported Python versions.
+3. The pull request should work for Python 3.8. Check
+   https://travis-ci.org/github/jboynyc/textnets/pull_requests and make sure
+   that the tests pass.
 
 Deploying
 ---------

@@ -4,48 +4,25 @@
 Installation
 ============
 
+**textnets** is now on the `Python Package Index`_, so it can be installed using `pip`_. 
 
-Stable release
---------------
+.. _`Python Package Index`: https://pypi.org/project/textnets/
+.. _pip: https://pip.pypa.io
 
-To install Textnets, run this command in your terminal:
+.. note::
 
-.. code-block:: console
+   Please note that **textnets** requires Python 3.8 to run.
 
-    $ pip install textnets
+In a `virtual environment`_, run ``pip install textnets``. You may also have to install an appropriate `language model`_ by issuing a command like:: 
 
-This is the preferred method to install Textnets, as it will always install the most recent stable release. 
+    $ python -m spacy download en_core_web_sm
 
-If you don't have `pip`_ installed, this `Python installation guide`_ can guide
+.. _`virtual environment`: https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments
+.. _`language model`: https://spacy.io/usage/models#download
+
+This is the preferred method to install **textnets**, as it will always install the most recent stable release. 
+
+If you don't have pip installed, this `Python installation guide`_ can guide
 you through the process.
 
-.. _pip: https://pip.pypa.io
 .. _Python installation guide: http://docs.python-guide.org/en/latest/starting/installation/
-
-
-From sources
-------------
-
-The sources for Textnets can be downloaded from the `Github repo`_.
-
-You can either clone the public repository:
-
-.. code-block:: console
-
-    $ git clone git://github.com/jboynyc/textnets
-
-Or download the `tarball`_:
-
-.. code-block:: console
-
-    $ curl  -OL https://github.com/jboynyc/textnets/tarball/master
-
-Once you have a copy of the source, you can install it with:
-
-.. code-block:: console
-
-    $ python setup.py install
-
-
-.. _Github repo: https://github.com/jboynyc/textnets
-.. _tarball: https://github.com/jboynyc/textnets/tarball/master
