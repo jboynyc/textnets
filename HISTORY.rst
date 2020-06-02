@@ -2,6 +2,13 @@
 History
 =======
 
+0.3.4 (2020-06-02)
+------------------
+
+* Integrated self-contained example that can be downloaded as Jupyter notebook
+  into tutorial.
+* Still trying to get automatic deployments to PyPI working.
+
 0.3.3 (2020-06-02)
 ------------------
 

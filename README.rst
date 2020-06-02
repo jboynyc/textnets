@@ -1,6 +1,6 @@
-================================================
-Textnets: automated text analysis with networks.
-================================================
+===============================================
+Textnets: automated text analysis with networks
+===============================================
 
 .. image:: https://zenodo.org/badge/114368834.svg
    :target: https://zenodo.org/badge/latestdoi/114368834
