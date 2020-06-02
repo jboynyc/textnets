@@ -9,6 +9,10 @@ Installation
 .. _`Python Package Index`: https://pypi.org/project/textnets/
 .. _pip: https://pip.pypa.io
 
+.. note::
+
+   Please note that **textnets** requires Python 3.8 to run.
+
 In a `virtual environment`_, run ``pip install textnets``. You may also have to install an appropriate `language model`_ by issuing a command like:: 
 
     $ python -m spacy download en_core_web_sm
