@@ -2,6 +2,7 @@ language: python
 python:
 - 3.8
 install: pip install -U tox-travis
+before_script: python -m spacy download en_core_web_sm
 script: tox
 deploy:
   provider: pypi
