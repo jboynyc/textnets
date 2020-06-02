@@ -20,11 +20,11 @@ class Corpus:
         Data frame containing the documents. The index contains document
         labels.
     doc_col : str, optional
-        Indicates which column of `data` contains the document texts. If
+        Indicates which column of ``data`` contains the document texts. If
         none is specified, the first column with strings is assumed to
         contain document texts.
     lang : str, optional
-        The langugage model to be used. Defaults to en_core_web_sm.
+        The langugage model to be used. Defaults to ``en_core_web_sm``.
     """
 
     def __init__(

@@ -57,9 +57,9 @@ If you are proposing a feature:
 Get Started!
 ------------
 
-Ready to contribute? Here's how to set up `textnets` for local development.
+Ready to contribute? Here's how to set up **textnets** for local development.
 
-1. Fork the `textnets` repo on GitHub.
+1. Fork the ``textnets`` repo on GitHub.
 2. Clone your fork locally::
 
     $ git clone git@github.com:your_name_here/textnets.git
@@ -71,7 +71,7 @@ Ready to contribute? Here's how to set up `textnets` for local development.
     $ python setup.py develop
 
    If you use nix, you can also invoke nix-shell in the repository to quickly
-   create a development environment with the included `default.nix` file.
+   create a development environment with the included ``default.nix`` file.
 
 4. Create a branch for local development::
 
