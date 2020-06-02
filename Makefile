@@ -48,7 +48,7 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr .pytest_cache
 
 lint: format ## check style with flake8
-	flake8 --max-line-length=88 --ignore=F401 --show-source textnets tests
+	flake8 textnets tests
 
 format: ## format code with black
 	black textnets tests
