@@ -2,7 +2,7 @@
 Tutorial
 ========
 
-To use Textnets in a project, you need the following import::
+To use **textnets** in a project, you need the following import::
 
     from textnets import Corpus, Textnet
 
@@ -11,35 +11,6 @@ Wrangling Text & Mangling Data
 
 A textnet is built from a collection – or *corpus* – of texts, so we use
 the `Corpus` class to get our data ready.
-
-From Files
-~~~~~~~~~~
-
-It may be that you have each document stored on disk in a separate text
-file. `Corpus` comes with a utility, `from_files()`, to help in such
-situations. You can pass a path to it using a
-`globbing <https://en.wikipedia.org/wiki/Glob_(programming)>`__ pattern:
-
-.. code:: python
-
-   corpus = Corpus.from_files('/path/to/tests/\*.txt')
-
-You can also pass it a list of paths:
-
-.. code:: python
-
-   corpus = Corpus.from_files(['kohl.txt', 'schroeder.txt', 'merkel.txt'],
-                              doc_labels=['Kohl', 'Schröder', 'Merkel'],
-                              lang='de_core_news_sm')
-
-The above example demonstrates two other features:
-
-1. You can optionally pass explicit labels for your documents using
-   ``doc_labels``. Without this, labels are inferred from the file name
-   (by stripping off the file suffix).
-2. You can specify which `language model <https://spacy.io/models>`__
-   you would like to use. The default is English, but you don’t have to
-   be monolingual to use **textnets**.
 
 From a Data Frame
 ~~~~~~~~~~~~~~~~~
@@ -59,10 +30,39 @@ labels as the index.
 If you do not specify ``doc_col``, **textnets** will assume that the
 first column containing strings is the one you meant.
 
+From Files
+~~~~~~~~~~
+
+Perhaps you have each document you want to include in your textnet stored on
+disk in a separate text file. For such cases, `Corpus` comes with a utility,
+`from_files()`. You can simply pass a path to it using a `globbing
+<https://en.wikipedia.org/wiki/Glob_(programming)>`__ pattern:
+
+.. code:: python
+
+   corpus = Corpus.from_files('/path/to/texts/*.txt')
+
+You can also pass it a list of paths:
+
+.. code:: python
+
+   corpus = Corpus.from_files(['kohl.txt', 'schroeder.txt', 'merkel.txt'],
+                              doc_labels=['Kohl', 'Schröder', 'Merkel'],
+                              lang='de_core_news_sm')
+
+The above example demonstrates two other features:
+
+1. You can optionally pass explicit labels for your documents using the
+   argument ``doc_labels``. Without this, labels are inferred from file
+   names (by stripping off the file suffix).
+2. You can specify which `language model <https://spacy.io/models>`__
+   you would like to use. The default is English, but you don’t have to
+   be monolingual to use **textnets**.
+
 Break It Up
 ~~~~~~~~~~~
 
-The textnet is build from chunks of texts. `Corpus` offers two
+The textnet is built from chunks of texts. `Corpus` offers two
 methods for breaking your texts into chunks: `tokenized` and
 `noun_phrases`. The first breaks your texts up into individual
 words, while the latter looks for `noun
@@ -73,8 +73,8 @@ husband,” “our prime minister,” or “the virus.”
 
    np = corpus.noun_phrases(remove=['Lilongwe'])
 
-The result of this is another data frame, which we can feed to
-`Textnet` to make our textnet.
+The result of this is another data frame, which we can feed to `Textnet` to
+make our textnet.
 
 Make Connections
 ----------------
