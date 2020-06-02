@@ -44,7 +44,7 @@ setup(
     entry_points={"console_scripts": ["textnets=textnets.cli:main"]},
     include_package_data=True,
     install_requires=requirements,
-    dependency_links = ["https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz"],
+    dependency_links = ["https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz#egg=en_core_web_sm-2.2.5"],
     license="GNU General Public License v3",
     zip_safe=False,
     keywords="textnets",
