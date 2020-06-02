@@ -238,6 +238,8 @@ From the Command Line
 In addition to providing a Python library, **textnets** can also be used as a
 command-line tool.
 
-    $ textnets --lex noun_phrases --node-type groups ~/nltk_data/corpora/state_union | gzip > sotu_groups.graphmlz
+.. code:: bash
+
+   $ textnets --lex noun_phrases --node-type groups ~/nltk_data/corpora/state_union | gzip > sotu_groups.graphmlz
 
 Run ``textnets --help`` for usage instructions.
