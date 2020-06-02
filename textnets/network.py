@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Dict, Optional, List, Literal
+from typing import Dict, Optional, List, Literal, Union
 from functools import cached_property
 
 import numpy as np
@@ -59,6 +59,18 @@ class Textnet:
         return [True if t == "term" else False for t in self.graph.vs["type"]]
 
     def project(self, node_type: Literal["doc", "term"]) -> ig.Graph:
+        """Project to one-mode network.
+
+        Parameters
+        ----------
+        node_type : str
+            Either ``doc`` or ``term``, depending on desired node type.
+
+        Returns
+        -------
+        ig.Graph
+            The projected graph with edge weights.
+        """
         assert node_type in ("doc", "term"), "No valid node_type specified."
         graph_to_return = 0
         if node_type == "term":
@@ -100,7 +112,9 @@ class Textnet:
 
         Returns
         -------
-        TK
+        ig.drawing.Plot
+            The plot can be directly displayed in a Jupyter network or saved as
+            an image file.
         """
         if bipartite_layout:
             layout = self.graph.layout_bipartite(types=self.node_types)
@@ -142,6 +156,7 @@ class Textnet:
         return self._formal_context(alpha=0.3)
 
     def _partition_graph(self, resolution):
+        # https://github.com/vtraag/4TU-CSS/
         part, part0, part1 = la.CPMVertexPartition.Bipartite(
             self.graph, resolution_parameter_01=resolution
         )
@@ -187,5 +202,6 @@ def _tf_idf(tidy_text: pd.DataFrame, sublinear: bool, min_docs: int):
     return tt[tt["keep"]][["term", "n", "tf_idf"]]
 
 
-def _sublinear_scaling(n):
+def _sublinear_scaling(n: Union[int, float]) -> float:
+    """Logarithmic scaling function."""
     return 1 + np.log10(n) if n > 0 else 0
