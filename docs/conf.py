@@ -34,7 +34,9 @@ import textnets
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.viewcode',
               'sphinx.ext.napoleon',
-              'sphinx.ext.intersphinx']
+              'sphinx.ext.intersphinx',
+              'sphinx.ext.todo',
+              'jupyter_sphinx']
 
 napoleon_numpy_docstring = True
 
@@ -42,6 +44,11 @@ intersphinx_mapping = {
     'py': ('http://docs.python.org/3', None),
     'pd': ('http://pandas.pydata.org/docs/', None)
 }
+
+if os.environ.get('READTHEDOCS'):
+    todo_include_todos = False
+else:
+    todo_include_todos = True
 
 default_role = 'any'
 
@@ -95,11 +102,8 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-if not os.environ.get('READTHEDOCS'):
-    html_theme = 'alabaster'
-else:
-    html_theme_options = {'logo_only': True}
-
+html_theme = 'sphinx_rtd_theme'
+html_theme_options = {'logo_only': True}
 html_logo = 'textnets-logo.svg'
 
 # Theme options are theme-specific and customize the look and feel of a

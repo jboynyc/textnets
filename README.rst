@@ -25,26 +25,16 @@ Features
 The library builds on the state-of-the-art library `spacy`_ for
 natural-language processing and `igraph`_ for network analysis. It uses the
 `Leiden algorithm`_ for community detection, which is able to perform community
-detection on the bipartite (word–group) network. Textnets seamlessly integrates
-with `pandas`_ and other parts of `Python's scientific stack`_.
+detection on the bipartite (word–group) network. **textnets** seamlessly
+integrates with `pandas`_ and other parts of Python's excellent `scientific
+stack`_. That means that you can use **textnets** in Jupyter notebooks to
+analyze and visualize your data!
 
 .. _`Leiden algorithm`: https://arxiv.org/abs/1810.08473
 .. _`igraph`: http://igraph.org/python/
 .. _`spacy`: https://spacy.io/
 .. _`pandas`: https://pandas.io/
-.. _`Python's scientific stack`: https://numfocus.org/
-
-For a demonstration of some of this package's features, take a look at `this
-notebook`__.
-
-__ https://gist.github.com/jboynyc/d5a850c04c5ef8d9007a27bf22112212
-
-In addition to providing a Python library, **textnets** can also be used as a
-command-line tool to generate network graphs from text corpora::
-
-    $ textnets --lex noun_phrases --node-type groups ~/nltk_data/corpora/state_union | gzip > sotu_groups.graphmlz
-
-Run ``textnets --help`` for usage instructions.
+.. _`scientific stack`: https://numfocus.org/
 
 Learn More
 ----------

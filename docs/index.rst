@@ -1,20 +1,30 @@
-Textnets Documentation
-======================
+.. include:: ../README.rst
+
+User Guide
+==========
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
-   readme
    installation
    tutorial
-   modules
-   contributing
-   authors
-   history
 
-Indices and tables
-==================
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+API Reference
+=============
+
+.. toctree::
+   :maxdepth: 2
+
+   textnets
+   modules
+
+Project Information
+===================
+
+.. toctree::
+   :maxdepth: 2
+
+   contributing
+   history
+   authors
+   license
