@@ -97,9 +97,20 @@ todo_include_todos = False
 #
 if not os.environ.get('READTHEDOCS'):
     html_theme = 'alabaster'
-    html_theme_options = {'logo_only': True}
+else:
+    html_theme = 'sphinx-typlog-theme'
+    import sphinx_typlog_theme
+    html_theme_path = [sphinx_typlog_theme.get_path()]
 
-html_logo = 'textnets-logo.svg'
+html_theme_options = {
+    'description': 'Automated text analysis with networks',
+    'logo': 'textnets-logo.svg',
+    'logo_name': False,
+    'github_user': 'jboynyc',
+    'github_repo': 'textnets',
+}
+
+html_sidebars = {'**': ['github.html']}
 
 # Theme options are theme-specific and customize the look and feel of a
 # theme further.  For a list of options available for each theme, see the

@@ -11,4 +11,5 @@ dependencies:
   - toolz
   - click
   - sphinx
-  - sphinx_rtd_theme
+  - pip:
+      - sphinx-typlog-theme
