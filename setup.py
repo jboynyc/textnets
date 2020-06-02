@@ -15,8 +15,6 @@ requirements = [
     "spacy==2.2.4",
     "toolz==0.10.0",
     "leidenalg==0.8.0",
-    "en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz#egg=en_core_web_sm-2.2.5",
-    "pycairo"
 ]
 
 setup_requirements = ["pytest-runner"]
@@ -29,6 +27,8 @@ test_requirements = [
     "spacy",
     "toolz",
     "leidenalg",
+    "pycairo",
+    "en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz#egg=en_core_web_sm-2.2.5"
 ]
 
 setup(
