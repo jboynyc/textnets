@@ -17,8 +17,6 @@ requirements = [
     "leidenalg==0.8.0",
 ]
 
-setup_requirements = ["pytest-runner"]
-
 test_requirements = [
     "pytest>=3",
     "Click",
@@ -29,6 +27,21 @@ test_requirements = [
     "leidenalg",
     "pycairo",
     "en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz#egg=en_core_web_sm-2.2.5",
+]
+
+dev_requirements = [
+    "pip==19.2.3",
+    "bump2version==0.5.11",
+    "wheel==0.33.6",
+    "watchdog==0.9.0",
+    "flake8==3.7.8",
+    "tox==3.14.0",
+    "coverage==4.5.4",
+    "twine==3.1.1",
+    "pytest==4.6.5",
+    "pytest-runner==5.1",
+    "black==19.3b0",
+    "mypy==0.770"
 ]
 
 setup(
@@ -43,7 +56,6 @@ setup(
     packages=find_packages(include=["textnets", "textnets.*"]),
     entry_points={"console_scripts": ["textnets=textnets.cli:main"]},
     include_package_data=True,
-    install_requires=requirements,
     license="GNU General Public License v3",
     zip_safe=False,
     keywords="textnets",
@@ -59,6 +71,10 @@ setup(
         "Topic :: Sociology",
     ],
     test_suite="tests",
-    tests_require=test_requirements,
-    setup_requires=setup_requirements,
+    install_requires=requirements,
+    extras_require={
+        "test": test_requirements,
+        "dev": dev_requirements,
+        "doc": ["Sphinx>=3.0.4", "sphinx_rtd_theme", "jupyter_sphinx"]
+    },
 )

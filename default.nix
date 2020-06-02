@@ -16,6 +16,6 @@ with import <nixpkgs> {};
     python38Packages.toolz
   ];
   postShellHook = ''
-    pip install -r requirements_dev.txt
+    pip install -e ".[dev,doc]"
   '';
 }
