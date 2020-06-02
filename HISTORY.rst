@@ -2,6 +2,14 @@
 History
 =======
 
+0.3.2 (2020-06-02)
+------------------
+
+* Set up continuous integration with Travis CI.
+* Set up pyup.io dependency safety checks.
+* Expanded documentation.
+* A logo!
+
 0.3.2 (2020-05-31)
 ------------------
 
