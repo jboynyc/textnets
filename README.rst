@@ -2,16 +2,34 @@
 Textnets: automated text analysis with networks
 ===============================================
 
+.. image:: https://travis-ci.org/jboynyc/textnets.svg?branch=master
+   :target: https://travis-ci.org/jboynyc/textnets
+   :alt: Travis-CI Status
+
+.. image:: https://readthedocs.org/projects/textnets/badge/?version=stable
+   :target: https://textnets.readthedocs.io/en/stable/?badge=stable
+   :alt: Documentation Status
+
+.. image:: https://pyup.io/repos/github/jboynyc/textnets/shield.svg
+   :target: https://pyup.io/repos/github/jboynyc/textnets/
+   :alt: Python Dependency Freshness
+
 .. image:: https://zenodo.org/badge/114368834.svg
    :target: https://zenodo.org/badge/latestdoi/114368834
+   :alt: Latest DOI so you can please cite this software
 
-**textnets** represents collections of texts as networks of documents and words. This provides novel possibilities for the analysis and visualization of texts.
+**textnets** represents collections of texts as networks of documents and words. This provides novel possibilities for the visualization and analysis of texts.
 
 .. figure:: https://textnets.readthedocs.io/en/dev/_static/impeachment-statements.svg
    :alt: Bipartite network graph
 
    Network of U.S. Senators and words used in their official statements
    following the acquittal vote in the Senate impeachment trial.
+
+This is a Python implementation of `Chris Bail's textnets package for R`_.  It
+is free software under the terms of the GNU General Public License v3.
+
+.. _`Chris Bail's textnets package for R`: https://github.com/cbail/textnets/
 
 The idea underlying **textnets** is presented in this paper:
 
@@ -22,29 +40,27 @@ The idea underlying **textnets** is presented in this paper:
 
 __ https://doi.org/10.1073/pnas.1607151113
 
-This is a Python implementation of `Chris Bail's textnets package for R`_.  It
-is free software under the terms of the GNU General Public License v3.
-
-.. _`Chris Bail's textnets package for R`: https://github.com/cbail/textnets/
-
 Features
 --------
 
 **textnets** builds on the state-of-the-art library `spacy`_ for
 natural-language processing and `igraph`_ for network analysis. It uses the
 `Leiden algorithm`_ for community detection, which is able to perform community
-detection on the bipartite (word–group) network. **textnets** seamlessly
-integrates with `pandas`_ and other parts of Python's excellent `scientific
-stack`_. That means that you can use **textnets** in Jupyter notebooks to
-analyze and visualize your data!
+detection on the bipartite (word–group) network.
 
 .. _`Leiden algorithm`: https://arxiv.org/abs/1810.08473
 .. _`igraph`: http://igraph.org/python/
 .. _`spacy`: https://spacy.io/
+
+**textnets** seamlessly integrates with `pandas`_ and other parts of Python's
+excellent `scientific stack`_. That means that you can use **textnets** in
+Jupyter notebooks to analyze and visualize your data!
+
 .. _`pandas`: https://pandas.io/
 .. _`scientific stack`: https://numfocus.org/
 
-Read the documentation to find out more about the library's features.
+Read `the documentation <https://textnets.readthedocs.io>`_ to find out more
+about the library's features.
 
 Learn More
 ----------
