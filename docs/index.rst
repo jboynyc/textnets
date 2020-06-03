@@ -5,15 +5,10 @@ User Guide
 
 .. toctree::
    :maxdepth: 2
+   :caption: User Guide
 
    installation
    tutorial
-
-API Reference
-=============
-
-.. toctree::
-   :maxdepth: 2
 
    reference
 
@@ -24,6 +19,7 @@ Project Information
 
 .. toctree::
    :maxdepth: 2
+   :caption: Project Information
 
    contributing
    history
