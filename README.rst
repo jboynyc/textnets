@@ -2,8 +2,21 @@
 Textnets: automated text analysis with networks
 ===============================================
 
+.. image:: https://travis-ci.org/jboynyc/textnets.svg?branch=master
+   :target: https://travis-ci.org/jboynyc/textnets
+   :alt: Travis-CI Status
+
+.. image:: https://readthedocs.org/projects/textnets/badge/?version=stable
+   :target: https://textnets.readthedocs.io/en/stable/?badge=stable
+   :alt: Documentation Status
+
+.. image:: https://pyup.io/repos/github/jboynyc/textnets/shield.svg
+   :target: https://pyup.io/repos/github/jboynyc/textnets/
+   :alt: Python Dependency Freshness
+
 .. image:: https://zenodo.org/badge/114368834.svg
    :target: https://zenodo.org/badge/latestdoi/114368834
+   :alt: Latest DOI so you can please cite this software
 
 **textnets** represents collections of texts as networks of documents and words. This provides novel possibilities for the analysis and visualization of texts.
 
