@@ -46,10 +46,7 @@ intersphinx_mapping = {
     'pd': ('http://pandas.pydata.org/docs/', None)
 }
 
-if os.environ.get('READTHEDOCS'):
-    todo_include_todos = False
-else:
-    todo_include_todos = True
+todo_include_todos = not os.environ.get('READTHEDOCS')
 
 default_role = 'any'
 
