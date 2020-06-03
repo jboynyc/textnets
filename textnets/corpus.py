@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""Implements the features relating to language."""
+
 import os
 from typing import Callable, Optional, Union, List
 

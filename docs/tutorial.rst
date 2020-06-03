@@ -18,13 +18,11 @@ the `Corpus` class to get our data ready.
 From a Data Frame
 ~~~~~~~~~~~~~~~~~
 
-You may already have your texts in a Python data structure. `Corpus`
-can read documents directly from a `pandas <https://pandas.io>`__
-`DataFrame`; mangling your data into the appropriate format should
-only take `one or two easy
-steps <https://pandas.pydata.org/docs/getting_started/dsintro.html#from-dict-of-series-or-dicts>`__.
-The important thing is to have the texts in one column, and the document
-labels as the index.
+You may already have your texts in a Python data structure. `Corpus` can read
+documents directly from a `DataFrame <pd:pandas.DataFrame>`; mangling your data
+into the appropriate format should only take :doc:`one or two easy steps
+<pd:getting_started/dsintro>`. The important thing is to have the texts in one
+column, and the document labels as the index.
 
 .. code:: python
 
@@ -132,8 +130,6 @@ network into a single-mode network.
 
 The resulting network will only contain nodes of the chosen type. Edge weights
 are calculated, and node attributes are maintained.
-
-.. _example:
 
 Example
 -------

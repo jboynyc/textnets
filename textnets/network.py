@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""Implements the features relating to networks."""
+
 from typing import Dict, Optional, List, Literal, Union
 from functools import cached_property
 
