@@ -2,6 +2,12 @@
 History
 =======
 
+0.3.5 (2020-06-03)
+------------------
+
+* Overall improvements to documentation.
+* Added ``label_edges`` argument to `Textnet.plot`.
+
 0.3.4 (2020-06-02)
 ------------------
 
