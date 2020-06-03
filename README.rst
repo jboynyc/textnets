@@ -7,6 +7,14 @@ Textnets: automated text analysis with networks
 
 **textnets** represents collections of texts as networks of documents and words. This provides novel possibilities for the analysis and visualization of texts.
 
+.. https://textnets.readthedocs.io/en/dev/_static/
+
+.. figure:: _static/impeachment-statements.svg
+   :alt: Bipartite network graph
+
+   Network of U.S. Senators and words used in their official statements
+   following the acquittal vote in the Senate impeachment trial.
+
 The idea underlying **textnets** is presented in this paper:
 
   Christopher A. Bail, "`Combining natural language processing and network
