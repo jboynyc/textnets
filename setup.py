@@ -26,7 +26,6 @@ test_requirements = [
     "toolz",
     "leidenalg",
     "pycairo",
-    "en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz#egg=en_core_web_sm-2.2.5",
 ]
 
 dev_requirements = [
@@ -41,7 +40,7 @@ dev_requirements = [
     "pytest==4.6.5",
     "pytest-runner==5.1",
     "black==19.3b0",
-    "mypy==0.770"
+    "mypy==0.770",
 ]
 
 setup(
@@ -75,6 +74,6 @@ setup(
     extras_require={
         "test": test_requirements,
         "dev": dev_requirements,
-        "doc": ["Sphinx>=3.0.4", "sphinx_rtd_theme", "jupyter_sphinx"]
+        "doc": ["Sphinx>=3.0.4", "sphinx_rtd_theme", "jupyter_sphinx"],
     },
 )
