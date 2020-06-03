@@ -15,7 +15,7 @@ API Reference
 .. toctree::
    :maxdepth: 2
 
-   textnets
+   modules
 
 Project Information
 ===================
