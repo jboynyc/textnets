@@ -19,6 +19,7 @@ with import <nixpkgs> {};
     python38Packages.matplotlib
   ];
   postShellHook = ''
+    export PS1="\$(__git_ps1) $PS1"
     pip install -e ".[dev,doc]"
   '';
 }
