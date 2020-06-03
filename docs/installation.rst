@@ -4,7 +4,7 @@
 Installation
 ============
 
-**textnets** is now on the `Python Package Index`_, so it can be installed using `pip`_. 
+**textnets** is in the `Python Package Index`_, so it can be installed using `pip`_.
 
 .. _`Python Package Index`: https://pypi.org/project/textnets/
 .. _pip: https://pip.pypa.io
@@ -13,16 +13,21 @@ Installation
 
    Please note that **textnets** requires Python 3.8 to run.
 
-In a `virtual environment`_, run ``pip install textnets``. You may also have to install an appropriate `language model`_ by issuing a command like:: 
+In a `virtual environment`_, run::
 
-    $ python -m spacy download en_core_web_sm
+   pip install textnets
 
 .. _`virtual environment`: https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments
-.. _`language model`: https://spacy.io/usage/models#download
 
-This is the preferred method to install **textnets**, as it will always install the most recent stable release. 
+This is the preferred method to install **textnets**, as it will always install the most recent stable release.
 
-If you don't have pip installed, this `Python installation guide`_ can guide
+If you don't have pip installed, the `Python installation guide`_ can guide
 you through the process.
 
 .. _Python installation guide: http://docs.python-guide.org/en/latest/starting/installation/
+
+Most likely you will also have to install an appropriate `language model`_ by issuing a command like::
+
+    $ python -m spacy download en_core_web_sm
+
+.. _`language model`: https://spacy.io/usage/models#download
