@@ -97,7 +97,8 @@ class Textnet:
         mark_groups: bool = False,
         bipartite_layout: bool = False,
         label_nodes: tuple = ("term",),
-        **kwargs
+        label_edges: bool = False,
+        **kwargs,
     ):
         """Plot the bipartite graph.
 
@@ -111,6 +112,8 @@ class Textnet:
         label_nodes : tuple, optional
             Node type to label. Tuple of "term," "doc," or both. Default:
             term only.
+        label_edges : bool, optional
+            Show edge weights in plot.
 
         Returns
         -------
@@ -143,6 +146,12 @@ class Textnet:
             "vertex_label",
             [v["id"] if v["type"] in label_nodes else None for v in self.graph.vs],
         )
+        kwargs.setdefault("vertex_label_size", 10)
+        kwargs.setdefault(
+            "edge_label",
+            [f"{e['weight']:.2f}" if label_edges else None for e in self.graph.es],
+        )
+        kwargs.setdefault("edge_label_size", 8)
         return ig.plot(
             self.graph, mark_groups=self.clusters if mark_groups else False, **kwargs
         )
