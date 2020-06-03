@@ -11,7 +11,8 @@ Installation
 
 .. note::
 
-   Please note that **textnets** requires Python 3.8 to run.
+   Please note that **textnets** currently requires Python 3.8 to run. There's
+   `an issue <https://github.com/jboynyc/textnets/issues/8>`_ open about that.
 
 In a `virtual environment`_, run::
 
