@@ -16,7 +16,7 @@ Installation
 
 In a `virtual environment`_, run::
 
-   pip install textnets
+   $ pip install textnets
 
 .. _`virtual environment`: https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments
 
@@ -29,6 +29,6 @@ you through the process.
 
 Most likely you will also have to install an appropriate `language model`_ by issuing a command like::
 
-    $ python -m spacy download en_core_web_sm
+   $ python -m spacy download en_core_web_sm
 
 .. _`language model`: https://spacy.io/usage/models#download
