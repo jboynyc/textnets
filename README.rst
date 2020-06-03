@@ -5,10 +5,7 @@ Textnets: automated text analysis with networks
 .. image:: https://zenodo.org/badge/114368834.svg
    :target: https://zenodo.org/badge/latestdoi/114368834
 
-This is a Python implementation of `Chris Bail's textnets package for R`_.  It
-is free software under the terms of the GNU General Public License v3.
-
-.. _`Chris Bail's textnets package for R`: https://github.com/cbail/textnets/
+**textnets** represents collections of texts as networks of documents and words. This provides novel possibilities for the analysis and visualization of texts.
 
 The idea underlying **textnets** is presented in this paper:
 
@@ -19,10 +16,15 @@ The idea underlying **textnets** is presented in this paper:
 
 __ https://doi.org/10.1073/pnas.1607151113
 
+This is a Python implementation of `Chris Bail's textnets package for R`_.  It
+is free software under the terms of the GNU General Public License v3.
+
+.. _`Chris Bail's textnets package for R`: https://github.com/cbail/textnets/
+
 Features
 --------
 
-The library builds on the state-of-the-art library `spacy`_ for
+**textnets** builds on the state-of-the-art library `spacy`_ for
 natural-language processing and `igraph`_ for network analysis. It uses the
 `Leiden algorithm`_ for community detection, which is able to perform community
 detection on the bipartite (word–group) network. **textnets** seamlessly
@@ -35,6 +37,8 @@ analyze and visualize your data!
 .. _`spacy`: https://spacy.io/
 .. _`pandas`: https://pandas.io/
 .. _`scientific stack`: https://numfocus.org/
+
+Read the documentation to find out more about the library's features.
 
 Learn More
 ----------
