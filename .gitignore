@@ -84,6 +84,7 @@ celerybeat-schedule
 .env
 
 # virtualenv
+.VENV
 .venv
 venv/
 ENV/
@@ -103,3 +104,7 @@ ENV/
 
 # IDE settings
 .vscode/
+
+# Vim
+*~
+.*~
