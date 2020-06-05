@@ -49,7 +49,7 @@ intersphinx_mapping = {
     "ig": ("https://igraph.org/python/doc/tutorial/", None),
     "la": ("https://leidenalg.readthedocs.io/en/stable/", None),
     "pd": ("http://pandas.pydata.org/docs/", None),
-    "py": ("http://docs.python.org/3", None)
+    "py": ("http://docs.python.org/3", None),
 }
 
 todo_include_todos = not os.environ.get("READTHEDOCS")
