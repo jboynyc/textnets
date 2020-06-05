@@ -159,17 +159,18 @@ class Textnet:
     @cached_property
     def clusters(self):
         """Return partition of bipartite graph detected by Leiden algorithm."""
-        return self._partition_graph(resolution=0.5)
+        return self._partition_graph(self.graph, resolution=0.5)
 
     @cached_property
     def context(self):
         """Return formal context of terms and documents."""
-        return self._formal_context(alpha=0.3)
+        return self._formal_context(self.im, alpha=0.3)
 
-    def _partition_graph(self, resolution):
+    @staticmethod
+    def _partition_graph(graph, resolution):
         # https://github.com/vtraag/4TU-CSS/
         part, part0, part1 = la.CPMVertexPartition.Bipartite(
-            self.graph, resolution_parameter_01=resolution
+            graph, resolution_parameter_01=resolution
         )
         opt = la.Optimiser()
         opt.optimise_partition_multiplex(
@@ -177,12 +178,13 @@ class Textnet:
         )
         return part
 
-    def _formal_context(self, alpha):
+    @staticmethod
+    def _formal_context(im, alpha):
         # The incidence matrix is a "fuzzy formal context." We can binarize it
         # by using a cutoff. This is known as an alpha-cut.
         # See doi:10.1016/j.knosys.2012.10.005 and
         # doi:10.1016/j.asoc.2017.05.028
-        crisp = self.im.applymap(lambda x: True if x >= alpha else False)
+        crisp = im.applymap(lambda x: True if x >= alpha else False)
         reduced = crisp[crisp.any(axis=1)].loc[:, crisp.any(axis=0)]
         objects = reduced.index.tolist()
         properties = reduced.columns.tolist()
