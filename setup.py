@@ -74,6 +74,11 @@ setup(
     extras_require={
         "test": test_requirements,
         "dev": dev_requirements,
-        "doc": ["Sphinx>=3.0.4", "sphinx_rtd_theme", "jupyter_sphinx"],
+        "doc": [
+            "Sphinx>=3.0.4",
+            "sphinx_rtd_theme",
+            "jupyter_sphinx",
+            "sphinxcontrib-bibtex",
+        ],
     },
 )

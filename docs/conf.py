@@ -39,6 +39,7 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
     "sphinx.ext.autosectionlabel",
+    "sphinxcontrib.bibtex",
     "jupyter_sphinx",
 ]
 
