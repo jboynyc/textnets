@@ -179,12 +179,13 @@ Let's take a look:
 
 .. jupyter-execute::
 
-   tn.plot(label_nodes=('term', 'doc'),
-           mark_groups=True)
+   tn.plot(label_term_nodes=True,
+           label_doc_nodes=True,
+           show_clusters=True)
 
-The ``mark_group`` options marks the partitions found by the Leiden community
-detection algorithm. It identifies document-term groups that appear to form
-part of the same theme in the texts.
+The ``show_clusters`` options marks the partitions found by the Leiden
+community detection algorithm. It identifies document-term groups that appear
+to form part of the same theme in the texts.
 
 You may be wondering: Why is the moon drifting off by itself in the network
 plot? That's because the word moon appears exactly once in each document, so
@@ -218,6 +219,8 @@ Next, the term network:
            vertex_label=words.vs['id'],
            mark_groups=words.community_leiden(weights='weight'))
 
+*to be continued*
+
 Download this example as a Jupyter notebook: :jupyter-download:notebook:`tutorial`.
 
 .. todo::
@@ -225,8 +228,6 @@ Download this example as a Jupyter notebook: :jupyter-download:notebook:`tutoria
    * network measures
    * scaling nodes according to centrality measures
    * tools to aid with interpretation of clusters
-
-*to be continued*
 
 From the Command Line
 ---------------------
