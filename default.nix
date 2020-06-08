@@ -20,6 +20,11 @@ with import <nixpkgs> {};
   ];
   postShellHook = ''
     export PS1="\$(__git_ps1) $PS1"
-    pip install -e ".[dev,doc]"
+    pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz#egg=en_core_web_sm-2.2.5
+    if [[ -z $BINDER_SERVICE_HOST ]]; then
+      pip install -e ".[dev,doc]"
+    else
+      pip install .
+    fi
   '';
 }
