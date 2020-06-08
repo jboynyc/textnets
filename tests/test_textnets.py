@@ -24,8 +24,7 @@ def test_corpus():
     """Test Corpus class using small data frame."""
 
     c = Corpus(examples.moon_landing)
-    assert c._df.shape[0] == 7
-    assert c._df.shape[1] == 2
+    assert len(c.documents) == 7
 
     noun_phrases = c.noun_phrases()
     assert set(noun_phrases.columns) == {"term", "n"}
