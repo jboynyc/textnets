@@ -43,8 +43,8 @@ class Textnet:
         doc_attrs: Optional[Dict[str, Dict[str, str]]] = None,
         min_docs: int = 2,
     ):
-        self._df = _tf_idf(tidy_text, sublinear, min_docs)
-        im = self._df.pivot(values="tf_idf", columns="term").fillna(0)
+        df = _tf_idf(tidy_text, sublinear, min_docs)
+        im = df.pivot(values="tf_idf", columns="term").fillna(0)
         self.im = im
         g = ig.Graph.Incidence(im.to_numpy().tolist(), directed=False)
         g.vs["id"] = np.append(im.index, im.columns).tolist()
