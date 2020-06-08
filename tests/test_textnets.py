@@ -55,7 +55,6 @@ def test_textnet():
     tn_np = Textnet(noun_phrases)
     assert tn_np.graph.vcount() > 0
     assert tn_np.graph.ecount() > 0
-    assert set(tn_np._df.columns) == {"term", "n", "tf_idf"}
     g_np_groups = tn_np.project(node_type="doc")
     assert g_np_groups.vcount() > 0
     assert g_np_groups.ecount() > 0
