@@ -10,9 +10,6 @@ Module contents
    :undoc-members:
    :show-inheritance:
 
-Submodules
-----------
-
 textnets.corpus module
 ----------------------
 
@@ -44,5 +41,3 @@ textnets.cli module
    :members:
    :undoc-members:
    :show-inheritance:
-
-
