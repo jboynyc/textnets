@@ -50,6 +50,15 @@ class Corpus:
         lang: str = "en_core_web_sm",
     ):
         """Construct corpus from files.
+
+        Parameters
+        ----------
+        files : str or list of str
+            Path to files (with globbing pattern) or list of file paths.
+        doc_labels : list of str, optional
+            Labels for documents (default: file name without suffix).
+        lang : str, optional
+            The langugage model to use (default: ``en_core_web_sm``).
         """
         if isinstance(files, str):
             files = glob(os.path.expanduser(files))
