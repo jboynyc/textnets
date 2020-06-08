@@ -94,9 +94,10 @@ class Textnet:
 
     def plot(
         self,
-        mark_groups: bool = False,
+        show_clusters: bool = False,
         bipartite_layout: bool = False,
-        label_nodes: tuple = ("term",),
+        label_term_nodes: bool = False,
+        label_doc_nodes: bool = False,
         label_edges: bool = False,
         **kwargs,
     ):
@@ -104,14 +105,15 @@ class Textnet:
 
         Parameters
         ----------
-        mark_groups : bool, optional
+        show_clusters: bool, optional
             Mark clusters detected by Leiden algorithm (default: False).
         bipartite_layout : bool, optional
             Use a bipartite graph layout (default: False, in which case a
             weighted Fruchterman-Reingold layout is used).
-        label_nodes : tuple, optional
-            Node type to label. Tuple of "term," "doc," or both. Default:
-            term only.
+        label_term_nodes : bool, optional
+            Label term nodes (default: False)
+        label_doc_nodes : bool, optional
+            Label document nodes (default: False)
         label_edges : bool, optional
             Show edge weights in plot.
 
@@ -144,7 +146,13 @@ class Textnet:
         kwargs.setdefault("vertex_frame_width", 0.2)
         kwargs.setdefault(
             "vertex_label",
-            [v["id"] if v["type"] in label_nodes else None for v in self.graph.vs],
+            [
+                v["id"]
+                if (v["type"] == "doc" and label_doc_nodes)
+                or (v["type"] == "term" and label_term_nodes)
+                else None
+                for v in self.graph.vs
+            ],
         )
         kwargs.setdefault("vertex_label_size", 10)
         kwargs.setdefault(
@@ -152,9 +160,8 @@ class Textnet:
             [f"{e['weight']:.2f}" if label_edges else None for e in self.graph.es],
         )
         kwargs.setdefault("edge_label_size", 8)
-        return ig.plot(
-            self.graph, mark_groups=self.clusters if mark_groups else False, **kwargs
-        )
+        kwargs.setdefault("mark_groups", self.clusters if show_clusters else False)
+        return ig.plot(self.graph, **kwargs)
 
     @cached_property
     def clusters(self):
