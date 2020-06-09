@@ -23,7 +23,7 @@ def test_command_line_interface():
 def test_corpus():
     """Test Corpus class using small data frame."""
 
-    c = Corpus(examples.moon_landing)
+    c = Corpus.from_df(examples.moon_landing)
     assert len(c.documents) == 7
 
     noun_phrases = c.noun_phrases()
@@ -48,7 +48,7 @@ def test_corpus():
 def test_textnet():
     """Test Textnet class using small data frame."""
 
-    c = Corpus(examples.moon_landing)
+    c = Corpus.from_df(examples.moon_landing)
     noun_phrases = c.noun_phrases()
 
     tn_np = Textnet(noun_phrases)
@@ -65,7 +65,7 @@ def test_textnet():
 def test_plotting(tmpdir):
     """Test Textnet plotting."""
 
-    c = Corpus(examples.moon_landing)
+    c = Corpus.from_df(examples.moon_landing)
     noun_phrases = c.noun_phrases()
     tn_np = Textnet(noun_phrases)
     out = tmpdir.join("plot.png")
