@@ -13,7 +13,11 @@ Wrangling Text & Mangling Data
 ------------------------------
 
 A textnet is built from a collection – or *corpus* – of texts, so we use
-the `Corpus` class to get our data ready.
+the `Corpus` class to get our data ready. Each of the following snippets
+assume that you will have imported Corpus and Textnet like this:
+
+.. code:: python
+    from textnets import Corpus, Textnet
 
 From a Data Frame
 ~~~~~~~~~~~~~~~~~
