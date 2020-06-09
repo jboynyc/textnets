@@ -14,30 +14,61 @@ Wrangling Text & Mangling Data
 
 A textnet is built from a collection – or *corpus* – of texts, so we use
 the `Corpus` class to get our data ready. Each of the following snippets
-assume that you will have imported Corpus and Textnet like this:
+assume that you have imported `Corpus` and `Textnet` like this:
 
 .. code:: python
-    from textnets import Corpus, Textnet
+   from textnets import Corpus, Textnet
 
-From a Data Frame
-~~~~~~~~~~~~~~~~~
+From Pandas
+~~~~~~~~~~~
 
 You may already have your texts in a Python data structure. `Corpus` can read
-documents directly from a `DataFrame <pd:pandas.DataFrame>`; mangling your data
-into the appropriate format should only take :doc:`one or two easy steps
-<pd:getting_started/dsintro>`. The important thing is to have the texts in one
-column, and the document labels as the index.
+documents directly from pandas' `Series <pd:pandas.Series>` or `DataFrame
+<pd:pandas.DataFrame>`; mangling your data into the appropriate format should
+only take :doc:`one or two easy steps <pd:getting_started/dsintro>`. The
+important thing is to have the texts in one column, and the document labels as
+the index.
 
 .. code:: python
 
-   corpus = Corpus(df, doc_col='tekst', lang='nl_core_news_sm')
+   corpus = Corpus(series, lang='nl_core_news_sm')
+   # alternately:
+   corpus = Corpus.from_df(df, doc_col='tekst', lang='nl_core_news_sm')
 
-If you do not specify ``doc_col``, **textnets** will assume that the
-first column containing strings is the one you meant.
+If you do not specify ``doc_col``, **textnets** will assume that the first
+column containing strings is the one you meant.
 
 You can specify which `language model <https://spacy.io/models>`__ you would
 like to use using the ``lang`` argument. The default is English, but you don’t
 have to be monolingual to use **textnets**.
+
+From a DB or CSV file
+~~~~~~~~~~~~~~~~~~~~~
+
+You can also use `Corpus` to load your documents from a database or
+comma-separated value file using `from_sql` and `from_csv` respectively.
+
+.. code:: python
+
+   import sqlite3
+
+   with sqlite3.connect('documents.db') as conn:
+       articles = Corpus.from_sql('SELECT title, text FROM articles', conn)
+
+As before, you do can specify a ``doc_col`` to specify which column contains
+your texts. You can also specify a ``label_col`` containing document labels. By
+default, `from_sql` uses the first column as the ``label_col`` and the first
+column after that containing strings as the ``doc_col``.
+
+.. code:: python
+
+   blog = Corpus.from_csv('blog-posts.csv',
+                          label_col='slug',
+                          doc_col='summary'
+                          sep=';')
+
+Both `from_sql` and `from_csv` accept additional keyword arguments that are
+passed to `pandas.read_sql` and `pandas.read_csv` respectively.
 
 From Files
 ~~~~~~~~~~
@@ -63,6 +94,7 @@ This example demonstrates another features: You can optionally pass explicit
 labels for your documents using the argument ``doc_labels``. Without this,
 labels are inferred from file names (by stripping off the file suffix).
 
+
 Break It Up
 ~~~~~~~~~~~
 
@@ -75,7 +107,7 @@ husband,” “our prime minister,” or “the virus.”
 
 .. code:: python
 
-   np = corpus.noun_phrases(remove=['Lilongwe'])
+   np = corpus.noun_phrases(remove=['Lilongwe', 'Mzuzu', 'Blantyre'])
 
 The result of this is another data frame, which we can feed to `Textnet` to
 make our textnet.
@@ -175,9 +207,9 @@ Next, we create the textnet:
    tn = Textnet(corpus.tokenized(), min_docs=1)
 
 We're using `tokenized` with all defaults, so **textnets** is removing stop
-words, applying stemming, and removing punctuation marks and numbers. However,
-we're overriding the default setting for ``min_docs``, opting to keep even
-words that appear in only one document (i.e., newspaper headline).
+words, applying stemming, and removing punctuation marks, numbers, URLs and the
+like. However, we're overriding the default setting for ``min_docs``, opting to
+keep even words that appear in only one document (i.e., newspaper headline).
 
 Let's take a look:
 
@@ -236,7 +268,7 @@ Download this example as a Jupyter notebook: :jupyter-download:notebook:`tutoria
 From the Command Line
 ---------------------
 
-In addition to providing a Python library, **textnets** can also be used as a
+In addition to providing a Python package, **textnets** can also be used as a
 command-line tool.
 
 .. code:: bash
