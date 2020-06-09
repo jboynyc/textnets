@@ -21,37 +21,20 @@ class Corpus:
 
     Parameters
     ----------
-    data : Series or DataFrame
-        Series or data frame containing the documents. The index must contain
-        document labels.
-    doc_col : str, optional
-        If ``data`` is a data frame, this indicates which column contains the
-        document texts. If none is specified, the first column with strings is
-        used.
+    data : Series
+        Series containing the documents. The index must contain document
+        labels.
     lang : str, optional
-        The langugage model to be used. Defaults to ``en_core_web_sm``.
-
-    Raises
-    ------
-    NoDocumentColumnException
-        If no suitable document column is specified or found.
+        The langugage model to use (default: ``en_core_web_sm``).
     """
 
     def __init__(
         self,
-        data: Union[pd.Series, pd.DataFrame],
+        data: pd.Series,
         doc_col: Optional[str] = None,
         lang: str = "en_core_web_sm",
     ):
-        if isinstance(data, pd.DataFrame):
-            object_cols = data.select_dtypes(include="object").columns
-            if not doc_col and object_cols.empty:
-                raise NoDocumentColumnException("No suitable document column.")
-            elif not doc_col:
-                doc_col = object_cols[0]
-            documents = data.copy()[doc_col]
-        else:
-            documents = data.copy()
+        documents = data.copy()
         documents.index = documents.index.set_names(["label"])
         self.documents = documents
         self.lang = lang
@@ -66,6 +49,33 @@ class Corpus:
 
     def __getitem__(self, key):
         return self.documents[key]
+
+    @classmethod
+    def from_df(
+        cls,
+        data: pd.DataFrame,
+        doc_col: Optional[str] = None,
+        lang: str = "en_core_web_sm",
+    ):
+        """
+        Create corpus from data frame.
+
+        data : DataFrame
+            Series containing the documents. The index must contain document
+            labels.
+        doc_col : str, optional
+            If ``data`` is a data frame, this indicates which column contains the
+            document texts. If none is specified, the first column with strings is
+            used.
+        lang : str, optional
+            The langugage model to use (default: ``en_core_web_sm``).
+        """
+        object_cols = data.select_dtypes(include="object").columns
+        if not doc_col and object_cols.empty:
+            raise NoDocumentColumnException("No suitable document column.")
+        elif not doc_col:
+            doc_col = object_cols[0]
+        return cls(data.copy()[doc_col], lang=lang)
 
     @classmethod
     def from_files(
@@ -137,20 +147,15 @@ class Corpus:
         data = pd.read_csv(path, **kwargs)
         if not label_col or isinstance(data.index, pd.RangeIndex):
             data = data.set_index(data.columns[0])
-        object_cols = data.select_dtypes(include="object").columns
-        if not doc_col and object_cols.empty:
-            raise NoDocumentColumnException("No suitable document column.")
-        elif not doc_col:
-            doc_col = object_cols[0]
-        return cls(data, doc_col=doc_col, lang=lang)
+        return cls.from_df(data, doc_col=doc_col, lang=lang)
 
     @classmethod
     def from_sql(
         cls,
         qry: str,
-        conn: str,
-        label_col: str = None,
-        doc_col: str = None,
+        conn: Union[str, object],
+        label_col: Optional[str] = None,
+        doc_col: Optional[str] = None,
         lang: str = "en_core_web_sm",
         **kwargs
     ) -> Corpus:
@@ -160,8 +165,8 @@ class Corpus:
         ----------
         qry : str
             SQL query or table name
-        conn : str
-            Database URI.
+        conn : str or object
+            Database URI or connection object.
         label_col : str, optional
             Column that contains document labels (default: None, in which case
             the first column is used).
@@ -186,12 +191,7 @@ class Corpus:
         data = pd.read_sql(qry, conn, **kwargs)
         if not label_col or isinstance(data.index, pd.RangeIndex):
             data = data.set_index(data.columns[0])
-        object_cols = data.select_dtypes(include="object").columns
-        if not doc_col and object_cols.empty:
-            raise NoDocumentColumnException("No suitable document column.")
-        elif not doc_col:
-            doc_col = object_cols[0]
-        return cls(data, doc_col=doc_col, lang=lang)
+        return cls.from_df(data, doc_col=doc_col, lang=lang)
 
     def tokenized(
         self,
