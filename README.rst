@@ -60,7 +60,7 @@ Jupyter notebooks to analyze and visualize your data!
 .. _`scientific stack`: https://numfocus.org/
 
 Read `the documentation <https://textnets.readthedocs.io>`_ to find out more
-about the library's features.
+about the package's features.
 
 Learn More
 ----------
