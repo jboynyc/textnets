@@ -49,6 +49,7 @@ class Textnet:
         g = ig.Graph.Incidence(im.to_numpy().tolist(), directed=False)
         g.vs["id"] = np.append(im.index, im.columns).tolist()
         g.es["weight"] = im.to_numpy().flatten()[np.flatnonzero(im)]
+        g.es["cost"] = [1 / pow(w, 0.5) for w in g.es["weight"]]
         g.vs["type"] = ["term" if t else "doc" for t in g.vs["type"]]
         if doc_attrs:
             for name, attr in doc_attrs.items():
