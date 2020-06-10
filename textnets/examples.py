@@ -25,4 +25,5 @@ moon_landing = pd.Series(
         "Chicago Tribune",
         "Los Angeles Times",
     ],
+    name="headlines",
 )
