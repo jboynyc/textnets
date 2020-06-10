@@ -2,8 +2,8 @@
 API Reference
 =============
 
-Module contents
----------------
+textnets
+========
 
 .. automodule:: textnets
    :members:
@@ -26,6 +26,14 @@ textnets.network module
    :undoc-members:
    :show-inheritance:
 
+textnets.fca module
+-------------------
+
+.. automodule:: textnets.fca
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 textnets.examples module
 ------------------------
 
@@ -41,3 +49,8 @@ textnets.cli module
    :members:
    :undoc-members:
    :show-inheritance:
+
+Bibliography
+============
+
+.. bibliography:: refs.bib
