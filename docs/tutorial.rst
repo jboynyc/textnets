@@ -3,21 +3,138 @@ Tutorial
 ========
 
 This tutorial will walk you through all the steps required to analyze and
-visualize your data using **textnets**.
+visualize your data using **textnets**. The tutorial first presents a
+self-contained example before addressing miscellaneous other issues related to
+using **textnets**.
+
+Example
+-------
 
 .. tip::
 
-   Are you eager to see **textnets** in action? Jump to the self-contained `example` below.
+   Download this example as a Jupyter notebook so you can follow along:
+   :jupyter-download:notebook:`tutorial`.
+
+To use **textnets** in a project, you typically need the following imports:
+
+.. jupyter-execute::
+
+   from textnets import Corpus, Textnet
+
+For the purposes of demonstration, we also import the bundled example data:
+
+.. jupyter-execute::
+
+   from textnets import examples
+
+We construct the corpus from the example data:
+
+.. jupyter-execute::
+
+   corpus = Corpus(examples.moon_landing)
+
+What is this `moon_landing` example all about?
+
+.. jupyter-execute::
+
+   display(examples.moon_landing)
+
+.. note::
+
+   Hat tip to Chris Bail for this example data!
+
+Next, we create the textnet:
+
+.. jupyter-execute::
+
+   tn = Textnet(corpus.tokenized(), min_docs=1)
+
+We're using `tokenized` with all defaults, so **textnets** is removing stop
+words, applying stemming, and removing punctuation marks, numbers, URLs and the
+like. However, we're overriding the default setting for ``min_docs``, opting to
+keep even words that appear in only one document (i.e., a single newspaper
+headline).
+
+Let's take a look:
+
+.. jupyter-execute::
+
+   tn.plot(label_term_nodes=True,
+           label_doc_nodes=True,
+           show_clusters=True)
+
+The ``show_clusters`` options marks the partitions found by the Leiden
+community detection algorithm (see :doc:`here <la:multiplex>`). It identifies
+document--term groups that appear to form part of the same theme in the texts.
+
+You may be wondering: Why is the moon drifting off by itself in the network
+plot? That's because the word moon appears exactly once in each document, so
+its *tf-idf* value for each document is 0.
+
+We can also visualize the projected networks.
+
+First, the network of newspapers:
+
+.. jupyter-execute::
+
+    papers = tn.project(node_type='doc')
+    papers.plot(label_nodes=True)
+
+As before in the bipartite projection, we can see the *Houston Chronicle*,
+*Chicago Tribune* and *Los Angeles Times* cluster more closely together.
+
+Next, the term network:
+
+.. jupyter-execute::
+
+   words = tn.project(node_type='term')
+   words.plot(label_nodes=True,
+              show_clusters=True)
+
+Aside from visualization, we can also analyze our corpus using network metrics.
+For instance, documents with high betweenness centrality (or "cultural
+betweenness"; :cite:`Bail2016`) might link together themes, thereby stimulating
+exchange across symbolic divides.
+
+.. jupyter-execute::
+
+   papers.top_betweenness()
+
+As we can see, the *Los Angeles Times* is a cultural bridge linking the
+headline themes of the East Coast newspapers to the others.
+
+.. jupyter-execute::
+
+   words.top_betweenness()
+
+It's because the *Times* uses the word "walk" in its headline, linking the "One
+Small Step" cluster to the "Man on Moon" cluster.
+
+We can produce the term graph plot again, this time scaling nodes according to
+their betweenness centrality.
+
+.. jupyter-execute::
+
+   words.plot(label_nodes=True,
+              scale_nodes_by=words.betweenness)
+
+In addition to `betweenness`, we could also use `closeness` and
+`eigenvector_centrality` to scale nodes.
+
+.. todo::
+
+   * tools to aid with interpretation of clusters
 
 Wrangling Text & Mangling Data
 ------------------------------
 
+How to go from this admittedly contrived example to working with your own data?
+The following snippets are meant to help you get started. The first thing is to
+get your data in the right shape.
+
 A textnet is built from a collection – or *corpus* – of texts, so we use
 the `Corpus` class to get our data ready. Each of the following snippets
-assume that you have imported `Corpus` and `Textnet` like this:
-
-.. code:: python
-   from textnets import Corpus, Textnet
+assume that you have imported `Corpus` and `Textnet` like in the example above.
 
 From Pandas
 ~~~~~~~~~~~
@@ -32,7 +149,7 @@ the index.
 .. code:: python
 
    corpus = Corpus(series, lang='nl_core_news_sm')
-   # alternately:
+   # or alternately:
    corpus = Corpus.from_df(df, doc_col='tekst', lang='nl_core_news_sm')
 
 If you do not specify ``doc_col``, **textnets** will assume that the first
@@ -42,8 +159,8 @@ You can specify which `language model <https://spacy.io/models>`__ you would
 like to use using the ``lang`` argument. The default is English, but you don’t
 have to be monolingual to use **textnets**.
 
-From a DB or CSV file
-~~~~~~~~~~~~~~~~~~~~~
+From a database or CSV file
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can also use `Corpus` to load your documents from a database or
 comma-separated value file using `from_sql` and `from_csv` respectively.
@@ -150,7 +267,8 @@ Seeing Results
 --------------
 
 You are now ready to see the first results. `Textnet` comes with a utility
-method, `plot`, which allows you to quickly visualize the bipartite graph.
+method, `plot <Textnet.plot>`, which allows you to quickly visualize the bipartite
+graph.
 
 Projecting
 ----------
@@ -166,104 +284,6 @@ network into a single-mode network.
 
 The resulting network will only contain nodes of the chosen type. Edge weights
 are calculated, and node attributes are maintained.
-
-Example
--------
-
-To use **textnets** in a project, you typically need the following imports:
-
-.. jupyter-execute::
-
-   import pandas as pd
-   import igraph as ig
-   from textnets import Corpus, Textnet
-
-For the purposes of demonstration, we also import the bundled example data:
-
-.. jupyter-execute::
-
-   from textnets import examples
-
-We construct the corpus from the example data:
-
-.. jupyter-execute::
-
-   corpus = Corpus(examples.moon_landing)
-
-What is this `moon_landing` example all about?
-
-.. jupyter-execute::
-
-   display(examples.moon_landing)
-
-.. note::
-
-   Hat tip to Chris Bail for this example data!
-
-Next, we create the textnet:
-
-.. jupyter-execute::
-
-   tn = Textnet(corpus.tokenized(), min_docs=1)
-
-We're using `tokenized` with all defaults, so **textnets** is removing stop
-words, applying stemming, and removing punctuation marks, numbers, URLs and the
-like. However, we're overriding the default setting for ``min_docs``, opting to
-keep even words that appear in only one document (i.e., newspaper headline).
-
-Let's take a look:
-
-.. jupyter-execute::
-
-   tn.plot(label_term_nodes=True,
-           label_doc_nodes=True,
-           show_clusters=True)
-
-The ``show_clusters`` options marks the partitions found by the Leiden
-community detection algorithm. It identifies document-term groups that appear
-to form part of the same theme in the texts.
-
-You may be wondering: Why is the moon drifting off by itself in the network
-plot? That's because the word moon appears exactly once in each document, so
-its tf-idf value for each document is 0.
-
-We can also visualize the projected networks.
-
-First, the network of newspapers:
-
-.. jupyter-execute::
-
-    papers = tn.project(node_type='doc')
-    ig.plot(papers,
-            layout=papers.layout_fruchterman_reingold(weights='weight'),
-            margin=100,
-            vertex_shape='box',
-            vertex_color='dodgerblue',
-            vertex_label=papers.vs['id'])
-
-As before in the bipartite projection, we can see the East Coast papers cluster
-more closely together.
-
-Next, the term network:
-
-.. jupyter-execute::
-
-   words = tn.project(node_type='term')
-   ig.plot(words,
-           layout=words.layout_fruchterman_reingold(weights='weight'),
-           margin=100,
-           vertex_label=words.vs['id'],
-           mark_groups=words.community_leiden(weights='weight'))
-
-*to be continued*
-
-Download this example as a Jupyter notebook: :jupyter-download:notebook:`tutorial`.
-
-.. todo::
-
-   * network measures
-   * scaling nodes according to centrality measures
-   * tools to aid with interpretation of clusters
 
 From the Command Line
 ---------------------
