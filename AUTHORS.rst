@@ -10,5 +10,5 @@ Author & Maintainer
 Contributors
 ------------
 
-- Jeremy Foote (`jdfoote <https://github.com/jdfoote>`) contributed to the documentation.
+- Jeremy Foote (`jdfoote <https://github.com/jdfoote>`__) contributed to the documentation.
 - Your name here?
