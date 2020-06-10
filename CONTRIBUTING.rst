@@ -70,8 +70,9 @@ Ready to contribute? Here's how to set up **textnets** for local development.
     $ cd textnets/
     $ python setup.py develop
 
-   If you use nix, you can also invoke nix-shell in the repository to quickly
-   create a development environment with the included ``default.nix`` file.
+   If you use `nix <https://nixos.org/nix>`__, you can also invoke
+   ``nix-shell`` in the repository to quickly create a development environment
+   with the included ``default.nix`` file.
 
 4. Create a branch for local development::
 
@@ -84,7 +85,7 @@ Ready to contribute? Here's how to set up **textnets** for local development.
 
     $ make lint
     $ make test
-    $ make test-all # to test other Python versions with tox
+    $ make test-all # optional: to test other Python versions with tox
 
    To get flake8 and tox, just pip install them into your virtualenv.
 
