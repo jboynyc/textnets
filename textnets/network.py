@@ -135,8 +135,8 @@ class Textnet:
         Returns
         -------
         ig.drawing.Plot
-            The plot can be directly displayed in a Jupyter network or saved as
-            an image file.
+            The plot can be directly displayed in a Jupyter notebook or saved
+            as an image file.
         """
         if bipartite_layout:
             layout = self.graph.layout_bipartite(types=self.node_types)
