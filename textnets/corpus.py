@@ -40,7 +40,8 @@ class Corpus:
         self.lang = lang
 
     @cached_property
-    def nlp(self):
+    def nlp(self) -> pd.Series:
+        """Corpus documents with NLP applied."""
         nlp = spacy.load(self.lang, disable=["ner", "textcat"])
         return self.documents.map(_normalize_whitespace).map(nlp)
 
@@ -60,6 +61,8 @@ class Corpus:
         """
         Create corpus from data frame.
 
+        Parameters
+        ----------
         data : DataFrame
             Series containing the documents. The index must contain document
             labels.
@@ -69,6 +72,10 @@ class Corpus:
             used.
         lang : str, optional
             The langugage model to use (default: ``en_core_web_sm``).
+
+        Returns
+        -------
+        Corpus
         """
         object_cols = data.select_dtypes(include="object").columns
         if not doc_col and object_cols.empty:
@@ -137,11 +144,6 @@ class Corpus:
         Returns
         -------
         Corpus
-
-        Raises
-        ------
-        NoDocumentColumnException
-            If no suitable document column is specified or found.
         """
         kwargs.setdefault("index_col", label_col)
         data = pd.read_csv(path, **kwargs)
@@ -164,7 +166,7 @@ class Corpus:
         Parameters
         ----------
         qry : str
-            SQL query or table name
+            SQL query
         conn : str or object
             Database URI or connection object.
         label_col : str, optional
@@ -181,11 +183,6 @@ class Corpus:
         Returns
         -------
         Corpus
-
-        Raises
-        ------
-        NoDocumentColumnException
-            If no suitable document column is specified or found.
         """
         kwargs.setdefault("index_col", label_col)
         data = pd.read_sql(qry, conn, **kwargs)
@@ -293,18 +290,22 @@ def _noun_chunks(doc: Doc) -> List[str]:
 
 
 def _remove_stop_words(doc: Doc) -> Doc:
+    """Return document without stop words."""
     return [word for word in doc if not word.is_stop]
 
 
 def _remove_urls(doc: Doc) -> Doc:
+    """Return document without URLs or email addresses."""
     return [word for word in doc if not word.like_url and not word.like_email]
 
 
 def _remove_numbers(doc: Doc) -> Doc:
+    """Return document without numbers."""
     return [word for word in doc if not word.like_num]
 
 
 def _remove_punctuation(doc: Doc) -> Doc:
+    """Return document without punctuation, brackets and quotation marks."""
     return [
         word
         for word in doc
@@ -313,20 +314,24 @@ def _remove_punctuation(doc: Doc) -> Doc:
 
 
 def _stem(doc: Doc) -> List[str]:
+    """Return list of word stem strings."""
     return [word.lemma_ for word in doc]
 
 
 def _as_text(doc: Doc) -> List[str]:
+    """Turn document into list of strings."""
     return [word.text for word in doc]
 
 
 def _lower(doc: List[str]) -> List[str]:
+    """Return list of strings in lower case."""
     return [s.lower() for s in doc]
 
 
 def _remove_additional(doc: List[str], token_list: List[str]) -> List[str]:
+    """Return list of strings without specified tokens."""
     return [s for s in doc if s not in token_list]
 
 
 class NoDocumentColumnException(Exception):
-    """Raise if no document column is specified or found."""
+    """Raised if no suitable document column is specified or found."""
