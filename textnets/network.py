@@ -176,7 +176,7 @@ class Textnet(TextnetBase, FormalContext):
     ----------
     tidy_text : DataFrame
         DataFrame of tokens with per-document counts, as created by
-        `Corpus` methods `tokenized()` and `noun_phrases()`.
+        `Corpus` methods `tokenized` and `noun_phrases`.
     sublinear : bool, optional
         Apply sublinear scaling to tf-idf values (default: True).
     doc_attrs : dict of dict, optional
@@ -256,17 +256,19 @@ class Textnet(TextnetBase, FormalContext):
 
         Parameters
         ----------
-        show_clusters: bool, optional
+        show_clusters : bool, optional
             Mark clusters detected by Leiden algorithm (default: False).
         bipartite_layout : bool, optional
             Use a bipartite graph layout (default: False, in which case a
             weighted Fruchterman-Reingold layout is used).
         label_term_nodes : bool, optional
-            Label term nodes (default: False)
+            Label term nodes (default: False).
         label_doc_nodes : bool, optional
-            Label document nodes (default: False)
+            Label document nodes (default: False).
         label_edges : bool, optional
             Show edge weights in plot.
+        kwargs
+            Additional arguments to pass to :doc:`ig.plot <ig:tutorial>`.
 
         Returns
         -------
