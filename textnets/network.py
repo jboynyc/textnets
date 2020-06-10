@@ -206,11 +206,6 @@ class Textnet(TextnetBase, FormalContext):
                 g.vs[name] = [attr.get(doc) for doc in g.vs["id"]]
         self.graph = g
 
-    @cached_property
-    def node_types(self) -> List[bool]:
-        """Returns boolean list to distinguish node types."""
-        return [True if t == "term" else False for t in self.graph.vs["type"]]
-
     def project(self, node_type: Literal["doc", "term"]) -> ig.Graph:
         """Project to one-mode network.
 
@@ -231,27 +226,26 @@ class Textnet(TextnetBase, FormalContext):
             weights = self.im.T.dot(self.im)
         else:
             weights = self.im.dot(self.im.T)
-        graph = self.graph.bipartite_projection(
+        g = self.graph.bipartite_projection(
             types=self.node_types, which=graph_to_return
         )
-        for i in graph.es.indices:
-            edge = graph.es[i]
+        for i in g.es.indices:
+            edge = g.es[i]
             source, target = edge.source_vertex["id"], edge.target_vertex["id"]
             if source == target:
                 edge["weight"] = 0
             else:
                 edge["weight"] = weights.loc[source, target]
-        return graph
+        g.es["cost"] = [1 / pow(w, TUNING_PARAMETER) for w in g.es["weight"]]
+        return ProjectedTextnet(g)
 
     def plot(
         self,
-        show_clusters: bool = False,
         bipartite_layout: bool = False,
         label_term_nodes: bool = False,
         label_doc_nodes: bool = False,
-        label_edges: bool = False,
         **kwargs,
-    ):
+    ) -> ig.drawing.Plot:
         """Plot the bipartite graph.
 
         Parameters
@@ -278,25 +272,7 @@ class Textnet(TextnetBase, FormalContext):
         """
         if bipartite_layout:
             layout = self.graph.layout_bipartite(types=self.node_types)
-        else:
-            layout = self.graph.layout_fruchterman_reingold(
-                weights="weight", grid=False
-            )
-        kwargs.setdefault("layout", layout)
-        kwargs.setdefault("autocurve", True)
-        kwargs.setdefault("margin", 50)
-        kwargs.setdefault("edge_color", "lightgray")
-        kwargs.setdefault(
-            "vertex_shape", ["circle" if v else "square" for v in self.node_types]
-        )
-        kwargs.setdefault(
-            "vertex_color",
-            ["orangered" if v else "dodgerblue" for v in self.node_types],
-        )
-        kwargs.setdefault(
-            "vertex_frame_color", ["black" if v else "white" for v in self.node_types]
-        )
-        kwargs.setdefault("vertex_frame_width", 0.2)
+            kwargs.setdefault("layout", layout)
         kwargs.setdefault(
             "vertex_label",
             [
@@ -304,72 +280,40 @@ class Textnet(TextnetBase, FormalContext):
                 if (v["type"] == "doc" and label_doc_nodes)
                 or (v["type"] == "term" and label_term_nodes)
                 else None
-                for v in self.graph.vs
+                for v in self.vs
             ],
         )
-        kwargs.setdefault("vertex_label_size", 10)
+        return self._plot(**kwargs)
+
+
+class ProjectedTextnet(TextnetBase):
+    """One-mode projection of a textnet.
+
+    Created by calling `Textnet.project()` with the desired ``node_type``."""
+
+    def plot(self, label_nodes: bool = False, **kwargs) -> ig.drawing.Plot:
+        """Plot the projected graph.
+
+        Parameters
+        ----------
+        show_clusters : bool, optional
+            Mark clusters detected by Leiden algorithm (default: False).
+        label_nodes : bool, optional
+            Label nodes (default: False).
+        label_edges : bool, optional
+            Show edge weights in plot.
+        kwargs
+            Additional arguments to pass to :doc:`ig.plot <ig:tutorial>`.
+
+        Returns
+        -------
+        ig.drawing.Plot
+            The plot can be directly displayed in a Jupyter notebook or saved
+            as an image file.
+
+        """
         kwargs.setdefault(
-            "edge_label",
-            [f"{e['weight']:.2f}" if label_edges else None for e in self.graph.es],
-        )
-        kwargs.setdefault("edge_label_size", 8)
-        kwargs.setdefault("mark_groups", self.clusters if show_clusters else False)
-        return ig.plot(self.graph, **kwargs)
-
-    @cached_property
-    def clusters(self):
-        """Return partition of bipartite graph detected by Leiden algorithm."""
-        return self._partition_graph(self.graph, resolution=RESOLUTION_PARAMETER)
-
-    @cached_property
-    def context(self):
-        """Return formal context of terms and documents."""
-        return self._formal_context(self.im, alpha=FFCA_CUTOFF)
-
-    @staticmethod
-    def _partition_graph(graph, resolution):
-        part, part0, part1 = la.CPMVertexPartition.Bipartite(
-            graph, resolution_parameter_01=resolution
-        )
-        opt = la.Optimiser()
-        opt.optimise_partition_multiplex(
-            [part, part0, part1], layer_weights=[1, -1, -1], n_iterations=100
-        )
-        return part
-
-    @staticmethod
-    def _formal_context(im, alpha):
-        # The incidence matrix is a "fuzzy formal context." We can binarize it
-        # by using a cutoff. This is known as an alpha-cut.
-        crisp = im.applymap(lambda x: True if x >= alpha else False)
-        reduced = crisp[crisp.any(axis=1)].loc[:, crisp.any(axis=0)]
-        objects = reduced.index.tolist()
-        properties = reduced.columns.tolist()
-        bools = reduced.to_numpy()
-        return objects, properties, bools
-
-    @staticmethod
-    def _tf_idf(tidy_text: pd.DataFrame, sublinear: bool, min_docs: int):
-        """Calculate term frequency/inverse document frequency."""
-        if sublinear:
-            tidy_text["tf"] = tidy_text["n"].map(_sublinear_scaling)
-        else:
-            totals = (
-                tidy_text.groupby(tidy_text.index).sum().rename(columns={"n": "total"})
-            )
-            tidy_text = tidy_text.merge(totals, right_index=True, left_index=True)
-            tidy_text["tf"] = tidy_text["n"] / tidy_text["total"]
-        idfs = np.log10(len(set(tidy_text.index)) / tidy_text["term"].value_counts())
-        tt = tidy_text.merge(
-            pd.DataFrame(idfs), left_on="term", right_index=True
-        ).rename(columns={"term_y": "idf"})
-        tt["tf_idf"] = tt["tf"] * tt["idf"]
-        wc = tt.groupby("term").count()["tf"]
-        tt = (
-            tt.reset_index()
-            .merge(wc >= min_docs, on="term", how="left")
-            .rename(columns={"tf_y": "keep"})
-            .set_index("label")
+            "vertex_label", [v["id"] for v in self.vs] if label_nodes else None
         )
         return self._plot(**kwargs)
 
