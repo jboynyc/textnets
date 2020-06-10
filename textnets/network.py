@@ -11,6 +11,20 @@ import igraph as ig
 import leidenalg as la
 
 
+#: Tuning parameter (alpha) for inverse edge weights
+#: (Opsahl et al. 2010, 10.1016/j.socnet.2010.03.006)
+TUNING_PARAMETER = 0.5
+
+#: Resolution parameter (gamma) for community detection
+#: (Reichardt & Bornnholdt 2006, 10.1103/PhysRevE.74.016110;
+#: Traag et al. 2019, 10.1038/s41598-019-41695-z)
+RESOLUTION_PARAMETER = 0.5
+
+#: Membership degree threshold (alpha) for concept lattice
+#: (Tho et al. 2006, 10.1109/TKDE.2006.87)
+FFCA_CUTOFF = 0.3
+
+
 class Textnet:
     """
     Textnet for the relational analysis of meanings.
@@ -49,7 +63,7 @@ class Textnet:
         g = ig.Graph.Incidence(im.to_numpy().tolist(), directed=False)
         g.vs["id"] = np.append(im.index, im.columns).tolist()
         g.es["weight"] = im.to_numpy().flatten()[np.flatnonzero(im)]
-        g.es["cost"] = [1 / pow(w, 0.5) for w in g.es["weight"]]
+        g.es["cost"] = [1 / pow(w, TUNING_PARAMETER) for w in g.es["weight"]]
         g.vs["type"] = ["term" if t else "doc" for t in g.vs["type"]]
         if doc_attrs:
             for name, attr in doc_attrs.items():
@@ -167,16 +181,15 @@ class Textnet:
     @cached_property
     def clusters(self):
         """Return partition of bipartite graph detected by Leiden algorithm."""
-        return self._partition_graph(self.graph, resolution=0.5)
+        return self._partition_graph(self.graph, resolution=RESOLUTION_PARAMETER)
 
     @cached_property
     def context(self):
         """Return formal context of terms and documents."""
-        return self._formal_context(self.im, alpha=0.3)
+        return self._formal_context(self.im, alpha=FFCA_CUTOFF)
 
     @staticmethod
     def _partition_graph(graph, resolution):
-        # https://github.com/vtraag/4TU-CSS/
         part, part0, part1 = la.CPMVertexPartition.Bipartite(
             graph, resolution_parameter_01=resolution
         )
@@ -190,8 +203,6 @@ class Textnet:
     def _formal_context(im, alpha):
         # The incidence matrix is a "fuzzy formal context." We can binarize it
         # by using a cutoff. This is known as an alpha-cut.
-        # See doi:10.1016/j.knosys.2012.10.005 and
-        # doi:10.1016/j.asoc.2017.05.028
         crisp = im.applymap(lambda x: True if x >= alpha else False)
         reduced = crisp[crisp.any(axis=1)].loc[:, crisp.any(axis=0)]
         objects = reduced.index.tolist()
