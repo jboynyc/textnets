@@ -3,6 +3,10 @@
 
 """Tests for `textnets` package."""
 
+import sqlite3
+
+import pandas as pd
+
 from click.testing import CliRunner
 
 from textnets import Corpus, Textnet
@@ -23,7 +27,7 @@ def test_command_line_interface():
 def test_corpus():
     """Test Corpus class using small data frame."""
 
-    c = Corpus.from_df(examples.moon_landing)
+    c = Corpus(examples.moon_landing)
     assert len(c.documents) == 7
 
     noun_phrases = c.noun_phrases()
@@ -45,10 +49,30 @@ def test_corpus():
     assert set(upper.columns) == {"term", "n"}
 
 
+def test_corpus_df():
+    df = pd.DataFrame({"headlines": examples.moon_landing, "meta": list("ABCDEFG")})
+    c = Corpus.from_df(df, doc_col="headlines")
+    assert len(c.documents) == 7
+
+
+def test_corpus_csv(tmpdir):
+    out = tmpdir.join("corpus.csv")
+    examples.moon_landing.to_csv(out)
+    c = Corpus.from_csv(out)
+    assert len(c.documents) == 7
+
+
+def test_corpus_sql():
+    with sqlite3.connect(":memory:") as conn:
+        examples.moon_landing.to_sql("headlines", conn)
+        c = Corpus.from_sql("SELECT * FROM headlines", conn)
+    assert len(c.documents) == 7
+
+
 def test_textnet():
     """Test Textnet class using small data frame."""
 
-    c = Corpus.from_df(examples.moon_landing)
+    c = Corpus(examples.moon_landing)
     noun_phrases = c.noun_phrases()
 
     tn_np = Textnet(noun_phrases)
@@ -65,7 +89,7 @@ def test_textnet():
 def test_plotting(tmpdir):
     """Test Textnet plotting."""
 
-    c = Corpus.from_df(examples.moon_landing)
+    c = Corpus(examples.moon_landing)
     noun_phrases = c.noun_phrases()
     tn_np = Textnet(noun_phrases)
     out = tmpdir.join("plot.png")
