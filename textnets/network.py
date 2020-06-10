@@ -193,7 +193,7 @@ class Textnet(TextnetBase, FormalContext):
         doc_attrs: Optional[Dict[str, Dict[str, str]]] = None,
         min_docs: int = 2,
     ):
-        df = self._tf_idf(tidy_text, sublinear, min_docs)
+        df = _tf_idf(tidy_text, sublinear, min_docs)
         im = df.pivot(values="tf_idf", columns="term").fillna(0)
         self.im = im
         g = ig.Graph.Incidence(im.to_numpy().tolist(), directed=False)
@@ -371,7 +371,30 @@ class Textnet(TextnetBase, FormalContext):
             .rename(columns={"tf_y": "keep"})
             .set_index("label")
         )
-        return tt[tt["keep"]][["term", "n", "tf_idf"]]
+        return self._plot(**kwargs)
+
+
+def _tf_idf(tidy_text: pd.DataFrame, sublinear: bool, min_docs: int):
+    """Calculate term frequency/inverse document frequency."""
+    if sublinear:
+        tidy_text["tf"] = tidy_text["n"].map(_sublinear_scaling)
+    else:
+        totals = tidy_text.groupby(tidy_text.index).sum().rename(columns={"n": "total"})
+        tidy_text = tidy_text.merge(totals, right_index=True, left_index=True)
+        tidy_text["tf"] = tidy_text["n"] / tidy_text["total"]
+    idfs = np.log10(len(set(tidy_text.index)) / tidy_text["term"].value_counts())
+    tt = tidy_text.merge(pd.DataFrame(idfs), left_on="term", right_index=True).rename(
+        columns={"term_y": "idf"}
+    )
+    tt["tf_idf"] = tt["tf"] * tt["idf"]
+    wc = tt.groupby("term").count()["tf"]
+    tt = (
+        tt.reset_index()
+        .merge(wc >= min_docs, on="term", how="left")
+        .rename(columns={"tf_y": "keep"})
+        .set_index("label")
+    )
+    return tt[tt["keep"]][["term", "n", "tf_idf"]]
 
 
 def _sublinear_scaling(n: Union[int, float]) -> float:
