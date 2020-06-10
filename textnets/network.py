@@ -10,22 +10,158 @@ import pandas as pd
 import igraph as ig
 import leidenalg as la
 
+from .fca import FormalContext
+
 
 #: Tuning parameter (alpha) for inverse edge weights
-#: (Opsahl et al. 2010, 10.1016/j.socnet.2010.03.006)
+#: (see :cite:`Opsahl2010`).
 TUNING_PARAMETER = 0.5
 
 #: Resolution parameter (gamma) for community detection
-#: (Reichardt & Bornnholdt 2006, 10.1103/PhysRevE.74.016110;
-#: Traag et al. 2019, 10.1038/s41598-019-41695-z)
-RESOLUTION_PARAMETER = 0.5
-
-#: Membership degree threshold (alpha) for concept lattice
-#: (Tho et al. 2006, 10.1109/TKDE.2006.87)
-FFCA_CUTOFF = 0.3
+#: (see :cite:`Reichardt2006,Traag2019`).
+RESOLUTION_PARAMETER = 0.1
 
 
-class Textnet:
+class TextnetBase:
+    """Base class for `Textnet` and `ProjectedTextnet`."""
+
+    def __init__(self, graph):
+        self.graph = graph
+
+    def summary(self) -> str:
+        """Return summary of underlying graph."""
+        return self.graph.summary()
+
+    @property
+    def vs(self):
+        """Iterator of vertices (nodes)."""
+        return self.graph.vs
+
+    @property
+    def es(self):
+        """Iterator of edges."""
+        return self.graph.es
+
+    def vcount(self):
+        """Returns the number of vertices (nodes)."""
+        return self.graph.vcount()
+
+    def ecount(self):
+        """Returns the number of edges."""
+        return self.graph.ecount()
+
+    @cached_property
+    def betweenness(self) -> List[float]:
+        """Weighted betweenness centrality."""
+        return self.graph.betweenness(weights="cost")
+
+    @cached_property
+    def closeness(self) -> List[float]:
+        """Weighted closeness centrality."""
+        return self.graph.closeness(weights="cost")
+
+    @cached_property
+    def eigenvector_centrality(self) -> List[float]:
+        """Weighted eigenvector centrality."""
+        return self.graph.eigenvector_centrality(weights="weight")
+
+    @cached_property
+    def node_types(self) -> List[bool]:
+        """Returns boolean list to distinguish node types."""
+        return [True if t == "term" else False for t in self.vs["type"]]
+
+    @cached_property
+    def clusters(self):
+        """Return partition of graph detected by Leiden algorithm."""
+        return self._partition_graph(self.graph, resolution=RESOLUTION_PARAMETER)
+
+    @cached_property
+    def modularity(self):
+        """Returns graph modularity based on partition detected by Leiden algorithm."""
+        return self.graph.modularity(self.clusters, weights="weight")
+
+    def top_betweenness(self, n: int = 10) -> pd.Series:
+        return (
+            pd.Series(self.betweenness, index=self.vs["id"], name="top_betweenness")
+            .sort_values(ascending=False)
+            .head(n)
+        )
+
+    def top_closeness(self, n: int = 10) -> pd.Series:
+        return (
+            pd.Series(self.closeness, index=self.vs["id"], name="top_closeness")
+            .sort_values(ascending=False)
+            .head(n)
+        )
+
+    def top_ev(self, n: int = 10) -> pd.Series:
+        return (
+            pd.Series(self.eigenvector_centrality, index=self.vs["id"], name="top_ev")
+            .sort_values(ascending=False)
+            .head(n)
+        )
+
+    def _plot(
+        self,
+        show_clusters: bool = False,
+        label_edges: bool = False,
+        scale_nodes_by: Optional[List[float]] = None,
+        **kwargs,
+    ) -> ig.drawing.Plot:
+        if "layout" not in kwargs.keys():
+            layout = self.graph.layout_fruchterman_reingold(
+                weights="weight", grid=False
+            )
+            kwargs.setdefault("layout", layout)
+        if scale_nodes_by:
+            max_ = max(scale_nodes_by)
+            norm = [v / max_ for v in scale_nodes_by]
+            kwargs.setdefault("vertex_size", [12 + (12 * v) for v in norm])
+        kwargs.setdefault("mark_groups", self.clusters if show_clusters else False)
+        kwargs.setdefault("autocurve", True)
+        kwargs.setdefault("wrap_labels", True)
+        kwargs.setdefault("margin", 50)
+        kwargs.setdefault("edge_color", "lightgray")
+        kwargs.setdefault("vertex_frame_width", 0.2)
+        kwargs.setdefault("vertex_label_size", 10)
+        kwargs.setdefault("edge_label_size", 8)
+        kwargs.setdefault(
+            "vertex_shape", ["circle" if v else "square" for v in self.node_types]
+        )
+        kwargs.setdefault(
+            "vertex_color",
+            ["orangered" if v else "dodgerblue" for v in self.node_types],
+        )
+        kwargs.setdefault(
+            "vertex_frame_color", ["black" if v else "white" for v in self.node_types]
+        )
+        kwargs.setdefault(
+            "edge_label",
+            [f"{e['weight']:.2f}" if label_edges else None for e in self.es],
+        )
+        return ig.plot(self.graph, **kwargs)
+
+    @staticmethod
+    def _partition_graph(graph, resolution):
+        if graph.is_bipartite():
+            part, part0, part1 = la.CPMVertexPartition.Bipartite(
+                graph, resolution_parameter_01=resolution, weights="weight"
+            )
+            opt = la.Optimiser()
+            opt.optimise_partition_multiplex(
+                [part, part0, part1], layer_weights=[1, -1, -1], n_iterations=100
+            )
+        else:
+            part = la.find_partition(
+                graph,
+                la.CPMVertexPartition,
+                resolution_parameter=resolution,
+                weights="weight",
+            )
+        return part
+
+
+class Textnet(TextnetBase, FormalContext):
     """
     Textnet for the relational analysis of meanings.
 
