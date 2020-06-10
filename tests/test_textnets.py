@@ -86,13 +86,34 @@ def test_textnet():
     assert g_np_words.ecount() > 0
 
 
-def test_plotting(tmpdir):
+def test_context():
+    """Test formal context creation from textnet."""
+
+    c = Corpus(examples.moon_landing)
+    tn = Textnet(c.tokenized(), sublinear=False)
+    ctx = tn.context
+    assert len(ctx) == 3
+
+
+def test_plot(tmpdir):
     """Test Textnet plotting."""
 
     c = Corpus(examples.moon_landing)
     noun_phrases = c.noun_phrases()
     tn_np = Textnet(noun_phrases)
-    out = tmpdir.join("plot.png")
+    out = tmpdir.join("plot-1.png")
     plot = tn_np.plot(target=str(out))
+    assert len(plot._objects) > 0
+    assert len(tmpdir.listdir()) == 1
+
+
+def test_plot_projected(tmpdir):
+    """Test ProjectedTextnet plotting."""
+
+    c = Corpus(examples.moon_landing)
+    tn = Textnet(c.tokenized())
+    papers = tn.project(node_type="doc")
+    out = tmpdir.join("plot-2.png")
+    plot = papers.plot(show_clusters=True, label_nodes=True, target=str(out))
     assert len(plot._objects) > 0
     assert len(tmpdir.listdir()) == 1
