@@ -34,7 +34,7 @@ class TextnetBase:
 
     @property
     def vs(self):
-        """Iterator of vertices (nodes)."""
+        """Iterator of nodes (vertices)."""
         return self.graph.vs
 
     @property
@@ -167,10 +167,13 @@ class Textnet(TextnetBase, FormalContext):
 
     A textnet is a bipartite network of documents and terms. Links exist
     only between the two types of nodes. Documents have a tie with terms
-    they contain; the tie is weighted by tf-idf.
+    they contain; the tie is weighted by *tf-idf*.
 
     The bipartite network can be projected into two different kinds of
     single-mode networks: document-to-document, and term-to-term.
+
+    Experimental: The underlying incidence matrix can also be turned into a
+    formal context, which can be used to construct a concept lattice.
 
     Parameters
     ----------
@@ -178,7 +181,7 @@ class Textnet(TextnetBase, FormalContext):
         DataFrame of tokens with per-document counts, as created by
         `Corpus` methods `tokenized` and `noun_phrases`.
     sublinear : bool, optional
-        Apply sublinear scaling to tf-idf values (default: True).
+        Apply sublinear scaling to *tf-idf* values (default: True).
     doc_attrs : dict of dict, optional
         Additional attributes of document nodes.
     min_docs : int, optional
@@ -302,6 +305,9 @@ class ProjectedTextnet(TextnetBase):
             Label nodes (default: False).
         label_edges : bool, optional
             Show edge weights in plot.
+        scale_nodes_by : list of float, optional
+            Iterator of values, such as a centrality measure, to scale nodes by
+            (default: None).
         kwargs
             Additional arguments to pass to :doc:`ig.plot <ig:tutorial>`.
 
