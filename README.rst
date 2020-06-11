@@ -24,7 +24,8 @@ Textnets: automated text analysis with networks
    :alt: Bipartite network graph
 
    Network of U.S. Senators and words used in their official statements
-   following the acquittal vote in the Senate impeachment trial.
+   following the acquittal vote in the Senate impeachment trial (`source
+   <https://www.jboy.space/blog/enemies-foreign-and-partisan.html>`_).
 
 This is a Python implementation of `Chris Bail's textnets package for R`_.  It
 is free software under the terms of the GNU General Public License v3.
