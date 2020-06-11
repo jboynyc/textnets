@@ -90,7 +90,57 @@ class TextnetBase:
         """Returns graph modularity based on partition detected by Leiden algorithm."""
         return self.graph.modularity(self.clusters, weights="weight")
 
+    def top_degree(self, n: int = 10) -> pd.Series:
+        """Show nodes sorted by unweighted degree.
+
+        Parameters
+        ----------
+        n : int, optional
+            How many nodes to show (default: 10).
+
+        Returns
+        -------
+        pd.Series
+            Ranked nodes.
+        """
+        return (
+            pd.Series(self.degree, index=self.vs["id"], name="top_degree")
+            .sort_values(ascending=False)
+            .head(n)
+        )
+
+    def top_strength(self, n: int = 10) -> pd.Series:
+        """Show nodes sorted by weighted degree.
+
+        Parameters
+        ----------
+        n : int, optional
+            How many nodes to show (default: 10).
+
+        Returns
+        -------
+        pd.Series
+            Ranked nodes.
+        """
+        return (
+            pd.Series(self.strength, index=self.vs["id"], name="top_degree")
+            .sort_values(ascending=False)
+            .head(n)
+        )
+
     def top_betweenness(self, n: int = 10) -> pd.Series:
+        """Show nodes sorted by betweenness.
+
+        Parameters
+        ----------
+        n : int, optional
+            How many nodes to show (default: 10)
+
+        Returns
+        -------
+        pd.Series
+            Ranked nodes.
+        """
         return (
             pd.Series(self.betweenness, index=self.vs["id"], name="top_betweenness")
             .sort_values(ascending=False)
@@ -98,6 +148,18 @@ class TextnetBase:
         )
 
     def top_closeness(self, n: int = 10) -> pd.Series:
+        """Show nodes sorted by closeness.
+
+        Parameters
+        ----------
+        n : int, optional
+            How many nodes to show (default: 10)
+
+        Returns
+        -------
+        pd.Series
+            Ranked nodes.
+        """
         return (
             pd.Series(self.closeness, index=self.vs["id"], name="top_closeness")
             .sort_values(ascending=False)
@@ -105,6 +167,18 @@ class TextnetBase:
         )
 
     def top_ev(self, n: int = 10) -> pd.Series:
+        """Show nodes sorted by eigenvector centrality.
+
+        Parameters
+        ----------
+        n : int, optional
+            How many nodes to show (default: 10)
+
+        Returns
+        -------
+        pd.Series
+            Ranked nodes.
+        """
         return (
             pd.Series(self.eigenvector_centrality, index=self.vs["id"], name="top_ev")
             .sort_values(ascending=False)
