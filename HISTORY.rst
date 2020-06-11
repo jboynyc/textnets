@@ -2,6 +2,17 @@
 History
 =======
 
+0.4.1 (2020-06-12)
+------------------
+
+* Documented `TextnetBase` methods to output lists of nodes ranked by various
+  centrality measures: `top_betweenness` and several more.
+* Added `top_cluster_nodes` to output list of top nodes per cluster found via
+  community detection. This is useful when trying to interpret such clusters as
+  themes/topics (in the projected word-to-word graph) or as groupings (in the
+  document-to-document graph).
+* Small additions to documentation.
+
 0.4.0 (2020-06-11)
 ------------------
 
