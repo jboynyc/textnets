@@ -51,6 +51,16 @@ class TextnetBase:
         return self.graph.ecount()
 
     @cached_property
+    def degree(self) -> List[float]:
+        """Unweighted node degree."""
+        return self.graph.degree()
+
+    @cached_property
+    def strength(self) -> List[float]:
+        """Weighted node degree."""
+        return self.graph.strength(weights="weight")
+
+    @cached_property
     def betweenness(self) -> List[float]:
         """Weighted betweenness centrality."""
         return self.graph.betweenness(weights="cost")
