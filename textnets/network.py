@@ -185,6 +185,38 @@ class TextnetBase:
             .head(n)
         )
 
+    def top_cluster_nodes(
+        self, n: int = 10, part: Optional[ig.clustering.VertexClustering] = None
+    ) -> pd.Series:
+        """Show top nodes ranked by weighted degree per cluster.
+
+        Parameters
+        ----------
+        n : int, optional
+            How many nodes to show per cluster (default: 10)
+        part : VertexClustering, optional
+            Partition to use (default: Leiden partition).
+
+        Returns
+        -------
+        pd.Series
+            Ranked nodes.
+        """
+        if part is None:
+            part = self.clusters
+        return (
+            pd.DataFrame(
+                {
+                    "nodes": self.vs["id"],
+                    "strength": self.strength,
+                    "cluster": part.membership,
+                }
+            )
+            .sort_values("strength", ascending=False)
+            .groupby("cluster")
+            .agg({"nodes": lambda x: ", ".join(x[:n])})["nodes"]
+        )
+
     def _plot(
         self,
         show_clusters: bool = False,
