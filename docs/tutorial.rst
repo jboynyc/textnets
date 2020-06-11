@@ -253,7 +253,8 @@ value.
 A boolean argument, ``sublinear``, decides whether to use sublinear
 (logarithmic) scaling when calculating tf-idf for edge weights. The default is
 ``True`` because sublinear scaling is considered good practice in the
-information retrieval literature, but there may be good reason to disable it.
+information retrieval literature (:cite:`Manning2008`), but there may be good
+reason to disable it.
 
 ``doc_attr`` allows setting additional attributes for documents that become
 node attributes in the resulting network graph. For instance, if texts

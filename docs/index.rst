@@ -9,6 +9,8 @@
 
    reference
 
+   bibliography
+
 * :ref:`genindex`
 
 .. toctree::

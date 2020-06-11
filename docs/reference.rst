@@ -49,8 +49,3 @@ textnets.cli module
    :members:
    :undoc-members:
    :show-inheritance:
-
-Bibliography
-============
-
-.. bibliography:: refs.bib
