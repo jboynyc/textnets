@@ -451,7 +451,7 @@ class ProjectedTextnet(TextnetBase):
         :cite:`Serrano2009`
         """
         if "alpha" not in self.graph.vertex_attributes():
-            self.graph.es["alpha"] = list(_disparity(self.graph))
+            self.graph.es["alpha"] = list(_disparity_filter(self.graph))
         pruned = self.graph.copy()
         pruned.delete_edges(pruned.es.select(alpha_ge=alpha))
         return ProjectedTextnet(_giant_component(pruned))
@@ -527,10 +527,10 @@ def _sublinear_scaling(n: Union[int, float]) -> float:
     return 1 + np.log10(n) if n > 0 else 0
 
 
-def _disparity(g: ig.Graph) -> Iterator[float]:
+def _disparity_filter(g: ig.Graph) -> Iterator[float]:
     """Compute significance scores of edge weights.
 
-    TODO: Make sure this implementation is correct!
+    TODO: Make this more DRY.
     """
     for edge in g.es:
         source, target = edge.vertex_tuple
@@ -542,8 +542,9 @@ def _disparity(g: ig.Graph) -> Iterator[float]:
         sum_weights_t = target.strength(weights="weight")
         norm_weight_t = edge["weight"] / sum_weights_t
         integral_t = quad(lambda x: (1 - x) ** (degree_t - 2), 0, norm_weight_t)
-        yield min(1 - (degree_s - 1) * integral_s[0],
-                  1 - (degree_t - 1) * integral_t[0])
+        yield min(
+            1 - (degree_s - 1) * integral_s[0], 1 - (degree_t - 1) * integral_t[0]
+        )
 
 
 def _giant_component(g: ig.Graph) -> ig.Graph:
