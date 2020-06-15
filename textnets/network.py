@@ -369,6 +369,7 @@ class Textnet(TextnetBase, FormalContext):
     def plot(
         self,
         bipartite_layout: bool = False,
+        sugiyama_layout: bool = False,
         label_term_nodes: bool = False,
         label_doc_nodes: bool = False,
         **kwargs,
