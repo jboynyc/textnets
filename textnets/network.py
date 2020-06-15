@@ -548,6 +548,7 @@ def _disparity_filter(g: ig.Graph) -> Iterator[float]:
 
 
 def _giant_component(g: ig.Graph) -> ig.Graph:
+    """Return the subgraph corresponding to the giant component."""
     size = max(g.components().sizes())
     pos = g.components().sizes().index(size)
     return g.subgraph(g.components()[pos])
