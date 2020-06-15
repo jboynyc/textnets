@@ -412,8 +412,7 @@ class Textnet(TextnetBase, FormalContext):
             layout = self.graph.layout_bipartite(types=self.node_types)
             kwargs.setdefault("layout", layout)
         elif sugiyama_layout:
-            layout = self.graph.layout_sugiyama(weights="weight", hgap=50,
-                    maxiter=1e5)
+            layout = self.graph.layout_sugiyama(weights="weight", hgap=50, maxiter=1e5)
             kwargs.setdefault("layout", layout)
         kwargs.setdefault(
             "vertex_label",
@@ -500,7 +499,7 @@ class ProjectedTextnet(TextnetBase):
         return to_plot._plot(**kwargs)
 
 
-def _tf_idf(tidy_text: pd.DataFrame, sublinear: bool, min_docs: int):
+def _tf_idf(tidy_text: pd.DataFrame, sublinear: bool, min_docs: int) -> pd.DataFrame:
     """Calculate term frequency/inverse document frequency."""
     if sublinear:
         tidy_text["tf"] = tidy_text["n"].map(_sublinear_scaling)
