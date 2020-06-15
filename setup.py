@@ -13,6 +13,7 @@ requirements = [
     "pandas==1.0.3",
     "python-igraph==0.8.2",
     "spacy==2.2.4",
+    "scipy==1.4.1",
     "toolz==0.10.0",
     "leidenalg==0.8.0",
 ]
@@ -23,6 +24,7 @@ test_requirements = [
     "pandas",
     "python-igraph",
     "spacy",
+    "scipy",
     "toolz",
     "leidenalg",
     "pycairo",
