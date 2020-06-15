@@ -116,7 +116,7 @@ their betweenness centrality.
 .. jupyter-execute::
 
    words.plot(label_nodes=True,
-              scale_nodes_by=words.betweenness)
+              scale_nodes_by='betweenness')
 
 In addition to `betweenness`, we could also use `closeness` and
 `eigenvector_centrality` to scale nodes.

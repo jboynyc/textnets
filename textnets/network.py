@@ -221,7 +221,7 @@ class TextnetBase:
         self,
         show_clusters: Union[bool, ig.clustering.VertexClustering] = False,
         label_edges: bool = False,
-        scale_nodes_by: Optional[List[float]] = None,
+        scale_nodes_by: Optional[str] = None,
         **kwargs,
     ) -> ig.drawing.Plot:
         if "layout" not in kwargs.keys():
@@ -230,8 +230,9 @@ class TextnetBase:
             )
             kwargs.setdefault("layout", layout)
         if scale_nodes_by:
-            max_ = max(scale_nodes_by)
-            norm = [v / max_ for v in scale_nodes_by]
+            dist = getattr(self, scale_nodes_by)
+            max_ = max(dist)
+            norm = [v / max_ for v in dist]
             kwargs.setdefault("vertex_size", [15 + (15 * v) for v in norm])
         if show_clusters:
             if isinstance(show_clusters, ig.clustering.VertexClustering):
