@@ -413,7 +413,9 @@ class Textnet(TextnetBase, FormalContext):
             layout = self.graph.layout_bipartite(types=self.node_types)
             kwargs.setdefault("layout", layout)
         elif sugiyama_layout:
-            layout = self.graph.layout_sugiyama(weights="weight", hgap=50, maxiter=1e5)
+            layout = self.graph.layout_sugiyama(
+                weights="weight", hgap=50, maxiter=100000
+            )
             kwargs.setdefault("layout", layout)
         kwargs.setdefault(
             "vertex_label",
