@@ -522,12 +522,17 @@ def _disparity(g: ig.Graph) -> Iterator[float]:
     TODO: Make sure this implementation is correct!
     """
     for edge in g.es:
-        source, _ = edge.vertex_tuple
-        degree = source.degree()
-        sum_weights = sum(e["weight"] for e in source.all_edges())
-        prob = edge["weight"] / sum_weights
-        integral = quad(lambda x: (1 - x) ** (degree - 2), 0, prob)
-        yield 1 - (degree - 1) * integral[0]
+        source, target = edge.vertex_tuple
+        degree_s = source.degree()
+        sum_weights_s = source.strength(weights="weight")
+        norm_weight_s = edge["weight"] / sum_weights_s
+        integral_s = quad(lambda x: (1 - x) ** (degree_s - 2), 0, norm_weight_s)
+        degree_t = target.degree()
+        sum_weights_t = target.strength(weights="weight")
+        norm_weight_t = edge["weight"] / sum_weights_t
+        integral_t = quad(lambda x: (1 - x) ** (degree_t - 2), 0, norm_weight_t)
+        yield min(1 - (degree_s - 1) * integral_s[0],
+                  1 - (degree_t - 1) * integral_t[0])
 
 
 def _giant_component(g: ig.Graph) -> ig.Graph:
