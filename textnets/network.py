@@ -440,7 +440,6 @@ class ProjectedTextnet(TextnetBase):
         """
         if "alpha" not in self.graph.vertex_attributes():
             self.graph.es["alpha"] = list(_disparity(self.graph))
-            print(self.graph.es["alpha"])
         pruned = self.graph.copy()
         pruned.delete_edges(pruned.es.select(alpha_ge=alpha))
         return ProjectedTextnet(_giant_component(pruned))
