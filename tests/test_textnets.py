@@ -117,3 +117,15 @@ def test_plot_projected(tmpdir):
     plot = papers.plot(show_clusters=True, label_nodes=True, target=str(out))
     assert len(plot._objects) > 0
     assert len(tmpdir.listdir()) == 1
+
+
+def test_plot_backbone(tmpdir):
+    """Test ProjectedTextnet plotting with alpha cut."""
+
+    c = Corpus(examples.moon_landing)
+    tn = Textnet(c.tokenized())
+    papers = tn.project(node_type="doc")
+    out = tmpdir.join("plot-3.png")
+    plot = papers.plot(alpha=0.4, label_nodes=True, target=str(out))
+    assert len(plot._objects) > 0
+    assert len(tmpdir.listdir()) == 1
