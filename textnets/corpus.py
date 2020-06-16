@@ -15,6 +15,21 @@ from glob import glob
 from toolz import compose, partial, identity
 
 
+#: Mapping of language codes to spacy language model names.
+LANGS = {
+    "en": "en_core_web_sm",  # English
+    "de": "de_core_news_sm", # German
+    "fr": "fr_core_news_sm", # French
+    "es": "es_core_news_sm", # Spanish
+    "pt": "pt_core_news_sm", # Portuguese
+    "it": "it_core_news_sm", # Italian
+    "nl": "nl_core_news_sm", # Dutch
+    "el": "el_core_news_sm", # Greek
+    "nb": "nb_core_news_sm", # Norwegian
+    "lt": "lt_core_news_sm", # Lithuanian
+}
+
+
 class Corpus:
     """
     Corpus of labeled documents.
@@ -37,7 +52,7 @@ class Corpus:
         documents = data.copy()
         documents.index = documents.index.set_names(["label"])
         self.documents = documents
-        self.lang = lang
+        self.lang = LANGS[lang] if lang in LANGS.keys() else lang
 
     @cached_property
     def nlp(self) -> pd.Series:
