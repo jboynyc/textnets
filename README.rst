@@ -18,7 +18,9 @@ Textnets: automated text analysis with networks
    :target: https://zenodo.org/badge/latestdoi/114368834
    :alt: Latest DOI so you can please cite this software
 
-**textnets** represents collections of texts as networks of documents and words. This provides novel possibilities for the visualization and analysis of texts.
+**textnets** represents collections of texts as networks of documents and
+words. This provides novel possibilities for the visualization and analysis of
+texts.
 
 .. figure:: https://textnets.readthedocs.io/en/dev/_static/impeachment-statements.svg
    :alt: Bipartite network graph
@@ -71,5 +73,5 @@ Learn More
 **Repository**      https://github.com/jboynyc/textnets
 **Issues & Ideas**  https://github.com/jboynyc/textnets/issues
 **PyPI**            https://pypi.org/project/textnets/
-**DOI**             https://zenodo.org/badge/latestdoi/114368834
+**DOI**             [10.5281/zenodo.3866676](https://doi.org/10.5281/zenodo.3866676)
 ==================  =============================================
