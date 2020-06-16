@@ -31,7 +31,7 @@ possibilities for the visualization and analysis of texts.
 
 ![Network of U.S. Senators and words used in their official statements
 following the acquittal vote in the Senate impeachment trial in February
-2020\label{fig:senate}](impeachment-statements.svg)
+2020\label{fig:senate}](impeachment-statements.png)
 
 The package can operate on the bipartite network containing both document and
 word nodes. Figure \autoref{fig:senate} shows an example of a visualization
