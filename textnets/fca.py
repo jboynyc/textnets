@@ -2,8 +2,11 @@
 
 """Implements experimental features for formal concept analysis."""
 
-from functools import cached_property
 from typing import Tuple, List
+try:
+    from functools import cached_property
+except ImportError:
+    from cached_property import cached_property
 
 import pandas as pd
 
