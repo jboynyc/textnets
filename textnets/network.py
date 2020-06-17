@@ -11,12 +11,12 @@ from typing import Dict, Optional, List, Union, Iterator
 try:
     from typing import Literal
 except ImportError:
-    from typing_extensions import Literal
+    from typing_extensions import Literal  # type: ignore
 
 try:
     from functools import cached_property
 except ImportError:
-    from cached_property import cached_property
+    from cached_property import cached_property  # type: ignore
 
 import numpy as np
 import pandas as pd

@@ -10,7 +10,7 @@ from typing import Callable, Optional, Union, List
 try:
     from functools import cached_property
 except ImportError:
-    from cached_property import cached_property
+    from cached_property import cached_property  # type: ignore
 
 import spacy
 from spacy.tokens.doc import Doc
