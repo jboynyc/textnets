@@ -16,6 +16,8 @@ requirements = [
     "scipy==1.4.1",
     "toolz==0.10.0",
     "leidenalg==0.8.0",
+    "typing_extensions; python_version<3.8",
+    "cached-property; python_version<3.8",
 ]
 
 test_requirements = [
@@ -48,7 +50,7 @@ dev_requirements = [
 setup(
     author="John D. Boy",
     author_email="jboy@bius.moe",
-    python_requires=">=3.8",
+    python_requires=">=3.7",
     name="textnets",
     version="0.4.2",
     description="Automated text analysis with networks",

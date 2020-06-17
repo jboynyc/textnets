@@ -4,9 +4,18 @@
 
 from __future__ import annotations
 
-from typing import Dict, Optional, List, Literal, Union, Iterator
 from collections import Counter
-from functools import cached_property
+
+from typing import Dict, Optional, List, Union, Iterator
+try:
+    from typing import Literal
+except ImportError:
+    from typing_extensions import Literal
+
+try:
+    from functools import cached_property
+except ImportError:
+    from cached_property import cached_property
 
 import numpy as np
 import pandas as pd
