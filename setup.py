@@ -48,7 +48,7 @@ dev_requirements = [
 setup(
     author="John D. Boy",
     author_email="jboy@bius.moe",
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     name="textnets",
     version="0.4.2",
     description="Automated text analysis with networks",
