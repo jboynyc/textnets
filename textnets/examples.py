@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Example data for feature demnstrations."""
+"""Example data for feature demonstrations."""
 
 import pandas as pd
 
@@ -26,4 +26,5 @@ moon_landing = pd.Series(
         "Los Angeles Times",
     ],
     name="headlines",
+    dtype="object",
 )
