@@ -2,7 +2,7 @@ language: python
 python:
 - 3.7
 - 3.8
-install: pip install six>=1.14 .[test] tox-travis
+install: pip install six>=1.14 pluggy>=0.12.0 .[test] tox-travis
 script: tox
 deploy:
   provider: pypi
