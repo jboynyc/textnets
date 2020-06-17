@@ -129,3 +129,15 @@ def test_plot_backbone(tmpdir):
     plot = papers.plot(alpha=0.4, label_nodes=True, target=str(out))
     assert len(plot._objects) > 0
     assert len(tmpdir.listdir()) == 1
+
+
+def test_plot_scaled(tmpdir):
+    """Test ProjectedTextnet plotting with scaled nodes."""
+
+    c = Corpus(examples.moon_landing)
+    tn = Textnet(c.tokenized())
+    papers = tn.project(node_type="doc")
+    out = tmpdir.join("plot-4.png")
+    plot = papers.plot(scale_nodes_by="betweenness", label_nodes=True, target=str(out))
+    assert len(plot._objects) > 0
+    assert len(tmpdir.listdir()) == 1
