@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from typing import Dict, Optional, List, Literal, Union, Iterator
+from collections import Counter
 from functools import cached_property
 
 import numpy as np
@@ -332,6 +333,10 @@ class Textnet(TextnetBase, FormalContext):
             for name, attr in doc_attrs.items():
                 g.vs[name] = [attr.get(doc) for doc in g.vs["id"]]
         self.graph = g
+
+    def __repr__(self):
+        c = Counter(self.vs["type"])
+        return f"Textnet({c['doc']} docs, {c['term']} terms, {self.ecount()} edges)"
 
     def project(self, node_type: Literal["doc", "term"]) -> ig.Graph:
         """Project to one-mode network.
