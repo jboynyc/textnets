@@ -7,6 +7,7 @@ from __future__ import annotations
 from collections import Counter
 
 from typing import Dict, Optional, List, Union, Iterator
+
 try:
     from typing import Literal
 except ImportError:

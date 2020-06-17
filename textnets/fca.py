@@ -3,6 +3,7 @@
 """Implements experimental features for formal concept analysis."""
 
 from typing import Tuple, List
+
 try:
     from functools import cached_property
 except ImportError:
