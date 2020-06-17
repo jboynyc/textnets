@@ -375,6 +375,7 @@ class Textnet(TextnetBase, FormalContext):
         self,
         bipartite_layout: bool = False,
         sugiyama_layout: bool = False,
+        circular_layout: bool = False,
         label_term_nodes: bool = False,
         label_doc_nodes: bool = False,
         **kwargs,
@@ -390,11 +391,15 @@ class Textnet(TextnetBase, FormalContext):
         bipartite_layout : bool, optional
             Use a bipartite graph layout (default: False; a
             weighted Fruchterman-Reingold layout is used unless
-            ``sugiyama_layout`` is true).
+            another layout is specified).
         sugiyama_layout : bool, optional
-            Use Sugiyama layout (default: False; a weighted
-            Fruchterman-Reingold layout is used unless ``bipartite_layout`` is
-            true).
+            Use layered Sugiyama layout (default: False; a weighted
+            Fruchterman-Reingold layout is used unless another layout is
+            specified).
+        circular_layout : bool, optional
+            Use circular Reingold-Tilford layout (default: False; a weighted
+            Fruchterman-Reingold layout is used unless another layout is
+            specified).
         scale_nodes_by : str, optional
             Name of centrality measure to scale nodes by. Possible values:
             ``betweenness``, ``closeness``, ``degree``, ``strength``,
@@ -421,6 +426,9 @@ class Textnet(TextnetBase, FormalContext):
             layout = self.graph.layout_sugiyama(
                 weights="weight", hgap=50, maxiter=100000
             )
+            kwargs.setdefault("layout", layout)
+        elif circular_layout:
+            layout = self.graph.layout_reingold_tilford_circular()
             kwargs.setdefault("layout", layout)
         kwargs.setdefault(
             "vertex_label",
