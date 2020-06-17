@@ -19,7 +19,7 @@ requirements = [
 ]
 
 test_requirements = [
-    "pytest>=3",
+    "pytest",
     "Click",
     "pandas",
     "python-igraph",
