@@ -16,8 +16,6 @@ requirements = [
     "scipy==1.4.1",
     "toolz==0.10.0",
     "leidenalg==0.8.0",
-    "typing_extensions; python_version<3.8",
-    "cached-property; python_version<3.8",
 ]
 
 test_requirements = [
@@ -76,6 +74,7 @@ setup(
     test_suite="tests",
     install_requires=requirements,
     extras_require={
+        ":python_version<'3.8'": ["typing_extensions", "cached-property"],
         "test": test_requirements,
         "dev": dev_requirements,
         "doc": [
