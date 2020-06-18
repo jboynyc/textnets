@@ -73,5 +73,5 @@ Learn More
 **Repository**      https://github.com/jboynyc/textnets
 **Issues & Ideas**  https://github.com/jboynyc/textnets/issues
 **PyPI**            https://pypi.org/project/textnets/
-**DOI**             [10.5281/zenodo.3866676](https://doi.org/10.5281/zenodo.3866676)
+**DOI**             `10.5281/zenodo.3866676 <https://doi.org/10.5281/zenodo.3866676>`_
 ==================  =============================================
