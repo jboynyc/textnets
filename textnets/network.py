@@ -229,7 +229,7 @@ class TextnetBase:
             dist = getattr(self, scale_nodes_by)
             if dist.skew() < 2:
                 dist **= 2
-            norm = (dist - dist.mean())/dist.std()
+            norm = (dist - dist.mean()) / dist.std()
             mult = 20 / abs(norm).max()
             kwargs.setdefault("vertex_size", [25 + mult * z for z in norm])
         if show_clusters:
