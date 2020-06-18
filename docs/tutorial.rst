@@ -2,10 +2,10 @@
 Tutorial
 ========
 
-This tutorial will walk you through all the steps required to analyze and
-visualize your data using **textnets**. The tutorial first presents a
-self-contained example before addressing miscellaneous other issues related to
-using **textnets**.
+This tutorial walks you through all the steps required to analyze and visualize
+your data using **textnets**. The tutorial first presents a self-contained
+example before addressing miscellaneous other issues related to using
+**textnets**.
 
 Example
 -------
@@ -27,7 +27,7 @@ For the purposes of demonstration, we also import the bundled example data:
 
    from textnets import examples
 
-We construct the corpus from the example data:
+Construct the corpus from the example data:
 
 .. jupyter-execute::
 
@@ -52,7 +52,7 @@ Next, we create the textnet:
 We're using `tokenized` with all defaults, so **textnets** is removing stop
 words, applying stemming, and removing punctuation marks, numbers, URLs and the
 like. However, we're overriding the default setting for ``min_docs``, opting to
-keep even words that appear in only one document (i.e., a single newspaper
+keep even words that appear in only one document (that is, a single newspaper
 headline).
 
 Let's take a look:
@@ -67,7 +67,7 @@ The ``show_clusters`` options marks the partitions found by the Leiden
 community detection algorithm (see :doc:`here <la:multiplex>`). It identifies
 document--term groups that appear to form part of the same theme in the texts.
 
-You may be wondering: Why is the moon drifting off by itself in the network
+You may be wondering: why is the moon drifting off by itself in the network
 plot? That's because the word moon appears exactly once in each document, so
 its *tf-idf* value for each document is 0.
 
@@ -132,9 +132,9 @@ How to go from this admittedly contrived example to working with your own data?
 The following snippets are meant to help you get started. The first thing is to
 get your data in the right shape.
 
-A textnet is built from a collection – or *corpus* – of texts, so we use
-the `Corpus` class to get our data ready. Each of the following snippets
-assume that you have imported `Corpus` and `Textnet` like in the example above.
+A textnet is built from a collection—or *corpus*—of texts, so we use the
+`Corpus` class to get our data ready. Each of the following snippets assume
+that you have imported `Corpus` and `Textnet` like in the preceding example.
 
 From Pandas
 ~~~~~~~~~~~
@@ -152,8 +152,8 @@ the index.
    # or alternately:
    corpus = Corpus.from_df(df, doc_col='tekst', lang='nl_core_news_sm')
 
-If you do not specify ``doc_col``, **textnets** will assume that the first
-column containing strings is the one you meant.
+If you do not specify ``doc_col``, **textnets** assumes that the first column
+containing strings is the one you meant.
 
 You can specify which `language model <https://spacy.io/models>`__ you would
 like to use using the ``lang`` argument. The default is English, but you don’t
@@ -207,7 +207,7 @@ You can also pass it a list of paths:
                               doc_labels=['Kohl', 'Schröder', 'Merkel'],
                               lang='de_core_news_sm')
 
-This example demonstrates another features: You can optionally pass explicit
+This example demonstrates another features: you can optionally pass explicit
 labels for your documents using the argument ``doc_labels``. Without this,
 labels are inferred from file names (by stripping off the file suffix).
 
@@ -254,7 +254,7 @@ A boolean argument, ``sublinear``, decides whether to use sublinear
 (logarithmic) scaling when calculating tf-idf for edge weights. The default is
 ``True`` because sublinear scaling is considered good practice in the
 information retrieval literature (:cite:`Manning2008`), but there may be good
-reason to disable it.
+reason to turn it off.
 
 ``doc_attr`` allows setting additional attributes for documents that become
 node attributes in the resulting network graph. For instance, if texts
@@ -283,8 +283,8 @@ network into a single-mode network.
    groups = tn.project(node_type='doc')
    groups.summary()
 
-The resulting network will only contain nodes of the chosen type. Edge weights
-are calculated, and node attributes are maintained.
+The resulting network only contains nodes of the chosen type. Edge weights are
+calculated, and node attributes are maintained.
 
 From the Command Line
 ---------------------

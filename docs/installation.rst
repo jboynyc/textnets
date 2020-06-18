@@ -21,7 +21,7 @@ In a `virtual environment`_, run::
 .. _`virtual environment`:
 https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments
 
-This is the preferred method to install **textnets**, as it will always install
+This is the preferred method to install **textnets**, as it always installs
 the most recent stable release.
 
 If you don't have pip installed, the `Python installation guide`_ can guide you
@@ -30,7 +30,7 @@ through the process.
 .. _Python installation guide:
 http://docs.python-guide.org/en/latest/starting/installation/
 
-Most likely you will also have to install an appropriate `language model`_ by
+Most likely you also have to install an appropriate `language model`_ by
 issuing a command like::
 
    $ python -m spacy download en_core_web_sm
