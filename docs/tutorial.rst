@@ -133,7 +133,7 @@ The following snippets are meant to help you get started. The first thing is to
 get your data in the right shape.
 
 A textnet is built from a collection—or *corpus*—of texts, so we use the
-`Corpus` class to get our data ready. Each of the following snippets assume
+`Corpus` class to get our data ready. Each of the following snippets assumes
 that you have imported `Corpus` and `Textnet` like in the preceding example.
 
 From Pandas
