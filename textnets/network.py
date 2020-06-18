@@ -65,29 +65,31 @@ class TextnetBase:
         return self.graph.ecount()
 
     @cached_property
-    def degree(self) -> List[float]:
+    def degree(self) -> pd.Series:
         """Unweighted node degree."""
         return pd.Series(self.graph.degree(), index=self.vs["id"])
 
     @cached_property
-    def strength(self) -> List[float]:
+    def strength(self) -> pd.Series:
         """Weighted node degree."""
         return pd.Series(self.graph.strength(weights="weight"), index=self.vs["id"])
 
     @cached_property
-    def betweenness(self) -> List[float]:
+    def betweenness(self) -> pd.Series:
         """Weighted betweenness centrality."""
         return pd.Series(self.graph.betweenness(weights="cost"), index=self.vs["id"])
 
     @cached_property
-    def closeness(self) -> List[float]:
+    def closeness(self) -> pd.Series:
         """Weighted closeness centrality."""
         return pd.Series(self.graph.closeness(weights="cost"), index=self.vs["id"])
 
     @cached_property
-    def eigenvector_centrality(self) -> List[float]:
+    def eigenvector_centrality(self) -> pd.Series:
         """Weighted eigenvector centrality."""
-        return pd.Series(self.graph.eigenvector_centrality(weights="weight"), index=self.vs["id"])
+        return pd.Series(
+            self.graph.eigenvector_centrality(weights="weight"), index=self.vs["id"]
+        )
 
     @cached_property
     def node_types(self) -> List[bool]:
@@ -95,7 +97,7 @@ class TextnetBase:
         return [True if t == "term" else False for t in self.vs["type"]]
 
     @cached_property
-    def clusters(self):
+    def clusters(self) -> ig.clusters.VertexClustering:
         """Return partition of graph detected by Leiden algorithm."""
         return self._partition_graph(self.graph, resolution=RESOLUTION_PARAMETER)
 
@@ -117,11 +119,7 @@ class TextnetBase:
         pd.Series
             Ranked nodes.
         """
-        return (
-            pd.Series(self.degree, index=self.vs["id"])
-            .sort_values(ascending=False)
-            .head(n)
-        )
+        return self.degree.sort_values(ascending=False).head(n)
 
     def top_strength(self, n: int = 10) -> pd.Series:
         """Show nodes sorted by weighted degree.
@@ -136,11 +134,7 @@ class TextnetBase:
         pd.Series
             Ranked nodes.
         """
-        return (
-            pd.Series(self.strength, index=self.vs["id"])
-            .sort_values(ascending=False)
-            .head(n)
-        )
+        return self.strength.sort_values(ascending=False).head(n)
 
     def top_betweenness(self, n: int = 10) -> pd.Series:
         """Show nodes sorted by betweenness.
@@ -155,11 +149,7 @@ class TextnetBase:
         pd.Series
             Ranked nodes.
         """
-        return (
-            pd.Series(self.betweenness, index=self.vs["id"])
-            .sort_values(ascending=False)
-            .head(n)
-        )
+        return self.betweenness.sort_values(ascending=False).head(n)
 
     def top_closeness(self, n: int = 10) -> pd.Series:
         """Show nodes sorted by closeness.
@@ -174,11 +164,7 @@ class TextnetBase:
         pd.Series
             Ranked nodes.
         """
-        return (
-            pd.Series(self.closeness, index=self.vs["id"])
-            .sort_values(ascending=False)
-            .head(n)
-        )
+        return self.closeness.sort_values(ascending=False).head(n)
 
     def top_ev(self, n: int = 10) -> pd.Series:
         """Show nodes sorted by eigenvector centrality.
@@ -193,11 +179,7 @@ class TextnetBase:
         pd.Series
             Ranked nodes.
         """
-        return (
-            pd.Series(self.eigenvector_centrality, index=self.vs["id"])
-            .sort_values(ascending=False)
-            .head(n)
-        )
+        return self.eigenvector_centrality.sort_values(ascending=False).head(n)
 
     def top_cluster_nodes(
         self, n: int = 10, part: Optional[ig.clustering.VertexClustering] = None
