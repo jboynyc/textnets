@@ -301,3 +301,7 @@ command-line tool.
    $ textnets --lex noun_phrases --node-type groups ~/nltk_data/corpora/state_union | gzip > sotu_groups.graphmlz
 
 Run ``textnets --help`` for usage instructions.
+
+.. warning::
+   The command-line tool is not currently maintained and may be removed in
+   future releases.
