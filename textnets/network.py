@@ -245,9 +245,11 @@ class TextnetBase:
             kwargs.setdefault("layout", layout)
         if scale_nodes_by:
             dist = getattr(self, scale_nodes_by)
-            max_ = max(dist)
-            norm = [v / max_ for v in dist]
-            kwargs.setdefault("vertex_size", [15 + (15 * v) for v in norm])
+            if dist.skew() < 2:
+                dist **= 2
+            norm = (dist - dist.mean())/dist.std()
+            mult = 20 / abs(norm).max()
+            kwargs.setdefault("vertex_size", [25 + mult * z for z in norm])
         if show_clusters:
             if isinstance(show_clusters, ig.clustering.VertexClustering):
                 kwargs.setdefault("mark_groups", show_clusters)
