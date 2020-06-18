@@ -118,7 +118,7 @@ class TextnetBase:
             Ranked nodes.
         """
         return (
-            pd.Series(self.degree, index=self.vs["id"], name="top_degree")
+            pd.Series(self.degree, index=self.vs["id"])
             .sort_values(ascending=False)
             .head(n)
         )
@@ -137,7 +137,7 @@ class TextnetBase:
             Ranked nodes.
         """
         return (
-            pd.Series(self.strength, index=self.vs["id"], name="top_degree")
+            pd.Series(self.strength, index=self.vs["id"])
             .sort_values(ascending=False)
             .head(n)
         )
@@ -156,7 +156,7 @@ class TextnetBase:
             Ranked nodes.
         """
         return (
-            pd.Series(self.betweenness, index=self.vs["id"], name="top_betweenness")
+            pd.Series(self.betweenness, index=self.vs["id"])
             .sort_values(ascending=False)
             .head(n)
         )
@@ -175,7 +175,7 @@ class TextnetBase:
             Ranked nodes.
         """
         return (
-            pd.Series(self.closeness, index=self.vs["id"], name="top_closeness")
+            pd.Series(self.closeness, index=self.vs["id"])
             .sort_values(ascending=False)
             .head(n)
         )
@@ -194,7 +194,7 @@ class TextnetBase:
             Ranked nodes.
         """
         return (
-            pd.Series(self.eigenvector_centrality, index=self.vs["id"], name="top_ev")
+            pd.Series(self.eigenvector_centrality, index=self.vs["id"])
             .sort_values(ascending=False)
             .head(n)
         )
