@@ -275,6 +275,19 @@ You are now ready to see the first results. `Textnet` comes with a utility
 method, `plot <Textnet.plot>`, which allows you to quickly visualize the bipartite
 graph.
 
+For bipartite graphs, it can be helpful to use a layout option such as
+``bipartite_layout``, ``circular_layout``, or ``sugiyama_layout`` which helps
+to spatially separate the two node types.
+
+You may want terms that are used in more documents to appear bigger in the
+graph. In that case, use the ``scale_nodes_by`` argument with the value
+"degree." Other useful options include ``label_term_nodes``,
+``label_doc_nodes``, and ``label_edges``. These are all boolean options, so
+simply pass the value ``True`` to enable them.
+
+Finally, ``show_clusters`` will draw a polygon around detected groups of nodes
+with a community structure.
+
 Projecting
 ----------
 
@@ -287,8 +300,24 @@ network into a single-mode network.
    groups = tn.project(node_type='doc')
    groups.summary()
 
-The resulting network only contains nodes of the chosen type. Edge weights are
-calculated, and node attributes are maintained.
+The resulting network only contains nodes of the chosen type (``doc`` or
+``term``). Edge weights are calculated, and node attributes are maintained.
+
+Like the bipartite network, the projected textnet also has a `plot
+<ProjectedTextnet.plot>` method. This takes an optional argument, ``alpha``,
+which can help "declutter" the resulting visualization by removing edges. The
+value for this argument is a significance value, and only edges with a
+significance value at or below the chosen value are kept. What remains in the
+pruned graph is called the "backbone" in the network science literature.
+Commonly chosen values for ``alpha`` are in the range between 0.2 and 0.6 (with
+lower values resulting in more aggressive pruning).
+
+In visualizations of the projected network, you may want to scale nodes
+according to centrality. Pass the argument ``scale_nodes_by`` with a value of
+"betweenness," "closeness," "strength" or "eigenvector_centrality."
+
+Label nodes using the boolean argument ``label_nodes``. As above,
+``show_clusters`` will mark groups of nodes with a community structure.
 
 From the Command Line
 ---------------------
