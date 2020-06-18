@@ -67,27 +67,27 @@ class TextnetBase:
     @cached_property
     def degree(self) -> List[float]:
         """Unweighted node degree."""
-        return self.graph.degree()
+        return pd.Series(self.graph.degree(), index=self.vs["id"])
 
     @cached_property
     def strength(self) -> List[float]:
         """Weighted node degree."""
-        return self.graph.strength(weights="weight")
+        return pd.Series(self.graph.strength(weights="weight"), index=self.vs["id"])
 
     @cached_property
     def betweenness(self) -> List[float]:
         """Weighted betweenness centrality."""
-        return self.graph.betweenness(weights="cost")
+        return pd.Series(self.graph.betweenness(weights="cost"), index=self.vs["id"])
 
     @cached_property
     def closeness(self) -> List[float]:
         """Weighted closeness centrality."""
-        return self.graph.closeness(weights="cost")
+        return pd.Series(self.graph.closeness(weights="cost"), index=self.vs["id"])
 
     @cached_property
     def eigenvector_centrality(self) -> List[float]:
         """Weighted eigenvector centrality."""
-        return self.graph.eigenvector_centrality(weights="weight")
+        return pd.Series(self.graph.eigenvector_centrality(weights="weight"), index=self.vs["id"])
 
     @cached_property
     def node_types(self) -> List[bool]:
