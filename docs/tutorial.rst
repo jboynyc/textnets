@@ -226,6 +226,10 @@ husband,” “our prime minister,” or “the virus.”
 
    np = corpus.noun_phrases(remove=['Lilongwe', 'Mzuzu', 'Blantyre'])
 
+.. warning::
+   For large corpora, this can be a computationally intense task. Use your
+   friendly neighborhood HPC cluster or be prepared for your laptop to get hot.
+
 The result of this is another data frame, which we can feed to `Textnet` to
 make our textnet.
 
