@@ -70,7 +70,7 @@ def test_corpus_sql():
 
 
 def test_textnet():
-    """Test Textnet class using small data frame."""
+    """Test Textnet class using sample data."""
 
     c = Corpus(examples.moon_landing)
     noun_phrases = c.noun_phrases()
