@@ -256,8 +256,8 @@ documents really indicate latent topics, so it is common to pass a higher
 value.
 
 A boolean argument, ``sublinear``, decides whether to use sublinear
-(logarithmic) scaling when calculating tf-idf for edge weights. The default is
-``True`` because sublinear scaling is considered good practice in the
+(logarithmic) scaling when calculating *tf-idf* for edge weights. The default
+is ``True`` because sublinear scaling is considered good practice in the
 information retrieval literature (:cite:`Manning2008`), but there may be good
 reason to turn it off.
 
@@ -276,25 +276,25 @@ You are now ready to see the first results. `Textnet` comes with a utility
 method, `plot <Textnet.plot>`, which allows you to quickly visualize the bipartite
 graph.
 
-For bipartite graphs, it can be helpful to use a layout option such as
-``bipartite_layout``, ``circular_layout``, or ``sugiyama_layout`` which helps
+For bipartite graphs, it can be helpful to use a layout option, such as
+``bipartite_layout``, ``circular_layout``, or ``sugiyama_layout``, which help
 to spatially separate the two node types.
 
 You may want terms that are used in more documents to appear bigger in the
 graph. In that case, use the ``scale_nodes_by`` argument with the value
-"degree." Other useful options include ``label_term_nodes``,
+``degree``. Other useful options include ``label_term_nodes``,
 ``label_doc_nodes``, and ``label_edges``. These are all boolean options, so
 simply pass the value ``True`` to enable them.
 
-Finally, ``show_clusters`` will draw a polygon around detected groups of nodes
-with a community structure.
+Finally, enabling ``show_clusters`` will draw polygons around detected groups
+of nodes with a community structure.
 
 Projecting
 ----------
 
 Depending on your research question, you may be interested either in how terms
-or documents are connected. For that purpose, you can project the bipartite
-network into a single-mode network.
+or documents are connected. You can project the bipartite network into a
+single-mode network of either kind.
 
 .. code:: python
 
