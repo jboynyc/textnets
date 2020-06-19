@@ -148,16 +148,17 @@ the index.
 
 .. code:: python
 
-   corpus = Corpus(series, lang='nl_core_news_sm')
+   corpus = Corpus(series, lang='nl')
    # or alternately:
-   corpus = Corpus.from_df(df, doc_col='tekst', lang='nl_core_news_sm')
+   corpus = Corpus.from_df(df, doc_col='tekst', lang='nl')
 
 If you do not specify ``doc_col``, **textnets** assumes that the first column
 containing strings is the one you meant.
 
 You can specify which `language model <https://spacy.io/models>`__ you would
 like to use using the ``lang`` argument. The default is English, but you don’t
-have to be monolingual to use **textnets**.
+have to be monolingual to use **textnets**. (See `LANGS` for supported
+languages.)
 
 From a database or CSV file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -205,7 +206,7 @@ You can also pass it a list of paths:
 
    corpus = Corpus.from_files(['kohl.txt', 'schroeder.txt', 'merkel.txt'],
                               doc_labels=['Kohl', 'Schröder', 'Merkel'],
-                              lang='de_core_news_sm')
+                              lang='de')
 
 This example demonstrates another features: you can optionally pass explicit
 labels for your documents using the argument ``doc_labels``. Without this,
