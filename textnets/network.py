@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 from collections import Counter
-
 from typing import Dict, Optional, List, Union, Iterator
 
 try:
@@ -237,13 +236,6 @@ class TextnetBase:
                 kwargs.setdefault("mark_groups", show_clusters)
             else:
                 kwargs.setdefault("mark_groups", self.clusters)
-        kwargs.setdefault("autocurve", True)
-        kwargs.setdefault("wrap_labels", True)
-        kwargs.setdefault("margin", 50)
-        kwargs.setdefault("edge_color", "lightgray")
-        kwargs.setdefault("vertex_frame_width", 0.2)
-        kwargs.setdefault("vertex_label_size", 10)
-        kwargs.setdefault("edge_label_size", 8)
         kwargs.setdefault(
             "vertex_shape", ["circle" if v else "square" for v in self.node_types]
         )
@@ -258,6 +250,13 @@ class TextnetBase:
             "edge_label",
             [f"{e['weight']:.2f}" if label_edges else None for e in self.es],
         )
+        kwargs.setdefault("autocurve", True)
+        kwargs.setdefault("wrap_labels", True)
+        kwargs.setdefault("margin", 50)
+        kwargs.setdefault("edge_color", "lightgray")
+        kwargs.setdefault("vertex_frame_width", 0.2)
+        kwargs.setdefault("vertex_label_size", 10)
+        kwargs.setdefault("edge_label_size", 8)
         return ig.plot(self.graph, **kwargs)
 
     @staticmethod
