@@ -2,6 +2,41 @@
 History
 =======
 
+0.4.4 (2020-06-19)
+------------------
+
+* Methods to report centrality measures in `TextnetBase` now return
+  `pandas.Series` objects. This has some nice benefits, like seeing node labels
+  alongside centrality measures and being able to call ``.hist()`` on them to
+  visualize the distribution
+* Scaling of nodes by centrality in plots should bring out differences more
+  clearly now.
+* Improved and expanded tutorial.
+
+0.4.3 (2020-06-17)
+------------------
+
+* Python 3.7 compatibility is here.
+* New ``circular_layout`` option for `Textnet.plot`. This is based on "`Tidier
+  Drawings <https://www.reingold.co/graph-drawing.shtml>`_" and looks very nice
+  for some bipartite graphs.
+* String representation of `Textnet` instances now gives helpful information.
+* Updated documentation to note changed Python version requirement.
+
+0.4.2 (2020-06-16)
+------------------
+
+* `ProjectedTextnet.plot` now takes an argument, ``alpha``, that allows for
+  pruning the graph in order to visualize its "backbone." This is useful when
+  working with hairball graphs, which is common when creating textnets. Right
+  now, it uses Serrano et al.'s disparity filter. That means that edges with an
+  alpha value greater than the one specified are discarded, so lower values
+  mean more extreme pruning.
+* Language models can now be specified using a short ISO language code.
+* Bipartite networks can now be plotted using a layered layout (by Kozo
+  Sugiyama). Simply pass ``sugiyama_layout=True`` to `Textnet.plot`.
+* Incremental improvements to documentation.
+
 0.4.1 (2020-06-12)
 ------------------
 
