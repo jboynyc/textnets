@@ -64,10 +64,12 @@ Ready to contribute? Here's how to set up **textnets** for local development.
 
     $ git clone git@github.com:your_name_here/textnets.git
 
-3. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
+3. Install your local copy into a virtual environment. This is how you set up
+   your fork for local development::
 
-    $ mkvirtualenv textnets
     $ cd textnets/
+    $ python -m venv textnets # create the virtualenv
+    $ source venv/bin/activate # activate it
     $ python setup.py develop
 
    If you use `nix <https://nixos.org/nix>`__, you can also invoke
@@ -108,9 +110,9 @@ Before you submit a pull request, check that it meets these guidelines:
 
 1. The pull request should include tests.
 2. If the pull request adds functionality, the docs should be updated. Put
-   your new functionality into a function with a docstring, and add the
-   feature to the list in README.rst.
-3. The pull request should work for Python 3.8. Check
+   your new functionality into a function with a docstring, and add
+   illustrative code examples to the tutorial.
+3. The pull request should work for Python 3.7 and 3.8. Check
    https://travis-ci.org/github/jboynyc/textnets/pull_requests and make sure
    that the tests pass.
 
