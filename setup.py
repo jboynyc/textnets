@@ -50,7 +50,7 @@ setup(
     author_email="jboy@bius.moe",
     python_requires=">=3.7",
     name="textnets",
-    version="0.4.3",
+    version="0.4.4",
     description="Automated text analysis with networks",
     long_description=readme,
     url="https://textnets.readthedocs.io",
