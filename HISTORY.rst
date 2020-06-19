@@ -8,10 +8,11 @@ History
 * Methods to report centrality measures in `TextnetBase` now return
   `pandas.Series` objects. This has some nice benefits, like seeing node labels
   alongside centrality measures and being able to call ``.hist()`` on them to
-  visualize the distribution
+  visualize the distribution.
 * Scaling of nodes by centrality in plots should bring out differences more
   clearly now.
-* Improved and expanded tutorial.
+* Improved and expanded tutorial. Among other things, it now uses short codes
+  to specify language models.
 
 0.4.3 (2020-06-17)
 ------------------
