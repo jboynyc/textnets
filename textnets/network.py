@@ -267,7 +267,7 @@ class TextnetBase:
             )
             opt = la.Optimiser()
             opt.optimise_partition_multiplex(
-                [part, part0, part1], layer_weights=[1, -1, -1], n_iterations=100
+                [part, part0, part1], layer_weights=[1, -1, -1], n_iterations=-1
             )
         else:
             part = la.find_partition(
