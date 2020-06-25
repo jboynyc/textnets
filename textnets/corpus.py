@@ -254,11 +254,15 @@ class Corpus:
         )
         return self._return_tidy_text(func)
 
-    def noun_phrases(self, remove: List[str] = []) -> pd.DataFrame:
+    def noun_phrases(
+        self, normalize: bool = False, remove: List[str] = []
+    ) -> pd.DataFrame:
         """Return noun phrases from corpus in tidy format.
 
         Parameters
         ----------
+        normalize : bool, optional
+            Return lemmas of noun phrases (default: False).
         remove : list of str, optional
             Additional tokens to remove.
 
@@ -270,7 +274,7 @@ class Corpus:
         """
         func = compose(
             partial(_remove_additional, token_list=remove) if remove else identity,
-            _noun_chunks,
+            partial(_noun_chunks, normalize=normalize),
         )
         return self._return_tidy_text(func)
 
@@ -299,10 +303,10 @@ def _normalize_whitespace(s: str) -> str:
     return " ".join(s.split())
 
 
-def _noun_chunks(doc: Doc) -> List[str]:
+def _noun_chunks(doc: Doc, normalize) -> List[str]:
     """Return only the noun chunks in lower case."""
     return [
-        chunk.lower_
+        (chunk.lemma_ if normalize else chunk.lower_)
         for chunk in doc.noun_chunks
         if not all(token.is_stop for token in chunk)
     ]

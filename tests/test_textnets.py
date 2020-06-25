@@ -36,6 +36,9 @@ def test_corpus():
     noun_phrases_remove = c.noun_phrases(remove=["moon"])
     assert set(noun_phrases_remove.columns) == {"term", "n"}
 
+    noun_phrases_remove = c.noun_phrases(normalize=True)
+    assert set(noun_phrases_remove.columns) == {"term", "n"}
+
     tokenized = c.tokenized()
     assert set(tokenized.columns) == {"term", "n"}
 
