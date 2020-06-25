@@ -68,8 +68,8 @@ Ready to contribute? Here's how to set up **textnets** for local development.
    your fork for local development::
 
     $ cd textnets/
-    $ python -m venv textnets # create the virtualenv
-    $ source venv/bin/activate # activate it
+    $ python -m venv ENV # create the virtualenv
+    $ source ENV/bin/activate # activate it
     $ python setup.py develop
 
    If you use `nix <https://nixos.org/nix>`__, you can also invoke
