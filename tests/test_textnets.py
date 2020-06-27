@@ -144,3 +144,21 @@ def test_plot_scaled(tmpdir):
     plot = papers.plot(scale_nodes_by="betweenness", label_nodes=True, target=str(out))
     assert len(plot._objects) > 0
     assert len(tmpdir.listdir()) == 1
+
+
+def test_plot_filtered(tmpdir):
+    """Test ProjectedTextnet plotting filtered labels."""
+
+    c = Corpus(examples.moon_landing)
+    tn = Textnet(c.tokenized())
+    papers = tn.project(node_type="doc")
+    out = tmpdir.join("plot-5.png")
+    plot = papers.plot(
+        label_nodes=True,
+        label_edges=True,
+        node_label_filter=lambda v: v.degree() > 2,
+        edge_label_filter=lambda e: e["weight"] > 0.1,
+        target=str(out),
+    )
+    assert len(plot._objects) > 0
+    assert len(tmpdir.listdir()) == 1

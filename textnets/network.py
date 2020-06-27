@@ -5,7 +5,7 @@
 from __future__ import annotations
 
 from collections import Counter
-from typing import Dict, Optional, List, Union, Iterator
+from typing import Dict, Optional, List, Union, Iterator, Callable
 
 try:
     from typing import Literal
@@ -217,6 +217,8 @@ class TextnetBase:
         show_clusters: Union[bool, ig.clustering.VertexClustering] = False,
         label_edges: bool = False,
         scale_nodes_by: Optional[str] = None,
+        node_label_filter: Optional[Callable[[ig.Vertex], bool]] = None,
+        edge_label_filter: Optional[Callable[[ig.Edge], bool]] = None,
         **kwargs,
     ) -> ig.drawing.Plot:
         if "layout" not in kwargs.keys():
@@ -257,6 +259,20 @@ class TextnetBase:
         kwargs.setdefault("vertex_frame_width", 0.2)
         kwargs.setdefault("vertex_label_size", 10)
         kwargs.setdefault("edge_label_size", 8)
+        if node_label_filter and "vertex_label" in kwargs:
+            node_labels = kwargs.pop("vertex_label")
+            filtered_node_labels = map(node_label_filter, self.vs)
+            kwargs["vertex_label"] = [
+                lbl if keep else None
+                for lbl, keep in zip(node_labels, filtered_node_labels)
+            ]
+        if edge_label_filter and "edge_label" in kwargs:
+            edge_labels = kwargs.pop("edge_label")
+            filtered_edge_labels = map(edge_label_filter, self.es)
+            kwargs["edge_label"] = [
+                lbl if keep else None
+                for lbl, keep in zip(edge_labels, filtered_edge_labels)
+            ]
         return ig.plot(self.graph, **kwargs)
 
     @staticmethod

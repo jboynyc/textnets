@@ -119,11 +119,16 @@ their betweenness centrality.
               scale_nodes_by='betweenness')
 
 In addition to `betweenness`, we could also use `closeness` and
-`eigenvector_centrality` to scale nodes.
+`eigenvector_centrality` to scale nodes. We can also filter node labels,
+labeling only those nodes that have a betweenness centrality score above the
+median. This can be useful in high-order graphs where labeling every single
+node would caus too much clutter.
 
-.. todo::
+.. jupyter-execute::
 
-   * tools to aid with interpretation of clusters
+   words.plot(label_nodes=True,
+              node_label_filter=lambda n: n.betweenness() > words.betweenness.median(),
+              scale_nodes_by='betweenness')
 
 Wrangling Text & Mangling Data
 ------------------------------
