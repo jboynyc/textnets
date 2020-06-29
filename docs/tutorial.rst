@@ -122,7 +122,7 @@ In addition to `betweenness`, we could also use `closeness` and
 `eigenvector_centrality` to scale nodes. We can also filter node labels,
 labeling only those nodes that have a betweenness centrality score above the
 median. This can be useful in high-order graphs where labeling every single
-node would caus too much clutter.
+node would cause too much clutter.
 
 .. jupyter-execute::
 
@@ -213,7 +213,7 @@ You can also pass it a list of paths:
                               doc_labels=['Kohl', 'Schröder', 'Merkel'],
                               lang='de')
 
-This example demonstrates another features: you can optionally pass explicit
+This example demonstrates another feature: you can optionally pass explicit
 labels for your documents using the argument ``doc_labels``. Without this,
 labels are inferred from file names (by stripping off the file suffix).
 
@@ -311,7 +311,7 @@ The resulting network only contains nodes of the chosen type (``doc`` or
 
 Like the bipartite network, the projected textnet also has a `plot
 <ProjectedTextnet.plot>` method. This takes an optional argument, ``alpha``,
-which can help "declutter" the resulting visualization by removing edges. The
+which can help "de-clutter" the resulting visualization by removing edges. The
 value for this argument is a significance value, and only edges with a
 significance value at or below the chosen value are kept. What remains in the
 pruned graph is called the "backbone" in the network science literature.
