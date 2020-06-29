@@ -4,7 +4,7 @@ History
 
 0.4.5 (2020-06-29)
 ------------------
-* `Textnet.plot` and `TextnetBase.plot` now accept arguments to selectively
+* `Textnet.plot` and `ProjectedTextnet.plot` now accept arguments to selectively
   suppress node or edge labels. ``node_label_filter`` and ``edge_label_filter``
   take a function that is mapped to the iterator of nodes and edges. Only nodes
   or edges for which the function returns ``True`` are displayed in the plot.
