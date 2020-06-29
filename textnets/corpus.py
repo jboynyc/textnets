@@ -58,6 +58,12 @@ class Corpus:
         self.documents = documents
         self.lang = LANGS[lang] if lang in LANGS.keys() else lang
 
+    def __repr__(self):
+        return (
+            f"Corpus({self.documents.shape[0]} docs: "
+            f"{', '.join(self.documents.index[:3])}…)"
+        )
+
     @cached_property
     def nlp(self) -> pd.Series:
         """Corpus documents with NLP applied."""
@@ -141,7 +147,7 @@ class Corpus:
         label_col: Optional[str] = None,
         doc_col: Optional[str] = None,
         lang: str = "en_core_web_sm",
-        **kwargs
+        **kwargs,
     ) -> Corpus:
         """Read corpus from comma-separated value file.
 
@@ -178,7 +184,7 @@ class Corpus:
         label_col: Optional[str] = None,
         doc_col: Optional[str] = None,
         lang: str = "en_core_web_sm",
-        **kwargs
+        **kwargs,
     ) -> Corpus:
         """Read corpus from SQL database.
 
