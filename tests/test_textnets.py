@@ -9,8 +9,7 @@ import pandas as pd
 
 from click.testing import CliRunner
 
-from textnets import Corpus, Textnet
-from textnets import cli, examples
+from textnets import Corpus, Textnet, cli
 
 
 def test_command_line_interface():
@@ -24,59 +23,60 @@ def test_command_line_interface():
     assert "Show this message and exit." in help_result.output
 
 
-def test_corpus():
+def test_corpus(corpus):
     """Test Corpus class using small data frame."""
 
-    c = Corpus(examples.moon_landing)
-    assert len(c.documents) == 7
+    assert len(corpus.documents) == 7
 
-    noun_phrases = c.noun_phrases()
+    noun_phrases = corpus.noun_phrases()
+    assert noun_phrases.sum().n == 26
     assert set(noun_phrases.columns) == {"term", "n"}
 
-    noun_phrases_remove = c.noun_phrases(remove=["moon"])
+    noun_phrases_remove = corpus.noun_phrases(remove=["moon"])
+    assert noun_phrases.sum().n == 22
     assert set(noun_phrases_remove.columns) == {"term", "n"}
 
-    noun_phrases_remove = c.noun_phrases(normalize=True)
+    noun_phrases_remove = corpus.noun_phrases(normalize=True)
     assert set(noun_phrases_remove.columns) == {"term", "n"}
 
-    tokenized = c.tokenized()
+    tokenized = corpus.tokenized()
+    assert tokenized.sum().n == 44
     assert set(tokenized.columns) == {"term", "n"}
 
-    nostem = c.tokenized(stem=False)
+    nostem = corpus.tokenized(stem=False)
     assert set(nostem.columns) == {"term", "n"}
 
-    nopunct = c.tokenized(remove_punctuation=False)
+    nopunct = corpus.tokenized(remove_punctuation=False)
     assert set(nopunct.columns) == {"term", "n"}
 
-    upper = c.tokenized(lower=False)
+    upper = corpus.tokenized(lower=False)
     assert set(upper.columns) == {"term", "n"}
 
 
-def test_corpus_df():
-    df = pd.DataFrame({"headlines": examples.moon_landing, "meta": list("ABCDEFG")})
+def test_corpus_df(testdata):
+    df = pd.DataFrame({"headlines": testdata, "meta": list("ABCDEFG")})
     c = Corpus.from_df(df, doc_col="headlines")
     assert len(c.documents) == 7
 
 
-def test_corpus_csv(tmpdir):
+def test_corpus_csv(tmpdir, testdata):
     out = tmpdir.join("corpus.csv")
-    examples.moon_landing.to_csv(out)
+    testdata.to_csv(out)
     c = Corpus.from_csv(out)
     assert len(c.documents) == 7
 
 
-def test_corpus_sql():
+def test_corpus_sql(testdata):
     with sqlite3.connect(":memory:") as conn:
-        examples.moon_landing.to_sql("headlines", conn)
+        testdata.to_sql("headlines", conn)
         c = Corpus.from_sql("SELECT * FROM headlines", conn)
     assert len(c.documents) == 7
 
 
-def test_textnet():
+def test_textnet(corpus):
     """Test Textnet class using sample data."""
 
-    c = Corpus(examples.moon_landing)
-    noun_phrases = c.noun_phrases()
+    noun_phrases = corpus.noun_phrases()
 
     tn_np = Textnet(noun_phrases)
     assert tn_np.graph.vcount() > 0
@@ -89,20 +89,18 @@ def test_textnet():
     assert g_np_words.ecount() > 0
 
 
-def test_context():
+def test_context(corpus):
     """Test formal context creation from textnet."""
 
-    c = Corpus(examples.moon_landing)
-    tn = Textnet(c.tokenized(), sublinear=False)
+    tn = Textnet(corpus.tokenized(), sublinear=False)
     ctx = tn.context
     assert len(ctx) == 3
 
 
-def test_plot(tmpdir):
+def test_plot(tmpdir, corpus):
     """Test Textnet plotting."""
 
-    c = Corpus(examples.moon_landing)
-    noun_phrases = c.noun_phrases()
+    noun_phrases = corpus.noun_phrases()
     tn_np = Textnet(noun_phrases)
     out = tmpdir.join("plot-1.png")
     plot = tn_np.plot(target=str(out))
@@ -110,11 +108,10 @@ def test_plot(tmpdir):
     assert len(tmpdir.listdir()) == 1
 
 
-def test_plot_projected(tmpdir):
+def test_plot_projected(tmpdir, corpus):
     """Test ProjectedTextnet plotting."""
 
-    c = Corpus(examples.moon_landing)
-    tn = Textnet(c.tokenized())
+    tn = Textnet(corpus.tokenized())
     papers = tn.project(node_type="doc")
     out = tmpdir.join("plot-2.png")
     plot = papers.plot(show_clusters=True, label_nodes=True, target=str(out))
@@ -122,11 +119,10 @@ def test_plot_projected(tmpdir):
     assert len(tmpdir.listdir()) == 1
 
 
-def test_plot_backbone(tmpdir):
+def test_plot_backbone(tmpdir, corpus):
     """Test ProjectedTextnet plotting with alpha cut."""
 
-    c = Corpus(examples.moon_landing)
-    tn = Textnet(c.tokenized())
+    tn = Textnet(corpus.tokenized())
     papers = tn.project(node_type="doc")
     out = tmpdir.join("plot-3.png")
     plot = papers.plot(alpha=0.4, label_nodes=True, target=str(out))
@@ -134,11 +130,10 @@ def test_plot_backbone(tmpdir):
     assert len(tmpdir.listdir()) == 1
 
 
-def test_plot_scaled(tmpdir):
+def test_plot_scaled(tmpdir, corpus):
     """Test ProjectedTextnet plotting with scaled nodes."""
 
-    c = Corpus(examples.moon_landing)
-    tn = Textnet(c.tokenized())
+    tn = Textnet(corpus.tokenized())
     papers = tn.project(node_type="doc")
     out = tmpdir.join("plot-4.png")
     plot = papers.plot(scale_nodes_by="betweenness", label_nodes=True, target=str(out))
@@ -146,11 +141,10 @@ def test_plot_scaled(tmpdir):
     assert len(tmpdir.listdir()) == 1
 
 
-def test_plot_filtered(tmpdir):
+def test_plot_filtered(tmpdir, corpus):
     """Test ProjectedTextnet plotting filtered labels."""
 
-    c = Corpus(examples.moon_landing)
-    tn = Textnet(c.tokenized())
+    tn = Textnet(corpus.tokenized())
     papers = tn.project(node_type="doc")
     out = tmpdir.join("plot-5.png")
     plot = papers.plot(
