@@ -33,7 +33,7 @@ def test_corpus(corpus):
     assert set(noun_phrases.columns) == {"term", "n"}
 
     noun_phrases_remove = corpus.noun_phrases(remove=["moon"])
-    assert noun_phrases.sum().n == 22
+    assert noun_phrases_remove.sum().n == 22
     assert set(noun_phrases_remove.columns) == {"term", "n"}
 
     noun_phrases_remove = corpus.noun_phrases(normalize=True)
