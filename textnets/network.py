@@ -409,16 +409,22 @@ class Textnet(TextnetBase, FormalContext):
             Use circular Reingold-Tilford layout (default: False; a weighted
             Fruchterman-Reingold layout is used unless another layout is
             specified).
-        scale_nodes_by : str, optional
-            Name of centrality measure to scale nodes by. Possible values:
-            ``betweenness``, ``closeness``, ``degree``, ``strength``,
-            ``eigenvector_centrality`` (default: None).
         label_term_nodes : bool, optional
             Label term nodes (default: False).
         label_doc_nodes : bool, optional
             Label document nodes (default: False).
         label_edges : bool, optional
             Show edge weights in plot.
+        node_label_filter : function, optional
+            Function returning boolean value mapped to iterator of nodes to
+            decide whether or not to suppress labels.
+        edge_label_filter : function, optional
+            Function returning boolean value mapped to iterator of edges to
+            decide whether or not to suppress labels.
+        scale_nodes_by : str, optional
+            Name of centrality measure to scale nodes by. Possible values:
+            ``betweenness``, ``closeness``, ``degree``, ``strength``,
+            ``eigenvector_centrality`` (default: None).
         kwargs
             Additional arguments to pass to :doc:`ig.plot <ig:tutorial>`.
 
@@ -500,6 +506,12 @@ class ProjectedTextnet(TextnetBase):
             Label nodes (default: False).
         label_edges : bool, optional
             Show edge weights in plot.
+        node_label_filter : function, optional
+            Function returning boolean value mapped to iterator of nodes to
+            decide whether or not to suppress labels.
+        edge_label_filter : function, optional
+            Function returning boolean value mapped to iterator of edges to
+            decide whether or not to suppress labels.
         scale_nodes_by : str, optional
             Name of centrality measure to scale nodes by. Possible values:
             ``betweenness``, ``closeness``, ``degree``, ``strength``,
