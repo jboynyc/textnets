@@ -228,7 +228,7 @@ class TextnetBase:
             kwargs.setdefault("layout", layout)
         if scale_nodes_by:
             dist = getattr(self, scale_nodes_by)
-            if dist.skew() < 2:
+            if abs(dist.skew()) < 2:
                 dist **= 2
             norm = (dist - dist.mean()) / dist.std()
             mult = 20 / abs(norm).max()
