@@ -2,6 +2,10 @@
 History
 =======
 
+0.4.7 (2020-07-01)
+------------------
+* No substantive change from previous release.
+
 0.4.6 (2020-07-01)
 ------------------
 * Bump spacy dependency to version 2.3 because it includes several new language
