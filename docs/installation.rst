@@ -33,4 +33,9 @@ issuing a command like::
 
    $ python -m spacy download en_core_web_sm
 
+After updating **textnets** you may also need to update the language models.
+Run the following command to check::
+
+   $ python -m spacy validate
+
 .. _`language model`: https://spacy.io/usage/models#download

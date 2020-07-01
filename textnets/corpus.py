@@ -21,16 +21,21 @@ from toolz import compose, partial, identity
 
 #: Mapping of language codes to spacy language model names.
 LANGS = {
-    "en": "en_core_web_sm",  # English
+    "da": "da_core_news_sm",  # Danish
     "de": "de_core_news_sm",  # German
-    "fr": "fr_core_news_sm",  # French
-    "es": "es_core_news_sm",  # Spanish
-    "pt": "pt_core_news_sm",  # Portuguese
-    "it": "it_core_news_sm",  # Italian
-    "nl": "nl_core_news_sm",  # Dutch
     "el": "el_core_news_sm",  # Greek
-    "nb": "nb_core_news_sm",  # Norwegian
+    "en": "en_core_web_sm",  # English
+    "es": "es_core_news_sm",  # Spanish
+    "fr": "fr_core_news_sm",  # French
+    "it": "it_core_news_sm",  # Italian
+    "ja": "ja_core_news_sm",  # Japanese
     "lt": "lt_core_news_sm",  # Lithuanian
+    "nb": "nb_core_news_sm",  # Norwegian
+    "nl": "nl_core_news_sm",  # Dutch
+    "pl": "pl_core_news_sm",  # Polish
+    "pt": "pt_core_news_sm",  # Portuguese
+    "ro": "ro_core_news_sm",  # Romanian
+    "zh": "zh_core_web_sm",  # Chinese
 }
 
 
