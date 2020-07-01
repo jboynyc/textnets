@@ -2,6 +2,11 @@
 History
 =======
 
+0.4.5 (2020-07-01)
+------------------
+* Bump spacy dependency to version 2.3 because it includes several new language
+  models.
+
 0.4.5 (2020-06-29)
 ------------------
 * `Textnet.plot` and `ProjectedTextnet.plot` now accept arguments to selectively
