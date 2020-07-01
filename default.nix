@@ -1,4 +1,6 @@
-with import <nixpkgs> {};
+{ pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/7db146538e49ad4bee4b5c4fea073c38586df7e2.tar.gz") {} }:
+
+with pkgs;
 
   stdenv.mkDerivation rec {
   name = "env";
