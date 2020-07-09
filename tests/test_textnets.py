@@ -63,6 +63,30 @@ def test_corpus_missing(testdata, recwarn):
     assert len(corpus.documents) == 7
 
 
+def test_corpus_czech(recwarn):
+    """Test Corpus class using Czech language documents."""
+    s = pd.Series(
+        [
+            "Holka modrooká nesedávej tam",
+            "Holka modrooká nesedávej u potoka",
+            "podemele tvoje oči",
+            "vezme li tě bude škoda",
+            "V potoce je hastrmánek",
+            "V potoce je velká voda",
+            "V potoce se voda točí",
+            "zatahá tě za copánek",
+        ]
+    )
+    corpus = Corpus(s, lang="cs")
+    assert len(corpus.documents) == 8
+    # This raises a warning about lacking a language model
+    tokenized = corpus.tokenized()
+    assert len(recwarn) == 1
+    assert tokenized.sum().n > 8
+    w = recwarn.pop(UserWarning)
+    assert str(w.message) == "Using basic cs language model."
+
+
 def test_corpus_df(testdata):
     df = pd.DataFrame({"headlines": testdata, "meta": list("ABCDEFG")})
     c = Corpus.from_df(df, doc_col="headlines")
