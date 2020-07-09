@@ -4,7 +4,7 @@
 """Configure tests for `textnets` package."""
 
 import pytest
-from textnets import Corpus, Textnet, examples
+from textnets import Corpus, examples
 
 
 @pytest.fixture(scope="session")

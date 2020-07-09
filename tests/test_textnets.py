@@ -3,7 +3,6 @@
 
 """Tests for `textnets` package."""
 
-import warnings
 import sqlite3
 
 import pandas as pd
@@ -56,7 +55,7 @@ def test_corpus(corpus):
 
 def test_corpus_missing(testdata, recwarn):
     """Test Corpus class on series with missing data."""
-    s = testdata.append(pd.Series([None], index=['Missing']))
+    s = testdata.append(pd.Series([None], index=["Missing"]))
     corpus = Corpus(s)
     assert len(recwarn) == 1
     w = recwarn.pop(UserWarning)
