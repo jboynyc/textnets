@@ -2,6 +2,14 @@
 History
 =======
 
+0.4.8 (2020-07-10)
+------------------
+* The `Corpus` class now handles missing data (#13).
+* Support for more corpus languages. If no statistical language model is
+  available, `Corpus` tries to use a basic ("blank") model.
+* Improved documentation around dependencies and language support.
+* Added tests.
+
 0.4.7 (2020-07-01)
 ------------------
 * No substantive change from previous release.
