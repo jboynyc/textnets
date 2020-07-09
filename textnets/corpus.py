@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import os
+import warnings
 from typing import Callable, Optional, Union, List
 
 try:
@@ -59,6 +60,9 @@ class Corpus:
         lang: str = "en_core_web_sm",
     ):
         documents = data.copy()
+        if missings := documents.isna().sum():
+            warnings.warn(f"Dropping {missings} empty document(s).")
+            documents = documents[~documents.isna()]
         documents.index = documents.index.set_names(["label"])
         self.documents = documents
         self.lang = LANGS[lang] if lang in LANGS.keys() else lang
