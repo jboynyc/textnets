@@ -28,6 +28,18 @@ through the process.
 
 .. _Python installation guide: http://docs.python-guide.org/en/latest/starting/installation/
 
+Plotting
+--------
+
+Plotting requires `pycairo`_. Install it using `pip`_ or `conda`_ (the latter
+is advisable if you're on a Windows system).
+
+.. _pycairo: https://pycairo.readthedocs.io/
+.. _conda: https://conda.io/
+
+Language Support
+----------------
+
 Most likely you also have to install an appropriate `language model`_ by
 issuing a command like::
 
@@ -39,3 +51,9 @@ Run the following command to check::
    $ python -m spacy validate
 
 .. _`language model`: https://spacy.io/usage/models#download
+
+If there are no language models available for your corpus language, there may
+be some `basic support <https://spacy.io/usage/models#languages>`_. Even in
+that case, some languages (including Korean, Vietnamese, Thai, Russian, and
+Ukrainian) require additional installs for tokenization support. Consult the
+spacy documentation for details.
