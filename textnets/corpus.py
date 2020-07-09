@@ -5,7 +5,7 @@
 from __future__ import annotations
 
 import os
-import warnings
+from warnings import warn
 from typing import Callable, Optional, Union, List
 
 try:
@@ -62,7 +62,7 @@ class Corpus:
         documents = data.copy()
         if documents.isna().any():
             missings = documents.isna().sum()
-            warnings.warn(f"Dropping {missings} empty document(s).")
+            warn(f"Dropping {missings} empty document(s).")
             documents = documents[~documents.isna()]
         documents.index = documents.index.set_names(["label"])
         self.documents = documents
