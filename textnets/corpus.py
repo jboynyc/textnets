@@ -77,7 +77,14 @@ class Corpus:
     @cached_property
     def nlp(self) -> pd.Series:
         """Corpus documents with NLP applied."""
-        nlp = spacy.load(self.lang, disable=["ner", "textcat"])
+        try:
+            nlp = spacy.load(self.lang, disable=["ner", "textcat"])
+        except OSError as err:
+            if self.lang in LANGS.values():
+                raise err
+            else:
+                nlp = spacy.blank(self.lang, disable=["ner", "textcat"])
+                warn(f"Using basic {self.lang} language model.")
         return self.documents.map(_normalize_whitespace).map(nlp)
 
     def __len__(self):
