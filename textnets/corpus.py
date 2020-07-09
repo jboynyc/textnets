@@ -60,7 +60,8 @@ class Corpus:
         lang: str = "en_core_web_sm",
     ):
         documents = data.copy()
-        if missings := documents.isna().sum():
+        if documents.isna().any():
+            missings = documents.isna().sum()
             warnings.warn(f"Dropping {missings} empty document(s).")
             documents = documents[~documents.isna()]
         documents.index = documents.index.set_names(["label"])
