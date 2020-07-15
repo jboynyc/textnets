@@ -89,7 +89,9 @@ Next, the term network:
 
    words = tn.project(node_type='term')
    words.plot(label_nodes=True,
-              show_clusters=True)
+              color_clusters=True)
+
+Here we use ``color_clusters`` to color nodes according to their partition.
 
 Aside from visualization, we can also analyze our corpus using network metrics.
 For instance, documents with high betweenness centrality (or "cultural
