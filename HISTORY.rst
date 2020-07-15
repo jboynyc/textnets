@@ -2,6 +2,11 @@
 History
 =======
 
+0.4.9 (2020-07-15)
+------------------
+* Add ``color_clusters`` option to `Textnet` plotting methods. This colors
+  nodes according to their partition using a bespoke color palette.
+
 0.4.8 (2020-07-10)
 ------------------
 * The `Corpus` class now handles missing data (#13).
