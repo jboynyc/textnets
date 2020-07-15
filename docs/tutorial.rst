@@ -162,8 +162,9 @@ containing strings is the one you meant.
 
 You can specify which `language model <https://spacy.io/models>`__ you would
 like to use using the ``lang`` argument. The default is English, but you don’t
-have to be monolingual to use **textnets**. (See `LANGS` for supported
-languages.)
+have to be monolingual to use **textnets**. (Languages in `LANGS` are fully
+supported since we can use spacy's statistical language models. Other languages
+are only partially supported, so `noun_phrases` will likely not function.)
 
 From a database or CSV file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
