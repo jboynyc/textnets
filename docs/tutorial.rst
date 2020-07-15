@@ -80,7 +80,7 @@ First, the network of newspapers:
     papers = tn.project(node_type='doc')
     papers.plot(label_nodes=True)
 
-As before in the bipartite projection, we can see the *Houston Chronicle*,
+As before in the bipartite network, we can see the *Houston Chronicle*,
 *Chicago Tribune* and *Los Angeles Times* cluster more closely together.
 
 Next, the term network:
