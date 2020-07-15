@@ -214,10 +214,9 @@ You can also pass it a list of paths:
                               doc_labels=['Kohl', 'Schröder', 'Merkel'],
                               lang='de')
 
-This example demonstrates another feature: you can optionally pass explicit
-labels for your documents using the argument ``doc_labels``. Without this,
-labels are inferred from file names (by stripping off the file suffix).
-
+You can optionally pass explicit labels for your documents using the argument
+``doc_labels``. Without this, labels are inferred from file names by stripping
+off the file suffix.
 
 Break It Up
 ~~~~~~~~~~~
@@ -321,7 +320,7 @@ lower values resulting in more aggressive pruning).
 
 In visualizations of the projected network, you may want to scale nodes
 according to centrality. Pass the argument ``scale_nodes_by`` with a value of
-"betweenness," "closeness," "strength" or "eigenvector_centrality."
+"betweenness," "closeness," "degree," "strength," or "eigenvector_centrality."
 
 Label nodes using the boolean argument ``label_nodes``. As above,
 ``show_clusters`` will mark groups of nodes with a community structure.
