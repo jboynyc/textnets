@@ -52,7 +52,3 @@ class TextnetPalette(PrecalculatedPalette):
 
         colors = colors[0:n]
         super().__init__(colors)
-
-
-# color_clusters: bool
-# vertex_color, [TextnetPalette(self.clusters.n)[c] for c in self.clusters.membership]
