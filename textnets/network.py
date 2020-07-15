@@ -97,7 +97,7 @@ class TextnetBase:
         return [True if t == "term" else False for t in self.vs["type"]]
 
     @cached_property
-    def clusters(self) -> ig.clusters.VertexClustering:
+    def clusters(self) -> ig.clustering.VertexClustering:
         """Return partition of graph detected by Leiden algorithm."""
         return self._partition_graph(self.graph, resolution=RESOLUTION_PARAMETER)
 
