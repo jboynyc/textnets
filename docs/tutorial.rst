@@ -89,9 +89,7 @@ Next, the term network:
 
    words = tn.project(node_type='term')
    words.plot(label_nodes=True,
-              color_clusters=True)
-
-Here we use ``color_clusters`` to color nodes according to their partition.
+              show_clusters=True)
 
 Aside from visualization, we can also analyze our corpus using network metrics.
 For instance, documents with high betweenness centrality (or "cultural
@@ -113,24 +111,24 @@ It's because the *Times* uses the word "walk" in its headline, linking the "One
 Small Step" cluster to the "Man on Moon" cluster.
 
 We can produce the term graph plot again, this time scaling nodes according to
-their betweenness centrality.
+their betweenness centrality, and pruning edges from the graph using "backbone
+extraction" (:cite:`Serrano2009`).
+
+We can also use ``color_clusters`` (instead of ``show_clusters``) to color
+nodes according to their partition.
+
+And we can filter node labels, labeling only those nodes that have a
+betweenness centrality score above the median. This is particularly useful in
+high-order graphs where labeling every single node would cause too much visual
+clutter.
 
 .. jupyter-execute::
 
    words.plot(label_nodes=True,
-              scale_nodes_by='betweenness')
-
-In addition to `betweenness`, we could also use `closeness` and
-`eigenvector_centrality` to scale nodes. We can also filter node labels,
-labeling only those nodes that have a betweenness centrality score above the
-median. This can be useful in high-order graphs where labeling every single
-node would cause too much clutter.
-
-.. jupyter-execute::
-
-   words.plot(label_nodes=True,
-              node_label_filter=lambda n: n.betweenness() > words.betweenness.median(),
-              scale_nodes_by='betweenness')
+              scale_nodes_by='betweenness',
+              color_clusters=True,
+              alpha=0.5,
+              node_label_filter=lambda n: n.betweenness() > words.betweenness.median())
 
 Wrangling Text & Mangling Data
 ------------------------------
