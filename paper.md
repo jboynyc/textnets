@@ -11,7 +11,7 @@ authors:
     orcid: 0000-0003-2118-4702
     affiliation: 1
 affiliations:
- - name: Assistant Professor, Leiden University
+ - name: Assistant Professor, Faculty of Social Sciences, Leiden University
    index: 1
 date: 16 June 2020
 bibliography: paper.bib
