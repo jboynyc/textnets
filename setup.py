@@ -11,7 +11,7 @@ with open("README.rst") as readme_file:
 requirements = [
     "Click>=7.0",
     "pandas==1.0.4",
-    "pycairo==1.18.2",
+    "cairocffi==1.1.0",
     "python-igraph==0.8.2",
     "spacy==2.3.0",
     "scipy==1.4.1",

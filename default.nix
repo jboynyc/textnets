@@ -13,7 +13,7 @@ with pkgs;
 
     python38Packages.click
     python38Packages.pandas
-    python38Packages.pycairo
+    python38Packages.cairocffi
     python38Packages.spacy
     python38Packages.toolz
 
