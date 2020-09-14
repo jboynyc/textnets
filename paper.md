@@ -19,15 +19,16 @@ bibliography: paper.bib
 
 # Background
 
-Owing to the ever-expanding digitization of social life, social scientists need
-computational tools to make sense of vasts amounts of unstructured data.
-Electronic text, in particular, is a growing area of interest thanks to the
-social and cultural insights lurking in social media posts, digitized corpora,
-and web content, among other troves [@Evans2016; @Ignatow2015].
+Social scientists increasingly rely on computational tools to make sense of
+vasts amounts of unstructured data generated in the wake of to the
+ever-expanding digitization of social life. Electronic text, in particular, is
+a growing area of interest thanks to the social and cultural insights lurking
+in social media posts, digitized corpora, and web content, among other troves
+[@Evans2016; @Ignatow2015].
 
 This package aims to fill that need. `textnets` represents collections of texts
-as networks of documents and words, which provides novel and exciting
-possibilities for the visualization and analysis of texts.
+as networks of documents and words, which provides powerful possibilities for
+the visualization and analysis of texts.
 
 ![Network of U.S. Senators and words used in their official statements
 following the acquittal vote in the Senate impeachment trial in February
