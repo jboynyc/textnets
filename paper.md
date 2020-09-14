@@ -44,10 +44,6 @@ with a clear community structure, it can also output lists of nodes grouped by
 cluster as identified by a community detection algorithm. This can help
 identify latent themes in the texts [@Gerlach2018].
 
-![Network of U.S. Senators and words used in their official statements
-following the acquittal vote in the Senate impeachment trial in February
-2020 [source: @Boy2020].\label{fig:senate}](impeachment-statements.png)
-
 Another implementation of the textnets technique exists in the `R` programming
 language by its originator [@Bail2016]. It can be found at
 <https://github.com/cbail/textnets>. Feature-wise, the two implementations are
@@ -66,6 +62,10 @@ tracker are currently hosted on GitHub at
 continuous integration service, before new releases are published to avoid
 regressions from one version to another. Archived versions of releases are
 available at doi:10.5281/zenodo.3866676.
+
+![Network of U.S. Senators and words used in their official statements
+following the acquittal vote in the Senate impeachment trial in February
+2020 [source: @Boy2020].\label{fig:senate}](impeachment-statements.png)
 
 # Statement of Need
 
