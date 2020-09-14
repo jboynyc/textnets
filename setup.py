@@ -16,7 +16,7 @@ requirements = [
     "spacy==2.3.0",
     "scipy==1.4.1",
     "toolz==0.10.0",
-    "leidenalg==0.8.0",
+    "leidenalg==0.8.1",
 ]
 
 test_requirements = [
