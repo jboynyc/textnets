@@ -2,6 +2,11 @@
 History
 =======
 
+0.4.10 (2020-09-14)
+-------------------
+* Add ``cairocffi`` dependency and update installation docs.
+* Bump ``leidenalg`` dependency to version 0.8.1.
+
 0.4.9 (2020-07-15)
 ------------------
 * Add ``color_clusters`` option to `Textnet` plotting methods. This colors
