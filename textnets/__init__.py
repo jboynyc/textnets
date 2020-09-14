@@ -10,4 +10,4 @@ from .network import Textnet  # noqa: F401
 
 __author__ = """John D. Boy"""
 __email__ = "jboy@bius.moe"
-__version__ = "0.4.9"
+__version__ = "0.4.10"
