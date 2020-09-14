@@ -1,6 +1,6 @@
-===============================================
-Textnets: automated text analysis with networks
-===============================================
+=====================================
+Textnets: text analysis with networks
+=====================================
 
 .. image:: https://travis-ci.org/jboynyc/textnets.svg?branch=master
    :target: https://travis-ci.org/jboynyc/textnets
@@ -10,9 +10,9 @@ Textnets: automated text analysis with networks
    :target: https://textnets.readthedocs.io/en/stable/?badge=stable
    :alt: Documentation Status
 
-.. image:: https://pyup.io/repos/github/jboynyc/textnets/shield.svg
-   :target: https://pyup.io/repos/github/jboynyc/textnets/
-   :alt: Python Dependency Freshness
+.. image:: https://anaconda.org/conda-forge/textnets/badges/installer/conda.svg
+   :target: https://anaconda.org/conda-forge/textnets
+   :alt: Install with conda
 
 .. image:: https://zenodo.org/badge/114368834.svg
    :target: https://zenodo.org/badge/latestdoi/114368834
@@ -29,7 +29,7 @@ texts.
    following the acquittal vote in the Senate impeachment trial (`source
    <https://www.jboy.space/blog/enemies-foreign-and-partisan.html>`_).
 
-This is a Python implementation of `Chris Bail's textnets package for R`_.  It
+This is a Python implementation of `Chris Bail's textnets package for R`_. It
 is free software under the terms of the GNU General Public License v3.
 
 .. _`Chris Bail's textnets package for R`: https://github.com/cbail/textnets/
@@ -62,6 +62,9 @@ Jupyter notebooks to analyze and visualize your data!
 .. _`pandas`: https://pandas.io/
 .. _`scientific stack`: https://numfocus.org/
 
+**textnets** is easily installable using the ``conda`` and ``pip`` package
+managers.
+
 Read `the documentation <https://textnets.readthedocs.io>`_ to find out more
 about the package's features.
 
@@ -72,6 +75,7 @@ Learn More
 **Documentation**   https://textnets.readthedocs.io/
 **Repository**      https://github.com/jboynyc/textnets
 **Issues & Ideas**  https://github.com/jboynyc/textnets/issues
+**Conda-Forge**     https://anaconda.org/conda-forge/textnets
 **PyPI**            https://pypi.org/project/textnets/
 **DOI**             `10.5281/zenodo.3866676 <https://doi.org/10.5281/zenodo.3866676>`_
 ==================  =============================================
