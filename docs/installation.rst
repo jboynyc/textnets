@@ -31,8 +31,9 @@ through the process.
 Plotting
 --------
 
-Plotting requires `pycairo`_. Install it using `pip`_ or `conda`_ (the latter
-is advisable if you're on a Windows system).
+**textnets** installs `pycairo`_ as a dependency for plotting. In some cases
+(for instance if running a Windows system), it may be necessary to install
+``cairoffi`` for plotting to work. If so, install it using `pip`_ or `conda`_.
 
 .. _pycairo: https://pycairo.readthedocs.io/
 .. _conda: https://conda.io/
