@@ -2,6 +2,10 @@
 History
 =======
 
+Unreleased
+----------
+* Updated documentation with conda-forge installation option.
+
 0.4.10 (2020-09-14)
 -------------------
 * Add ``cairocffi`` dependency and update installation docs.
