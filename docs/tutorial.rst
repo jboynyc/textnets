@@ -147,9 +147,9 @@ From Pandas
 You may already have your texts in a Python data structure. `Corpus` can read
 documents directly from pandas' `Series <pd:pandas.Series>` or `DataFrame
 <pd:pandas.DataFrame>`; mangling your data into the appropriate format should
-only take :doc:`one or two easy steps <pd:getting_started/dsintro>`. The
-important thing is to have the texts in one column, and the document labels as
-the index.
+only take :doc:`one or two easy steps <pd:getting_started/intro_tutorials>`.
+The important thing is to have the texts in one column, and the document labels
+as the index.
 
 .. code:: python
 
