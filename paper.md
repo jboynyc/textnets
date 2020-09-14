@@ -67,6 +67,23 @@ continuous integration service, before new releases are published to avoid
 regressions from one version to another. Archived versions of releases are
 available at doi:10.5281/zenodo.3866676.
 
+# Statement of Need
+
+With `textnets` it is possible to visualize and analyze textual data in novel
+ways. These are some of the package's distinguishing features:
+
+- Existing text analysis packages, such as @Benoit2018, typically to visualize
+  texts as word clouds, not as network graphs. Unlike word clouds, network
+  graphs can visualize not just the frequency and co-occurrence of text
+  features, but also their linking role within corpora.
+- The discovery of topics is typically performed using latent Dirichlet
+  allocation (LDA), while `textnets` uses community detection on the term graph
+  for that purpose. Unlike topic modeling using LDA, this does not require
+  specifying a fixed number of topics.
+- `textnets` can also cluster documents using community detection on the
+  document graph. This can serve as an alternative to techniques like $k$-means
+  clustering.
+
 # Dependencies
 
 For most heavy lifting, `textnets` uses data structures and methods from
