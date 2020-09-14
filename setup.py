@@ -28,7 +28,6 @@ test_requirements = [
     "scipy",
     "toolz",
     "leidenalg",
-    "pycairo",
 ]
 
 dev_requirements = [
