@@ -27,16 +27,18 @@ If you don't have pip installed, the `Python installation guide`_ can guide you
 through the process.
 
 .. _Python installation guide: http://docs.python-guide.org/en/latest/starting/installation/
+.. _conda: https://conda.io/
 
 Plotting
 --------
 
-**textnets** installs `pycairo`_ as a dependency for plotting. In some cases
-(for instance if running a Windows system), it may be necessary to install
-``cairoffi`` for plotting to work. If so, install it using `pip`_ or `conda`_.
+**textnets** installs the `Cairo`_ graphics library as a dependency for
+plotting using the `cairocffi`_ package. In some cases you may have to `install
+CFFI`_ separately for plotting to work.
 
-.. _pycairo: https://pycairo.readthedocs.io/
-.. _conda: https://conda.io/
+.. _Cairo: https://www.cairographics.org/
+.. _cairocffi: https://cairocffi.readthedocs.io/
+.. _install CFFI: https://cffi.readthedocs.io/en/latest/installation.html
 
 Language Support
 ----------------
