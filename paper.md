@@ -30,10 +30,6 @@ This package aims to fill that need. `textnets` represents collections of texts
 as networks of documents and words, which provides powerful possibilities for
 the visualization and analysis of texts.
 
-![Network of U.S. Senators and words used in their official statements
-following the acquittal vote in the Senate impeachment trial in February
-2020\. [Source: @Boy2020]\label{fig:senate}](impeachment-statements.png)
-
 The package can operate on the bipartite network containing both document and
 word nodes. \autoref{fig:senate} shows an example of a visualization
 created by `textnets`. The underlying corpus is a collection of statements by
@@ -47,6 +43,10 @@ backbone graph with nodes scaled by various centrality measures. For networks
 with a clear community structure, it can also output lists of nodes grouped by
 cluster as identified by a community detection algorithm. This can help
 identify latent themes in the texts [@Gerlach2018].
+
+![Network of U.S. Senators and words used in their official statements
+following the acquittal vote in the Senate impeachment trial in February
+2020 [source: @Boy2020].\label{fig:senate}](impeachment-statements.png)
 
 Another implementation of the textnets technique exists in the `R` programming
 language by its originator [@Bail2016]. It can be found at
