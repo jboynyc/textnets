@@ -22,6 +22,7 @@ with pkgs;
   ];
   postShellHook = ''
     export PS1="\$(__git_ps1) $PS1"
+    set SOURCE_DATE_EPOCH=1600000000
     pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.3.0/en_core_web_sm-2.3.0.tar.gz#egg=en_core_web_sm-2.3.0
     pip install -e ".[dev,doc]"
   '';
