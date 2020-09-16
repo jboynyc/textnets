@@ -1,5 +1,5 @@
 ---
-title: 'textnets: A Python package for text analysis using networks'
+title: 'textnets: A Python package for text analysis with networks'
 tags:
   - Python
   - sociology
