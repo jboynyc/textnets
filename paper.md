@@ -42,7 +42,7 @@ nodes, and it comprises tools to analyze them. For instance, it can visualize a
 backbone graph with nodes scaled by various centrality measures. For networks
 with a clear community structure, it can also output lists of nodes grouped by
 cluster as identified by a community detection algorithm. This can help
-identify latent themes in the texts [@Gerlach2018].
+identify latent themes in corpus texts [@Gerlach2018].
 
 Another implementation of the textnets technique exists in the `R` programming
 language by its originator [@Bail2016]. It can be found at
@@ -55,13 +55,15 @@ aims at seamless integration with the Jupyter ecosystem [@Kluyver2016].
 
 `textnets` is well documented; its API reference, contribution guidelines, and
 a comprehensive tutorial can be found at <https://textnets.readthedocs.io>. For
-easy installation, the package is included in the Python Package Index, where
-it lives at <https://pypi.org/project/textnets/>. Its code repository and issue
-tracker are currently hosted on GitHub at
-<https://github.com/jboynyc/textnets>. A test suite is run using Travis, a
-continuous integration service, before new releases are published to avoid
-regressions from one version to another. Archived versions of releases are
-available at doi:10.5281/zenodo.3866676.
+easy installation, the package is included in [conda-forge][] and the [Python
+Package Index][]. Its code repository and issue tracker are currently hosted
+on GitHub at <https://github.com/jboynyc/textnets>. A test suite is run using
+Travis, a continuous integration service, before new releases are published to
+avoid regressions from one version to another. Archived versions of releases
+are available at doi:10.5281/zenodo.3866676.
+
+[conda-forge]: https://anaconda.org/conda-forge/textnets
+[Python Package Index]: https://pypi.org/project/textnets/
 
 ![Network of U.S. Senators and words used in their official statements
 following the acquittal vote in the Senate impeachment trial in February
