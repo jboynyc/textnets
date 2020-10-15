@@ -20,7 +20,7 @@ bibliography: paper.bib
 # Background
 
 Social scientists increasingly rely on computational tools to make sense of
-vasts amounts of unstructured data generated in the wake of to the
+vasts amounts of unstructured data generated in the wake of the
 ever-expanding digitization of social life. Electronic text, in particular, is
 a growing area of interest thanks to the social and cultural insights lurking
 in social media posts, digitized corpora, and web content, among other troves
@@ -38,14 +38,14 @@ president in February 2020. Documents appear as triangles (representing the
 Senators who issued the statements), and words appear as yellow squares.
 
 `textnets` can also project one-mode networks containing only document or word
-nodes, and it comprises tools to analyze them. For instance, it can visualize a
+nodes, and it contains tools to analyze them. For instance, it can visualize a
 backbone graph with nodes scaled by various centrality measures. For networks
 with a clear community structure, it can also output lists of nodes grouped by
 cluster as identified by a community detection algorithm. This can help
 identify latent themes in corpus texts [@Gerlach2018].
 
 Another implementation of the textnets technique exists in the `R` programming
-language by its originator [@Bail2016]. It can be found at
+language by its originator [@Bail2016]; it can be found at
 <https://github.com/cbail/textnets>. Feature-wise, the two implementations are
 roughly on par. This implementation in Python features a modular design, which
 is meant to improve ergonomics for users and potential contributors alike. This
@@ -53,7 +53,7 @@ package aims to make text analysis techniques accessible to a broader range of
 researchers and students. Particularly for use in the classroom, `textnets`
 aims at seamless integration with the Jupyter ecosystem [@Kluyver2016].
 
-`textnets` is well documented; its API reference, contribution guidelines, and
+`textnets` is well documented: its API reference, contribution guidelines, and
 a comprehensive tutorial can be found at <https://textnets.readthedocs.io>. For
 easy installation, the package is included in [conda-forge][] and the [Python
 Package Index][]. Its code repository and issue tracker are currently hosted
@@ -74,7 +74,7 @@ following the acquittal vote in the Senate impeachment trial in February
 With `textnets` it is possible to visualize and analyze textual data in novel
 ways. These are some of the package's distinguishing features:
 
-- Existing text analysis packages, such as @Benoit2018, typically to visualize
+- Existing text analysis packages, such as @Benoit2018, typically visualize
   texts as word clouds, not as network graphs. Unlike word clouds, network
   graphs can visualize not just the frequency and co-occurrence of text
   features, but also their linking role within corpora.
