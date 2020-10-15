@@ -14,9 +14,9 @@ Textnets: text analysis with networks
    :target: https://anaconda.org/conda-forge/textnets
    :alt: Install with conda
 
-.. image:: https://zenodo.org/badge/114368834.svg
-   :target: https://zenodo.org/badge/latestdoi/114368834
-   :alt: Latest DOI so you can please cite this software
+.. image:: https://joss.theoj.org/papers/10.21105/joss.02594/status.svg
+   :target: https://doi.org/10.21105/joss.02594
+   :alt: Published in Journal of Open Source Software
 
 **textnets** represents collections of texts as networks of documents and
 words. This provides novel possibilities for the visualization and analysis of
@@ -68,6 +68,25 @@ managers.
 Read `the documentation <https://textnets.readthedocs.io>`_ to find out more
 about the package's features.
 
+Citation
+--------
+
+Using **textnets** in a scholarly publication? Please cite this paper:
+
+.. code-block:: bibtex
+
+   @article{Boy2020,
+     author = {John D. Boy},
+     title = {textnets},
+     subtitle = {A {P}ython Package for Text Analysis with Networks},
+     journal = {Journal of Open Source Software},
+     volume = {5},
+     number = {54},
+     pages = {2594},
+     year = {2020},
+     doi = {10.21105/joss.02594},
+   }
+
 Learn More
 ----------
 
@@ -77,5 +96,6 @@ Learn More
 **Issues & Ideas**  https://github.com/jboynyc/textnets/issues
 **Conda-Forge**     https://anaconda.org/conda-forge/textnets
 **PyPI**            https://pypi.org/project/textnets/
-**DOI**             `10.5281/zenodo.3866676 <https://doi.org/10.5281/zenodo.3866676>`_
+**DOI**             `10.21105/joss.02594 <https://doi.org/10.21105/joss.02594>`_
+**Archive**         `10.5281/zenodo.3866676 <https://doi.org/10.5281/zenodo.3866676>`_
 ==================  =============================================
