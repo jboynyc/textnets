@@ -2,9 +2,10 @@
 History
 =======
 
-Unreleased
-----------
+0.4.11 (2020-11-05)
+-------------------
 * Updated documentation with conda-forge installation option.
+* Run automated tests on Travis to check Python 3.9 compatibility.
 
 0.4.10 (2020-09-14)
 -------------------
