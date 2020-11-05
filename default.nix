@@ -1,4 +1,4 @@
-{ pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/7db146538e49ad4bee4b5c4fea073c38586df7e2.tar.gz") {} }:
+{ pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz") {} }:
 
 with pkgs;
 
@@ -22,8 +22,7 @@ with pkgs;
   ];
   postShellHook = ''
     export PS1="\$(__git_ps1) $PS1"
-    set SOURCE_DATE_EPOCH=1600000000
-    pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.3.0/en_core_web_sm-2.3.0.tar.gz#egg=en_core_web_sm-2.3.0
+    pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.3.1/en_core_web_sm-2.3.1.tar.gz#egg=en_core_web_sm-2.3.1
     pip install -e ".[dev,doc]"
   '';
 }
