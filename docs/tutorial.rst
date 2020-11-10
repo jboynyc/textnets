@@ -325,6 +325,20 @@ according to centrality. Pass the argument ``scale_nodes_by`` with a value of
 Label nodes using the boolean argument ``label_nodes``. As above,
 ``show_clusters`` will mark groups of nodes with a community structure.
 
+Analysis
+--------
+
+The tutorial above gives some examples of using centrality measures to analyze
+your corpus. Aside from `top_betweenness`, the package also provides the
+methods `top_closeness`, `top_degree` (for unweighted degree), `top_strength`
+(for weighted degree), and `top_ev` (for eigenvector centrality). By default,
+they each output the ten top nodes for each centrality measure.
+
+In addition, you can use `top_cluster_nodes <TextnetBase.top_cluster_nodes>` to
+help interpret the community structure of your textnet. Clusters can either be
+interpreted as latent themes (in the word graph) or as groupings of documents
+using similar words or phrases (in the document graph).
+
 From the Command Line
 ---------------------
 
