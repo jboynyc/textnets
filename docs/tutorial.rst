@@ -266,7 +266,7 @@ is ``True`` because sublinear scaling is considered good practice in the
 information retrieval literature (:cite:`Manning2008`), but there may be good
 reason to turn it off.
 
-``doc_attr`` allows setting additional attributes for documents that become
+``doc_attrs`` allows setting additional attributes for documents that become
 node attributes in the resulting network graph. For instance, if texts
 represent views of members of different parties, we can set a party attribute.
 
