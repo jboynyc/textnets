@@ -341,6 +341,11 @@ class Textnet(TextnetBase, FormalContext):
     min_docs : int, optional
         Minimum number of documents a term must appear in to be included
         in the network (default: 2).
+
+    Attributes
+    ----------
+    graph : ig.Graph
+        Direct access to the igraph object.
     """
 
     def __init__(
@@ -485,7 +490,12 @@ class Textnet(TextnetBase, FormalContext):
 class ProjectedTextnet(TextnetBase):
     """One-mode projection of a textnet.
 
-    Created by calling `Textnet.project()` with the desired ``node_type``."""
+    Created by calling `Textnet.project()` with the desired ``node_type``.
+
+    Attributes
+    ----------
+    graph : ig.Graph
+        Direct access to the igraph object."""
 
     def alpha_cut(self, alpha: float) -> ProjectedTextnet:
         """Return graph "backbone."
