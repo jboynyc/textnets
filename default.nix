@@ -1,8 +1,8 @@
-{ pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz") {} }:
+{ pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/acd49fab8ece11a89ef8ee49903e1cd7bb50f4b7.tar.gz") {} }:
 
 with pkgs;
 
-  stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "env";
   env = buildEnv { name = name; paths = buildInputs; };
   venvDir = "./.VENV";
@@ -11,9 +11,10 @@ with pkgs;
     python38Packages.venvShellHook
     python38Packages.virtualenv
 
-    #python38Packages.pandas
+    python38Packages.pandas
     python38Packages.cairocffi
     python38Packages.spacy
+
     python38Packages.toolz
 
     python38Packages.jupyter
