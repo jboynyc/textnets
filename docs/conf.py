@@ -52,6 +52,8 @@ intersphinx_mapping = {
     "py": ("http://docs.python.org/3", None),
 }
 
+bibtex_bibfiles = ["refs.bib"]
+
 todo_include_todos = not os.environ.get("READTHEDOCS")
 
 default_role = "any"
