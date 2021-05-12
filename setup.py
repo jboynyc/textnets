@@ -9,11 +9,11 @@ with open("README.rst") as readme_file:
     readme = readme_file.read()
 
 requirements = [
-    "pandas==1.1.5",
-    "cairocffi==1.1.0",
-    "python-igraph==0.8.3",
-    "spacy==2.3.5",
-    "scipy==1.6.0",
+    "pandas==1.2.3",
+    "cairocffi==1.2.0",
+    "python-igraph==0.9.1",
+    "spacy==3.0.5",
+    "scipy==1.6.1",
     "toolz==0.11.1",
     "leidenalg==0.8.2",
 ]
@@ -29,18 +29,17 @@ test_requirements = [
 ]
 
 dev_requirements = [
-    "pip==19.2.3",
-    "bump2version==1.0.0",
-    "wheel==0.34.2",
-    "watchdog==0.10.3",
-    "flake8==3.8.3",
-    "tox==3.19.0",
-    "coverage==5.2.1",
-    "twine==3.2.0",
-    "pytest==5.4.3",
-    "pytest-runner==5.2",
-    "black==19.10b0",
-    "mypy==0.782",
+    "pip==20.2.3",
+    "bump2version==1.0.1",
+    "watchdog==2.1.1",
+    "flake8==3.9.2",
+    "tox==3.23.1",
+    "coverage==5.5",
+    "twine==3.4.1",
+    "pytest==6.2.4",
+    "pytest-runner==5.3.0",
+    "black==21.5b1",
+    "mypy==0.812",
 ]
 
 setup(
