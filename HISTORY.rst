@@ -2,6 +2,11 @@
 History
 =======
 
+0.5 (in progress)
+-----------------
+* Update to Spacy 3 and bump other dependency versions.
+* Remove command-line interface.
+
 0.4.11 (2020-11-09)
 -------------------
 * Python 3.9 compatibility!
