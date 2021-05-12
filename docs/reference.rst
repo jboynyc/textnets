@@ -41,11 +41,3 @@ textnets.examples module
    :members:
    :undoc-members:
    :show-inheritance:
-
-textnets.cli module
--------------------
-
-.. automodule:: textnets.cli
-   :members:
-   :undoc-members:
-   :show-inheritance:

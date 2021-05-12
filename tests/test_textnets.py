@@ -7,20 +7,7 @@ import sqlite3
 
 import pandas as pd
 
-from click.testing import CliRunner
-
-from textnets import Corpus, Textnet, cli
-
-
-def test_command_line_interface():
-    """Test the CLI."""
-    runner = CliRunner()
-    result = runner.invoke(cli.main)
-    assert result.exit_code == 2
-    assert "Usage:" in result.output
-    help_result = runner.invoke(cli.main, ["--help"])
-    assert help_result.exit_code == 0
-    assert "Show this message and exit." in help_result.output
+from textnets import Corpus, Textnet
 
 
 def test_corpus(corpus):

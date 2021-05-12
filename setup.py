@@ -9,7 +9,6 @@ with open("README.rst") as readme_file:
     readme = readme_file.read()
 
 requirements = [
-    "Click>=7.0",
     "pandas==1.1.5",
     "cairocffi==1.1.0",
     "python-igraph==0.8.3",
@@ -21,7 +20,6 @@ requirements = [
 
 test_requirements = [
     "pytest>=4.6.5",
-    "Click",
     "pandas",
     "python-igraph",
     "spacy",
@@ -55,7 +53,6 @@ setup(
     long_description=readme,
     url="https://textnets.readthedocs.io",
     packages=find_packages(include=["textnets", "textnets.*"]),
-    entry_points={"console_scripts": ["textnets=textnets.cli:main"]},
     include_package_data=True,
     license="GNU General Public License v3",
     zip_safe=False,

@@ -11,7 +11,6 @@ with pkgs;
     python38Packages.venvShellHook
     python38Packages.virtualenv
 
-    python38Packages.click
     #python38Packages.pandas
     python38Packages.cairocffi
     python38Packages.spacy

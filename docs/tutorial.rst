@@ -338,19 +338,3 @@ In addition, you can use `top_cluster_nodes <TextnetBase.top_cluster_nodes>` to
 help interpret the community structure of your textnet. Clusters can either be
 interpreted as latent themes (in the word graph) or as groupings of documents
 using similar words or phrases (in the document graph).
-
-From the Command Line
----------------------
-
-In addition to providing a Python package, **textnets** can also be used as a
-command-line tool.
-
-.. code:: bash
-
-   $ textnets --lex noun_phrases --node-type groups ~/nltk_data/corpora/state_union | gzip > sotu_groups.graphmlz
-
-Run ``textnets --help`` for usage instructions.
-
-.. warning::
-   The command-line tool is not currently maintained and may be removed in
-   future releases.
