@@ -27,8 +27,7 @@ BASE_COLORS = [
 
 
 class TextnetPalette(PrecalculatedPalette):
-    """Color palette for textnets.
-    """
+    """Color palette for textnets."""
 
     def __init__(self, n: int):
         base_colors = [color_name_to_rgba(c) for c in BASE_COLORS]
