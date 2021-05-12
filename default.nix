@@ -21,7 +21,7 @@ with pkgs;
   ];
   postShellHook = ''
     export PS1="\$(__git_ps1) $PS1"
-    pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.3.1/en_core_web_sm-2.3.1.tar.gz#egg=en_core_web_sm-2.3.1
+    pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.0.0/en_core_web_sm-3.0.0.tar.gz#egg=en_core_web_sm-3.0.0
     pip install -e ".[dev,doc]"
   '';
 }

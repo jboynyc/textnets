@@ -83,7 +83,7 @@ class Corpus:
             if self.lang in LANGS.values():
                 raise err
             else:
-                nlp = spacy.blank(self.lang, disable=["ner", "textcat"])
+                nlp = spacy.blank(self.lang)
                 warn(f"Using basic {self.lang} language model.")
         return self.documents.map(_normalize_whitespace).map(nlp)
 
@@ -329,7 +329,7 @@ def _normalize_whitespace(s: str) -> str:
 def _noun_chunks(doc: Doc, normalize) -> List[str]:
     """Return only the noun chunks in lower case."""
     return [
-        (chunk.lemma_ if normalize else chunk.lower_)
+        (chunk.lemma_ if normalize else " ".join([t.lower_ for t in chunk]))
         for chunk in doc.noun_chunks
         if not all(token.is_stop for token in chunk)
     ]
