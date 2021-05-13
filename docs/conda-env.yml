@@ -3,10 +3,10 @@ channels:
   - conda-forge
 dependencies:
   - python>=3.8.2
-  - python-igraph>=0.9.1
-  - leidenalg>=0.8.2
-  - pandas>=1.2.3
-  - spacy>=3.0.5
+  - python-igraph==0.9.1
+  - leidenalg==0.8.2
+  - pandas==1.2.3
+  - spacy==3.0.5
   - spacy-model-en_core_web_sm==3.0.0
   - toolz
   - jupyter_sphinx
