@@ -603,10 +603,7 @@ def _sublinear_scaling(n: Union[int, float]) -> float:
 
 
 def _disparity_filter(g: ig.Graph) -> Iterator[float]:
-    """Compute significance scores of edge weights.
-
-    TODO: Make this more DRY.
-    """
+    """Compute significance scores of edge weights."""
     for edge in g.es:
         source, target = edge.vertex_tuple
         degree_s = source.degree()
@@ -616,7 +613,10 @@ def _disparity_filter(g: ig.Graph) -> Iterator[float]:
         degree_t = target.degree()
         sum_weights_t = target.strength(weights="weight")
         norm_weight_t = edge["weight"] / sum_weights_t
-        integral_t = quad(lambda x: (1 - x) ** (degree_t - 2), 0, norm_weight_t)
+        try:
+            integral_t = quad(lambda x: (1 - x) ** (degree_t - 2), 0, norm_weight_t)
+        except ZeroDivisionError:
+            yield 0
         yield min(
             1 - (degree_s - 1) * integral_s[0], 1 - (degree_t - 1) * integral_t[0]
         )
