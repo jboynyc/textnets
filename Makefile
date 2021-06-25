@@ -47,6 +47,9 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
+push:
+	git push && git push --tag
+
 lint: format ## check style with flake8
 	flake8 textnets tests
 
