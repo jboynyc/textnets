@@ -18,7 +18,8 @@ readme = "README.rst"
 
 [tool.poetry.dependencies]
 python = ">=3.7.1,<3.10"
-cairocffi = "^1.2.0"
+cairocffi = {version = "^1.2.0", platform = "linux"}
+pycairo = {version = "^1.20.1", markers = "sys_platform != 'linux' }
 leidenalg = "^0.8.4"
 pandas = "^1.2.5"
 python-igraph = "^0.9.6"
