@@ -64,11 +64,12 @@ Plotting
 --------
 
 **textnets** installs the `Cairo`_ graphics library as a dependency for
-plotting using the `cairocffi`_ package. In rare cases you may have to `install
-CFFI`_ separately for plotting to work.
+plotting. On a Mac, you may have to install Cairo separately using the
+`Homebrew`_ package manager. In rare cases you may also have to `install CFFI`_
+separately for plotting to work.
 
 .. _Cairo: https://www.cairographics.org/
-.. _cairocffi: https://cairocffi.readthedocs.io/
+.. _Hombrew: https://formulae.brew.sh/formula/cairo
 .. _install CFFI: https://cffi.readthedocs.io/en/latest/installation.html
 
 Language Support

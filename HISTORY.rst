@@ -5,6 +5,7 @@ History
 0.5 (in progress)
 -----------------
 * Migrate continuous integration testing from Travis to GitHub Actions.
+* Continuous integration tests now run for MacOS and Windows too.
 * Update to Spacy 3 and bump other dependency versions.
 * Handle dependencies using poetry.
 * Remove command-line interface.
