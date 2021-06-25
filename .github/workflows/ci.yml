@@ -26,6 +26,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
+      shell: bash
       run: |
         if [ "$RUNNER_OS" == "macOS" ]; then
           brew install cairo
