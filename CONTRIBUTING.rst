@@ -122,7 +122,7 @@ Then run::
 
 $ poetry version patch # possible: major / minor / patch
 $ git commit -a -m "Bump to version $(poetry version)"
-$ git tag -a v$(poetry version) -m "Version $(poetry version)"
+$ git tag -a v$(poetry version)
 $ make push
 
-Travis will then deploy to PyPI if tests pass.
+Tagged releases are automatically published to PyPI.
