@@ -10,7 +10,7 @@ name: textnets PyPI upload
 
 on:
   release:
-    types: [published]
+    types: created
 
 jobs:
   deploy:
