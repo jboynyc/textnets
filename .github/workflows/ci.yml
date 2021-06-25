@@ -31,7 +31,7 @@ jobs:
         poetry install -E test
     - name: Lint with flake8
       run: |
-        flake8 textnets tests
+        poetry run flake8 textnets tests
     - name: Test with pytest
       run: |
-        pytest
+        poetry run pytest
