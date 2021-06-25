@@ -5,9 +5,12 @@ conda:
 
 # Optionally set the version of Python and requirements required to build your docs
 python:
+  version: 3.8
   install:
-    - method: setuptools
+    - method: pip
       path: .
+      extra_requirements:
+        - doc
 
 # Build documentation in the doc/source directory with Sphinx
 sphinx:
