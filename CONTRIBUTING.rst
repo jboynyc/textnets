@@ -68,13 +68,13 @@ Ready to contribute? Here's how to set up **textnets** for local development.
    your fork for local development::
 
     $ cd textnets/
-    $ python -m venv ENV # create the virtualenv
-    $ source ENV/bin/activate # activate it
-    $ python setup.py develop
+    $ poetry install
+    $ poetry install -E doc
+    $ poetry install -E test
 
    If you use `nix <https://nixos.org/nix>`__, you can also invoke
    ``nix-shell`` in the repository to quickly create a development environment
-   with the included ``default.nix`` file.
+   with the included ``shell.nix`` file.
 
 4. Create a branch for local development::
 
@@ -87,9 +87,6 @@ Ready to contribute? Here's how to set up **textnets** for local development.
 
     $ make lint
     $ make test
-    $ make test-all # optional: to test other Python versions with tox
-
-   To get flake8 and tox, just pip install them into your virtualenv.
 
 6. Commit your changes::
 
@@ -112,8 +109,8 @@ Before you submit a pull request, check that it meets these guidelines:
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add
    illustrative code examples to the tutorial.
-3. The pull request should work for Python 3.7 and 3.8. Check
-   https://travis-ci.org/github/jboynyc/textnets/pull_requests and make sure
+3. The pull request should work for Python 3.7, 3.8, and 3.9. Check
+   https://github.com/jboynyc/textnets/actions/workflows/ci.yml to make sure
    that the tests pass.
 
 Deploying
@@ -123,8 +120,9 @@ A reminder for the maintainers on how to deploy.
 Make sure all your changes are committed (including an entry in HISTORY.rst).
 Then run::
 
-$ bump2version patch # possible: major / minor / patch
-$ git push
-$ git push --tags
+$ poetry version patch # possible: major / minor / patch
+$ git commit -a -m "Bump to version $(poetry version)"
+$ git tag -a v$(poetry version) -m "Version $(poetry version)"
+$ make push
 
 Travis will then deploy to PyPI if tests pass.
