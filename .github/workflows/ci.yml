@@ -27,6 +27,9 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
+        if [ "$RUNNER_OS" == "macOS" ]; then
+          brew install cairo
+        fi
         python -m pip install poetry
         poetry install --no-dev
         poetry install -E test
