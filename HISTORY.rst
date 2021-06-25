@@ -4,7 +4,9 @@ History
 
 0.5 (in progress)
 -----------------
+* Migrate continuous integration testing from Travis to GitHub Actions.
 * Update to Spacy 3 and bump other dependency versions.
+* Handle dependencies using poetry.
 * Remove command-line interface.
 
 0.4.11 (2020-11-09)
