@@ -2,6 +2,14 @@
 Textnets: text analysis with networks
 =====================================
 
+.. image:: https://mybinder.org/badge_logo.svg
+   :target: https://mybinder.org/v2/gh/jboynyc/textnets-binder/trunk?filepath=Tutorial.ipynb
+   :alt: Launch on Binder
+
+.. image:: https://github.com/jboynyc/textnets/actions/workflows/ci.yml/badge.svg
+   :target: https://github.com/jboynyc/textnets/actions/workflows/ci.yml
+   :alt: CI status
+
 .. image:: https://readthedocs.org/projects/textnets/badge/?version=stable
    :target: https://textnets.readthedocs.io/en/stable/?badge=stable
    :alt: Documentation Status
