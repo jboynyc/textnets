@@ -70,7 +70,6 @@ Ready to contribute? Here's how to set up **textnets** for local development.
     $ cd textnets/
     $ poetry install
     $ poetry install -E doc
-    $ poetry install -E test
 
    If you use `nix <https://nixos.org/nix>`__, you can also invoke
    ``nix-shell`` in the repository to quickly create a development environment
@@ -121,8 +120,8 @@ Make sure all your changes are committed (including an entry in HISTORY.rst).
 Then run::
 
 $ poetry version patch # possible: major / minor / patch
-$ git commit -a -m "Bump to version $(poetry version)"
-$ git tag -a v$(poetry version)
+$ git commit -a -m "Bump to version $(poetry version -s)"
+$ git tag -a v$(poetry version -s)
 $ make push
 
 Tagged releases are automatically published to PyPI.
