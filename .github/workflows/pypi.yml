@@ -31,7 +31,7 @@ jobs:
       run: poetry build
     - name: Publish package
       env:
-        PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+        POETRY_HTTP_BASIC_TEST_USERNAME: __token__
+        POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API_TOKEN }}
       run: |
-        poetry config pypi-token.pypi $PYPI_TOKEN
-        poetry publish
+        poetry publish -n
