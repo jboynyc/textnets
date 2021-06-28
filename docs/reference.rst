@@ -26,10 +26,10 @@ textnets.network module
    :undoc-members:
    :show-inheritance:
 
-textnets.fca module
+textnets.viz module
 -------------------
 
-.. automodule:: textnets.fca
+.. automodule:: textnets.viz
    :members:
    :undoc-members:
    :show-inheritance:
@@ -38,6 +38,14 @@ textnets.examples module
 ------------------------
 
 .. automodule:: textnets.examples
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+textnets.fca module
+-------------------
+
+.. automodule:: textnets.fca
    :members:
    :undoc-members:
    :show-inheritance:

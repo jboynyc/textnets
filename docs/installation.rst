@@ -7,7 +7,7 @@ Installation
 **textnets** is included in `conda-forge`_ and the `Python Package Index`_, so
 it can either be installed using `conda`_ or `pip`_.
 
-.. _`conda-forge`: https://anaconda.org/conda-forge/textnets/
+.. _conda-forge: https://anaconda.org/conda-forge/textnets/
 .. _`Python Package Index`: https://pypi.org/project/textnets/
 .. _conda: https://conda.io/
 .. _pip: https://pip.pypa.io
@@ -39,8 +39,8 @@ packages.
 1. Go to the **Environments** tab.
 2. Click the **Channels** button.
 3. Click the **Add** button.
-4. Enter the channel url https://conda.anaconda.org/conda-forge/
-5. Hit your keyboard's Enter key.
+4. Enter the channel URL https://conda.anaconda.org/conda-forge/
+5. Hit your keyboard's **Enter** key.
 6. Click the **Update channels** button.
 7. Now you can install **textnets** in a new environment. (Make sure the
    package filter on the **Environments** tab is set to "all.")
@@ -49,14 +49,9 @@ Using pip
 ---------
 
 Alternately, if you already have Python installed, you can use its package
-manger. (If you don't have pip installed yet, the `Python installation guide`_
-can guide you through the process.)
+manger to install **textnets**. In a `virtual environment`_, run::
 
-.. _Python installation guide: http://docs.python-guide.org/en/latest/starting/installation/
-
-In a `virtual environment`_, run::
-
-   $ pip install textnets
+   $ python -m pip install textnets
 
 .. _`virtual environment`: https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments
 
@@ -64,12 +59,15 @@ Plotting
 --------
 
 **textnets** installs the `Cairo`_ graphics library as a dependency for
-plotting. On a Mac, you may have to install Cairo separately using the
-`Homebrew`_ package manager. In rare cases you may also have to `install CFFI`_
-separately for plotting to work.
+plotting. If you are using a Mac without Anaconda, you will probably have to
+install Cairo separately using the `Homebrew`_ package manager.
 
 .. _Cairo: https://www.cairographics.org/
-.. _Hombrew: https://formulae.brew.sh/formula/cairo
+.. _Homebrew: https://formulae.brew.sh/formula/cairo
+
+In rare cases you may also have to `install CFFI`_ separately for plotting to
+work.
+
 .. _install CFFI: https://cffi.readthedocs.io/en/latest/installation.html
 
 Language Support
@@ -91,4 +89,4 @@ If there are no language models available for your corpus language, there may
 be some `basic support <https://spacy.io/usage/models#languages>`_. Even in
 that case, some languages (including Korean, Vietnamese, Thai, Russian, and
 Ukrainian) require additional installs for tokenization support. Consult the
-spacy documentation for details.
+spaCy documentation for details.
