@@ -2,13 +2,14 @@
 History
 =======
 
-0.5 (in progress)
------------------
+0.5.0 (2021-06-28)
+------------------
 * Migrate continuous integration testing from Travis to GitHub Actions.
 * Continuous integration tests now run for MacOS and Windows too.
 * Update to Spacy 3 and bump other dependency versions.
-* Handle dependencies using poetry.
-* Remove command-line interface.
+* Improvements to documentation.
+* Handle dependencies and build project using Poetry (PEP 517 and 518).
+* Remove deprecated command-line interface.
 
 0.4.11 (2020-11-09)
 -------------------
