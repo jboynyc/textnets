@@ -23,6 +23,8 @@ export PRINT_HELP_PYSCRIPT
 
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
+COMMAND_PREFIX = poetry run
+
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
@@ -42,53 +44,41 @@ clean-pyc: ## remove Python file artifacts
 	find . -name '__pycache__' -exec rm -fr {} +
 
 clean-test: ## remove test and coverage artifacts
-	rm -fr .tox/
 	rm -f .coverage
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
-push:
+push: ## push code and tags to remote repository
 	git push && git push --tag
 
 lint: format ## check style with flake8
-	flake8 textnets tests
+	$(COMMAND_PREFIX) flake8 textnets tests
 
 format: ## format code with black
-	black textnets tests
+	$(COMMAND_PREFIX) black textnets tests
 
 test: ## run tests quickly with the default Python
-	pytest
-	mypy --ignore-missing-imports textnets
-
-test-all: ## run tests on every Python version with tox
-	tox
+	$(COMMAND_PREFIX) pytest
+	$(COMMAND_PREFIX) mypy --ignore-missing-imports textnets
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source textnets -m pytest
-	coverage report -m
-	coverage html
+	$(COMMAND_PREFIX) coverage run --source textnets -m pytest
+	$(COMMAND_PREFIX) coverage report -m
+	$(COMMAND_PREFIX) coverage html
 	$(BROWSER) htmlcov/index.html
 
 docs: ## generate Sphinx HTML documentation, including API docs
-	$(MAKE) -C docs clean
-	$(MAKE) -C docs html
+	$(COMMAND_PREFIX) $(MAKE) -C docs clean
+	$(COMMAND_PREFIX) $(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html
 
 api-docs:
 	rm -f docs/reference.rst
-	sphinx-apidoc -T -M -H "API Reference" -o docs/ textnets
+	$(COMMAND_PREFIX) sphinx-apidoc -T -M -H "API Reference" -o docs/ textnets
 	mv docs/textnets.rst docs/reference.rst
 
 servedocs: docs ## compile the docs watching for changes
-	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
+	$(COMMAND_PREFIX) watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
 
-release: dist ## package and upload a release
-	twine upload dist/*
-
-dist: clean ## builds source and wheel package
-	python setup.py sdist
-	python setup.py bdist_wheel
-	ls -l dist
-
-install: clean ## install the package to the active Python's site-packages
-	python setup.py install
+install: clean ## install the package and its dependencies
+	poetry install
