@@ -5,9 +5,9 @@ name: textnets CI
 
 on:
   push:
-    branches: [ $default-branch, "dev" ]
+    branches: [ "trunk", "dev" ]
   pull_request:
-    branches: [ $default-branch ]
+    branches: [ "trunk" ]
 
 jobs:
   build:
@@ -33,7 +33,7 @@ jobs:
         fi
         python -m pip install poetry
         poetry install --no-dev
-        poetry install -E test
+        pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.0.0/en_core_web_sm-3.0.0.tar.gz
     - name: Lint with flake8
       run: |
         poetry run flake8 textnets tests
