@@ -3,8 +3,6 @@
 with pkgs;
 
 mkShell rec {
-  name = "env";
-  env = buildEnv { name = name; paths = buildInputs; };
   venvDir = "./.VENV";
   buildInputs = [
     cairo
@@ -13,8 +11,8 @@ mkShell rec {
     python3.pkgs.venvShellHook
   ];
   postShellHook = ''
-    export LD_LIBRARY_PATH=${stdenv.cc.cc.lib}/lib/:${cairo}/lib/:$LD_LIBRARY_PATH
     export PS1="\$(__git_ps1) $PS1"
+    export LD_LIBRARY_PATH=${stdenv.cc.cc.lib}/lib/:${cairo}/lib/:$LD_LIBRARY_PATH
     poetry install
     poetry install -E doc
     poetry install -E test
