@@ -301,6 +301,55 @@ class Corpus:
         )
         return self._return_tidy_text(func)
 
+    def ngrams(
+        self,
+        size: int,
+        remove: List[str] = [],
+        stem: bool = False,
+        remove_stop_words: bool = False,
+        remove_urls: bool = True,
+        remove_numbers: bool = True,
+        remove_punctuation: bool = True,
+        lower: bool = True,
+    ) -> pd.DataFrame:
+        """Return n-grams of length n from corpus in tidy format.
+
+        Parameters
+        ----------
+        size : int
+            Size of n-grams to return.
+        remove : list of str, optional
+            Additional tokens to remove.
+        stem : bool, optional
+            Return token stems (default: False).
+        remove_stop_words : bool, optional
+            Remove stop words (default: False).
+        remove_urls : bool, optional
+            Remove URL and email address tokens (default: True).
+        remove_numbers : bool, optional
+            Remove number tokens (default: True).
+        remove_punctuation : bool, optional
+            Remove punctuation marks, brackets, and quotation marks
+            (default: True).
+
+        Returns
+        -------
+        pd.DataFrame
+            A data frame with document labels (index), n-grams (term), and
+            per-document counts (n).
+        """
+        func = compose(
+            partial(_ngrams, n=size),
+            partial(_remove_additional, token_list=remove) if remove else identity,
+            _lower if lower else identity,
+            _stem if stem else _as_text,
+            _remove_stop_words if remove_stop_words else identity,
+            _remove_urls if remove_urls else identity,
+            _remove_numbers if remove_numbers else identity,
+            _remove_punctuation if remove_punctuation else identity,
+        )
+        return self._return_tidy_text(func)
+
     def _return_tidy_text(self, func: Callable[[Doc], List[str]]) -> pd.DataFrame:
         return (
             pd.melt(
@@ -377,6 +426,11 @@ def _lower(doc: List[str]) -> List[str]:
 def _remove_additional(doc: List[str], token_list: List[str]) -> List[str]:
     """Return list of strings without specified tokens."""
     return [s for s in doc if s not in token_list]
+
+
+def _ngrams(doc: List[str], n: int) -> List[str]:
+    """Returns list of n-gram strings."""
+    return [" ".join(t) for t in zip(*[doc[offset:] for offset in range(n)])]
 
 
 class NoDocumentColumnException(Exception):
