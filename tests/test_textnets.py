@@ -39,6 +39,10 @@ def test_corpus(corpus):
     upper = corpus.tokenized(lower=False)
     assert set(upper.columns) == {"term", "n"}
 
+    ngrams = corpus.ngrams(3)
+    assert ngrams.sum().n == 53
+    assert set(ngrams.columns) == {"term", "n"}
+
 
 def test_corpus_missing(testdata, recwarn):
     """Test Corpus class on series with missing data."""
