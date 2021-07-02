@@ -314,6 +314,35 @@ class TextnetBase:
             )
         return part
 
+    def _repr_html_(self):
+        c = Counter(self.vs["type"])
+        return f"""
+            <table style="width: 100%;">
+              <tr style="font-weight: 600;">
+                <td style="text-align: left;"><kbd>{self.__class__.__name__}</kbd></td>
+                <td style="color: dodgerblue;">
+                  <svg width="1ex" height="1ex">
+                    <rect width="1ex" height="1ex" fill="dodgerblue">
+                  </svg>
+                  Docs: {c["doc"]}
+                </td>
+                <td style="color: orangered;">
+                  <svg width="1ex" height="1ex">
+                    <circle cx="50%" cy="50%" r="50%" fill="orangered">
+                  </svg>
+                  Terms: {c["term"]}
+                </td>
+                <td style="color: darkgray;">
+                  <svg width="2ex" height="1ex">
+                    <line x1="0" y1="50%" x2="100%" y2="50%"
+                      stroke="darkgray"
+                      stroke-width="2">
+                  </svg>
+                  Edges: {self.ecount()}
+                </td>
+              </tr>
+            </table>"""
+
 
 class Textnet(TextnetBase, FormalContext):
     """
@@ -367,10 +396,6 @@ class Textnet(TextnetBase, FormalContext):
             for name, attr in doc_attrs.items():
                 g.vs[name] = [attr.get(doc) for doc in g.vs["id"]]
         self.graph = g
-
-    def __repr__(self):
-        c = Counter(self.vs["type"])
-        return f"Textnet({c['doc']} docs, {c['term']} terms, {self.ecount()} edges)"
 
     def project(self, node_type: Literal["doc", "term"]) -> ig.Graph:
         """Project to one-mode network.
