@@ -7,7 +7,7 @@ Citation for this package: :cite:`Boy2020`. Functionality based on :cite:`Bail20
 try:
     from importlib.metadata import version
 except ImportError:
-    from importlib_metadata import version
+    from importlib_metadata import version  # type: ignore
 
 from .corpus import Corpus  # noqa: F401
 from .network import Textnet  # noqa: F401
