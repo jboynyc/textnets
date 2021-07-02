@@ -68,11 +68,34 @@ class Corpus:
         self.documents = documents
         self.lang = LANGS[lang] if lang in LANGS.keys() else lang
 
-    def __repr__(self):
-        return (
-            f"Corpus({self.documents.shape[0]} docs: "
-            f"{', '.join(self.documents.index[:3])}…)"
+    def _repr_html_(self):
+        tbl = pd.DataFrame(self.documents).to_html(
+            header=False,
+            notebook=False,
+            border=0,
+            classes=("full-width", "left-align"),
+            max_rows=10,
         )
+        return f"""
+            <style scoped>
+              .full-width {{ width: 100%; }}
+              .left-align td, .left-align th {{ text-align: left; }}
+            </style>
+            {tbl}
+            <table class="full-width">
+              <tr style="font-weight: 600;">
+                <td style="text-align: left;"><kbd>{self.__class__.__name__}</kbd></td>
+                <td style="color: dodgerblue;">
+                  <svg width="1ex" height="1ex">
+                    <rect width="1ex" height="1ex" fill="dodgerblue">
+                  </svg>
+                  Docs: {self.documents.shape[0]}
+                </td>
+                <td style="color: darkgray;">
+                  Lang: {self.lang}
+                </td>
+              </tr>
+            </table>"""
 
     @cached_property
     def nlp(self) -> pd.Series:
@@ -259,6 +282,8 @@ class Corpus:
         remove_punctuation : bool, optional
             Remove punctuation marks, brackets, and quotation marks
             (default: True).
+        lower : bool, optional
+            Make lower-case (default: True).
 
         Returns
         -------
@@ -307,10 +332,10 @@ class Corpus:
         remove: List[str] = [],
         stem: bool = False,
         remove_stop_words: bool = False,
-        remove_urls: bool = True,
-        remove_numbers: bool = True,
-        remove_punctuation: bool = True,
-        lower: bool = True,
+        remove_urls: bool = False,
+        remove_numbers: bool = False,
+        remove_punctuation: bool = False,
+        lower: bool = False,
     ) -> pd.DataFrame:
         """Return n-grams of length n from corpus in tidy format.
 
@@ -325,12 +350,14 @@ class Corpus:
         remove_stop_words : bool, optional
             Remove stop words (default: False).
         remove_urls : bool, optional
-            Remove URL and email address tokens (default: True).
+            Remove URL and email address tokens (default: False).
         remove_numbers : bool, optional
-            Remove number tokens (default: True).
+            Remove number tokens (default: False).
         remove_punctuation : bool, optional
             Remove punctuation marks, brackets, and quotation marks
-            (default: True).
+            (default: False).
+        lower : bool, optional
+            Make lower-case (default: False).
 
         Returns
         -------
