@@ -59,7 +59,7 @@ format: ## format code with black
 
 test: ## run tests quickly with the default Python
 	$(COMMAND_PREFIX) pytest
-	$(COMMAND_PREFIX) mypy --ignore-missing-imports textnets
+	$(COMMAND_PREFIX) mypy
 
 coverage: ## check code coverage quickly with the default Python
 	$(COMMAND_PREFIX) coverage run --source textnets -m pytest
