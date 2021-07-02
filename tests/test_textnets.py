@@ -40,7 +40,7 @@ def test_corpus(corpus):
     assert set(upper.columns) == {"term", "n"}
 
     ngrams = corpus.ngrams(3)
-    assert ngrams.sum().n == 53
+    assert ngrams.sum().n == 67
     assert set(ngrams.columns) == {"term", "n"}
 
 
