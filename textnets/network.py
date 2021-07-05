@@ -317,31 +317,48 @@ class TextnetBase:
     def _repr_html_(self):
         c = Counter(self.vs["type"])
         return f"""
-            <table style="width: 100%;">
-              <tr style="font-weight: 600;">
-                <td style="text-align: left;"><kbd>{self.__class__.__name__}</kbd></td>
-                <td style="color: dodgerblue;">
-                  <svg width="1ex" height="1ex">
-                    <rect width="1ex" height="1ex" fill="dodgerblue">
-                  </svg>
-                  Docs: {c["doc"]}
-                </td>
-                <td style="color: orangered;">
-                  <svg width="1ex" height="1ex">
-                    <circle cx="50%" cy="50%" r="50%" fill="orangered">
-                  </svg>
-                  Terms: {c["term"]}
-                </td>
-                <td style="color: darkgray;">
-                  <svg width="2ex" height="1ex">
-                    <line x1="0" y1="50%" x2="100%" y2="50%"
-                      stroke="darkgray"
-                      stroke-width="2">
-                  </svg>
-                  Edges: {self.ecount()}
-                </td>
-              </tr>
-            </table>"""
+            <style scoped>
+              .full-width {{ width: 100%; }}
+              summary {{
+                cursor: help;
+                list-style: none;
+              }}
+              details[open] summary {{
+                margin-bottom: 1em;
+              }}
+            </style>
+            <details>
+              <summary>
+                <table class="full-width">
+                  <tr style="font-weight: 600;">
+                    <td style="text-align: left;">
+                      <kbd>{self.__class__.__name__}</kbd>
+                    </td>
+                    <td style="color: dodgerblue;">
+                      <svg width="1ex" height="1ex">
+                        <rect width="1ex" height="1ex" fill="dodgerblue">
+                      </svg>
+                      Docs: {c["doc"]}
+                    </td>
+                    <td style="color: orangered;">
+                      <svg width="1ex" height="1ex">
+                        <circle cx="50%" cy="50%" r="50%" fill="orangered">
+                      </svg>
+                      Terms: {c["term"]}
+                    </td>
+                    <td style="color: darkgray;">
+                      <svg width="2ex" height="1ex">
+                        <line x1="0" y1="50%" x2="100%" y2="50%"
+                          stroke="darkgray"
+                          stroke-width="2">
+                      </svg>
+                      Edges: {self.ecount()}
+                    </td>
+                  </tr>
+                </table>
+              </summary>
+              <pre>{self.__doc__}</pre>
+            </details>"""
 
 
 class Textnet(TextnetBase, FormalContext):
