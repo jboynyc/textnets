@@ -2,6 +2,16 @@
 History
 =======
 
+0.5.1 (in progress)
+-------------------
+* Adds `Corpus.ngrams` method as alternative to `Corpus.noun_phrases`. This is
+  useful when working in languages that do not have noun chunks, such as
+  Chinese.
+* Fixes a bug in `Corpus.from_files`.
+* HTML representations of core classes for nicer integration in Jupyter
+  notebooks.
+* Update dependencies.
+
 0.5.0 (2021-06-28)
 ------------------
 * Migrate continuous integration testing from Travis to GitHub Actions.
