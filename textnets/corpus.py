@@ -176,9 +176,9 @@ class Corpus:
         assert all(os.path.exists(f) for f in files), "Some files in list do not exist."
         if not doc_labels:
             doc_labels = [os.path.basename(f).split(".")[0] for f in files]
-        df = pd.DataFrame({"path": files}, index=doc_labels)
-        df["raw"] = df["path"].map(_read_file)
-        return cls(df, doc_col="raw", lang=lang)
+        data = pd.DataFrame({"path": files}, index=doc_labels)
+        data["raw"] = data["path"].map(_read_file)
+        return cls.from_df(data, doc_col="raw", lang=lang)
 
     @classmethod
     def from_csv(
