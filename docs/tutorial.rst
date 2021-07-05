@@ -221,23 +221,28 @@ off the file suffix.
 Break It Up
 ~~~~~~~~~~~
 
-The textnet is built from chunks of texts. `Corpus` offers two
-methods for breaking your texts into chunks: `tokenized` and
-`noun_phrases`. The first breaks your texts up into individual
-words, while the latter looks for `noun
-phrases <https://en.wikipedia.org/wiki/Noun_phrase>`__ such as “my
-husband,” “our prime minister,” or “the virus.”
+The textnet is built from chunks of texts. `Corpus` offers three methods for
+breaking your texts into chunks: `tokenized`, `ngrams`, and `noun_phrases`. The
+first breaks your texts up into individual words, the second into n-grams of
+desired size, while the third looks for `noun phrases
+<https://en.wikipedia.org/wiki/Noun_phrase>`__ such as “my husband,” “our prime
+minister,” or “the virus.”
+
+.. code:: python
+
+   trigrams = corpus.ngrams(3)
 
 .. code:: python
 
    np = corpus.noun_phrases(remove=['Lilongwe', 'Mzuzu', 'Blantyre'])
 
 .. warning::
-   For large corpora, this can be a computationally intense task. Use your
-   friendly neighborhood HPC cluster or be prepared for your laptop to get hot.
+   For large corpora, some of these operations can be computationally intense.
+   Use your friendly neighborhood HPC cluster or be prepared for your laptop to
+   get hot.
 
-The result of this is another data frame, which we can feed to `Textnet` to
-make our textnet.
+Calling these methods results in another data frame, which we can feed to
+`Textnet` to make our textnet.
 
 Make Connections
 ----------------
