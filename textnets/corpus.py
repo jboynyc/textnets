@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 from warnings import warn
 from typing import Callable, Optional, Union, List
 
@@ -123,7 +124,7 @@ class Corpus:
     @classmethod
     def from_files(
         cls,
-        files: Union[str, List[str]],
+        files: Union[str, List[str], List[Path]],
         doc_labels: Optional[List[str]] = None,
         lang: str = "en_core_web_sm",
     ) -> Corpus:
@@ -131,7 +132,7 @@ class Corpus:
 
         Parameters
         ----------
-        files : str or list of str
+        files : str or list of str or list of Path
             Path to files (with globbing pattern) or list of file paths.
         doc_labels : list of str, optional
             Labels for documents (default: file name without suffix).
@@ -144,9 +145,16 @@ class Corpus:
         """
         if isinstance(files, str):
             files = glob(os.path.expanduser(files))
-        assert all(os.path.exists(f) for f in files), "Some files in list do not exist."
+        files = [Path(f) for f in files]
+        for f in files:
+            if f.expanduser().is_file():
+                pass
+            elif f.expanduser().exists():
+                raise IsADirectoryError(f.name)
+            else:
+                raise FileNotFoundError(f.name)
         if not doc_labels:
-            doc_labels = [os.path.basename(f).split(".")[0] for f in files]
+            doc_labels = [f.stem for f in files]
         data = pd.DataFrame({"path": files}, index=doc_labels)
         data["raw"] = data["path"].map(_read_file)
         return cls.from_df(data, doc_col="raw", lang=lang)
@@ -406,9 +414,9 @@ class Corpus:
             </details>"""
 
 
-def _read_file(file_name: str) -> str:
+def _read_file(file_name: Path) -> str:
     """Read contents of file ignoring any unicode errors."""
-    return open(file_name, "rb").read().decode("utf-8", "replace").strip()
+    return file_name.read_bytes().decode("utf-8", "replace").strip()
 
 
 def _normalize_whitespace(s: str) -> str:
