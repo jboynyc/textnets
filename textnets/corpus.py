@@ -68,49 +68,6 @@ class Corpus:
         self.documents = documents
         self.lang = LANGS[lang] if lang in LANGS.keys() else lang
 
-    def _repr_html_(self):
-        tbl = pd.DataFrame(self.documents).to_html(
-            header=False,
-            notebook=False,
-            border=0,
-            classes=("full-width", "left-align"),
-            max_rows=10,
-        )
-        return f"""
-            <style scoped>
-              .full-width {{ width: 100%; }}
-              .left-align td, .left-align th {{ text-align: left; }}
-              summary {{
-                cursor: help;
-                list-style: none;
-              }}
-              details[open] summary {{
-                margin-bottom: 1em;
-              }}
-            </style>
-            {tbl}
-            <details>
-              <summary>
-                <table class="full-width">
-                  <tr style="font-weight: 600;">
-                    <td style="text-align: left;">
-                      <kbd>{self.__class__.__name__}</kbd>
-                    </td>
-                    <td style="color: dodgerblue;">
-                      <svg width="1ex" height="1ex">
-                        <rect width="1ex" height="1ex" fill="dodgerblue">
-                      </svg>
-                      Docs: {self.documents.shape[0]}
-                    </td>
-                    <td style="color: darkgray;">
-                      Lang: {self.lang}
-                    </td>
-                  </tr>
-                </table>
-              </summary>
-              <pre>{self.__doc__}</pre>
-            </details>"""
-
     @cached_property
     def nlp(self) -> pd.Series:
         """Corpus documents with NLP applied."""
@@ -404,6 +361,49 @@ class Corpus:
             .reset_index()
             .set_index("label")
         )
+
+    def _repr_html_(self):
+        tbl = pd.DataFrame(self.documents).to_html(
+            header=False,
+            notebook=False,
+            border=0,
+            classes=("full-width", "left-align"),
+            max_rows=10,
+        )
+        return f"""
+            <style scoped>
+              .full-width {{ width: 100%; }}
+              .left-align td, .left-align th {{ text-align: left; }}
+              summary {{
+                cursor: help;
+                list-style: none;
+              }}
+              details[open] summary {{
+                margin-bottom: 1em;
+              }}
+            </style>
+            {tbl}
+            <details>
+              <summary>
+                <table class="full-width">
+                  <tr style="font-weight: 600;">
+                    <td style="text-align: left;">
+                      <kbd>{self.__class__.__name__}</kbd>
+                    </td>
+                    <td style="color: dodgerblue;">
+                      <svg width="1ex" height="1ex">
+                        <rect width="1ex" height="1ex" fill="dodgerblue">
+                      </svg>
+                      Docs: {self.documents.shape[0]}
+                    </td>
+                    <td style="color: darkgray;">
+                      Lang: {self.lang}
+                    </td>
+                  </tr>
+                </table>
+              </summary>
+              <pre>{self.__doc__}</pre>
+            </details>"""
 
 
 def _read_file(file_name: str) -> str:
