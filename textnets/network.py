@@ -379,7 +379,7 @@ class Textnet(TextnetBase, FormalContext):
     ----------
     tidy_text : DataFrame
         DataFrame of tokens with per-document counts, as created by
-        `Corpus` methods `tokenized` and `noun_phrases`.
+        `Corpus` methods `tokenized`, `ngrams` and `noun_phrases`.
     sublinear : bool, optional
         Apply sublinear scaling to *tf-idf* values (default: True).
     doc_attrs : dict of dict, optional
