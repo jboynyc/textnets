@@ -60,6 +60,8 @@ class Corpus:
         doc_col: Optional[str] = None,
         lang: str = "en_core_web_sm",
     ):
+        if data.empty:
+            raise ValueError("Corpus data is empty")
         documents = data.copy()
         if documents.isna().any():
             missings = documents.isna().sum()
