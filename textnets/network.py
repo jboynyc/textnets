@@ -401,6 +401,8 @@ class Textnet(TextnetBase, FormalContext):
         doc_attrs: Optional[Dict[str, Dict[str, str]]] = None,
         min_docs: int = 2,
     ):
+        if tidy_text.empty:
+            raise ValueError("DataFrame is empty")
         df = _tf_idf(tidy_text, sublinear, min_docs)
         im = df.pivot(values="tf_idf", columns="term").fillna(0)
         self.im = im
