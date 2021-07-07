@@ -15,6 +15,11 @@ Example
    Download this example as a Jupyter notebook so you can follow along:
    :jupyter-download:notebook:`tutorial`.
 
+   You can also make this tutorial "live" so you can adjust the example code
+   and re-run it.
+
+   .. thebe-button:: Do it live!
+
 To use **textnets** in a project, you typically need the following imports:
 
 .. jupyter-execute::
@@ -37,7 +42,7 @@ What is this `moon_landing` example all about?
 
 .. jupyter-execute::
 
-   display(examples.moon_landing)
+   corpus
 
 .. note::
 

@@ -30,7 +30,7 @@ texts.
    :alt: Bipartite network graph
 
    Network of U.S. Senators and words used in their official statements
-   following the acquittal vote in the Senate impeachment trial (`source
+   following the acquittal vote in the 2020 Senate impeachment trial (`source
    <https://www.jboy.space/blog/enemies-foreign-and-partisan.html>`_).
 
 This is a Python implementation of `Chris Bail's textnets package for R`_. It
@@ -50,27 +50,26 @@ __ https://doi.org/10.1073/pnas.1607151113
 Features
 --------
 
-**textnets** builds on the state-of-the-art library `spacy`_ for
+**textnets** builds on the state-of-the-art library `spaCy`_ for
 natural-language processing and `igraph`_ for network analysis. It uses the
 `Leiden algorithm`_ for community detection, which is able to perform community
 detection on the bipartite (word–group) network.
 
 .. _`Leiden algorithm`: https://arxiv.org/abs/1810.08473
 .. _`igraph`: http://igraph.org/python/
-.. _`spacy`: https://spacy.io/
+.. _`spaCy`: https://spacy.io/
 
-**textnets** seamlessly integrates with `pandas`_ and other parts of Python's
-excellent `scientific stack`_. That means that you can use **textnets** in
-Jupyter notebooks to analyze and visualize your data!
+**textnets** seamlessly integrates with Python's excellent `scientific stack`_.
+That means that you can use **textnets** in Jupyter notebooks to analyze and
+visualize your data!
 
-.. _`pandas`: https://pandas.io/
 .. _`scientific stack`: https://numfocus.org/
 
 **textnets** is easily installable using the ``conda`` and ``pip`` package
-managers.
+managers. It requires Python 3.7 or higher.
 
-Read `the documentation <https://textnets.readthedocs.io>`_ to find out more
-about the package's features.
+Read `the documentation <https://textnets.readthedocs.io>`_ to learn more about
+the package's features.
 
 Citation
 --------
@@ -80,15 +79,15 @@ Using **textnets** in a scholarly publication? Please cite this paper:
 .. code-block:: bibtex
 
    @article{Boy2020,
-     author = {John D. Boy},
-     title = {textnets},
+     author   = {John D. Boy},
+     title    = {textnets},
      subtitle = {A {P}ython Package for Text Analysis with Networks},
-     journal = {Journal of Open Source Software},
-     volume = {5},
-     number = {54},
-     pages = {2594},
-     year = {2020},
-     doi = {10.21105/joss.02594},
+     journal  = {Journal of Open Source Software},
+     volume   = {5},
+     number   = {54},
+     pages    = {2594},
+     year     = {2020},
+     doi      = {10.21105/joss.02594},
    }
 
 Learn More
@@ -103,3 +102,9 @@ Learn More
 **DOI**             `10.21105/joss.02594 <https://doi.org/10.21105/joss.02594>`_
 **Archive**         `10.5281/zenodo.3866676 <https://doi.org/10.5281/zenodo.3866676>`_
 ==================  =============================================
+
+.. image:: https://textnets.readthedocs.io/en/dev/_static/textnets-logo.svg
+   :alt: textnets logo
+   :target: https://textnets.readthedocs.io
+   :align: center
+   :width: 140

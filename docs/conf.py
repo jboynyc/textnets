@@ -48,11 +48,16 @@ napoleon_numpy_docstring = True
 intersphinx_mapping = {
     "ig": ("https://igraph.org/python/doc/tutorial/", None),
     "la": ("https://leidenalg.readthedocs.io/en/stable/", None),
-    "pd": ("http://pandas.pydata.org/docs/", None),
-    "py": ("http://docs.python.org/3", None),
+    "pd": ("https://pandas.pydata.org/docs/", None),
+    "py": ("https://docs.python.org/3", None),
 }
 
 bibtex_bibfiles = ["refs.bib"]
+
+jupyter_sphinx_thebelab_config = {
+    "requestKernel": True,
+    "binderOptions": {"repo": "jboynyc/textnets-binder", "ref": "trunk"},
+}
 
 todo_include_todos = not os.environ.get("READTHEDOCS")
 
@@ -72,7 +77,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "textnets"
-copyright = "2020, John D. Boy"
+copyright = "2021, John D. Boy"
 author = "John D. Boy"
 
 # The version info for the project you're documenting, acts as replacement
