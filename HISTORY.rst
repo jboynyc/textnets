@@ -2,6 +2,14 @@
 History
 =======
 
+0.5.2 (2021-08-24)
+------------------
+* Improve the handling of edge cases when initializing the `Corpus` and
+  `Textnet` classes, such as empty data being provided.
+* Added ability to run the tutorial in the documentation interactively using
+  `thebe <https://thebelab.readthedocs.io/>`_.
+* Update to spacy 3.1 and bump other dependencies.
+
 0.5.1 (2021-07-06)
 ------------------
 * Adds `Corpus.ngrams` method as alternative to `Corpus.noun_phrases`. This is
