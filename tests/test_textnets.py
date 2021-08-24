@@ -16,18 +16,18 @@ def test_corpus(corpus):
     assert len(corpus.documents) == 7
 
     noun_phrases = corpus.noun_phrases()
-    assert noun_phrases.sum().n == 25
+    assert noun_phrases.sum().n == 27
     assert set(noun_phrases.columns) == {"term", "n"}
 
     noun_phrases_remove = corpus.noun_phrases(remove=["moon"])
-    assert noun_phrases_remove.sum().n == 21
+    assert noun_phrases_remove.sum().n == 23
     assert set(noun_phrases_remove.columns) == {"term", "n"}
 
     noun_phrases_remove = corpus.noun_phrases(normalize=True)
     assert set(noun_phrases_remove.columns) == {"term", "n"}
 
     tokenized = corpus.tokenized()
-    assert tokenized.sum().n == 44
+    assert tokenized.sum().n == 43
     assert set(tokenized.columns) == {"term", "n"}
 
     nostem = corpus.tokenized(stem=False)

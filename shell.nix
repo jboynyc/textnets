@@ -15,6 +15,6 @@ mkShell rec {
     export LD_LIBRARY_PATH=${stdenv.cc.cc.lib}/lib/:${cairo}/lib/:$LD_LIBRARY_PATH
     poetry install
     poetry install -E doc
-    spacy validate | grep en_core_web_sm || poetry run pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.0.0/en_core_web_sm-3.0.0.tar.gz
+    spacy validate | grep en_core_web_sm || poetry run pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.1.0/en_core_web_sm-3.1.0.tar.gz
   '';
 }
