@@ -60,7 +60,6 @@ class Corpus:
     def __init__(
         self,
         data: pd.Series,
-        doc_col: Optional[str] = None,
         lang: str = "en_core_web_sm",
     ):
         if data.empty:
