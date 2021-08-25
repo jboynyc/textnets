@@ -23,6 +23,7 @@ from toolz import compose, partial, identity
 
 #: Mapping of language codes to spacy language model names.
 LANGS = {
+    "ca": "ca_core_news_sm",  # Catalan
     "da": "da_core_news_sm",  # Danish
     "de": "de_core_news_sm",  # German
     "el": "el_core_news_sm",  # Greek
@@ -32,11 +33,13 @@ LANGS = {
     "it": "it_core_news_sm",  # Italian
     "ja": "ja_core_news_sm",  # Japanese
     "lt": "lt_core_news_sm",  # Lithuanian
+    "mk": "mk_core_news_sm",  # Macedonian
     "nb": "nb_core_news_sm",  # Norwegian
     "nl": "nl_core_news_sm",  # Dutch
     "pl": "pl_core_news_sm",  # Polish
     "pt": "pt_core_news_sm",  # Portuguese
     "ro": "ro_core_news_sm",  # Romanian
+    "ru": "ru_core_news_sm",  # Russian
     "zh": "zh_core_web_sm",  # Chinese
 }
 
