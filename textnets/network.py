@@ -22,10 +22,14 @@ import pandas as pd
 import igraph as ig
 import leidenalg as la
 from scipy.integrate import quad
+from scipy import LowLevelCallable
 
 from .viz import TextnetPalette
 from .fca import FormalContext
 
+from . import disparity_filter
+
+integrand = LowLevelCallable.from_cython(disparity_filter, "integrand")
 
 #: Tuning parameter (alpha) for inverse edge weights
 #: (see :cite:`Opsahl2010`).
@@ -653,12 +657,12 @@ def _disparity_filter(g: ig.Graph) -> Iterator[float]:
         degree_s = source.degree()
         sum_weights_s = source.strength(weights="weight")
         norm_weight_s = edge["weight"] / sum_weights_s
-        integral_s = quad(lambda x: (1 - x) ** (degree_s - 2), 0, norm_weight_s)
+        integral_s = quad(integrand, 0, norm_weight_s, args=(degree_s))
         degree_t = target.degree()
         sum_weights_t = target.strength(weights="weight")
         norm_weight_t = edge["weight"] / sum_weights_t
         try:
-            integral_t = quad(lambda x: (1 - x) ** (degree_t - 2), 0, norm_weight_t)
+            integral_t = quad(integrand, 0, norm_weight_t, args=(degree_t))
         except ZeroDivisionError:
             yield 0
         yield min(
