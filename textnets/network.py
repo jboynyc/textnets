@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+from warnings import warn
 from collections import Counter
 from typing import Dict, Optional, List, Union, Iterator, Callable
 
@@ -27,9 +28,16 @@ from scipy import LowLevelCallable
 from .viz import TextnetPalette
 from .fca import FormalContext
 
-from . import disparity_filter
+try:
+    from . import _ext  # type: ignore
 
-integrand = LowLevelCallable.from_cython(disparity_filter, "integrand")
+    integrand = LowLevelCallable.from_cython(_ext, "df_integrand")
+except ImportError:
+
+    def integrand(x: Union[int, float], degree: int) -> Union[int, float]:
+        return (1 - x) ** (degree - 2)
+
+    warn("Could not import compiled extension, backbone extraction will be slow.")
 
 #: Tuning parameter (alpha) for inverse edge weights
 #: (see :cite:`Opsahl2010`).
