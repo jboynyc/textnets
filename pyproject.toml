@@ -49,7 +49,7 @@ watchdog = {extras = ["watchmedo"], version = "^2.1.3"}
 doc = ["jupyter-sphinx", "sphinx", "sphinx-rtd-theme", "sphinxcontrib-bibtex"]
 
 [build-system]
-requires = ["poetry-core>=1.0.0", "Cython~=0.29", "setuptools>=41"]
+requires = ["poetry-core>=1.0.0", "cython~=0.29", "setuptools>=41"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]
