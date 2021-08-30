@@ -34,7 +34,7 @@ try:
     integrand = LowLevelCallable.from_cython(_ext, "df_integrand")
 except ImportError:
 
-    def integrand(x: Union[int, float], degree: int) -> Union[int, float]:
+    def integrand(x: float, degree: int) -> float:
         return (1 - x) ** (degree - 2)
 
     warn("Could not import compiled extension, backbone extraction will be slow.")
