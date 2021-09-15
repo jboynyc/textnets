@@ -61,7 +61,7 @@ class Corpus:
         self,
         data: pd.Series,
         lang: str = "en_core_web_sm",
-    ):
+    ) -> None:
         if data.empty:
             raise ValueError("Corpus data is empty")
         documents = data.copy()
@@ -86,10 +86,10 @@ class Corpus:
                 warn(f"Using basic {self.lang} language model.")
         return self.documents.map(_normalize_whitespace).map(nlp)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.documents)
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> str:
         return self.documents[key]
 
     @classmethod
@@ -98,7 +98,7 @@ class Corpus:
         data: pd.DataFrame,
         doc_col: Optional[str] = None,
         lang: str = "en_core_web_sm",
-    ):
+    ) -> Corpus:
         """
         Create corpus from data frame.
 
@@ -374,7 +374,7 @@ class Corpus:
             .set_index("label")
         )
 
-    def _repr_html_(self):
+    def _repr_html_(self) -> str:
         tbl = pd.DataFrame(self.documents).to_html(
             header=False,
             notebook=False,

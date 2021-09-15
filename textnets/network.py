@@ -41,17 +41,17 @@ except ImportError:
 
 #: Tuning parameter (alpha) for inverse edge weights
 #: (see :cite:`Opsahl2010`).
-TUNING_PARAMETER = 0.5
+TUNING_PARAMETER = tn.rcParams.get("tuning_parameter", 0.5)
 
 #: Resolution parameter (gamma) for community detection
 #: (see :cite:`Reichardt2006,Traag2019`).
-RESOLUTION_PARAMETER = 0.1
+RESOLUTION_PARAMETER = tn.rcParams.get("resolution_parameter", 0.1)
 
 
 class TextnetBase:
     """Base class for `Textnet` and `ProjectedTextnet`."""
 
-    def __init__(self, graph):
+    def __init__(self, graph: ig.Graph) -> None:
         self.graph = graph
 
     def summary(self) -> str:
@@ -59,20 +59,20 @@ class TextnetBase:
         return self.graph.summary()
 
     @property
-    def vs(self):
+    def vs(self) -> ig.VertexSeq:
         """Iterator of nodes (vertices)."""
         return self.graph.vs
 
     @property
-    def es(self):
+    def es(self) -> ig.EdgeSeq:
         """Iterator of edges."""
         return self.graph.es
 
-    def vcount(self):
+    def vcount(self) -> int:
         """Returns the number of vertices (nodes)."""
         return self.graph.vcount()
 
-    def ecount(self):
+    def ecount(self) -> int:
         """Returns the number of edges."""
         return self.graph.ecount()
 
@@ -109,12 +109,12 @@ class TextnetBase:
         return [True if t == "term" else False for t in self.vs["type"]]
 
     @cached_property
-    def clusters(self) -> ig.clustering.VertexClustering:
+    def clusters(self) -> ig.VertexClustering:
         """Return partition of graph detected by Leiden algorithm."""
         return self._partition_graph(self.graph, resolution=RESOLUTION_PARAMETER)
 
     @cached_property
-    def modularity(self):
+    def modularity(self) -> float:
         """Returns graph modularity based on partition detected by Leiden algorithm."""
         return self.graph.modularity(self.clusters, weights="weight")
 
@@ -194,7 +194,7 @@ class TextnetBase:
         return self.eigenvector_centrality.sort_values(ascending=False).head(n)
 
     def top_cluster_nodes(
-        self, n: int = 10, part: Optional[ig.clustering.VertexClustering] = None
+        self, n: int = 10, part: Optional[ig.VertexClustering] = None
     ) -> pd.Series:
         """Show top nodes ranked by weighted degree per cluster.
 
@@ -227,14 +227,14 @@ class TextnetBase:
 
     def _plot(
         self,
-        show_clusters: Union[bool, ig.clustering.VertexClustering] = False,
-        color_clusters: Union[bool, ig.clustering.VertexClustering] = False,
+        show_clusters: Union[bool, ig.VertexClustering] = False,
+        color_clusters: Union[bool, ig.VertexClustering] = False,
         label_edges: bool = False,
         scale_nodes_by: Optional[str] = None,
         node_label_filter: Optional[Callable[[ig.Vertex], bool]] = None,
         edge_label_filter: Optional[Callable[[ig.Edge], bool]] = None,
         **kwargs,
-    ) -> ig.drawing.Plot:
+    ) -> ig.Plot:
         if "layout" not in kwargs.keys():
             layout = self.graph.layout_fruchterman_reingold(
                 weights="weight", grid=False
@@ -248,12 +248,12 @@ class TextnetBase:
             mult = 20 / abs(norm).max()
             kwargs.setdefault("vertex_size", [25 + mult * z for z in norm])
         if show_clusters:
-            if isinstance(show_clusters, ig.clustering.VertexClustering):
+            if isinstance(show_clusters, ig.VertexClustering):
                 kwargs.setdefault("mark_groups", show_clusters)
             else:
                 kwargs.setdefault("mark_groups", self.clusters)
         if color_clusters:
-            if isinstance(color_clusters, ig.clustering.VertexClustering):
+            if isinstance(color_clusters, ig.VertexClustering):
                 kwargs.setdefault(
                     "vertex_color",
                     [
@@ -308,7 +308,7 @@ class TextnetBase:
         return ig.plot(self.graph, **kwargs)
 
     @staticmethod
-    def _partition_graph(graph, resolution):
+    def _partition_graph(graph, resolution: float) -> ig.VertexClustering:
         if graph.is_bipartite():
             part, part0, part1 = la.CPMVertexPartition.Bipartite(
                 graph, resolution_parameter_01=resolution, weights="weight"
@@ -326,8 +326,8 @@ class TextnetBase:
             )
         return part
 
-    def _repr_html_(self):
-        c = Counter(self.vs["type"])
+    def _repr_html_(self) -> str:
+        c: Counter = Counter(self.vs["type"])
         return f"""
             <style scoped>
               .full-width {{ width: 100%; }}
@@ -412,7 +412,7 @@ class Textnet(TextnetBase, FormalContext):
         sublinear: bool = True,
         doc_attrs: Optional[Dict[str, Dict[str, str]]] = None,
         min_docs: int = 2,
-    ):
+    ) -> None:
         if tidy_text.empty:
             raise ValueError("DataFrame is empty")
         df = _tf_idf(tidy_text, sublinear, min_docs)
@@ -469,7 +469,7 @@ class Textnet(TextnetBase, FormalContext):
         label_term_nodes: bool = False,
         label_doc_nodes: bool = False,
         **kwargs,
-    ) -> ig.drawing.Plot:
+    ) -> ig.Plot:
         """Plot the bipartite graph.
 
         Parameters
@@ -515,7 +515,7 @@ class Textnet(TextnetBase, FormalContext):
 
         Returns
         -------
-        ig.drawing.Plot
+        ig.Plot
             The plot can be directly displayed in a Jupyter notebook or saved
             as an image file.
         """
@@ -579,7 +579,7 @@ class ProjectedTextnet(TextnetBase):
 
     def plot(
         self, label_nodes: bool = False, alpha: Optional[float] = None, **kwargs
-    ) -> ig.drawing.Plot:
+    ) -> ig.Plot:
         """Plot the projected graph.
 
         Parameters
@@ -615,7 +615,7 @@ class ProjectedTextnet(TextnetBase):
 
         Returns
         -------
-        ig.drawing.Plot
+        ig.Plot
             The plot can be directly displayed in a Jupyter notebook or saved
             as an image file.
 
