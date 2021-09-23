@@ -21,11 +21,11 @@ class FormalContext:
     """Textnets inherits methods from this class for treating its incidence
     matrix as a formal context."""
 
-    def __init__(self, im: pd.DataFrame):
+    def __init__(self, im: pd.DataFrame) -> None:
         self.im = im
 
     @cached_property
-    def context(self):
+    def context(self) -> Tuple[List[str], List[str], List[List[bool]]]:
         """Return formal context of terms and documents."""
         return self._formal_context(self.im, alpha=FFCA_CUTOFF)
 
