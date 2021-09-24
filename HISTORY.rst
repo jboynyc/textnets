@@ -2,6 +2,11 @@
 History
 =======
 
+0.5.4 (2021-09-24)
+------------------
+* Attempt to fix cross-platform build and deploy pipeline. Otherwise, no
+  substantive change from previous release.
+
 0.5.3 (2021-09-24)
 ------------------
 * Adds Catalan, Macedonian and Russian language models.
