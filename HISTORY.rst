@@ -2,6 +2,18 @@
 History
 =======
 
+0.5.3 (2021-09-24)
+------------------
+* Adds Catalan, Macedonian and Russian language models.
+* Significantly speeds up backbone extraction by implementing the disparity
+  filter integrand in Cython. (If the compiled extension cannot be loaded for
+  some reason, it falls back on an interpreted function.)
+* `PyPI <http://pypi.org/project/textnets>`_ *should* now receive binary wheels
+  for Mac, Windows and Linux (via GitHub Actions) to ease installation on each
+  platform.
+* Improved type annotations.
+* Update several dependencies.
+
 0.5.2 (2021-08-24)
 ------------------
 * Improve the handling of edge cases when initializing the `Corpus` and
