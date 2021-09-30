@@ -7,7 +7,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 from warnings import warn
-from typing import Callable, Optional, Union, List
+from typing import Any, Callable, Optional, Union, List
 
 try:
     from functools import cached_property
@@ -124,6 +124,29 @@ class Corpus:
         elif not doc_col:
             doc_col = object_cols[0]
         return cls(data.copy()[doc_col], lang=lang)
+
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[Any, str],
+        lang: str = "en_core_web_sm",
+    ) -> Corpus:
+        """
+        Create corpus from dictionary.
+
+        Parameters
+        ----------
+        data : dict
+            Dictionary containing the documents as values and document labels
+            as keys.
+        lang : str, optional
+            The langugage model to use (default: ``en_core_web_sm``).
+
+        Returns
+        -------
+        Corpus
+        """
+        return cls(pd.Series(data), lang=lang)
 
     @classmethod
     def from_files(

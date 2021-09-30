@@ -84,6 +84,12 @@ def test_corpus_df(testdata):
     assert len(c.documents) == 7
 
 
+def test_corpus_dict(testdata):
+    data = testdata.to_dict()
+    c = Corpus.from_dict(data)
+    assert len(c.documents) == 7
+
+
 def test_corpus_csv(tmpdir, testdata):
     out = tmpdir.join("corpus.csv")
     testdata.to_csv(out)

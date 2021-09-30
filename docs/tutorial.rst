@@ -146,13 +146,30 @@ A textnet is built from a collection—or *corpus*—of texts, so we use the
 `Corpus` class to get our data ready. Each of the following snippets assumes
 that you have imported `Corpus` and `Textnet` like in the preceding example.
 
+From a Dictionary
+~~~~~~~~~~~~~~~~~
+
+You may already have your texts in a Python data structure, such as a
+dictionary mapping document labels (keys) to documents (values). In that case,
+you can use the `from_dict` method to construct your `Corpus`.
+
+.. code:: python
+
+   data = {f'Documento {label+1}': doc for label, doc in enumerate(docs)}
+   corpus = Corpus.from_dict(data, lang='it')
+
+You can specify which `language model <https://spacy.io/models>`__ you would
+like to use using the ``lang`` argument. The default is English, but you don’t
+have to be monolingual to use **textnets**. (Languages in `LANGS` are fully
+supported since we can use spacy's statistical language models. Other languages
+are only partially supported, so `noun_phrases` will likely not function.)
+
 From Pandas
 ~~~~~~~~~~~
 
-You may already have your texts in a Python data structure. `Corpus` can read
-documents directly from pandas' `Series <pd:pandas.Series>` or `DataFrame
-<pd:pandas.DataFrame>`; mangling your data into the appropriate format should
-only take :doc:`one or two easy steps
+`Corpus` can read documents directly from pandas' `Series <pd:pandas.Series>`
+or `DataFrame <pd:pandas.DataFrame>`; mangling your data into the appropriate
+format should only take :doc:`one or two easy steps
 <pd:getting_started/intro_tutorials/10_text_data>`. The important thing is to
 have the texts in one column, and the document labels as the index.
 
@@ -164,12 +181,6 @@ have the texts in one column, and the document labels as the index.
 
 If you do not specify ``doc_col``, **textnets** assumes that the first column
 containing strings is the one you meant.
-
-You can specify which `language model <https://spacy.io/models>`__ you would
-like to use using the ``lang`` argument. The default is English, but you don’t
-have to be monolingual to use **textnets**. (Languages in `LANGS` are fully
-supported since we can use spacy's statistical language models. Other languages
-are only partially supported, so `noun_phrases` will likely not function.)
 
 From a database or CSV file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
