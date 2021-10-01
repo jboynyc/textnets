@@ -27,7 +27,7 @@ import leidenalg as la
 from scipy.integrate import quad
 from scipy import LowLevelCallable
 
-from .viz import TextnetPalette
+from .viz import TextnetPalette, add_opacity
 from .fca import FormalContext
 
 try:
@@ -243,6 +243,8 @@ class TextnetBase:
         self,
         show_clusters: Union[bool, ig.VertexClustering] = False,
         color_clusters: Union[bool, ig.VertexClustering] = False,
+        node_opacity: Optional[float] = None,
+        edge_opacity: Optional[float] = None,
         label_edges: bool = False,
         scale_nodes_by: Optional[str] = None,
         node_label_filter: Optional[Callable[[ig.Vertex], bool]] = None,
@@ -288,6 +290,14 @@ class TextnetBase:
                 "vertex_color",
                 ["orangered" if v else "dodgerblue" for v in self.node_types],
             )
+        if node_opacity:
+            kwargs.update(
+                {
+                    "vertex_color": [
+                        add_opacity(c, node_opacity) for c in kwargs["vertex_color"]
+                    ],
+                }
+            )
         kwargs.setdefault(
             "vertex_shape", ["circle" if v else "square" for v in self.node_types]
         )
@@ -302,6 +312,12 @@ class TextnetBase:
         kwargs.setdefault("wrap_labels", True)
         kwargs.setdefault("margin", 50)
         kwargs.setdefault("edge_color", "lightgray")
+        if edge_opacity:
+            kwargs.update(
+                {
+                    "edge_color": [add_opacity(kwargs["edge_color"], edge_opacity)],
+                }
+            )
         kwargs.setdefault("vertex_frame_width", 0.2)
         kwargs.setdefault("vertex_label_size", 10)
         kwargs.setdefault("edge_label_size", 8)
