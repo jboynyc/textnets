@@ -51,3 +51,8 @@ class TextnetPalette(PrecalculatedPalette):
 
         colors = colors[0:n]
         super().__init__(colors)
+
+
+def add_opacity(color: str, alpha: float) -> tuple:
+    """Turns a color name into a RGBA tuple with specified opacity."""
+    return tuple([*color_name_to_rgba(color)[:3], alpha])
