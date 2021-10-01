@@ -35,7 +35,7 @@ class TextnetPalette(PrecalculatedPalette):
         num_base_colors = len(base_colors)
         colors = base_colors[:]
 
-        blocks_to_add = ceil(float(n - num_base_colors) / num_base_colors)
+        blocks_to_add = ceil((n - num_base_colors) / num_base_colors)
         ratio_increment = 1.0 / (ceil(blocks_to_add / 2.0) + 1)
 
         adding_darker = False
@@ -49,7 +49,7 @@ class TextnetPalette(PrecalculatedPalette):
             colors.extend(new_block)
             adding_darker = not adding_darker
 
-        colors = colors[0:n]
+        colors = colors[:n]
         super().__init__(colors)
 
 
