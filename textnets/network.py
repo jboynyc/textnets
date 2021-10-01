@@ -262,7 +262,8 @@ class TextnetBase:
                 dist **= 2
             norm = (dist - dist.mean()) / dist.std()
             mult = 20 / abs(norm).max()
-            kwargs.setdefault("vertex_size", [25 + mult * z for z in norm])
+            sizes = pd.Series([25 + mult * z for z in norm]).fillna(0)
+            kwargs.setdefault("vertex_size", sizes)
         if show_clusters:
             if isinstance(show_clusters, ig.VertexClustering):
                 kwargs.setdefault("mark_groups", show_clusters)
