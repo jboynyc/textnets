@@ -2,10 +2,23 @@
 History
 =======
 
+dev branch (unreleased)
+-----------------------
+* Adds a `Corpus.from_dict` method.
+* The bipartite layout optionally used by `Textnet.plot` is now horizontal, so
+  node types are arranged in columns rather than rows. That way node labels are
+  less likely to overlap.
+* Adds ``label_nodes`` argument to the `Textnet.plot` method to label both types
+  of nodes. Defaults to ``False``.
+* Adds ``node_opacity`` and ``edge_opacity`` arguments for `Textnet.plot`.
+* Adds `Textnet.save_graph` to save the underlying graph (for instance, for
+  further processing in Gephi).
+
 0.5.4 (2021-09-24)
 ------------------
-* Attempt to fix cross-platform build and deploy pipeline. Otherwise, no
-  substantive change from previous release.
+* Fix the cross-platform build and deploy pipeline.
+* Create binary packages for conda-forge.
+* Otherwise, no substantive change from previous release.
 
 0.5.3 (2021-09-24)
 ------------------
