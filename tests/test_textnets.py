@@ -128,6 +128,16 @@ def test_context(corpus):
     assert len(ctx) == 3
 
 
+def test_save(tmpdir, corpus):
+    """Test Textnet graph saving."""
+
+    noun_phrases = corpus.noun_phrases()
+    tn_np = Textnet(noun_phrases)
+    out = tmpdir.join("graph.graphml")
+    tn_np.save_graph(str(out))
+    assert len(tmpdir.listdir()) == 1
+
+
 def test_plot(tmpdir, corpus):
     """Test Textnet plotting."""
 

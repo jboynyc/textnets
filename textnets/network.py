@@ -4,9 +4,11 @@
 
 from __future__ import annotations
 
+import os
 from warnings import warn
 from collections import Counter
 from typing import Dict, Optional, List, Union, Iterator, Callable
+from typing.io import IO
 
 try:
     from typing import Literal
@@ -75,6 +77,18 @@ class TextnetBase:
     def ecount(self) -> int:
         """Returns the number of edges."""
         return self.graph.ecount()
+
+    def save_graph(
+        self, file: Union[str, bytes, IO], format: Optional[str] = None
+    ) -> None:
+        """Save the underlying graph."""
+        if not format:
+            if hasattr(file, "name"):
+                fname = file.name  # type: ignore
+            else:
+                fname = str(file)
+            format = fname.split(os.path.extsep)[-1]
+        return self.graph.write(file, format)
 
     @cached_property
     def degree(self) -> pd.Series:
