@@ -7,7 +7,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 from warnings import warn
-from typing import Any, Callable, Optional, Union, List
+from typing import Any, Callable, Dict, Optional, Union, List
 
 try:
     from functools import cached_property
@@ -128,7 +128,7 @@ class Corpus:
     @classmethod
     def from_dict(
         cls,
-        data: dict[Any, str],
+        data: Dict[Any, str],
         lang: str = "en_core_web_sm",
     ) -> Corpus:
         """
