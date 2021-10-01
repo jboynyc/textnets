@@ -133,8 +133,19 @@ def test_plot(tmpdir, corpus):
 
     noun_phrases = corpus.noun_phrases()
     tn_np = Textnet(noun_phrases)
-    out = tmpdir.join("plot-1.png")
+    out = tmpdir.join("plot-0.png")
     plot = tn_np.plot(target=str(out))
+    assert len(plot._objects) > 0
+    assert len(tmpdir.listdir()) == 1
+
+
+def test_plot_layout(tmpdir, corpus):
+    """Test Textnet plotting with bipartite layout and node labels."""
+
+    noun_phrases = corpus.noun_phrases()
+    tn_np = Textnet(noun_phrases)
+    out = tmpdir.join("plot-1.png")
+    plot = tn_np.plot(target=str(out), bipartite_layout=True, label_nodes=True)
     assert len(plot._objects) > 0
     assert len(tmpdir.listdir()) == 1
 

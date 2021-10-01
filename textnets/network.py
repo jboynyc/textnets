@@ -468,6 +468,7 @@ class Textnet(TextnetBase, FormalContext):
         circular_layout: bool = False,
         label_term_nodes: bool = False,
         label_doc_nodes: bool = False,
+        label_nodes: bool = False,
         **kwargs,
     ) -> ig.Plot:
         """Plot the bipartite graph.
@@ -498,6 +499,8 @@ class Textnet(TextnetBase, FormalContext):
             Label term nodes (default: False).
         label_doc_nodes : bool, optional
             Label document nodes (default: False).
+        label_nodes : bool, optional
+            Label term and document nodes (default: False).
         label_edges : bool, optional
             Show edge weights in plot.
         node_label_filter : function, optional
@@ -537,6 +540,7 @@ class Textnet(TextnetBase, FormalContext):
                 v["id"]
                 if (v["type"] == "doc" and label_doc_nodes)
                 or (v["type"] == "term" and label_term_nodes)
+                or label_nodes
                 else None
                 for v in self.vs
             ],
