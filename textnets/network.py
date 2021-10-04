@@ -274,7 +274,7 @@ class TextnetBase:
                 kwargs.setdefault(
                     "vertex_color",
                     [
-                        TextnetPalette(color_clusters.n)[c]
+                        TextnetPalette(color_clusters._len)[c]
                         for c in color_clusters.membership
                     ],
                 )
@@ -282,7 +282,7 @@ class TextnetBase:
                 kwargs.setdefault(
                     "vertex_color",
                     [
-                        TextnetPalette(self.clusters.n)[c]
+                        TextnetPalette(self.clusters._len)[c]
                         for c in self.clusters.membership
                     ],
                 )
