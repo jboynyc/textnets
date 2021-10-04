@@ -344,6 +344,10 @@ class TextnetBase:
                 lbl if keep else None
                 for lbl, keep in zip(edge_labels, filtered_edge_labels)
             ]
+        node_opts = [k for k, _ in kwargs.items() if k.startswith("node_")]
+        for opt in node_opts:
+            val = kwargs.pop(opt)
+            kwargs[opt.replace("node_", "vertex_")] = val
         return ig.plot(self.graph, **kwargs)
 
     @staticmethod
