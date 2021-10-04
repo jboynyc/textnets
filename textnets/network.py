@@ -556,6 +556,7 @@ class Textnet(TextnetBase, FormalContext):
         if bipartite_layout:
             layout = self.graph.layout_bipartite(types=self.node_types)
             layout.rotate(90)
+            kwargs.setdefault("wrap_labels", False)
             kwargs.setdefault("layout", layout)
         elif sugiyama_layout:
             layout = self.graph.layout_sugiyama(
