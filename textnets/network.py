@@ -7,6 +7,7 @@ from __future__ import annotations
 import os
 from warnings import warn
 from collections import Counter
+from itertools import repeat
 from typing import Dict, Optional, List, Union, Iterator, Callable
 from typing.io import IO
 
@@ -266,9 +267,16 @@ class TextnetBase:
             kwargs.setdefault("vertex_size", sizes)
         if show_clusters:
             if isinstance(show_clusters, ig.VertexClustering):
-                kwargs.setdefault("mark_groups", show_clusters)
+                markers = zip(
+                    _cluster_indices(show_clusters),
+                    repeat(add_opacity("limegreen", 0.4)),
+                )
             else:
-                kwargs.setdefault("mark_groups", self.clusters)
+                markers = zip(
+                    _cluster_indices(self.clusters),
+                    repeat(add_opacity("limegreen", 0.4)),
+                )
+            kwargs.setdefault("mark_groups", markers)
         if color_clusters:
             if isinstance(color_clusters, ig.VertexClustering):
                 kwargs.setdefault(
@@ -720,3 +728,9 @@ def _giant_component(g: ig.Graph) -> ig.Graph:
     size = max(g.components().sizes())
     pos = g.components().sizes().index(size)
     return g.subgraph(g.components()[pos])
+
+
+def _cluster_indices(vc: ig.VertexClustering) -> Iterator[List[int]]:
+    """Return node indices for each detected cluster."""
+    for n in range(vc._len):
+        yield [i for i, x in enumerate(vc.membership) if x == n]
