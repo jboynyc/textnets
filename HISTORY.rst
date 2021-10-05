@@ -11,8 +11,12 @@ dev branch (unreleased)
 * Adds ``label_nodes`` argument to the `Textnet.plot` method to label both types
   of nodes. Defaults to ``False``.
 * Adds ``node_opacity`` and ``edge_opacity`` arguments for `Textnet.plot`.
-* Adds `Textnet.save_graph` to save the underlying graph (for instance, for
+* Makes polygons marking clusters more visually appealing by adding opacity.
+* Probably fixes a bug that would occassionally result in an exception being
+  raised during plotting (``IndexError: color index too large``).
+* Adds `TextnetBase.save_graph` to save the underlying graph (for instance, for
   further processing in Gephi).
+* Update dependencies.
 
 0.5.4 (2021-09-24)
 ------------------
