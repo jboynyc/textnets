@@ -471,7 +471,7 @@ class Textnet(TextnetBase, FormalContext):
                 g.vs[name] = [attr.get(doc) for doc in g.vs["id"]]
         self.graph = g
 
-    def project(self, node_type: Literal["doc", "term"]) -> ig.Graph:
+    def project(self, node_type: Literal["doc", "term"]) -> ProjectedTextnet:
         """Project to one-mode network.
 
         Parameters
@@ -481,8 +481,8 @@ class Textnet(TextnetBase, FormalContext):
 
         Returns
         -------
-        ig.Graph
-            The projected graph with edge weights.
+        ProjectedTextnet
+            A one-mode textnet.
         """
         assert node_type in ("doc", "term"), "No valid node_type specified."
         graph_to_return = 0
