@@ -7,8 +7,7 @@ mkShell rec {
   buildInputs = [
     cairo
     poetry
-    python3
-    python3.pkgs.venvShellHook
+    python39.pkgs.venvShellHook
   ];
   postShellHook = ''
     export PS1="\$(__git_ps1) $PS1"
