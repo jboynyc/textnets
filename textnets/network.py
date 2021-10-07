@@ -143,7 +143,7 @@ class TextnetBase:
 
         Returns
         -------
-        pd.Series
+        `pandas.Series`
             Ranked nodes.
         """
         return self.degree.sort_values(ascending=False).head(n)
@@ -158,7 +158,7 @@ class TextnetBase:
 
         Returns
         -------
-        pd.Series
+        `pandas.Series`
             Ranked nodes.
         """
         return self.strength.sort_values(ascending=False).head(n)
@@ -173,7 +173,7 @@ class TextnetBase:
 
         Returns
         -------
-        pd.Series
+        `pandas.Series`
             Ranked nodes.
         """
         return self.betweenness.sort_values(ascending=False).head(n)
@@ -188,7 +188,7 @@ class TextnetBase:
 
         Returns
         -------
-        pd.Series
+        `pandas.Series`
             Ranked nodes.
         """
         return self.closeness.sort_values(ascending=False).head(n)
@@ -203,7 +203,7 @@ class TextnetBase:
 
         Returns
         -------
-        pd.Series
+        `pandas.Series`
             Ranked nodes.
         """
         return self.eigenvector_centrality.sort_values(ascending=False).head(n)
@@ -222,7 +222,7 @@ class TextnetBase:
 
         Returns
         -------
-        pd.Series
+        `pandas.Series`
             Ranked nodes.
         """
         if part is None:
@@ -445,7 +445,7 @@ class Textnet(TextnetBase, FormalContext):
 
     Attributes
     ----------
-    graph : ig.Graph
+    graph : `igraph.Graph`
         Direct access to the igraph object.
     """
 
@@ -481,7 +481,7 @@ class Textnet(TextnetBase, FormalContext):
 
         Returns
         -------
-        ProjectedTextnet
+        `ProjectedTextnet`
             A one-mode textnet.
         """
         assert node_type in ("doc", "term"), "No valid node_type specified."
@@ -538,6 +538,12 @@ class Textnet(TextnetBase, FormalContext):
             Use circular Reingold-Tilford layout (default: False; a weighted
             Fruchterman-Reingold layout is used unless another layout is
             specified).
+        node_opacity : float, optional
+            Opacity (between 0 and 1) to apply to nodes (default: no
+            transparency).
+        edge_opacity : float, optional
+            Opacity (between 0 and 1) to apply to edges (default: no
+            transparency).
         label_term_nodes : bool, optional
             Label term nodes (default: False).
         label_doc_nodes : bool, optional
@@ -557,11 +563,11 @@ class Textnet(TextnetBase, FormalContext):
             ``betweenness``, ``closeness``, ``degree``, ``strength``,
             ``eigenvector_centrality`` (default: None).
         kwargs
-            Additional arguments to pass to :doc:`ig.plot <ig:tutorial>`.
+            Additional arguments to pass to `igraph.drawing.plot`.
 
         Returns
         -------
-        ig.Plot
+        `igraph.drawing.Plot`
             The plot can be directly displayed in a Jupyter notebook or saved
             as an image file.
         """
@@ -599,7 +605,7 @@ class ProjectedTextnet(TextnetBase):
 
     Attributes
     ----------
-    graph : ig.Graph
+    graph : `igraph.Graph`
         Direct access to the igraph object."""
 
     def alpha_cut(self, alpha: float) -> ProjectedTextnet:
@@ -613,7 +619,7 @@ class ProjectedTextnet(TextnetBase):
 
         Returns
         -------
-        ProjectedTextnet
+        `ProjectedTextnet`
             New textnet sans pruned edges.
 
         References
@@ -645,6 +651,12 @@ class ProjectedTextnet(TextnetBase):
             Threshold for edge elimination. Must be between 0 and 1. Edges with
             an alpha value above the specified threshold are removed. This is
             useful when plotting "hairball" graphs.
+        node_opacity : float, optional
+            Opacity (between 0 and 1) to apply to nodes (default: no
+            transparency).
+        edge_opacity : float, optional
+            Opacity (between 0 and 1) to apply to edges (default: no
+            transparency).
         label_nodes : bool, optional
             Label nodes (default: False).
         label_edges : bool, optional
@@ -660,11 +672,11 @@ class ProjectedTextnet(TextnetBase):
             ``betweenness``, ``closeness``, ``degree``, ``strength``,
             ``eigenvector_centrality`` (default: None).
         kwargs
-            Additional arguments to pass to :doc:`ig.plot <ig:tutorial>`.
+            Additional arguments to pass to `igraph.drawing.plot`.
 
         Returns
         -------
-        ig.Plot
+        `igraph.drawing.Plot`
             The plot can be directly displayed in a Jupyter notebook or saved
             as an image file.
 

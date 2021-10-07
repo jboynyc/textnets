@@ -105,7 +105,7 @@ class Corpus:
         Parameters
         ----------
         data : DataFrame
-            Series containing the documents. The index must contain document
+            DataFrame containing documents. The index must contain document
             labels.
         doc_col : str, optional
             If ``data`` is a data frame, this indicates which column contains the
@@ -116,7 +116,7 @@ class Corpus:
 
         Returns
         -------
-        Corpus
+        `Corpus`
         """
         object_cols = data.select_dtypes(include="object").columns
         if not doc_col and object_cols.empty:
@@ -144,7 +144,7 @@ class Corpus:
 
         Returns
         -------
-        Corpus
+        `Corpus`
         """
         return cls(pd.Series(data), lang=lang)
 
@@ -168,7 +168,7 @@ class Corpus:
 
         Returns
         -------
-        Corpus
+        `Corpus`
         """
         if isinstance(files, str):
             files = glob(os.path.expanduser(files))
@@ -214,7 +214,7 @@ class Corpus:
 
         Returns
         -------
-        Corpus
+        `Corpus`
         """
         kwargs.setdefault("index_col", label_col)
         data = pd.read_csv(path, **kwargs)
@@ -253,7 +253,7 @@ class Corpus:
 
         Returns
         -------
-        Corpus
+        `Corpus`
         """
         kwargs.setdefault("index_col", label_col)
         data = pd.read_sql(qry, conn, **kwargs)
@@ -293,7 +293,7 @@ class Corpus:
 
         Returns
         -------
-        pd.DataFrame
+        `pandas.DataFrame`
             A data frame with document labels (index), tokens (term), and
             per-document counts (n).
         """
@@ -322,7 +322,7 @@ class Corpus:
 
         Returns
         -------
-        pd.DataFrame
+        `pandas.DataFrame`
             A data frame with document labels (index), noun phrases
             (term), and per-document counts (n).
         """
@@ -367,7 +367,7 @@ class Corpus:
 
         Returns
         -------
-        pd.DataFrame
+        `pandas.DataFrame`
             A data frame with document labels (index), n-grams (term), and
             per-document counts (n).
         """
