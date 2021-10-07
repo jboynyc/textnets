@@ -6,20 +6,20 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional, Union
 from warnings import warn
-from typing import Any, Callable, Dict, Optional, Union, List
 
 try:
     from functools import cached_property
 except ImportError:
     from cached_property import cached_property  # type: ignore
 
+from glob import glob
+
+import pandas as pd
 import spacy
 from spacy.tokens.doc import Doc
-import pandas as pd
-from glob import glob
-from toolz import compose, partial, identity
-
+from toolz import compose, identity, partial
 
 #: Mapping of language codes to spacy language model names.
 LANGS = {

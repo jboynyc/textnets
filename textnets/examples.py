@@ -4,7 +4,6 @@
 
 import pandas as pd
 
-
 #: Example dataset with newspaper headlines about the Apollo 11 landing.
 moon_landing = pd.Series(
     [

@@ -1,7 +1,7 @@
 import os
+from distutils.core import Extension
 
 from Cython.Build import cythonize
-from distutils.core import Extension
 
 
 def build(setup_kwargs):

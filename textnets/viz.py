@@ -8,11 +8,10 @@ from math import ceil
 
 from igraph.drawing.colors import (
     PrecalculatedPalette,
-    lighten,
-    darken,
     color_name_to_rgba,
+    darken,
+    lighten,
 )
-
 
 #: Base colors for textnets color palette.
 BASE_COLORS = [

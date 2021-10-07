@@ -5,11 +5,11 @@
 from __future__ import annotations
 
 import os
-from warnings import warn
 from collections import Counter
 from itertools import repeat
-from typing import Dict, Optional, List, Union, Iterator, Callable
+from typing import Callable, Dict, Iterator, List, Optional, Union
 from typing.io import IO
+from warnings import warn
 
 try:
     from typing import Literal
@@ -21,15 +21,15 @@ try:
 except ImportError:
     from cached_property import cached_property  # type: ignore
 
-import numpy as np
-import pandas as pd
 import igraph as ig
 import leidenalg as la
-from scipy.integrate import quad
+import numpy as np
+import pandas as pd
 from scipy import LowLevelCallable
+from scipy.integrate import quad
 
-from .viz import TextnetPalette, add_opacity
 from .fca import FormalContext
+from .viz import TextnetPalette, add_opacity
 
 try:
     from . import _ext  # type: ignore

@@ -2,7 +2,7 @@
 
 """Implements experimental features for formal concept analysis."""
 
-from typing import Tuple, List
+from typing import List, Tuple
 
 try:
     from functools import cached_property
@@ -10,7 +10,6 @@ except ImportError:
     from cached_property import cached_property  # type: ignore
 
 import pandas as pd
-
 
 #: Membership degree threshold (alpha) for concept lattice
 #: (see :cite:`Tho2006`).

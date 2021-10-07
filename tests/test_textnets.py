@@ -6,7 +6,6 @@
 import sqlite3
 
 import pandas as pd
-
 from textnets import Corpus, Textnet
 
 
