@@ -59,14 +59,6 @@ class TextnetBase:
     def __init__(self, graph: ig.Graph) -> None:
         self.graph = graph
 
-    def __getattr__(self, name):
-        try:
-            return getattr(self.graph, name)
-        except AttributeError as err:
-            raise AttributeError(
-                f"{self.__class__.__name__} has no attribute called '{name}'"
-            ) from err
-
     def summary(self) -> str:
         """Return summary of underlying graph."""
         return self.graph.summary()
@@ -99,7 +91,7 @@ class TextnetBase:
             else:
                 fname = str(file)
             format = fname.split(os.path.extsep)[-1]
-        return self.graph.write(file, format)
+        self.graph.write(file, format)
 
     @cached_property
     def degree(self) -> pd.Series:
