@@ -20,23 +20,17 @@ Example
 
    .. thebe-button:: Do it live!
 
-To use **textnets** in a project, you typically need the following imports:
+To use **textnets** in a project, you typically start with the following import:
 
 .. jupyter-execute::
 
-   from textnets import Corpus, Textnet
-
-For the purposes of demonstration, we also import the bundled example data:
-
-.. jupyter-execute::
-
-   from textnets import examples
+   import textnets as tn
 
 Construct the corpus from the example data:
 
 .. jupyter-execute::
 
-   corpus = Corpus(examples.moon_landing)
+   corpus = tn.Corpus(tn.examples.moon_landing)
 
 What is this `moon_landing` example all about?
 
@@ -52,7 +46,7 @@ Next, we create the textnet:
 
 .. jupyter-execute::
 
-   tn = Textnet(corpus.tokenized(), min_docs=1)
+   n = tn.Textnet(corpus.tokenized(), min_docs=1)
 
 We're using `tokenized` with all defaults, so **textnets** is removing stop
 words, applying stemming, and removing punctuation marks, numbers, URLs and the
@@ -64,9 +58,8 @@ Let's take a look:
 
 .. jupyter-execute::
 
-   tn.plot(label_term_nodes=True,
-           label_doc_nodes=True,
-           show_clusters=True)
+   n.plot(label_nodes=True,
+          show_clusters=True)
 
 The ``show_clusters`` options marks the partitions found by the Leiden
 community detection algorithm (see :doc:`here <la:multiplex>`). It identifies
@@ -82,7 +75,7 @@ First, the network of newspapers:
 
 .. jupyter-execute::
 
-    papers = tn.project(node_type='doc')
+    papers = n.project(node_type="doc")
     papers.plot(label_nodes=True)
 
 As before in the bipartite network, we can see the *Houston Chronicle*,
@@ -92,7 +85,7 @@ Next, the term network:
 
 .. jupyter-execute::
 
-   words = tn.project(node_type='term')
+   words = n.project(node_type="term")
    words.plot(label_nodes=True,
               show_clusters=True)
 
@@ -130,9 +123,11 @@ clutter.
 .. jupyter-execute::
 
    words.plot(label_nodes=True,
-              scale_nodes_by='betweenness',
+              scale_nodes_by="betweenness",
               color_clusters=True,
               alpha=0.5,
+              edge_width=[10*w for w in words.es["weight"]],
+              edge_opacity=0.4,
               node_label_filter=lambda n: n.betweenness() > words.betweenness.median())
 
 Wrangling Text & Mangling Data
@@ -155,8 +150,8 @@ you can use the `from_dict` method to construct your `Corpus`.
 
 .. code:: python
 
-   data = {f'Documento {label+1}': doc for label, doc in enumerate(docs)}
-   corpus = Corpus.from_dict(data, lang='it')
+   data = {f"Documento {label+1}": doc for label, doc in enumerate(docs)}
+   corpus = tn.Corpus.from_dict(data, lang="it")
 
 You can specify which `language model <https://spacy.io/models>`__ you would
 like to use using the ``lang`` argument. The default is English, but you don’t
@@ -175,9 +170,9 @@ have the texts in one column, and the document labels as the index.
 
 .. code:: python
 
-   corpus = Corpus(series, lang='nl')
+   corpus = tn.Corpus(series, lang="nl")
    # or alternately:
-   corpus = Corpus.from_df(df, doc_col='tekst', lang='nl')
+   corpus = tn.Corpus.from_df(df, doc_col="tekst", lang="nl")
 
 If you do not specify ``doc_col``, **textnets** assumes that the first column
 containing strings is the one you meant.
@@ -192,8 +187,8 @@ comma-separated value file using `from_sql` and `from_csv` respectively.
 
    import sqlite3
 
-   with sqlite3.connect('documents.db') as conn:
-       articles = Corpus.from_sql('SELECT title, text FROM articles', conn)
+   with sqlite3.connect("documents.db") as conn:
+       articles = tn.Corpus.from_sql("SELECT title, text FROM articles", conn)
 
 As before, you do can specify a ``doc_col`` to specify which column contains
 your texts. You can also specify a ``label_col`` containing document labels. By
@@ -202,10 +197,10 @@ column after that containing strings as the ``doc_col``.
 
 .. code:: python
 
-   blog = Corpus.from_csv('blog-posts.csv',
-                          label_col='slug',
-                          doc_col='summary'
-                          sep=';')
+   blog = tn.Corpus.from_csv("blog-posts.csv",
+                             label_col="slug",
+                             doc_col="summary"
+                             sep=";")
 
 Both `from_sql` and `from_csv` accept additional keyword arguments that are
 passed to `pandas.read_sql` and `pandas.read_csv` respectively.
@@ -220,15 +215,15 @@ disk in a separate text file. For such cases, `Corpus` comes with a utility,
 
 .. code:: python
 
-   corpus = Corpus.from_files('/path/to/texts/*.txt')
+   corpus = tn.Corpus.from_files("/path/to/texts/*.txt")
 
 You can also pass it a list of paths:
 
 .. code:: python
 
-   corpus = Corpus.from_files(['kohl.txt', 'schroeder.txt', 'merkel.txt'],
-                              doc_labels=['Kohl', 'Schröder', 'Merkel'],
-                              lang='de')
+   corpus = tn.Corpus.from_files(["kohl.txt", "schroeder.txt", "merkel.txt"],
+                                 doc_labels=["Kohl", "Schröder", "Merkel"],
+                                 lang="de")
 
 You can optionally pass explicit labels for your documents using the argument
 ``doc_labels``. Without this, labels are inferred from file names by stripping
@@ -250,7 +245,7 @@ minister,” or “the virus.”
 
 .. code:: python
 
-   np = corpus.noun_phrases(remove=['Lilongwe', 'Mzuzu', 'Blantyre'])
+   np = corpus.noun_phrases(remove=["Lilongwe", "Mzuzu", "Blantyre"])
 
 .. warning::
    For large corpora, some of these operations can be computationally intense.
@@ -271,7 +266,7 @@ authored them). We create the textnet from the processed corpus using the
 
 .. code:: python
 
-   tn = Textnet(np)
+   n = tn.Textnet(np)
 
 `Textnet` takes a few optional arguments. The most important one is
 ``min_docs``. It determines how many documents a term must appear in to be
@@ -293,7 +288,7 @@ represent views of members of different parties, we can set a party attribute.
 
 .. code:: python
 
-   tn = Textnet(corpus.tokenized(), doc_attr=df[['party']].to_dict())
+   n = tn.Textnet(corpus.tokenized(), doc_attr=df[["party"]].to_dict())
 
 Seeing Results
 --------------
@@ -324,7 +319,7 @@ single-mode network of either kind.
 
 .. code:: python
 
-   groups = tn.project(node_type='doc')
+   groups = n.project(node_type="doc")
    groups.summary()
 
 The resulting network only contains nodes of the chosen type (``doc`` or
