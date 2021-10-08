@@ -16,6 +16,7 @@ except ImportError:
 
 from glob import glob
 
+import textnets as tn
 import pandas as pd
 import spacy
 from spacy.tokens.doc import Doc
@@ -71,19 +72,24 @@ class Corpus:
             documents = documents[~documents.isna()]
         documents.index = documents.index.set_names(["label"])
         self.documents = documents
-        self.lang = LANGS[lang] if lang in LANGS.keys() else lang
+        self._lang = LANGS[lang] if lang in LANGS.keys() else lang
+        if self._lang not in spacy.util.get_installed_models():
+            if tn.params.get("autodownload", False):
+                spacy.cli.download(self._lang)  # type: ignore
+            else:
+                warn(f"Language model '{self._lang}' is not yet installed.")
 
     @cached_property
     def nlp(self) -> pd.Series:
         """Corpus documents with NLP applied."""
         try:
-            nlp = spacy.load(self.lang, disable=["ner", "textcat"])
+            nlp = spacy.load(self._lang, disable=["ner", "textcat"])
         except OSError as err:
-            if self.lang in LANGS.values():
+            if self._lang in LANGS.values():
                 raise err
             else:
-                nlp = spacy.blank(self.lang)
-                warn(f"Using basic {self.lang} language model.")
+                nlp = spacy.blank(self._lang)
+                warn(f"Using basic {self._lang} language model.")
         return self.documents.map(_normalize_whitespace).map(nlp)
 
     def __len__(self) -> int:

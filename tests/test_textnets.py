@@ -67,14 +67,17 @@ def test_corpus_czech(recwarn):
             "zatahá tě za copánek",
         ]
     )
+    # This raises a warning about an uninstalled language model
     corpus = Corpus(s, lang="cs")
     assert len(corpus.documents) == 8
-    # This raises a warning about lacking a language model
+    # This raises another warning about lacking a language model
     tokenized = corpus.tokenized()
-    assert len(recwarn) == 1
+    assert len(recwarn) == 2
     assert tokenized.sum().n > 8
-    w = recwarn.pop(UserWarning)
-    assert str(w.message) == "Using basic cs language model."
+    w1 = recwarn.pop(UserWarning)
+    assert str(w1.message) == "Language model 'cs' is not yet installed."
+    w2 = recwarn.pop(UserWarning)
+    assert str(w2.message) == "Using basic cs language model."
 
 
 def test_corpus_df(testdata):
