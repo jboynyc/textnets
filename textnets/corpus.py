@@ -415,36 +415,24 @@ class Corpus:
             <style scoped>
               .full-width {{ width: 100%; }}
               .left-align td, .left-align th {{ text-align: left; }}
-              summary {{
-                cursor: help;
-                list-style: none;
-              }}
-              details[open] summary {{
-                margin-bottom: 1em;
-              }}
             </style>
             {tbl}
-            <details>
-              <summary>
-                <table class="full-width">
-                  <tr style="font-weight: 600;">
-                    <td style="text-align: left;">
-                      <kbd>{self.__class__.__name__}</kbd>
-                    </td>
-                    <td style="color: dodgerblue;">
-                      <svg width="1ex" height="1ex">
-                        <rect width="1ex" height="1ex" fill="dodgerblue">
-                      </svg>
-                      Docs: {self.documents.shape[0]}
-                    </td>
-                    <td style="color: darkgray;">
-                      Lang: {self.lang}
-                    </td>
-                  </tr>
-                </table>
-              </summary>
-              <pre>{self.__doc__}</pre>
-            </details>"""
+            <table class="full-width">
+              <tr style="font-weight: 600;">
+                <td style="text-align: left;">
+                  <kbd>{self.__class__.__name__}</kbd>
+                </td>
+                <td style="color: dodgerblue;">
+                  <svg width="1ex" height="1ex">
+                    <rect width="1ex" height="1ex" fill="dodgerblue">
+                  </svg>
+                  Docs: {self.documents.shape[0]}
+                </td>
+                <td style="color: darkgray;">
+                  Lang: {self._lang}
+                </td>
+              </tr>
+            </table>"""
 
 
 def _read_file(file_name: Path) -> str:
