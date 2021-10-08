@@ -10,9 +10,10 @@ except ImportError:
     from importlib_metadata import version  # type: ignore
 
 from . import examples  # noqa: F401
+from .config import config  # noqa: F401
 from .corpus import Corpus  # noqa: F401
 from .network import Textnet  # noqa: F401
 
-__author__ = """John D. Boy"""
+__author__ = "John D. Boy"
 __email__ = "jboy@bius.moe"
 __version__ = version(__name__)

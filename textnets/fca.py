@@ -10,10 +10,11 @@ except ImportError:
     from cached_property import cached_property  # type: ignore
 
 import pandas as pd
+import textnets as tn
 
 #: Membership degree threshold (alpha) for concept lattice
 #: (see :cite:`Tho2006`).
-FFCA_CUTOFF = 0.3
+FFCA_CUTOFF = tn.config.get("ffca_cutoff", 0.3)
 
 
 class FormalContext:

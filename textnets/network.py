@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import os
+import random
 from collections import Counter
 from itertools import repeat
 from typing import Callable, Dict, Iterator, List, Optional, Union
@@ -25,6 +26,7 @@ import igraph as ig
 import leidenalg as la
 import numpy as np
 import pandas as pd
+import textnets as tn
 from scipy import LowLevelCallable
 from scipy.integrate import quad
 
@@ -44,11 +46,11 @@ except ImportError:
 
 #: Tuning parameter (alpha) for inverse edge weights
 #: (see :cite:`Opsahl2010`).
-TUNING_PARAMETER = 0.5
+TUNING_PARAMETER = tn.config.get("tuning_parameter", 0.5)
 
 #: Resolution parameter (gamma) for community detection
 #: (see :cite:`Reichardt2006,Traag2019`).
-RESOLUTION_PARAMETER = 0.1
+RESOLUTION_PARAMETER = tn.config.get("resolution_parameter", 0.1)
 
 
 class TextnetBase:
@@ -56,6 +58,14 @@ class TextnetBase:
 
     def __init__(self, graph: ig.Graph) -> None:
         self.graph = graph
+
+    def __getattr__(self, name):
+        try:
+            return getattr(self.graph, name)
+        except AttributeError as err:
+            raise AttributeError(
+                f"{self.__class__.__name__} has no attribute called '{name}'"
+            ) from err
 
     def summary(self) -> str:
         """Return summary of underlying graph."""
@@ -126,7 +136,9 @@ class TextnetBase:
     @cached_property
     def clusters(self) -> ig.VertexClustering:
         """Return partition of graph detected by Leiden algorithm."""
-        return self._partition_graph(self.graph, resolution=RESOLUTION_PARAMETER)
+        return self._partition_graph(
+            self.graph, resolution=RESOLUTION_PARAMETER, seed=tn.config["seed"]
+        )
 
     @cached_property
     def modularity(self) -> float:
@@ -252,6 +264,7 @@ class TextnetBase:
         edge_label_filter: Optional[Callable[[ig.Edge], bool]] = None,
         **kwargs,
     ) -> ig.Plot:
+        random.seed(tn.config["seed"])
         if "layout" not in kwargs.keys():
             layout = self.graph.layout_fruchterman_reingold(
                 weights="weight", grid=False
@@ -351,12 +364,13 @@ class TextnetBase:
         return ig.plot(self.graph, **kwargs)
 
     @staticmethod
-    def _partition_graph(graph, resolution: float) -> ig.VertexClustering:
+    def _partition_graph(graph, resolution: float, seed: int) -> ig.VertexClustering:
         if graph.is_bipartite():
             part, part0, part1 = la.CPMVertexPartition.Bipartite(
                 graph, resolution_parameter_01=resolution, weights="weight"
             )
             opt = la.Optimiser()
+            opt.set_rng_seed(seed)
             opt.optimise_partition_multiplex(
                 [part, part0, part1], layer_weights=[1, -1, -1], n_iterations=-1
             )
@@ -365,6 +379,7 @@ class TextnetBase:
                 graph,
                 la.CPMVertexPartition,
                 resolution_parameter=resolution,
+                seed=seed,
                 weights="weight",
             )
         return part
@@ -730,10 +745,10 @@ def _disparity_filter(g: ig.Graph) -> Iterator[float]:
         degree_t = target.degree()
         sum_weights_t = target.strength(weights="weight")
         norm_weight_t = edge["weight"] / sum_weights_t
-        try:
-            integral_t = quad(integrand, 0, norm_weight_t, args=(degree_t))
-        except ZeroDivisionError:
+        if degree_t <= 1:
             yield 0
+        else:
+            integral_t = quad(integrand, 0, norm_weight_t, args=(degree_t))
         yield min(
             1 - (degree_s - 1) * integral_s[0], 1 - (degree_t - 1) * integral_t[0]
         )
