@@ -10,7 +10,7 @@ except ImportError:
     from importlib_metadata import version  # type: ignore
 
 from . import examples  # noqa: F401
-from .config import config  # noqa: F401
+from .config import params  # noqa: F401
 from .corpus import Corpus  # noqa: F401
 from .network import Textnet  # noqa: F401
 

@@ -46,11 +46,11 @@ except ImportError:
 
 #: Tuning parameter (alpha) for inverse edge weights
 #: (see :cite:`Opsahl2010`).
-TUNING_PARAMETER = tn.config.get("tuning_parameter", 0.5)
+TUNING_PARAMETER = tn.params.get("tuning_parameter", 0.5)
 
 #: Resolution parameter (gamma) for community detection
 #: (see :cite:`Reichardt2006,Traag2019`).
-RESOLUTION_PARAMETER = tn.config.get("resolution_parameter", 0.1)
+RESOLUTION_PARAMETER = tn.params.get("resolution_parameter", 0.1)
 
 
 class TextnetBase:
@@ -137,7 +137,7 @@ class TextnetBase:
     def clusters(self) -> ig.VertexClustering:
         """Return partition of graph detected by Leiden algorithm."""
         return self._partition_graph(
-            self.graph, resolution=RESOLUTION_PARAMETER, seed=tn.config["seed"]
+            self.graph, resolution=RESOLUTION_PARAMETER, seed=tn.params["seed"]
         )
 
     @cached_property
@@ -264,7 +264,7 @@ class TextnetBase:
         edge_label_filter: Optional[Callable[[ig.Edge], bool]] = None,
         **kwargs,
     ) -> ig.Plot:
-        random.seed(tn.config["seed"])
+        random.seed(tn.params["seed"])
         if "layout" not in kwargs.keys():
             layout = self.graph.layout_fruchterman_reingold(
                 weights="weight", grid=False
