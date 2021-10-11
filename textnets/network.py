@@ -29,6 +29,7 @@ import pandas as pd
 import textnets as tn
 from scipy import LowLevelCallable
 from scipy.integrate import quad
+from toolz import memoize
 
 from .fca import FormalContext
 from .viz import TextnetPalette, add_opacity
@@ -125,14 +126,15 @@ class TextnetBase:
         """Returns boolean list to distinguish node types."""
         return [True if t == "term" else False for t in self.vs["type"]]
 
-    @cached_property
+    @property
     def clusters(self) -> ig.VertexClustering:
         """Return partition of graph detected by Leiden algorithm."""
         return self._partition_graph(
-            self.graph, resolution=RESOLUTION_PARAMETER, seed=tn.params["seed"]
+            resolution=tn.params["resolution_parameter"],
+            seed=tn.params["seed"],
         )
 
-    @cached_property
+    @property
     def modularity(self) -> float:
         """Returns graph modularity based on partition detected by Leiden algorithm."""
         return self.graph.modularity(self.clusters, weights="weight")
@@ -355,11 +357,11 @@ class TextnetBase:
             kwargs[opt.replace("node_", "vertex_")] = val
         return ig.plot(self.graph, **kwargs)
 
-    @staticmethod
-    def _partition_graph(graph, resolution: float, seed: int) -> ig.VertexClustering:
-        if graph.is_bipartite():
+    @memoize
+    def _partition_graph(self, resolution: float, seed: int) -> ig.VertexClustering:
+        if self.graph.is_bipartite():
             part, part0, part1 = la.CPMVertexPartition.Bipartite(
-                graph, resolution_parameter_01=resolution, weights="weight"
+                self.graph, resolution_parameter_01=resolution, weights="weight"
             )
             opt = la.Optimiser()
             opt.set_rng_seed(seed)
@@ -368,7 +370,7 @@ class TextnetBase:
             )
         else:
             part = la.find_partition(
-                graph,
+                self.graph,
                 la.CPMVertexPartition,
                 resolution_parameter=resolution,
                 seed=seed,

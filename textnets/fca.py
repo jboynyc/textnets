@@ -4,17 +4,9 @@
 
 from typing import List, Tuple
 
-try:
-    from functools import cached_property
-except ImportError:
-    from cached_property import cached_property  # type: ignore
-
 import pandas as pd
 import textnets as tn
-
-#: Membership degree threshold (alpha) for concept lattice
-#: (see :cite:`Tho2006`).
-FFCA_CUTOFF = tn.params.get("ffca_cutoff", 0.3)
+from toolz import memoize
 
 
 class FormalContext:
@@ -24,16 +16,19 @@ class FormalContext:
     def __init__(self, im: pd.DataFrame) -> None:
         self.im = im
 
-    @cached_property
+    @property
     def context(self) -> Tuple[List[str], List[str], List[List[bool]]]:
         """Return formal context of terms and documents."""
-        return self._formal_context(self.im, alpha=FFCA_CUTOFF)
+        return self._formal_context(alpha=tn.params["ffca_cutoff"])
 
-    @staticmethod
-    def _formal_context(im, alpha) -> Tuple[List[str], List[str], List[List[bool]]]:
+    @memoize
+    def _formal_context(
+        self, alpha: float
+    ) -> Tuple[List[str], List[str], List[List[bool]]]:
         # The incidence matrix is a "fuzzy formal context." We can binarize it
-        # by using a cutoff. This is known as an alpha-cut.
-        crisp = im.applymap(lambda x: True if x >= alpha else False)
+        # by using a cutoff. This is known as an alpha-cut. This feature is
+        # experimental.
+        crisp = self.im.applymap(lambda x: x >= alpha)
         reduced = crisp[crisp.any(axis=1)].loc[:, crisp.any(axis=0)]
         objects = reduced.index.tolist()
         properties = reduced.columns.tolist()
