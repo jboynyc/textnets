@@ -20,9 +20,9 @@ __version__ = version(__name__)
 
 
 def _repr_html_():
-    import spacy
     import igraph
     import leidenalg
+    import spacy
 
     packages = ["igraph", "leidenalg", "spacy"]
     package_versions = [
