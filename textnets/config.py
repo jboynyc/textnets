@@ -43,16 +43,17 @@ from warnings import warn
 class _Configuration(UserDict):
     """Container for global parameters."""
 
-    _params = {
+    _valid = {
         "autodownload",
         "ffca_cutoff",
+        "lang",
         "resolution_parameter",
         "seed",
         "tuning_parameter",
     }
 
     def __setitem__(self, key, item):
-        if key not in self._params:
+        if key not in self._valid:
             warn(f"Parameter '{key}' not known. Skipping.")
         else:
             self.data[key] = item
@@ -64,11 +65,19 @@ class _Configuration(UserDict):
             <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
             {os.linesep.join(rows)}
             <tr style="font-weight: 600;">
-              <td style="text-align: left;">
+              <td colspan="2" style="text-align: left;">
                 <kbd>params</kbd>
               </td>
             </tr>
           </table>"""
 
 
-params = _Configuration(seed=randint(0, 10_000))
+default_params = {
+    "autodownload": False,
+    "ffca_cutoff": 0.3,
+    "lang": "en_core_web_sm",
+    "resolution_parameter": 0.1,
+    "tuning_parameter": 0.5,
+}
+
+params = _Configuration(seed=randint(0, 10_000), **default_params)
