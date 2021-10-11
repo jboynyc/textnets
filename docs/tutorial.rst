@@ -126,7 +126,7 @@ clutter.
               scale_nodes_by="betweenness",
               color_clusters=True,
               alpha=0.5,
-              edge_width=[10*w for w in words.es["weight"]],
+              edge_width=[10*w for w in words.edges["weight"]],
               edge_opacity=0.4,
               node_label_filter=lambda n: n.betweenness() > words.betweenness.median())
 

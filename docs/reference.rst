@@ -10,6 +10,14 @@ textnets
    :undoc-members:
    :show-inheritance:
 
+textnets.config module
+----------------------
+
+.. automodule:: textnets.config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 textnets.corpus module
 ----------------------
 
