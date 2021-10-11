@@ -53,6 +53,7 @@ intersphinx_mapping = {
 }
 
 bibtex_bibfiles = ["refs.bib"]
+bibtex_reference_style = "author_year"
 
 jupyter_sphinx_thebelab_config = {
     "requestKernel": True,

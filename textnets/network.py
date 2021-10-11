@@ -48,7 +48,14 @@ except ImportError:
 
 
 class TextnetBase:
-    """Base class for `Textnet` and `ProjectedTextnet`."""
+    """
+    Base class for `Textnet` and `ProjectedTextnet`.
+
+    Attributes
+    ----------
+    graph : `igraph.Graph`
+        Direct access to the igraph object.
+    """
 
     def __init__(self, graph: ig.Graph) -> None:
         self.graph = graph
@@ -76,16 +83,25 @@ class TextnetBase:
         return self.graph.ecount()
 
     def save_graph(
-        self, file: Union[str, bytes, IO], format: Optional[str] = None
+        self, target: Union[str, bytes, IO], format: Optional[str] = None
     ) -> None:
-        """Save the underlying graph."""
+        """
+        Save the underlying graph.
+
+        Parameters
+        ----------
+        target : str, file
+            File or path that the graph should be written to.
+        format : {"dot", "edgelist", "gml", "graphml", "graphmlz", "net", "pajek", "svg"}, optional
+            Optionally specify the desired format (otherwise it is derived from the file suffix).
+        """
         if not format:
-            if hasattr(file, "name"):
-                fname = file.name  # type: ignore
+            if hasattr(target, "name"):
+                fname = target.name  # type: ignore
             else:
-                fname = str(file)
+                fname = str(target)
             format = fname.split(os.path.extsep)[-1]
-        self.graph.write(file, format)
+        self.graph.write(target, format)
 
     @cached_property
     def degree(self) -> pd.Series:
@@ -121,7 +137,7 @@ class TextnetBase:
 
     @property
     def clusters(self) -> ig.VertexClustering:
-        """Return partition of graph detected by Leiden algorithm."""
+        """Return partition of graph detected by the Leiden algorithm."""
         return self._partition_graph(
             resolution=tn.params["resolution_parameter"],
             seed=tn.params["seed"],
@@ -129,11 +145,13 @@ class TextnetBase:
 
     @property
     def modularity(self) -> float:
-        """Returns graph modularity based on partition detected by Leiden algorithm."""
+        """Returns graph modularity based on the partition detected by the
+        Leiden algorithm."""
         return self.graph.modularity(self.clusters, weights="weight")
 
     def top_degree(self, n: int = 10) -> pd.Series:
-        """Show nodes sorted by unweighted degree.
+        """
+        Show nodes sorted by unweighted degree.
 
         Parameters
         ----------
@@ -148,7 +166,8 @@ class TextnetBase:
         return self.degree.sort_values(ascending=False).head(n)
 
     def top_strength(self, n: int = 10) -> pd.Series:
-        """Show nodes sorted by weighted degree.
+        """
+        Show nodes sorted by weighted degree.
 
         Parameters
         ----------
@@ -163,7 +182,8 @@ class TextnetBase:
         return self.strength.sort_values(ascending=False).head(n)
 
     def top_betweenness(self, n: int = 10) -> pd.Series:
-        """Show nodes sorted by betweenness.
+        """
+        Show nodes sorted by betweenness.
 
         Parameters
         ----------
@@ -178,7 +198,8 @@ class TextnetBase:
         return self.betweenness.sort_values(ascending=False).head(n)
 
     def top_closeness(self, n: int = 10) -> pd.Series:
-        """Show nodes sorted by closeness.
+        """
+        Show nodes sorted by closeness.
 
         Parameters
         ----------
@@ -193,7 +214,8 @@ class TextnetBase:
         return self.closeness.sort_values(ascending=False).head(n)
 
     def top_ev(self, n: int = 10) -> pd.Series:
-        """Show nodes sorted by eigenvector centrality.
+        """
+        Show nodes sorted by eigenvector centrality.
 
         Parameters
         ----------
@@ -210,13 +232,14 @@ class TextnetBase:
     def top_cluster_nodes(
         self, n: int = 10, part: Optional[ig.VertexClustering] = None
     ) -> pd.Series:
-        """Show top nodes ranked by weighted degree per cluster.
+        """
+        Show top nodes ranked by weighted degree per cluster.
 
         Parameters
         ----------
         n : int, optional
             How many nodes to show per cluster (default: 10)
-        part : VertexClustering, optional
+        part : igraph.VertexClustering, optional
             Partition to use (default: Leiden partition).
 
         Returns
@@ -436,7 +459,13 @@ class Textnet(TextnetBase, FormalContext):
     Attributes
     ----------
     graph : `igraph.Graph`
-        Direct access to the igraph object.
+        Direct access to the underlying igraph object.
+    im : `pandas.DataFrame`
+        Incidence matrix of bipartite graph.
+
+    See Also
+    --------
+    `TextnetBase`
     """
 
     def __init__(
@@ -464,11 +493,12 @@ class Textnet(TextnetBase, FormalContext):
         self.graph = g
 
     def project(self, node_type: Literal["doc", "term"]) -> ProjectedTextnet:
-        """Project to one-mode network.
+        """
+        Project to one-mode network.
 
         Parameters
         ----------
-        node_type : str
+        node_type : {"doc", "term"}
             Either ``doc`` or ``term``, depending on desired node type.
 
         Returns
@@ -476,7 +506,8 @@ class Textnet(TextnetBase, FormalContext):
         `ProjectedTextnet`
             A one-mode textnet.
         """
-        assert node_type in ("doc", "term"), "No valid node_type specified."
+        if node_type not in {"doc", "term"}:
+            raise ValueError("No valid node_type specified.")
         graph_to_return = 0
         if node_type == "term":
             graph_to_return = 1
@@ -508,16 +539,17 @@ class Textnet(TextnetBase, FormalContext):
         label_nodes: bool = False,
         **kwargs,
     ) -> ig.Plot:
-        """Plot the bipartite graph.
+        """
+        Plot the bipartite graph.
 
         Parameters
         ----------
         color_clusters : bool or VertexClustering, optional
-            Color nodes according to clusters detected by Leiden algorithm
+            Color nodes according to clusters detected by the Leiden algorithm
             (default: False). Alternately a clustering object generated by
             another community detection algorithm can be passed.
         show_clusters : bool or VertexClustering, optional
-            Mark clusters detected by Leiden algorithm (default: False).
+            Mark clusters detected by the Leiden algorithm (default: False).
             Alternately a clustering object generated by another community
             detection algorithm can be passed.
         bipartite_layout : bool, optional
@@ -556,6 +588,11 @@ class Textnet(TextnetBase, FormalContext):
             Name of centrality measure to scale nodes by. Possible values:
             ``betweenness``, ``closeness``, ``degree``, ``strength``,
             ``eigenvector_centrality`` (default: None).
+
+        Other Parameters
+        ----------------
+        target : str, file, optional
+            File or path that the plot should be saved to (e.g., ``plot.png``).
         kwargs
             Additional arguments to pass to `igraph.drawing.plot`.
 
@@ -593,17 +630,24 @@ class Textnet(TextnetBase, FormalContext):
 
 
 class ProjectedTextnet(TextnetBase):
-    """One-mode projection of a textnet.
+    """
+    One-mode projection of a textnet.
 
     Created by calling `Textnet.project()` with the desired ``node_type``.
 
     Attributes
     ----------
     graph : `igraph.Graph`
-        Direct access to the igraph object."""
+        Direct access to the igraph object.
+
+    See Also
+    --------
+    `TextnetBase`
+    """
 
     def alpha_cut(self, alpha: float) -> ProjectedTextnet:
-        """Return graph "backbone."
+        """
+        Return graph "backbone."
 
         Parameters
         ----------
@@ -629,16 +673,17 @@ class ProjectedTextnet(TextnetBase):
     def plot(
         self, label_nodes: bool = False, alpha: Optional[float] = None, **kwargs
     ) -> ig.Plot:
-        """Plot the projected graph.
+        """
+        Plot the projected graph.
 
         Parameters
         ----------
         color_clusters : bool or VertexClustering, optional
-            Color nodes according to clusters detected by Leiden algorithm
+            Color nodes according to clusters detected by the Leiden algorithm
             (default: False). Alternately a clustering object generated by
             another community detection algorithm can be passed.
         show_clusters : bool or VertexClustering, optional
-            Mark clusters detected by Leiden algorithm (default: False).
+            Mark clusters detected by the Leiden algorithm (default: False).
             Alternately a clustering object generated by another community
             detection algorithm can be passed.
         alpha : float, optional
@@ -665,8 +710,6 @@ class ProjectedTextnet(TextnetBase):
             Name of centrality measure to scale nodes by. Possible values:
             ``betweenness``, ``closeness``, ``degree``, ``strength``,
             ``eigenvector_centrality`` (default: None).
-        kwargs
-            Additional arguments to pass to `igraph.drawing.plot`.
 
         Returns
         -------
@@ -674,6 +717,12 @@ class ProjectedTextnet(TextnetBase):
             The plot can be directly displayed in a Jupyter notebook or saved
             as an image file.
 
+        Other Parameters
+        ----------------
+        target : str, file, optional
+            File or path that the plot should be saved to (e.g., ``plot.png``).
+        kwargs
+            Additional arguments to pass to `igraph.drawing.plot`.
         """
         if alpha is not None:
             to_plot = self.alpha_cut(alpha)

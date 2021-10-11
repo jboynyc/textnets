@@ -26,6 +26,13 @@ To use **textnets** in a project, you typically start with the following import:
 
    import textnets as tn
 
+You can set a fixed seed to ensure that results are reproducible across runs of
+your script (see :cite:t:`Sandve2013`):
+
+.. jupyter-execute::
+
+   tn.params["seed"] = 42
+
 Construct the corpus from the example data:
 
 .. jupyter-execute::
@@ -46,7 +53,7 @@ Next, we create the textnet:
 
 .. jupyter-execute::
 
-   n = tn.Textnet(corpus.tokenized(), min_docs=1)
+   t = tn.Textnet(corpus.tokenized(), min_docs=1)
 
 We're using `tokenized` with all defaults, so **textnets** is removing stop
 words, applying stemming, and removing punctuation marks, numbers, URLs and the
@@ -58,7 +65,7 @@ Let's take a look:
 
 .. jupyter-execute::
 
-   n.plot(label_nodes=True,
+   t.plot(label_nodes=True,
           show_clusters=True)
 
 The ``show_clusters`` options marks the partitions found by the Leiden
@@ -75,7 +82,7 @@ First, the network of newspapers:
 
 .. jupyter-execute::
 
-    papers = n.project(node_type="doc")
+    papers = t.project(node_type="doc")
     papers.plot(label_nodes=True)
 
 As before in the bipartite network, we can see the *Houston Chronicle*,
@@ -85,13 +92,13 @@ Next, the term network:
 
 .. jupyter-execute::
 
-   words = n.project(node_type="term")
+   words = t.project(node_type="term")
    words.plot(label_nodes=True,
               show_clusters=True)
 
 Aside from visualization, we can also analyze our corpus using network metrics.
 For instance, documents with high betweenness centrality (or "cultural
-betweenness"; :cite:`Bail2016`) might link together themes, thereby stimulating
+betweenness"; :cite:t:`Bail2016`) might link together themes, thereby stimulating
 exchange across symbolic divides.
 
 .. jupyter-execute::
@@ -110,7 +117,7 @@ Small Step" cluster to the "Man on Moon" cluster.
 
 We can produce the term graph plot again, this time scaling nodes according to
 their betweenness centrality, and pruning edges from the graph using "backbone
-extraction" (:cite:`Serrano2009`).
+extraction" :cite:p`Serrano2009`.
 
 We can also use ``color_clusters`` (instead of ``show_clusters``) to color
 nodes according to their partition.
@@ -266,7 +273,7 @@ authored them). We create the textnet from the processed corpus using the
 
 .. code:: python
 
-   n = tn.Textnet(np)
+   t = tn.Textnet(np)
 
 `Textnet` takes a few optional arguments. The most important one is
 ``min_docs``. It determines how many documents a term must appear in to be
@@ -279,7 +286,7 @@ value.
 A boolean argument, ``sublinear``, decides whether to use sublinear
 (logarithmic) scaling when calculating *tf-idf* for edge weights. The default
 is ``True`` because sublinear scaling is considered good practice in the
-information retrieval literature (:cite:`Manning2008`), but there may be good
+information retrieval literature :cite:p:`Manning2008`, but there may be good
 reason to turn it off.
 
 ``doc_attrs`` allows setting additional attributes for documents that become
@@ -288,7 +295,7 @@ represent views of members of different parties, we can set a party attribute.
 
 .. code:: python
 
-   n = tn.Textnet(corpus.tokenized(), doc_attr=df[["party"]].to_dict())
+   t = tn.Textnet(corpus.tokenized(), doc_attr=df[["party"]].to_dict())
 
 Seeing Results
 --------------
@@ -319,7 +326,7 @@ single-mode network of either kind.
 
 .. code:: python
 
-   groups = n.project(node_type="doc")
+   groups = t.project(node_type="doc")
    groups.summary()
 
 The resulting network only contains nodes of the chosen type (``doc`` or
@@ -354,3 +361,27 @@ In addition, you can use `top_cluster_nodes <TextnetBase.top_cluster_nodes>` to
 help interpret the community structure of your textnet. Clusters can either be
 interpreted as latent themes (in the word graph) or as groupings of documents
 using similar words or phrases (in the document graph).
+
+Saving
+------
+
+You can save both the network that underlies a textnet as well as
+visualizations. Assuming you want to save the projected term network, called
+``words``, that we created above, you can do so as follows:
+
+.. code:: python
+
+   words.save_graph("term_network.gml")
+
+This will create a file in the current directory in Graph Modeling Language
+(GML) format. This can then be opened by Pajek, yEd, Gephi and other programs.
+Consult the docs for ``save_graph`` for a list of supported formats.
+
+If instead you want to save a plot of a network, the easiest thing is to pass
+the ``target`` keyword to the `plot` method.
+
+.. code:: python
+
+   words.plot(label_nodes=True, color_clusters=True, target="term_network.svg")
+
+Supported file formats include PNG, EPS and SVG.

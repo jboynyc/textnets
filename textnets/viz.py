@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Implements visualization features."""
+"""Extends visualization features."""
 
 from __future__ import annotations
 

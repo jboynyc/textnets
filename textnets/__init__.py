@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 
-"""Top-level package for Textnets.
+"""
+Top-level package for Textnets.
 
-Citation for this package: :cite:`Boy2020`. Functionality based on :cite:`Bail2016`."""
+Citation for this package: :cite:t:`Boy2020`.
+
+Functionality based on :cite:t:`Bail2016`.
+"""
 
 try:
     from importlib.metadata import version

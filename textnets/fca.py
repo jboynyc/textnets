@@ -10,8 +10,17 @@ from toolz import memoize
 
 
 class FormalContext:
-    """Textnets inherits methods from this class for treating its incidence
-    matrix as a formal context."""
+    """
+    Class providing experimental FCA features.
+
+    Textnets inherits methods from this class for treating its incidence matrix
+    as a formal context.
+
+    Parameters
+    ----------
+    im : pandas.DataFrame
+        Incidence matrix of bipartite graph.
+    """
 
     def __init__(self, im: pd.DataFrame) -> None:
         self.im = im
