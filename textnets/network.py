@@ -46,14 +46,6 @@ except ImportError:
 
     warn("Could not import compiled extension, backbone extraction will be slow.")
 
-#: Tuning parameter (alpha) for inverse edge weights
-#: (see :cite:`Opsahl2010`).
-TUNING_PARAMETER = tn.params.get("tuning_parameter", 0.5)
-
-#: Resolution parameter (gamma) for community detection
-#: (see :cite:`Reichardt2006,Traag2019`).
-RESOLUTION_PARAMETER = tn.params.get("resolution_parameter", 0.1)
-
 
 class TextnetBase:
     """Base class for `Textnet` and `ProjectedTextnet`."""
