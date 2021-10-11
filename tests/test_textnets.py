@@ -77,7 +77,7 @@ def test_corpus_czech(recwarn):
     w1 = recwarn.pop(UserWarning)
     assert str(w1.message) == "Language model 'cs' is not yet installed."
     w2 = recwarn.pop(UserWarning)
-    assert str(w2.message) == "Using basic cs language model."
+    assert str(w2.message) == "Using basic 'cs' language model."
 
 
 def test_corpus_df(testdata):

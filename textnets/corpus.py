@@ -5,22 +5,16 @@
 from __future__ import annotations
 
 import os
+from glob import glob
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Union
 from warnings import warn
 
-try:
-    from functools import cached_property
-except ImportError:
-    from cached_property import cached_property  # type: ignore
-
-from glob import glob
-
-import textnets as tn
 import pandas as pd
 import spacy
+import textnets as tn
 from spacy.tokens.doc import Doc
-from toolz import compose, identity, partial
+from toolz import compose, identity, memoize, partial
 
 #: Mapping of language codes to spacy language model names.
 LANGS = {
@@ -55,13 +49,13 @@ class Corpus:
         Series containing the documents. The index must contain document
         labels.
     lang : str, optional
-        The langugage model to use (default: ``en_core_web_sm``).
+        The langugage model to use (default set by "lang" parameter).
     """
 
     def __init__(
         self,
         data: pd.Series,
-        lang: str = "en_core_web_sm",
+        lang: Optional[str] = None,
     ) -> None:
         if data.empty:
             raise ValueError("Corpus data is empty")
@@ -72,24 +66,41 @@ class Corpus:
             documents = documents[~documents.isna()]
         documents.index = documents.index.set_names(["label"])
         self.documents = documents
-        self._lang = LANGS[lang] if lang in LANGS.keys() else lang
+        if lang is None:
+            lang = tn.params["lang"]
+        self._lang = LANGS.get(lang, lang)
         if self._lang not in spacy.util.get_installed_models():
-            if tn.params.get("autodownload", False):
-                spacy.cli.download(self._lang)  # type: ignore
-            else:
-                warn(f"Language model '{self._lang}' is not yet installed.")
+            warn(f"Language model '{self._lang}' is not yet installed.")
 
-    @cached_property
+    def set_lang(self, lang: str) -> None:
+        """Change the corpus language.
+
+        Parameters
+        ----------
+        lang : str
+          ISO code of spaCy model name to set for this corpus."""
+        self._lang = LANGS.get(lang, lang)
+
+    @property
     def nlp(self) -> pd.Series:
         """Corpus documents with NLP applied."""
+        return self._nlp(self._lang)
+
+    @memoize
+    def _nlp(self, lang: str) -> pd.Series:
         try:
-            nlp = spacy.load(self._lang, disable=["ner", "textcat"])
+            nlp = spacy.load(lang, disable=["ner", "textcat"])
         except OSError as err:
-            if self._lang in LANGS.values():
+            if tn.params["autodownload"]:
+                try:
+                    spacy.cli.download(lang)  # type: ignore
+                    return self._nlp(lang)
+                except (KeyError, OSError):
+                    pass
+            elif lang in LANGS.values():
                 raise err
-            else:
-                nlp = spacy.blank(self._lang)
-                warn(f"Using basic {self._lang} language model.")
+            nlp = spacy.blank(lang)
+            warn(f"Using basic '{lang}' language model.")
         return self.documents.map(_normalize_whitespace).map(nlp)
 
     def __len__(self) -> int:
@@ -103,7 +114,7 @@ class Corpus:
         cls,
         data: pd.DataFrame,
         doc_col: Optional[str] = None,
-        lang: str = "en_core_web_sm",
+        lang: Optional[str] = None,
     ) -> Corpus:
         """
         Create corpus from data frame.
@@ -118,7 +129,7 @@ class Corpus:
             document texts. If none is specified, the first column with strings is
             used.
         lang : str, optional
-            The langugage model to use (default: ``en_core_web_sm``).
+            The langugage model to use (default set by "lang" parameter).
 
         Returns
         -------
@@ -127,7 +138,7 @@ class Corpus:
         object_cols = data.select_dtypes(include="object").columns
         if not doc_col and object_cols.empty:
             raise NoDocumentColumnException("No suitable document column.")
-        elif not doc_col:
+        if not doc_col:
             doc_col = object_cols[0]
         return cls(data.copy()[doc_col], lang=lang)
 
@@ -135,7 +146,7 @@ class Corpus:
     def from_dict(
         cls,
         data: Dict[Any, str],
-        lang: str = "en_core_web_sm",
+        lang: Optional[str] = None,
     ) -> Corpus:
         """
         Create corpus from dictionary.
@@ -146,7 +157,7 @@ class Corpus:
             Dictionary containing the documents as values and document labels
             as keys.
         lang : str, optional
-            The langugage model to use (default: ``en_core_web_sm``).
+            The langugage model to use (default set by "lang" parameter).
 
         Returns
         -------
@@ -159,7 +170,7 @@ class Corpus:
         cls,
         files: Union[str, List[str], List[Path]],
         doc_labels: Optional[List[str]] = None,
-        lang: str = "en_core_web_sm",
+        lang: Optional[str] = None,
     ) -> Corpus:
         """Construct corpus from files.
 
@@ -170,7 +181,7 @@ class Corpus:
         doc_labels : list of str, optional
             Labels for documents (default: file name without suffix).
         lang : str, optional
-            The langugage model to use (default: ``en_core_web_sm``).
+            The langugage model to use (default set by "lang" parameter).
 
         Returns
         -------
@@ -179,15 +190,15 @@ class Corpus:
         if isinstance(files, str):
             files = glob(os.path.expanduser(files))
         files = [Path(f) for f in files]
-        for f in files:
-            if f.expanduser().is_file():
+        for file in files:
+            if file.expanduser().is_file():
                 pass
-            elif f.expanduser().exists():
-                raise IsADirectoryError(f.name)
+            elif file.expanduser().exists():
+                raise IsADirectoryError(file.name)
             else:
-                raise FileNotFoundError(f.name)
+                raise FileNotFoundError(file.name)
         if not doc_labels:
-            doc_labels = [f.stem for f in files]
+            doc_labels = [file.stem for file in files]
         data = pd.DataFrame({"path": files}, index=doc_labels)
         data["raw"] = data["path"].map(_read_file)
         return cls.from_df(data, doc_col="raw", lang=lang)
@@ -198,7 +209,7 @@ class Corpus:
         path: str,
         label_col: Optional[str] = None,
         doc_col: Optional[str] = None,
-        lang: str = "en_core_web_sm",
+        lang: Optional[str] = None,
         **kwargs,
     ) -> Corpus:
         """Read corpus from comma-separated value file.
@@ -214,7 +225,7 @@ class Corpus:
             Column that contains document text (default: None, in which case
             the first text column is used).
         lang : str, optional
-            The langugage model to use (default: ``en_core_web_sm``).
+            The langugage model to use (default set by "lang" parameter).
         kwargs
             Arguments to pass to `pandas.read_csv`.
 
@@ -235,7 +246,7 @@ class Corpus:
         conn: Union[str, object],
         label_col: Optional[str] = None,
         doc_col: Optional[str] = None,
-        lang: str = "en_core_web_sm",
+        lang: Optional[str] = None,
         **kwargs,
     ) -> Corpus:
         """Read corpus from SQL database.
@@ -253,7 +264,7 @@ class Corpus:
             Column that contains document text (default: None, in which case
             the first text column is used).
         lang : str, optional
-            The langugage model to use (default: ``en_core_web_sm``).
+            The langugage model to use (default set by "lang" parameter).
         kwargs
             Arguments to pass to `pandas.read_sql`.
 
@@ -269,7 +280,7 @@ class Corpus:
 
     def tokenized(
         self,
-        remove: List[str] = [],
+        remove: Optional[List[str]] = None,
         stem: bool = True,
         remove_stop_words: bool = True,
         remove_urls: bool = True,
@@ -304,7 +315,9 @@ class Corpus:
             per-document counts (n).
         """
         func = compose(
-            partial(_remove_additional, token_list=remove) if remove else identity,
+            partial(_remove_additional, token_list=remove)
+            if remove is not None
+            else identity,
             _lower if lower else identity,
             _stem if stem else _as_text,
             _remove_stop_words if remove_stop_words else identity,
@@ -315,7 +328,7 @@ class Corpus:
         return self._return_tidy_text(func)
 
     def noun_phrases(
-        self, normalize: bool = False, remove: List[str] = []
+        self, normalize: bool = False, remove: Optional[List[str]] = None
     ) -> pd.DataFrame:
         """Return noun phrases from corpus in tidy format.
 
@@ -333,7 +346,9 @@ class Corpus:
             (term), and per-document counts (n).
         """
         func = compose(
-            partial(_remove_additional, token_list=remove) if remove else identity,
+            partial(_remove_additional, token_list=remove)
+            if remove is not None
+            else identity,
             partial(_noun_chunks, normalize=normalize),
         )
         return self._return_tidy_text(func)
@@ -341,7 +356,7 @@ class Corpus:
     def ngrams(
         self,
         size: int,
-        remove: List[str] = [],
+        remove: Optional[List[str]] = None,
         stem: bool = False,
         remove_stop_words: bool = False,
         remove_urls: bool = False,
@@ -379,7 +394,9 @@ class Corpus:
         """
         func = compose(
             partial(_ngrams, n=size),
-            partial(_remove_additional, token_list=remove) if remove else identity,
+            partial(_remove_additional, token_list=remove)
+            if remove is not None
+            else identity,
             _lower if lower else identity,
             _stem if stem else _as_text,
             _remove_stop_words if remove_stop_words else identity,
@@ -440,9 +457,9 @@ def _read_file(file_name: Path) -> str:
     return file_name.read_bytes().decode("utf-8", "replace").strip()
 
 
-def _normalize_whitespace(s: str) -> str:
+def _normalize_whitespace(string: str) -> str:
     """Replace all whitespace with single spaces."""
-    return " ".join(s.split())
+    return " ".join(string.split())
 
 
 def _noun_chunks(doc: Doc, normalize) -> List[str]:
