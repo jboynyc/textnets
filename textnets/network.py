@@ -65,12 +65,12 @@ class TextnetBase:
         return self.graph.summary()
 
     @property
-    def vs(self) -> ig.VertexSeq:
-        """Iterator of nodes (vertices)."""
+    def nodes(self) -> ig.VertexSeq:
+        """Iterator of nodes."""
         return self.graph.vs
 
     @property
-    def es(self) -> ig.EdgeSeq:
+    def edges(self) -> ig.EdgeSeq:
         """Iterator of edges."""
         return self.graph.es
 
@@ -97,34 +97,34 @@ class TextnetBase:
     @cached_property
     def degree(self) -> pd.Series:
         """Unweighted node degree."""
-        return pd.Series(self.graph.degree(), index=self.vs["id"])
+        return pd.Series(self.graph.degree(), index=self.nodes["id"])
 
     @cached_property
     def strength(self) -> pd.Series:
         """Weighted node degree."""
-        return pd.Series(self.graph.strength(weights="weight"), index=self.vs["id"])
+        return pd.Series(self.graph.strength(weights="weight"), index=self.nodes["id"])
 
     @cached_property
     def betweenness(self) -> pd.Series:
         """Weighted betweenness centrality."""
-        return pd.Series(self.graph.betweenness(weights="cost"), index=self.vs["id"])
+        return pd.Series(self.graph.betweenness(weights="cost"), index=self.nodes["id"])
 
     @cached_property
     def closeness(self) -> pd.Series:
         """Weighted closeness centrality."""
-        return pd.Series(self.graph.closeness(weights="cost"), index=self.vs["id"])
+        return pd.Series(self.graph.closeness(weights="cost"), index=self.nodes["id"])
 
     @cached_property
     def eigenvector_centrality(self) -> pd.Series:
         """Weighted eigenvector centrality."""
         return pd.Series(
-            self.graph.eigenvector_centrality(weights="weight"), index=self.vs["id"]
+            self.graph.eigenvector_centrality(weights="weight"), index=self.nodes["id"]
         )
 
     @cached_property
     def node_types(self) -> List[bool]:
         """Returns boolean list to distinguish node types."""
-        return [True if t == "term" else False for t in self.vs["type"]]
+        return [t == "term" for t in self.nodes["type"]]
 
     @property
     def clusters(self) -> ig.VertexClustering:
@@ -236,7 +236,7 @@ class TextnetBase:
         return (
             pd.DataFrame(
                 {
-                    "nodes": self.vs["id"],
+                    "nodes": self.nodes["id"],
                     "strength": self.strength,
                     "cluster": part.membership,
                 }
@@ -322,7 +322,7 @@ class TextnetBase:
         )
         kwargs.setdefault(
             "edge_label",
-            [f"{e['weight']:.2f}" if label_edges else None for e in self.es],
+            [f"{e['weight']:.2f}" if label_edges else None for e in self.edges],
         )
         kwargs.setdefault("autocurve", True)
         kwargs.setdefault("wrap_labels", True)
@@ -339,14 +339,14 @@ class TextnetBase:
         kwargs.setdefault("edge_label_size", 8)
         if node_label_filter and "vertex_label" in kwargs:
             node_labels = kwargs.pop("vertex_label")
-            filtered_node_labels = map(node_label_filter, self.vs)
+            filtered_node_labels = map(node_label_filter, self.nodes)
             kwargs["vertex_label"] = [
                 lbl if keep else None
                 for lbl, keep in zip(node_labels, filtered_node_labels)
             ]
         if edge_label_filter and "edge_label" in kwargs:
             edge_labels = kwargs.pop("edge_label")
-            filtered_edge_labels = map(edge_label_filter, self.es)
+            filtered_edge_labels = map(edge_label_filter, self.edges)
             kwargs["edge_label"] = [
                 lbl if keep else None
                 for lbl, keep in zip(edge_labels, filtered_edge_labels)
@@ -379,7 +379,7 @@ class TextnetBase:
         return part
 
     def _repr_html_(self) -> str:
-        c: Counter = Counter(self.vs["type"])
+        type_counts: Counter = Counter(self.nodes["type"])
         return f"""
             <style scoped>
               .full-width {{ width: 100%; }}
@@ -393,13 +393,13 @@ class TextnetBase:
                   <svg width="1ex" height="1ex">
                     <rect width="1ex" height="1ex" fill="dodgerblue">
                   </svg>
-                  Docs: {c["doc"]}
+                  Docs: {type_counts["doc"]}
                 </td>
                 <td style="color: orangered;">
                   <svg width="1ex" height="1ex">
                     <circle cx="50%" cy="50%" r="50%" fill="orangered">
                   </svg>
-                  Terms: {c["term"]}
+                  Terms: {type_counts["term"]}
                 </td>
                 <td style="color: darkgray;">
                   <svg width="2ex" height="1ex">
@@ -461,7 +461,9 @@ class Textnet(TextnetBase, FormalContext):
         g = ig.Graph.Incidence(im.to_numpy().tolist(), directed=False)
         g.vs["id"] = np.append(im.index, im.columns).tolist()
         g.es["weight"] = im.to_numpy().flatten()[np.flatnonzero(im)]
-        g.es["cost"] = [1 / pow(w, TUNING_PARAMETER) for w in g.es["weight"]]
+        g.es["cost"] = [
+            1 / pow(w, tn.params["tuning_parameter"]) for w in g.es["weight"]
+        ]
         g.vs["type"] = ["term" if t else "doc" for t in g.vs["type"]]
         if doc_attrs:
             for name, attr in doc_attrs.items():
@@ -498,7 +500,9 @@ class Textnet(TextnetBase, FormalContext):
                 edge["weight"] = 0
             else:
                 edge["weight"] = weights.loc[source, target]
-        g.es["cost"] = [1 / pow(w, TUNING_PARAMETER) for w in g.es["weight"]]
+        g.es["cost"] = [
+            1 / pow(w, tn.params["tuning_parameter"]) for w in g.es["weight"]
+        ]
         return ProjectedTextnet(g)
 
     def plot(
@@ -589,7 +593,7 @@ class Textnet(TextnetBase, FormalContext):
                 or (v["type"] == "term" and label_term_nodes)
                 or label_nodes
                 else None
-                for v in self.vs
+                for v in self.nodes
             ],
         )
         return self._plot(**kwargs)
@@ -683,7 +687,7 @@ class ProjectedTextnet(TextnetBase):
         else:
             to_plot = self
         kwargs.setdefault(
-            "vertex_label", [v["id"] for v in to_plot.vs] if label_nodes else None
+            "vertex_label", [v["id"] for v in to_plot.nodes] if label_nodes else None
         )
         return to_plot._plot(**kwargs)
 
