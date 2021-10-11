@@ -41,6 +41,7 @@ try:
 except ImportError:
 
     def integrand(x: float, degree: int) -> float:
+        """Fallback version of integrand function for the disparity filter."""
         return (1 - x) ** (degree - 2)
 
     warn("Could not import compiled extension, backbone extraction will be slow.")
