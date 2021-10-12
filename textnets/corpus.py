@@ -75,23 +75,14 @@ class Corpus:
         self.documents = documents
         if lang is None:
             lang = tn.params["lang"]
-        self._lang = LANGS.get(lang, lang)
-        if self._lang not in spacy.util.get_installed_models():
-            warn(f"Language model '{self._lang}' is not yet installed.")
-
-    def set_lang(self, lang: str) -> None:
-        """Change the corpus language.
-
-        Parameters
-        ----------
-        lang : str
-          ISO code of spaCy model name to set for this corpus."""
-        self._lang = LANGS.get(lang, lang)
+        self.lang = LANGS.get(lang, lang)
+        if self.lang not in spacy.util.get_installed_models():
+            warn(f"Language model '{self.lang}' is not yet installed.")
 
     @property
     def nlp(self) -> pd.Series:
         """Corpus documents with NLP applied."""
-        return self._nlp(self._lang)
+        return self._nlp(self.lang)
 
     @memoize
     def _nlp(self, lang: str) -> pd.Series:
@@ -453,7 +444,7 @@ class Corpus:
                   Docs: {self.documents.shape[0]}
                 </td>
                 <td style="color: darkgray;">
-                  Lang: {self._lang}
+                  Lang: {self.lang}
                 </td>
               </tr>
             </table>"""
