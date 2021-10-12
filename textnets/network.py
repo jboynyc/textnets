@@ -7,7 +7,6 @@ from __future__ import annotations
 import os
 import random
 from collections import Counter
-from itertools import repeat
 from typing import Callable, Dict, Iterator, List, Optional, Union
 from typing.io import IO
 from warnings import warn
@@ -32,7 +31,7 @@ from scipy.integrate import quad
 from toolz import memoize
 
 from .fca import FormalContext
-from .viz import TextnetPalette, add_opacity
+from .viz import decorate_plot
 
 try:
     from . import _ext  # type: ignore
@@ -263,12 +262,15 @@ class TextnetBase:
             .agg({"nodes": lambda x: ", ".join(x[:n])})["nodes"]
         )
 
+    @decorate_plot
     def _plot(
         self,
+        *,
         show_clusters: Union[bool, ig.VertexClustering] = False,
         color_clusters: Union[bool, ig.VertexClustering] = False,
         node_opacity: Optional[float] = None,
         edge_opacity: Optional[float] = None,
+        label_nodes: bool = False,
         label_edges: bool = False,
         scale_nodes_by: Optional[str] = None,
         node_label_filter: Optional[Callable[[ig.Vertex], bool]] = None,
@@ -276,102 +278,6 @@ class TextnetBase:
         **kwargs,
     ) -> ig.Plot:
         random.seed(tn.params["seed"])
-        if "layout" not in kwargs.keys():
-            layout = self.graph.layout_fruchterman_reingold(
-                weights="weight", grid=False
-            )
-            kwargs.setdefault("layout", layout)
-        if scale_nodes_by:
-            dist = getattr(self, scale_nodes_by)
-            if abs(dist.skew()) < 2:
-                dist **= 2
-            norm = (dist - dist.mean()) / dist.std()
-            mult = 20 / abs(norm).max()
-            sizes = pd.Series([25 + mult * z for z in norm]).fillna(0)
-            kwargs.setdefault("vertex_size", sizes)
-        if show_clusters:
-            if isinstance(show_clusters, ig.VertexClustering):
-                markers = zip(
-                    _cluster_indices(show_clusters),
-                    repeat(add_opacity("limegreen", 0.4)),
-                )
-            else:
-                markers = zip(
-                    _cluster_indices(self.clusters),
-                    repeat(add_opacity("limegreen", 0.4)),
-                )
-            kwargs.setdefault("mark_groups", markers)
-        if color_clusters:
-            if isinstance(color_clusters, ig.VertexClustering):
-                kwargs.setdefault(
-                    "vertex_color",
-                    [
-                        TextnetPalette(color_clusters._len)[c]
-                        for c in color_clusters.membership
-                    ],
-                )
-            else:
-                kwargs.setdefault(
-                    "vertex_color",
-                    [
-                        TextnetPalette(self.clusters._len)[c]
-                        for c in self.clusters.membership
-                    ],
-                )
-        else:
-            kwargs.setdefault(
-                "vertex_color",
-                ["orangered" if v else "dodgerblue" for v in self.node_types],
-            )
-        if node_opacity:
-            kwargs.update(
-                {
-                    "vertex_color": [
-                        add_opacity(c, node_opacity) for c in kwargs["vertex_color"]
-                    ],
-                }
-            )
-        kwargs.setdefault(
-            "vertex_shape", ["circle" if v else "square" for v in self.node_types]
-        )
-        kwargs.setdefault(
-            "vertex_frame_color", ["black" if v else "white" for v in self.node_types]
-        )
-        kwargs.setdefault(
-            "edge_label",
-            [f"{e['weight']:.2f}" if label_edges else None for e in self.edges],
-        )
-        kwargs.setdefault("autocurve", True)
-        kwargs.setdefault("wrap_labels", True)
-        kwargs.setdefault("margin", 50)
-        kwargs.setdefault("edge_color", "lightgray")
-        if edge_opacity:
-            kwargs.update(
-                {
-                    "edge_color": [add_opacity(kwargs["edge_color"], edge_opacity)],
-                }
-            )
-        kwargs.setdefault("vertex_frame_width", 0.2)
-        kwargs.setdefault("vertex_label_size", 10)
-        kwargs.setdefault("edge_label_size", 8)
-        if node_label_filter and "vertex_label" in kwargs:
-            node_labels = kwargs.pop("vertex_label")
-            filtered_node_labels = map(node_label_filter, self.nodes)
-            kwargs["vertex_label"] = [
-                lbl if keep else None
-                for lbl, keep in zip(node_labels, filtered_node_labels)
-            ]
-        if edge_label_filter and "edge_label" in kwargs:
-            edge_labels = kwargs.pop("edge_label")
-            filtered_edge_labels = map(edge_label_filter, self.edges)
-            kwargs["edge_label"] = [
-                lbl if keep else None
-                for lbl, keep in zip(edge_labels, filtered_edge_labels)
-            ]
-        node_opts = [k for k, _ in kwargs.items() if k.startswith("node_")]
-        for opt in node_opts:
-            val = kwargs.pop(opt)
-            kwargs[opt.replace("node_", "vertex_")] = val
         return ig.plot(self.graph, **kwargs)
 
     @memoize
@@ -545,6 +451,7 @@ class Textnet(TextnetBase, FormalContext):
         label_term_nodes: bool = False,
         label_doc_nodes: bool = False,
         label_nodes: bool = False,
+        label_edges: bool = False,
         **kwargs,
     ) -> ig.Plot:
         """
@@ -599,7 +506,7 @@ class Textnet(TextnetBase, FormalContext):
 
         Other Parameters
         ----------------
-        target : str, file, optional
+        target : str or file, optional
             File or path that the plot should be saved to (e.g., ``plot.png``).
         kwargs
             Additional arguments to pass to `igraph.drawing.plot`.
@@ -610,30 +517,6 @@ class Textnet(TextnetBase, FormalContext):
             The plot can be directly displayed in a Jupyter notebook or saved
             as an image file.
         """
-        if bipartite_layout:
-            layout = self.graph.layout_bipartite(types=self.node_types)
-            layout.rotate(90)
-            kwargs.setdefault("wrap_labels", False)
-            kwargs.setdefault("layout", layout)
-        elif sugiyama_layout:
-            layout = self.graph.layout_sugiyama(
-                weights="weight", hgap=50, maxiter=100000
-            )
-            kwargs.setdefault("layout", layout)
-        elif circular_layout:
-            layout = self.graph.layout_reingold_tilford_circular()
-            kwargs.setdefault("layout", layout)
-        kwargs.setdefault(
-            "vertex_label",
-            [
-                v["id"]
-                if (v["type"] == "doc" and label_doc_nodes)
-                or (v["type"] == "term" and label_term_nodes)
-                or label_nodes
-                else None
-                for v in self.nodes
-            ],
-        )
         return self._plot(**kwargs)
 
 
@@ -727,7 +610,7 @@ class ProjectedTextnet(TextnetBase):
 
         Other Parameters
         ----------------
-        target : str, file, optional
+        target : str or file, optional
             File or path that the plot should be saved to (e.g., ``plot.png``).
         kwargs
             Additional arguments to pass to `igraph.drawing.plot`.
@@ -736,9 +619,6 @@ class ProjectedTextnet(TextnetBase):
             to_plot = self.alpha_cut(alpha)
         else:
             to_plot = self
-        kwargs.setdefault(
-            "vertex_label", [v["id"] for v in to_plot.nodes] if label_nodes else None
-        )
         return to_plot._plot(**kwargs)
 
 
@@ -795,9 +675,3 @@ def _giant_component(g: ig.Graph) -> ig.Graph:
     size = max(g.components().sizes())
     pos = g.components().sizes().index(size)
     return g.subgraph(g.components()[pos])
-
-
-def _cluster_indices(vc: ig.VertexClustering) -> Iterator[List[int]]:
-    """Return node indices for each detected cluster."""
-    for n in range(vc._len):
-        yield [i for i, x in enumerate(vc.membership) if x == n]
