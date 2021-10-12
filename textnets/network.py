@@ -25,10 +25,11 @@ import igraph as ig
 import leidenalg as la
 import numpy as np
 import pandas as pd
-import textnets as tn
 from scipy import LowLevelCallable
 from scipy.integrate import quad
 from toolz import memoize
+
+import textnets as tn
 
 from .fca import FormalContext
 from .viz import decorate_plot
@@ -444,17 +445,7 @@ class Textnet(TextnetBase, FormalContext):
         ]
         return ProjectedTextnet(g)
 
-    def plot(
-        self,
-        bipartite_layout: bool = False,
-        sugiyama_layout: bool = False,
-        circular_layout: bool = False,
-        label_term_nodes: bool = False,
-        label_doc_nodes: bool = False,
-        label_nodes: bool = False,
-        label_edges: bool = False,
-        **kwargs,
-    ) -> ig.Plot:
+    def plot(self, **kwargs) -> ig.Plot:
         """
         Plot the bipartite graph.
 

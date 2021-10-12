@@ -110,11 +110,11 @@ def decorate_plot(plot_func):
             ["orangered" if v else "dodgerblue" for v in textnet.node_types],
         )
         kwargs.setdefault(
-            "vertex_shape", ["circle" if v else "square" for v in textnet.node_types]
+            "vertex_shape", ["circle" if t else "square" for t in textnet.node_types]
         )
         kwargs.setdefault(
             "vertex_frame_color",
-            ["black" if v else "white" for v in textnet.node_types],
+            ["black" if t else "white" for t in textnet.node_types],
         )
         # Layouts
         bipartite_layout = kwargs.pop("bipartite_layout", False)
@@ -136,7 +136,7 @@ def decorate_plot(plot_func):
         elif kamada_kawai_layout:
             kwargs["layout"] = graph.layout_kamada_kawai()
         elif drl_layout:
-            kwargs["layout"] = layout = graph.layout_drl(weights="weight")
+            kwargs["layout"] = graph.layout_drl(weights="weight")
         # Node scaling
         scale_nodes_by = kwargs.pop("scale_nodes_by", False)
         if scale_nodes_by:
@@ -146,7 +146,7 @@ def decorate_plot(plot_func):
             norm = (dist - dist.mean()) / dist.std()
             mult = 20 / abs(norm).max()
             sizes = (norm * mult + 25).fillna(0)
-            kwargs.setdefault("vertex_size", sizes)
+            kwargs["vertex_size"] = sizes
         # Node and edge opacity
         node_opacity = kwargs.pop("node_opacity", None)
         edge_opacity = kwargs.pop("edge_opacity", None)
@@ -164,17 +164,20 @@ def decorate_plot(plot_func):
         kwargs.setdefault(
             "vertex_label",
             [
-                v["id"]
-                if (v["type"] == "doc" and label_doc_nodes)
-                or (v["type"] == "term" and label_term_nodes)
+                node["id"]
+                if (node["type"] == "doc" and label_doc_nodes)
+                or (node["type"] == "term" and label_term_nodes)
                 or label_nodes
                 else None
-                for v in textnet.nodes
+                for node in textnet.nodes
             ],
         )
         kwargs.setdefault(
             "edge_label",
-            [f"{e['weight']:.2f}" if label_edges else None for e in textnet.edges],
+            [
+                f"{edge['weight']:.2f}" if label_edges else None
+                for edge in textnet.edges
+            ],
         )
         # Node and edge label filters
         node_label_filter = kwargs.pop("node_label_filter", False)
