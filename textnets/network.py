@@ -90,7 +90,7 @@ class TextnetBase:
 
         Parameters
         ----------
-        target : str, file
+        target : str or file
             File or path that the graph should be written to.
         format : {"dot", "edgelist", "gml", "graphml", "pajek", ...}, optional
             Optionally specify the desired format (otherwise it is derived from
