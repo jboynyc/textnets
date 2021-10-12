@@ -50,6 +50,13 @@ class Corpus:
         labels.
     lang : str, optional
         The langugage model to use (default set by "lang" parameter).
+
+    Attributes
+    ----------
+    documents : Series
+        The corpus documents.
+    lang : str
+        The language model used (ISO code or spaCy model name).
     """
 
     def __init__(

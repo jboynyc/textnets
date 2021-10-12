@@ -378,7 +378,7 @@ This will create a file in the current directory in Graph Modeling Language
 Consult the docs for ``save_graph`` for a list of supported formats.
 
 If instead you want to save a plot of a network, the easiest thing is to pass
-the ``target`` keyword to the `plot` method.
+the ``target`` keyword to the `Textnet.plot` method.
 
 .. code:: python
 

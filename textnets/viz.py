@@ -94,7 +94,7 @@ def decorate_plot(plot_func):
                     TextnetPalette(textnet.clusters._len)[c]
                     for c in textnet.clusters.membership
                 ]
-        # Some sane defaults
+        # Default appearance
         kwargs.setdefault("autocurve", True)
         kwargs.setdefault("edge_color", "lightgray")
         kwargs.setdefault(
@@ -193,12 +193,11 @@ def decorate_plot(plot_func):
                 lbl if keep else None
                 for lbl, keep in zip(edge_labels, filtered_edge_labels)
             ]
-        # Rewrite remaining node_* arguments as vertex_* arguments
+        # Rewrite any remaining node_* arguments as vertex_* arguments
         node_opts = [k for k, _ in kwargs.items() if k.startswith("node_")]
         for opt in node_opts:
             val = kwargs.pop(opt)
             kwargs[opt.replace("node_", "vertex_")] = val
-        print(f"{args=} {kwargs=}")
         return plot_func(*args, **kwargs)
 
     return wrapper
