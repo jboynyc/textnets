@@ -92,8 +92,9 @@ class TextnetBase:
         ----------
         target : str, file
             File or path that the graph should be written to.
-        format : {"dot", "edgelist", "gml", "graphml", "graphmlz", "net", "pajek", "svg"}, optional
-            Optionally specify the desired format (otherwise it is derived from the file suffix).
+        format : {"dot", "edgelist", "gml", "graphml", "pajek", ...}, optional
+            Optionally specify the desired format (otherwise it is derived from
+            the file suffix).
         """
         if not format:
             if hasattr(target, "name"):
