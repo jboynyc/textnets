@@ -456,6 +456,9 @@ class Textnet(TextnetBase, FormalContext):
     min_docs : int, optional
         Minimum number of documents a term must appear in to be included
         in the network (default: 2).
+    connected : bool, optional
+        Keep only the largest connected component of the network (default:
+        False).
 
     Attributes
     ----------
@@ -475,6 +478,7 @@ class Textnet(TextnetBase, FormalContext):
         sublinear: bool = True,
         doc_attrs: Optional[Dict[str, Dict[str, str]]] = None,
         min_docs: int = 2,
+        connected: bool = False,
     ) -> None:
         if tidy_text.empty:
             raise ValueError("DataFrame is empty")
@@ -491,7 +495,10 @@ class Textnet(TextnetBase, FormalContext):
         if doc_attrs:
             for name, attr in doc_attrs.items():
                 g.vs[name] = [attr.get(doc) for doc in g.vs["id"]]
-        self.graph = g
+        if connected:
+            self.graph = _giant_component(g)
+        else:
+            self.graph = g
 
     def project(self, node_type: Literal["doc", "term"]) -> ProjectedTextnet:
         """
