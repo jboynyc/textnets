@@ -59,8 +59,9 @@ class TextnetBase:
     def __init__(self, graph: ig.Graph) -> None:
         self.graph = graph
 
+    @property
     def summary(self) -> str:
-        """Return summary of underlying graph."""
+        """Summary of underlying graph."""
         return self.graph.summary()
 
     @property
