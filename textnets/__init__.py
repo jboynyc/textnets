@@ -26,16 +26,10 @@ __version__ = version(__name__)
 
 
 def _repr_html_():
-    import igraph
-    import leidenalg
     import spacy
 
-    packages = ["igraph", "leidenalg", "spacy"]
-    package_versions = [
-        igraph.__version__,
-        leidenalg.version,
-        spacy.__version__,
-    ]
+    packages = ["python-igraph", "leidenalg", "spacy"]
+    package_versions = map(version, packages)
     language_models = spacy.util.get_installed_models()
     model_versions = map(spacy.util.get_package_version, language_models)
     pairs = dict(
