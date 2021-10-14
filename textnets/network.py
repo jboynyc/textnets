@@ -415,7 +415,9 @@ class Textnet(TextnetBase, FormalContext):
         else:
             self.graph = g
 
-    def project(self, node_type: Literal["doc", "term"]) -> ProjectedTextnet:
+    def project(
+        self, *, node_type: Literal["doc", "term"], connected: Optional[bool] = False
+    ) -> ProjectedTextnet:
         """
         Project to one-mode network.
 
@@ -423,6 +425,9 @@ class Textnet(TextnetBase, FormalContext):
         ----------
         node_type : {"doc", "term"}
             Either ``doc`` or ``term``, depending on desired node type.
+        connected : bool, optional
+            Keep only the largest connected component of the projected network
+            (default: False).
 
         Returns
         -------
@@ -450,6 +455,8 @@ class Textnet(TextnetBase, FormalContext):
         g.es["cost"] = [
             1 / pow(w, tn.params["tuning_parameter"]) for w in g.es["weight"]
         ]
+        if connected:
+            g = _giant_component(g)
         return ProjectedTextnet(g)
 
     def plot(self, **kwargs) -> ig.Plot:
