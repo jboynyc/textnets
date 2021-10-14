@@ -5,9 +5,9 @@ dependencies:
   - python==3.8.*
   - python-igraph==0.9.*
   - leidenalg==0.8.*
-  - pandas==1.2.*
-  - spacy==3.0.*
-  - spacy-model-en_core_web_sm==3.0.0
+  - pandas==1.3.*
+  - spacy==3.1.*
+  - spacy-model-en_core_web_sm==3.1.0
   - toolz
   - jupyter_sphinx
   - sphinx
