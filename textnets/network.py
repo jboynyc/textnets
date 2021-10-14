@@ -25,11 +25,10 @@ import igraph as ig
 import leidenalg as la
 import numpy as np
 import pandas as pd
+import textnets as tn
 from scipy import LowLevelCallable
 from scipy.integrate import quad
 from toolz import memoize
-
-import textnets as tn
 
 from .fca import FormalContext
 from .viz import decorate_plot
