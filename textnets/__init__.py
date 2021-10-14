@@ -25,7 +25,7 @@ __email__ = "jboy@bius.moe"
 __version__ = version(__name__)
 
 
-def _repr_html_():
+def _repr_html_() -> str:
     import spacy
 
     packages = ["python-igraph", "leidenalg", "spacy"]

@@ -7,7 +7,7 @@ from __future__ import annotations
 from functools import wraps
 from itertools import repeat
 from math import ceil
-from typing import Iterator, List
+from typing import Callable, Iterator, List
 
 import igraph as ig
 from igraph.drawing.colors import (
@@ -61,11 +61,11 @@ def add_opacity(color: str, alpha: float) -> tuple:
     return tuple([*color_name_to_rgba(color)[:3], alpha])
 
 
-def decorate_plot(plot_func):
+def decorate_plot(plot_func: Callable) -> Callable:
     """Style the plot produced by igraph's plot function."""
 
     @wraps(plot_func)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args, **kwargs) -> ig.Plot:
         textnet = args[0]
         graph = textnet.graph
         # Marking and coloring clusters

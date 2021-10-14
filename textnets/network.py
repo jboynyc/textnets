@@ -303,6 +303,13 @@ class TextnetBase:
             )
         return part
 
+    def __repr__(self) -> str:
+        type_counts: Counter = Counter(self.nodes["type"])
+        return (
+            f"""<{self.__class__.__name__} with {type_counts["doc"]} documents, """
+            + f"""{type_counts["term"]} terms, and {self.ecount()} edges>"""
+        )
+
     def _repr_html_(self) -> str:
         type_counts: Counter = Counter(self.nodes["type"])
         return f"""
@@ -356,7 +363,7 @@ class Textnet(TextnetBase, FormalContext):
     ----------
     tidy_text : DataFrame
         DataFrame of tokens with per-document counts, as created by
-        `Corpus.tokenzied` `Corpus.ngrams`, and `Corpus.noun_phrases`.
+        `Corpus.tokenized` `Corpus.ngrams`, and `Corpus.noun_phrases`.
     sublinear : bool, optional
         Apply sublinear scaling to *tf-idf* values (default: True).
     doc_attrs : dict of dict, optional

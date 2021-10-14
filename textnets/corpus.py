@@ -419,6 +419,12 @@ class Corpus:
             .set_index("label")
         )
 
+    def __repr__(self) -> str:
+        return (
+            f"<{self.__class__.__name__} with {len(self.documents)} documents "
+            + f"using language model '{self.lang}'>"
+        )
+
     def _repr_html_(self) -> str:
         tbl = pd.DataFrame(self.documents).to_html(
             header=False,
@@ -461,7 +467,7 @@ def _normalize_whitespace(string: str) -> str:
     return " ".join(string.split())
 
 
-def _noun_chunks(doc: Doc, normalize) -> List[str]:
+def _noun_chunks(doc: Doc, normalize: bool) -> List[str]:
     """Return only the noun chunks in lower case."""
     return [
         (chunk.lemma_ if normalize else " ".join([t.lower_ for t in chunk]))
