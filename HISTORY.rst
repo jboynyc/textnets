@@ -2,7 +2,7 @@
 History
 =======
 
-0.6.0 (unreleased)
+0.6.0 (2021-10-14)
 ------------------
 * Adds `params` as a container for global parameters. This makes it possible to
   fix the random seed and to change the resolution parameter for the community
