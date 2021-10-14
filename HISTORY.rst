@@ -4,11 +4,11 @@ History
 
 0.6.0 (unreleased)
 ------------------
-* Adds ``textnets.params`` as a container for global parameters. This makes it
-  possible to fix the random seed and to change the resolution parameter for
-  the community detection algorithm, among others. If the parameter
-  ``autodownload`` is set to true, **textnets** will attempt to download all
-  required spaCy language models automatically.
+* Adds `params` as a container for global parameters. This makes it possible to
+  fix the random seed and to change the resolution parameter for the community
+  detection algorithm, among others. If the parameter ``autodownload`` is set
+  to true, **textnets** will attempt to download all required spaCy language
+  models automatically.
 * Added HTML representation for the root module that displays versions of key
   dependencies.
 * Added back string representations of `Corpus` and `TextnetBase`-derived
