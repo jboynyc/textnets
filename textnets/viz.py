@@ -56,11 +56,6 @@ class TextnetPalette(PrecalculatedPalette):
         super().__init__(colors)
 
 
-def add_opacity(color: str, alpha: float) -> tuple:
-    """Turns a color name into a RGBA tuple with specified opacity."""
-    return tuple([*color_name_to_rgba(color)[:3], alpha])
-
-
 def decorate_plot(plot_func: Callable) -> Callable:
     """Style the plot produced by igraph's plot function."""
 
@@ -75,12 +70,12 @@ def decorate_plot(plot_func: Callable) -> Callable:
             if isinstance(show_clusters, ig.VertexClustering):
                 markers = zip(
                     _cluster_node_indices(show_clusters),
-                    repeat(add_opacity("limegreen", 0.4)),
+                    repeat(_add_opacity("limegreen", 0.4)),
                 )
             else:
                 markers = zip(
                     _cluster_node_indices(textnet.clusters),
-                    repeat(add_opacity("limegreen", 0.4)),
+                    repeat(_add_opacity("limegreen", 0.4)),
                 )
             kwargs.setdefault("mark_groups", markers)
         if color_clusters:
@@ -152,10 +147,10 @@ def decorate_plot(plot_func: Callable) -> Callable:
         edge_opacity = kwargs.pop("edge_opacity", None)
         if node_opacity is not None:
             kwargs["vertex_color"] = [
-                add_opacity(c, node_opacity) for c in kwargs["vertex_color"]
+                _add_opacity(c, node_opacity) for c in kwargs["vertex_color"]
             ]
         if edge_opacity is not None:
-            kwargs["edge_color"] = [add_opacity(kwargs["edge_color"], edge_opacity)]
+            kwargs["edge_color"] = [_add_opacity(kwargs["edge_color"], edge_opacity)]
         # Node and edge labels
         label_doc_nodes = kwargs.pop("label_doc_nodes", False)
         label_term_nodes = kwargs.pop("label_term_nodes", False)
@@ -204,6 +199,11 @@ def decorate_plot(plot_func: Callable) -> Callable:
         return plot_func(*args, **kwargs)
 
     return wrapper
+
+
+def _add_opacity(color: str, alpha: float) -> tuple:
+    """Turns a color name into a RGBA tuple with specified opacity."""
+    return tuple([*color_name_to_rgba(color)[:3], alpha])
 
 
 def _cluster_node_indices(vc: ig.VertexClustering) -> Iterator[List[int]]:
