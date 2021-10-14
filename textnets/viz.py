@@ -9,6 +9,7 @@ from itertools import repeat
 from math import ceil
 from typing import Callable, Iterator, List
 
+import textnets as tn
 import igraph as ig
 from igraph.drawing.colors import (
     PrecalculatedPalette,
@@ -60,8 +61,7 @@ def decorate_plot(plot_func: Callable) -> Callable:
     """Style the plot produced by igraph's plot function."""
 
     @wraps(plot_func)
-    def wrapper(*args, **kwargs) -> ig.Plot:
-        textnet = args[0]
+    def wrapper(textnet: tn.network.TextnetBase, **kwargs) -> ig.Plot:
         graph = textnet.graph
         # Marking and coloring clusters
         show_clusters = kwargs.pop("show_clusters", False)
@@ -92,14 +92,14 @@ def decorate_plot(plot_func: Callable) -> Callable:
         # Default appearance
         kwargs.setdefault("autocurve", True)
         kwargs.setdefault("edge_color", "lightgray")
+        kwargs.setdefault("edge_label_size", 8)
+        kwargs.setdefault("margin", 50)
+        kwargs.setdefault("vertex_frame_width", 0.2)
+        kwargs.setdefault("vertex_label_size", 10)
+        kwargs.setdefault("wrap_labels", True)
         kwargs.setdefault(
             "layout", graph.layout_fruchterman_reingold(weights="weight", grid=False)
         )
-        kwargs.setdefault("margin", 50)
-        kwargs.setdefault("wrap_labels", True)
-        kwargs.setdefault("vertex_frame_width", 0.2)
-        kwargs.setdefault("vertex_label_size", 10)
-        kwargs.setdefault("edge_label_size", 8)
         kwargs.setdefault(
             "vertex_color",
             ["orangered" if v else "dodgerblue" for v in textnet.node_types],
@@ -196,7 +196,7 @@ def decorate_plot(plot_func: Callable) -> Callable:
         for opt in node_opts:
             val = kwargs.pop(opt)
             kwargs[opt.replace("node_", "vertex_")] = val
-        return plot_func(*args, **kwargs)
+        return plot_func(textnet, **kwargs)
 
     return wrapper
 
