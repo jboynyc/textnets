@@ -2,9 +2,20 @@
 History
 =======
 
-dev branch (unreleased)
------------------------
+0.6.0 (unreleased)
+------------------
+* Adds ``textnets.params`` as a container for global parameters. This makes it
+  possible to fix the random seed and to change the resolution parameter for
+  the community detection algorithm, among others. If the parameter
+  ``autodownload`` is set to true, **textnets** will attempt to download all
+  required spaCy language models automatically.
+* Added HTML representation for the root module that displays versions of key
+  dependencies.
+* Added back string representations of `Corpus` and `TextnetBase`-derived
+  classes.
 * Adds a `Corpus.from_dict` method.
+* `Corpus` now exposes the ``lang`` attribute, so the corpus language can be
+  set after initialization of a class instance.
 * The bipartite layout optionally used by `Textnet.plot` is now horizontal, so
   node types are arranged in columns rather than rows. That way node labels are
   less likely to overlap.
@@ -12,10 +23,17 @@ dev branch (unreleased)
   of nodes. Defaults to ``False``.
 * Adds ``node_opacity`` and ``edge_opacity`` arguments for `Textnet.plot`.
 * Makes polygons marking clusters more visually appealing by adding opacity.
-* Probably fixes a bug that would occassionally result in an exception being
-  raised during plotting (``IndexError: color index too large``).
+* Probably fixes `a bug <https://github.com/jboynyc/textnets/issues/30>`_ that
+  would occassionally result in an exception being raised during plotting
+  (``IndexError: color index too large``).
+* When initializing an instance of the `Textnet` class, you can now optionally
+  pass the argument ``connected=True``, in which case only the largest
+  component of the underlying network is kept. When creating a one-mode
+  projection using `Textnet.project`, a ``connected`` argument can also be
+  passed.
 * Adds `TextnetBase.save_graph` to save the underlying graph (for instance, for
   further processing in Gephi).
+* Improved and extended documentation and docstrings.
 * Update dependencies.
 
 0.5.4 (2021-09-24)
