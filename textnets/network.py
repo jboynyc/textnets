@@ -381,10 +381,6 @@ class Textnet(TextnetBase, FormalContext):
         Direct access to the underlying igraph object.
     im : `pandas.DataFrame`
         Incidence matrix of bipartite graph.
-
-    See Also
-    --------
-    `TextnetBase`
     """
 
     def __init__(
@@ -544,10 +540,6 @@ class ProjectedTextnet(TextnetBase):
     ----------
     graph : `igraph.Graph`
         Direct access to the igraph object.
-
-    See Also
-    --------
-    `TextnetBase`
     """
 
     def alpha_cut(self, alpha: float) -> ProjectedTextnet:
@@ -603,10 +595,6 @@ class ProjectedTextnet(TextnetBase):
             File or path that the plot should be saved to (e.g., ``plot.png``).
         kwargs
             Additional arguments to pass to `igraph.drawing.plot`.
-
-        See Also
-        --------
-        `Textnet.plot`
         """
         if alpha is not None:
             to_plot = self.alpha_cut(alpha)

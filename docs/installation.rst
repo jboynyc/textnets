@@ -14,7 +14,8 @@ it can either be installed using `conda`_ or `pip`_.
 
 .. note::
 
-   Please note that **textnets** requires Python 3.7 or newer to run.
+   Please note that **textnets** requires Python 3.7 or newer to run. It has
+   not been tested with Python 3.10 yet.
 
 Using conda
 -----------
@@ -58,6 +59,13 @@ manger to install **textnets**. In a `virtual environment`_, run::
 Plotting
 --------
 
+.. sidebar::
+
+    In rare cases you may have to `install CFFI`_ separately for plotting to
+    work.
+
+.. _install CFFI: https://cffi.readthedocs.io/en/latest/installation.html
+
 **textnets** installs the `Cairo`_ graphics library as a dependency for
 plotting. If you are using a Mac without Anaconda, you will probably have to
 install Cairo separately using the `Homebrew`_ package manager.
@@ -65,16 +73,18 @@ install Cairo separately using the `Homebrew`_ package manager.
 .. _Cairo: https://www.cairographics.org/
 .. _Homebrew: https://formulae.brew.sh/formula/cairo
 
-In rare cases you may also have to `install CFFI`_ separately for plotting to
-work.
-
-.. _install CFFI: https://cffi.readthedocs.io/en/latest/installation.html
-
 Language Support
 ----------------
 
-Most likely you also have to install an appropriate `language model`_ by
-issuing a command like::
+**textnets** can try to download the `language models`_ you need "on the fly"
+if you set the ``autodownload`` parameter to ``True``. (It is off by default
+because language models are frequently many hundreds of megabytes in size and
+probably shouldn't be downloaded on a metered connection.)
+
+>>> import textnets as tn
+>>> tn.params["autodownload"] = True
+
+You can also install the models manually by issuing a command like::
 
    $ python -m spacy download en_core_web_sm
 
@@ -83,7 +93,7 @@ Run the following command to check::
 
    $ python -m spacy validate
 
-.. _`language model`: https://spacy.io/usage/models#download
+.. _`language models`: https://spacy.io/usage/models#download
 
 If there are no language models available for your corpus language, there may
 be some `basic support <https://spacy.io/usage/models#languages>`_. Even in

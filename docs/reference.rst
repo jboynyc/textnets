@@ -6,7 +6,6 @@ textnets
 ========
 
 .. automodule:: textnets
-   :members:
    :undoc-members:
    :show-inheritance:
 
