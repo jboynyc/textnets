@@ -2,10 +2,10 @@
 
 """Example data for feature demonstrations."""
 
-import pandas as pd
+from pandas import Series
 
 #: Example dataset with newspaper headlines about the Apollo 11 landing.
-moon_landing = pd.Series(
+moon_landing = Series(
     [
         "3:56 am: Man Steps On to the Moon",
         "Men Walk on Moon -- Astronauts Land on Plain, Collect Rocks, Plant Flag",
@@ -30,7 +30,7 @@ moon_landing = pd.Series(
 
 #: Example dataset with statements by five major German parties on digitization
 #: of higher education during the 2021 Bundestag election.
-digitalisierung = pd.Series(
+digitalisierung = Series(
     {
         "cdu/csu": """Mit der Bund-Länder-Vereinbarung „Innovation in der
             Hochschullehre“ unterstützen CDU und CSU die qualitative
