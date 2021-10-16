@@ -265,16 +265,6 @@ class TextnetBase:
     @decorate_plot
     def _plot(
         self,
-        *,
-        show_clusters: Union[bool, ig.VertexClustering] = False,
-        color_clusters: Union[bool, ig.VertexClustering] = False,
-        node_opacity: Optional[float] = None,
-        edge_opacity: Optional[float] = None,
-        label_nodes: bool = False,
-        label_edges: bool = False,
-        scale_nodes_by: Optional[str] = None,
-        node_label_filter: Optional[Callable[[ig.Vertex], bool]] = None,
-        edge_label_filter: Optional[Callable[[ig.Edge], bool]] = None,
         **kwargs,
     ) -> ig.Plot:
         random.seed(tn.params["seed"])
@@ -453,7 +443,6 @@ class Textnet(TextnetBase, FormalContext):
             g = _giant_component(g)
         return ProjectedTextnet(g)
 
-    def plot(self, **kwargs) -> ig.Plot:
     def save(self, target: os.PathLike) -> None:
         """
         Save a textnet to file.
@@ -592,6 +581,9 @@ class Textnet(TextnetBase, FormalContext):
             The plot can be directly displayed in a Jupyter notebook or saved
             as an image file.
         """
+        args = locals()
+        del args["self"], args["kwargs"]
+        kwargs.update(args)
         return self._plot(**kwargs)
 
 
@@ -660,6 +652,10 @@ class ProjectedTextnet(TextnetBase):
             File or path that the plot should be saved to (e.g., ``plot.png``).
         kwargs
             Additional arguments to pass to `igraph.drawing.plot`.
+
+        See Also
+        --------
+        Parameters for `Textnet.plot`.
         """
         if alpha is not None:
             to_plot = self.alpha_cut(alpha)
