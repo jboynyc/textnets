@@ -24,7 +24,7 @@ History
 * Adds ``node_opacity`` and ``edge_opacity`` arguments for `Textnet.plot`.
 * Makes polygons marking clusters more visually appealing by adding opacity.
 * Probably fixes `a bug <https://github.com/jboynyc/textnets/issues/30>`_ that
-  would occassionally result in an exception being raised during plotting
+  would occasionally result in an exception being raised during plotting
   (``IndexError: color index too large``).
 * When initializing an instance of the `Textnet` class, you can now optionally
   pass the argument ``connected=True``, in which case only the largest

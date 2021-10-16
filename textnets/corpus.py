@@ -66,7 +66,7 @@ class Corpus:
         lang: Optional[str] = None,
     ) -> None:
         if data.empty:
-            raise ValueError("Corpus data is empty")
+            raise ValueError("Corpus data is empty.")
         documents = data.copy()
         if documents.isna().any():
             missings = documents.isna().sum()
