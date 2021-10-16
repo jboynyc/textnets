@@ -18,7 +18,13 @@ from .config import params  # noqa: F401
 from .corpus import Corpus  # noqa: F401
 from .network import Textnet  # noqa: F401
 
-__all__ = ["Corpus", "Textnet", "params", "examples"]
+__all__ = ["Corpus", "load_corpus", "Textnet", "load_textnet", "params", "examples"]
+
+#: Load a corpus from file.
+load_corpus = Corpus.load
+
+#: Load a textnet from file.
+load_textnet = Textnet.load
 
 __author__ = "John D. Boy"
 __email__ = "jboy@bius.moe"

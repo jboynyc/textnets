@@ -110,6 +110,30 @@ def test_corpus_sql(testdata):
     assert len(c.documents) == 7
 
 
+def test_corpus_save_and_load(corpus, tmpdir):
+    """Test roundtrip of saving and loading a corpus from file."""
+    out = tmpdir.join("out.corpus")
+    corpus.save(out)
+    loaded = tn.load_corpus(out)
+    assert all(corpus.documents == loaded.documents)
+    assert corpus.lang == loaded.lang
+
+
+def test_textnet_save_and_load(corpus, tmpdir):
+    """Test roundtrip of saving and loading a textnet from file."""
+    out = tmpdir.join("out.textnet")
+    net = tn.Textnet(
+        corpus.tokenized(),
+        connected=True,
+        doc_attrs={"test": {"New York Times": 1, "Los Angeles Times": 3}},
+    )
+    net.save(out)
+    loaded = tn.load_textnet(out)
+    assert net.nodes["id"] == loaded.nodes["id"]
+    assert net.edges["weight"] == loaded.edges["weight"]
+    assert net.summary == loaded.summary
+
+
 def test_textnet(corpus):
     """Test Textnet class using sample data."""
 

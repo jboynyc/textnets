@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import os
+import sqlite3
 from glob import glob
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Union
@@ -276,6 +277,51 @@ class Corpus:
             data = data.set_index(data.columns[0])
         return cls.from_df(data, doc_col=doc_col, lang=lang)
 
+    def save(self, target: os.PathLike) -> None:
+        """
+        Save a corpus to file.
+
+        Parameters
+        ----------
+        target : str or path
+            File to save the corpus to. If the file exists, it will be
+            overwritten.
+        """
+        conn = sqlite3.connect(Path(target))
+        meta = {"lang": self.lang}
+        with conn as c:
+            self.documents.to_sql("corpus_documents", c, if_exists="replace")
+            pd.Series(meta, name="values").to_sql(
+                "corpus_meta", c, if_exists="replace", index_label="keys"
+            )
+
+    @classmethod
+    def load(cls, source: os.PathLike) -> Corpus:
+        """
+        Load a corpus from file.
+
+        Parameters
+        ----------
+        source : str or path
+            File to read the corpus from. This should be a file created by
+            `Corpus.save`.
+
+        Returns
+        -------
+        `Corpus`
+        """
+        if not Path(source).exists():
+            raise FileNotFoundError(f"File '{source}' does not exist.")
+        conn = sqlite3.connect(Path(source))
+        with conn as c:
+            documents = pd.read_sql(
+                "SELECT * FROM corpus_documents", c, index_col="label"
+            )
+            meta = pd.read_sql("SELECT * FROM corpus_meta", c, index_col="keys")[
+                "values"
+            ]
+        return cls.from_df(documents, lang=meta["lang"])
+
     def tokenized(
         self,
         remove: Optional[List[str]] = None,
@@ -405,7 +451,7 @@ class Corpus:
         return self._return_tidy_text(func)
 
     def _return_tidy_text(self, func: Callable[[Doc], List[str]]) -> pd.DataFrame:
-        return (
+        df = (
             pd.melt(
                 self.nlp.map(func).apply(pd.Series).reset_index(),
                 id_vars="label",
@@ -417,6 +463,7 @@ class Corpus:
             .reset_index()
             .set_index("label")
         )
+        return TidyText(df)
 
     def __repr__(self) -> str:
         return (
@@ -526,3 +573,7 @@ def _ngrams(doc: List[str], n: int) -> List[str]:
 
 class NoDocumentColumnException(Exception):
     """Raised if no suitable document column is specified or found."""
+
+
+class TidyText(pd.DataFrame):
+    """Collection of tokens with per-document counts."""

@@ -5,8 +5,12 @@
 from __future__ import annotations
 
 import os
+import json
 import random
+import sqlite3
+import warnings
 from collections import Counter
+from pathlib import Path
 from typing import Callable, Dict, Iterator, List, Optional, Union
 from typing.io import IO
 from warnings import warn
@@ -30,6 +34,7 @@ from scipy import LowLevelCallable
 from scipy.integrate import quad
 from toolz import memoize
 
+from .corpus import TidyText
 from .fca import FormalContext
 from .viz import decorate_plot
 
@@ -360,55 +365,55 @@ class Textnet(TextnetBase, FormalContext):
 
     Parameters
     ----------
-    tidy_text : DataFrame
-        DataFrame of tokens with per-document counts, as created by
-        `Corpus.tokenized` `Corpus.ngrams`, and `Corpus.noun_phrases`.
+    data: DataFrame
+        * DataFrame of tokens with per-document counts, as created by
+          `Corpus.tokenized` `Corpus.ngrams`, and `Corpus.noun_phrases`.
+        * An incidence matrix relating documents to terms.
     sublinear : bool, optional
         Apply sublinear scaling to *tf-idf* values (default: True).
-    doc_attrs : dict of dict, optional
-        Additional attributes of document nodes.
     min_docs : int, optional
         Minimum number of documents a term must appear in to be included
         in the network (default: 2).
     connected : bool, optional
         Keep only the largest connected component of the network (default:
         False).
+    doc_attrs : dict of dict, optional
+        Additional attributes of document nodes.
 
     Attributes
     ----------
-    graph : `igraph.Graph`
-        Direct access to the underlying igraph object.
-    im : `pandas.DataFrame`
-        Incidence matrix of bipartite graph.
+    im : `IncidenceMatrix`
+        Incidence matrix of the bipartite graph.
     """
 
     def __init__(
         self,
-        tidy_text: pd.DataFrame,
+        data: pd.DataFrame,
         sublinear: bool = True,
-        doc_attrs: Optional[Dict[str, Dict[str, str]]] = None,
         min_docs: int = 2,
         connected: bool = False,
+        doc_attrs: Optional[Dict[str, Dict[str, str]]] = None,
     ) -> None:
-        if tidy_text.empty:
-            raise ValueError("DataFrame is empty")
-        df = _tf_idf(tidy_text, sublinear, min_docs)
-        im = df.pivot(values="tf_idf", columns="term").fillna(0)
-        self.im = im
-        g = ig.Graph.Incidence(im.to_numpy().tolist(), directed=False)
-        g.vs["id"] = np.append(im.index, im.columns).tolist()
-        g.es["weight"] = im.to_numpy().flatten()[np.flatnonzero(im)]
-        g.es["cost"] = [
-            1 / pow(w, tn.params["tuning_parameter"]) for w in g.es["weight"]
-        ]
-        g.vs["type"] = ["term" if t else "doc" for t in g.vs["type"]]
-        if doc_attrs:
-            for name, attr in doc_attrs.items():
+        self._connected = connected
+        self._doc_attrs = doc_attrs
+        if data.empty:
+            raise ValueError("Data is empty.")
+        if isinstance(data, IncidenceMatrix):
+            self.im = data
+        elif isinstance(data, TidyText) or isinstance(data, pd.DataFrame):
+            self.im = _im_from_tidy_text(data, sublinear, min_docs)
+
+    @cached_property
+    def graph(self):
+        """Direct access to the underlying igraph object."""
+        g = _graph_from_im(self.im)
+        if self._doc_attrs:
+            for name, attr in self._doc_attrs.items():
                 g.vs[name] = [attr.get(doc) for doc in g.vs["id"]]
-        if connected:
-            self.graph = _giant_component(g)
+        if self._connected:
+            return _giant_component(g)
         else:
-            self.graph = g
+            return g
 
     def project(
         self, *, node_type: Literal["doc", "term"], connected: Optional[bool] = False
@@ -455,6 +460,73 @@ class Textnet(TextnetBase, FormalContext):
         return ProjectedTextnet(g)
 
     def plot(self, **kwargs) -> ig.Plot:
+    def save(self, target: os.PathLike) -> None:
+        """
+        Save a textnet to file.
+
+        Parameters
+        ----------
+        target : str or path
+            File to save the corpus to. If the file exists, it will be
+            overwritten.
+        """
+        conn = sqlite3.connect(Path(target))
+        meta = {"connected": self._connected, "doc_attrs": json.dumps(self._doc_attrs)}
+        with conn as c, warnings.catch_warnings():
+            warnings.simplefilter("ignore")  # catch warning from pandas.to_sql
+            self.im.T.to_sql("textnet_im", c, if_exists="replace")
+            pd.Series(meta, name="values").to_sql(
+                "textnet_meta", c, if_exists="replace", index_label="keys"
+            )
+
+    @classmethod
+    def load(cls, source: os.PathLike) -> Textnet:
+        """
+        Load a textnet from file.
+
+        Parameters
+        ----------
+        source : str or path
+            File to read the corpus from. This should be a file created by
+            `Textnet.save`.
+
+        Returns
+        -------
+        `Textnet`
+        """
+        if not Path(source).exists():
+            raise FileNotFoundError(f"File '{source}' does not exist.")
+        conn = sqlite3.connect(Path(source))
+        with conn as c:
+            im = pd.read_sql("SELECT * FROM textnet_im", c, index_col="term")
+            meta = pd.read_sql("SELECT * FROM textnet_meta", c, index_col="keys")[
+                "values"
+            ]
+        connected = meta["connected"] == "1"
+        doc_attrs = json.loads(meta["doc_attrs"])
+        return cls(IncidenceMatrix(im.T), connected=connected, doc_attrs=doc_attrs)
+
+    def plot(
+        self,
+        *,
+        color_clusters: Union[bool, ig.VertexClustering] = False,
+        show_clusters: Union[bool, ig.VertexClustering] = False,
+        bipartite_layout: bool = False,
+        sugiyama_layout: bool = False,
+        circular_layout: bool = False,
+        kamada_kawai_layout: bool = False,
+        drl_layout: bool = False,
+        node_opacity: Optional[float] = None,
+        edge_opacity: Optional[float] = None,
+        label_term_nodes: bool = False,
+        label_doc_nodes: bool = False,
+        label_nodes: bool = False,
+        label_edges: bool = False,
+        node_label_filter: Optional[Callable[[ig.Vertex], bool]] = None,
+        edge_label_filter: Optional[Callable[[ig.Edge], bool]] = None,
+        scale_nodes_by: Optional[str] = None,
+        **kwargs,
+    ) -> ig.Plot:
         """
         Plot the bipartite graph.
 
@@ -655,3 +727,24 @@ def _giant_component(g: ig.Graph) -> ig.Graph:
     size = max(g.components().sizes())
     pos = g.components().sizes().index(size)
     return g.subgraph(g.components()[pos])
+
+
+def _im_from_tidy_text(
+    tidy_text: TidyText, sublinear: bool, min_docs: int
+) -> pd.DataFrame:
+    df = _tf_idf(tidy_text, sublinear, min_docs)
+    im = df.pivot(values="tf_idf", columns="term").fillna(0)
+    return IncidenceMatrix(im)
+
+
+def _graph_from_im(im: pd.DataFrame) -> ig.Graph:
+    g = ig.Graph.Incidence(im.to_numpy().tolist(), directed=False)
+    g.vs["id"] = np.append(im.index, im.columns).tolist()
+    g.es["weight"] = im.to_numpy().flatten()[np.flatnonzero(im)]
+    g.es["cost"] = [1 / pow(w, tn.params["tuning_parameter"]) for w in g.es["weight"]]
+    g.vs["type"] = ["term" if t else "doc" for t in g.vs["type"]]
+    return g
+
+
+class IncidenceMatrix(pd.DataFrame):
+    """Matrix relating documents to terms."""
