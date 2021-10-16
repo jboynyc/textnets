@@ -88,25 +88,19 @@ class TextnetBase:
         return self.graph.ecount()
 
     def save_graph(
-        self, target: Union[str, bytes, IO], format: Optional[str] = None
+        self, target: Union[str, bytes, os.PathLike, IO], format: Optional[str] = None
     ) -> None:
         """
         Save the underlying graph.
 
         Parameters
         ----------
-        target : str or file
+        target : str or path or file
             File or path that the graph should be written to.
         format : {"dot", "edgelist", "gml", "graphml", "pajek", ...}, optional
-            Optionally specify the desired format (otherwise it is derived from
-            the file suffix).
+            Optionally specify the desired format (otherwise it is inferred
+            from the file suffix).
         """
-        if not format:
-            if hasattr(target, "name"):
-                fname = target.name  # type: ignore
-            else:
-                fname = str(target)
-            format = fname.split(os.path.extsep)[-1]
         self.graph.write(target, format)
 
     @cached_property
