@@ -6,7 +6,7 @@
 import sqlite3
 
 import pandas as pd
-from textnets import Corpus, Textnet
+import textnets as tn
 
 
 def test_corpus(corpus):
@@ -46,7 +46,7 @@ def test_corpus(corpus):
 def test_corpus_missing(testdata, recwarn):
     """Test Corpus class on series with missing data."""
     s = testdata.append(pd.Series([None], index=["Missing"]))
-    corpus = Corpus(s)
+    corpus = tn.Corpus(s)
     assert len(recwarn) == 1
     w = recwarn.pop(UserWarning)
     assert str(w.message) == "Dropping 1 empty document(s)."
@@ -68,7 +68,7 @@ def test_corpus_czech(recwarn):
         ]
     )
     # This raises a warning about an uninstalled language model
-    corpus = Corpus(s, lang="cs")
+    corpus = tn.Corpus(s, lang="cs")
     assert len(corpus.documents) == 8
     # This raises another warning about lacking a language model
     tokenized = corpus.tokenized()
@@ -81,28 +81,32 @@ def test_corpus_czech(recwarn):
 
 
 def test_corpus_df(testdata):
+    """Test creating a corpus from a data frame."""
     df = pd.DataFrame({"headlines": testdata, "meta": list("ABCDEFG")})
-    c = Corpus.from_df(df, doc_col="headlines")
+    c = tn.Corpus.from_df(df, doc_col="headlines")
     assert len(c.documents) == 7
 
 
 def test_corpus_dict(testdata):
+    """Test creating a corpus from a dictionary."""
     data = testdata.to_dict()
-    c = Corpus.from_dict(data)
+    c = tn.Corpus.from_dict(data)
     assert len(c.documents) == 7
 
 
 def test_corpus_csv(tmpdir, testdata):
+    """Test creating a corpus from a CSV file."""
     out = tmpdir.join("corpus.csv")
     testdata.to_csv(out)
-    c = Corpus.from_csv(out)
+    c = tn.Corpus.from_csv(out)
     assert len(c.documents) == 7
 
 
 def test_corpus_sql(testdata):
+    """Test creating a corpus from a SQL query."""
     with sqlite3.connect(":memory:") as conn:
         testdata.to_sql("headlines", conn)
-        c = Corpus.from_sql("SELECT * FROM headlines", conn)
+        c = tn.Corpus.from_sql("SELECT * FROM headlines", conn)
     assert len(c.documents) == 7
 
 
@@ -111,13 +115,13 @@ def test_textnet(corpus):
 
     noun_phrases = corpus.noun_phrases()
 
-    tn_np = Textnet(noun_phrases)
-    assert tn_np.graph.vcount() > 0
-    assert tn_np.graph.ecount() > 0
-    g_np_groups = tn_np.project(node_type="doc")
+    n_np = tn.Textnet(noun_phrases)
+    assert n_np.graph.vcount() > 0
+    assert n_np.graph.ecount() > 0
+    g_np_groups = n_np.project(node_type="doc")
     assert g_np_groups.vcount() > 0
     assert g_np_groups.ecount() > 0
-    g_np_words = tn_np.project(node_type="term")
+    g_np_words = n_np.project(node_type="term")
     assert g_np_words.vcount() > 0
     assert g_np_words.ecount() > 0
 
@@ -125,8 +129,8 @@ def test_textnet(corpus):
 def test_context(corpus):
     """Test formal context creation from textnet."""
 
-    tn = Textnet(corpus.tokenized(), sublinear=False)
-    ctx = tn.context
+    n = tn.Textnet(corpus.tokenized(), sublinear=False)
+    ctx = n.context
     assert len(ctx) == 3
 
 
@@ -134,9 +138,9 @@ def test_save(tmpdir, corpus):
     """Test Textnet graph saving."""
 
     noun_phrases = corpus.noun_phrases()
-    tn_np = Textnet(noun_phrases)
+    n_np = tn.Textnet(noun_phrases)
     out = tmpdir.join("graph.graphml")
-    tn_np.save_graph(str(out))
+    n_np.save_graph(str(out))
     assert len(tmpdir.listdir()) == 1
 
 
@@ -144,9 +148,9 @@ def test_plot(tmpdir, corpus):
     """Test Textnet plotting."""
 
     noun_phrases = corpus.noun_phrases()
-    tn_np = Textnet(noun_phrases)
+    n_np = tn.Textnet(noun_phrases)
     out = tmpdir.join("plot-0.png")
-    plot = tn_np.plot(target=str(out))
+    plot = n_np.plot(target=str(out))
     assert len(plot._objects) > 0
     assert len(tmpdir.listdir()) == 1
 
@@ -155,9 +159,9 @@ def test_plot_layout(tmpdir, corpus):
     """Test Textnet plotting with bipartite layout and node labels."""
 
     noun_phrases = corpus.noun_phrases()
-    tn_np = Textnet(noun_phrases)
+    n_np = tn.Textnet(noun_phrases)
     out = tmpdir.join("plot-1.png")
-    plot = tn_np.plot(target=str(out), bipartite_layout=True, label_nodes=True)
+    plot = n_np.plot(target=str(out), bipartite_layout=True, label_nodes=True)
     assert len(plot._objects) > 0
     assert len(tmpdir.listdir()) == 1
 
@@ -165,8 +169,8 @@ def test_plot_layout(tmpdir, corpus):
 def test_plot_projected(tmpdir, corpus):
     """Test ProjectedTextnet plotting."""
 
-    tn = Textnet(corpus.tokenized())
-    papers = tn.project(node_type="doc")
+    n = tn.Textnet(corpus.tokenized())
+    papers = n.project(node_type="doc")
     out = tmpdir.join("plot-2.png")
     plot = papers.plot(show_clusters=True, label_nodes=True, target=str(out))
     assert len(plot._objects) > 0
@@ -176,8 +180,8 @@ def test_plot_projected(tmpdir, corpus):
 def test_plot_backbone(tmpdir, corpus):
     """Test ProjectedTextnet plotting with alpha cut."""
 
-    tn = Textnet(corpus.tokenized())
-    papers = tn.project(node_type="doc")
+    n = tn.Textnet(corpus.tokenized())
+    papers = n.project(node_type="doc")
     out = tmpdir.join("plot-3.png")
     plot = papers.plot(alpha=0.4, label_nodes=True, target=str(out))
     assert len(plot._objects) > 0
@@ -187,8 +191,8 @@ def test_plot_backbone(tmpdir, corpus):
 def test_plot_scaled(tmpdir, corpus):
     """Test ProjectedTextnet plotting with scaled nodes."""
 
-    tn = Textnet(corpus.tokenized())
-    papers = tn.project(node_type="doc")
+    n = tn.Textnet(corpus.tokenized())
+    papers = n.project(node_type="doc")
     out = tmpdir.join("plot-4.png")
     plot = papers.plot(scale_nodes_by="betweenness", label_nodes=True, target=str(out))
     assert len(plot._objects) > 0
@@ -198,8 +202,8 @@ def test_plot_scaled(tmpdir, corpus):
 def test_plot_filtered(tmpdir, corpus):
     """Test ProjectedTextnet plotting filtered labels."""
 
-    tn = Textnet(corpus.tokenized())
-    papers = tn.project(node_type="doc")
+    n = tn.Textnet(corpus.tokenized())
+    papers = n.project(node_type="doc")
     out = tmpdir.join("plot-5.png")
     plot = papers.plot(
         label_nodes=True,
