@@ -696,20 +696,24 @@ def _disparity_filter(g: ig.Graph) -> Iterator[float]:
     """Compute significance scores of edge weights."""
     for edge in g.es:
         source, target = edge.vertex_tuple
+        degree_t = target.degree()
+        if degree_t <= 1:
+            yield 0
         degree_s = source.degree()
         sum_weights_s = source.strength(weights="weight")
         norm_weight_s = edge["weight"] / sum_weights_s
-        integral_s = quad(integrand, 0, norm_weight_s, args=(degree_s))
-        degree_t = target.degree()
         sum_weights_t = target.strength(weights="weight")
         norm_weight_t = edge["weight"] / sum_weights_t
-        if degree_t <= 1:
-            yield 0
-        else:
-            integral_t = quad(integrand, 0, norm_weight_t, args=(degree_t))
+        integral_s = _disparity_filter_integral(norm_weight_s, degree_s)
+        integral_t = _disparity_filter_integral(norm_weight_t, degree_t)
         yield min(
             1 - (degree_s - 1) * integral_s[0], 1 - (degree_t - 1) * integral_t[0]
         )
+
+
+@memoize
+def _disparity_filter_integral(norm_weight: float, degree: int) -> float:
+    return quad(integrand, 0, norm_weight, args=(degree))
 
 
 def _giant_component(g: ig.Graph) -> ig.Graph:
