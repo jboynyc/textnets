@@ -39,6 +39,8 @@ LANGS = {
     "zh": "zh_core_web_sm",  # Chinese
 }
 
+_INSTALLED_MODELS = spacy.util.get_installed_models()
+
 
 class Corpus:
     """
@@ -77,7 +79,7 @@ class Corpus:
         if lang is None:
             lang = tn.params["lang"]
         self.lang = LANGS.get(lang, lang)
-        if self.lang not in spacy.util.get_installed_models():
+        if self.lang not in _INSTALLED_MODELS:
             warn(f"Language model '{self.lang}' is not yet installed.")
 
     @property
@@ -93,6 +95,7 @@ class Corpus:
             if tn.params["autodownload"]:
                 try:
                     spacy.cli.download(lang)  # type: ignore
+                    _INSTALLED_MODELS.append(lang)
                     return self._nlp(lang)
                 except (KeyError, OSError):
                     pass
