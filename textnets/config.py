@@ -36,7 +36,11 @@ Global Parameters
 from __future__ import annotations
 
 import os
+import json
+import sqlite3
 from collections import UserDict
+from typing import Union
+from pathlib import Path
 from random import randint
 from warnings import warn
 
@@ -58,6 +62,26 @@ class _Configuration(UserDict):
             warn(f"Parameter '{key}' not known. Skipping.")
         else:
             self.data[key] = item
+
+    def save(self, target: Union[os.PathLike, str]) -> None:
+        """Save parameters to file."""
+        conn = sqlite3.connect(Path(target))
+        with conn as c:
+            c.execute("CREATE TABLE IF NOT EXISTS params(data json)")
+            c.execute("INSERT INTO params VALUES (?)", [json.dumps(self.data)])
+
+    def load(self, source: Union[os.PathLike, str]) -> None:
+        """Load parameters from file."""
+        if not Path(source).exists():
+            raise FileNotFoundError(f"File '{source}' does not exist.")
+        conn = sqlite3.connect(Path(source))
+        with conn as c:
+            ser = c.execute(
+                "SELECT rowid, * FROM params ORDER BY rowid DESC LIMIT 1"
+            ).fetchone()[1]
+        params = json.loads(ser)
+        self.update(params)
+        print(f"Updated global parameters with values loaded from '{source}'.")
 
     def _repr_html_(self) -> str:
         rows = [f"<tr><td>{par}</td><td>{val}</td></tr>" for par, val in self.items()]

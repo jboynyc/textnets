@@ -134,6 +134,17 @@ def test_textnet_save_and_load(corpus, tmpdir):
     assert net.summary == loaded.summary
 
 
+def test_config_save_and_load(tmpdir):
+    out = tmpdir.join("out.params")
+    defaults = tn.params.copy()
+    tn.params.update({"lang": "cs", "autodownload": True})
+    changed = tn.params.copy()
+    tn.params.save(out)
+    tn.params.update(defaults)
+    tn.params.load(out)
+    assert tn.params == changed
+
+
 def test_textnet(corpus):
     """Test Textnet class using sample data."""
 
