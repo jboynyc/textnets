@@ -280,7 +280,7 @@ class Corpus:
             data = data.set_index(data.columns[0])
         return cls.from_df(data, doc_col=doc_col, lang=lang)
 
-    def save(self, target: os.PathLike) -> None:
+    def save(self, target: Union[os.PathLike, str]) -> None:
         """
         Save a corpus to file.
 
@@ -299,7 +299,7 @@ class Corpus:
             )
 
     @classmethod
-    def load(cls, source: os.PathLike) -> Corpus:
+    def load(cls, source: Union[os.PathLike, str]) -> Corpus:
         """
         Load a corpus from file.
 

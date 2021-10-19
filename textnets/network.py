@@ -443,7 +443,7 @@ class Textnet(TextnetBase, FormalContext):
             g = _giant_component(g)
         return ProjectedTextnet(g)
 
-    def save(self, target: os.PathLike) -> None:
+    def save(self, target: Union[os.PathLike, str]) -> None:
         """
         Save a textnet to file.
 
@@ -463,7 +463,7 @@ class Textnet(TextnetBase, FormalContext):
             )
 
     @classmethod
-    def load(cls, source: os.PathLike) -> Textnet:
+    def load(cls, source: Union[os.PathLike, str]) -> Textnet:
         """
         Load a textnet from file.
 
