@@ -57,7 +57,7 @@ class _Configuration(UserDict):
         "tuning_parameter",
     }
 
-    def __setitem__(self, key, item):
+    def __setitem__(self, key, item) -> None:
         if key not in self._valid:
             warn(f"Parameter '{key}' not known. Skipping.")
         else:

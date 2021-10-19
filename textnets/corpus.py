@@ -334,7 +334,7 @@ class Corpus:
         remove_numbers: bool = True,
         remove_punctuation: bool = True,
         lower: bool = True,
-    ) -> pd.DataFrame:
+    ) -> TidyText:
         """Return tokenized version of corpus in tidy format.
 
         Parameters
@@ -376,7 +376,7 @@ class Corpus:
 
     def noun_phrases(
         self, normalize: bool = False, remove: Optional[List[str]] = None
-    ) -> pd.DataFrame:
+    ) -> TidyText:
         """Return noun phrases from corpus in tidy format.
 
         Parameters
@@ -410,7 +410,7 @@ class Corpus:
         remove_numbers: bool = False,
         remove_punctuation: bool = False,
         lower: bool = False,
-    ) -> pd.DataFrame:
+    ) -> TidyText:
         """Return n-grams of length n from corpus in tidy format.
 
         Parameters
@@ -453,7 +453,7 @@ class Corpus:
         )
         return self._return_tidy_text(func)
 
-    def _return_tidy_text(self, func: Callable[[Doc], List[str]]) -> pd.DataFrame:
+    def _return_tidy_text(self, func: Callable[[Doc], List[str]]) -> TidyText:
         df = (
             pd.melt(
                 self.nlp.map(func).apply(pd.Series).reset_index(),
