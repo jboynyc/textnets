@@ -123,9 +123,10 @@ def decorate_plot(plot_func: Callable) -> Callable:
             kwargs["wrap_labels"] = False
             kwargs["layout"] = layout
         elif sugiyama_layout:
-            kwargs["layout"] = graph.layout_sugiyama(
-                weights="weight", hgap=50, maxiter=100000
-            )
+            layout = graph.layout_sugiyama(weights="weight", hgap=50, maxiter=100000)
+            layout.rotate(270)
+            kwargs["wrap_labels"] = False
+            kwargs["layout"] = layout
         elif circular_layout:
             kwargs["layout"] = graph.layout_reingold_tilford_circular()
         elif kamada_kawai_layout:
