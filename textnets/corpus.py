@@ -14,6 +14,7 @@ from warnings import warn
 import pandas as pd
 import spacy
 import textnets as tn
+from spacy.tokens import Token
 from spacy.tokens.doc import Doc
 from toolz import compose, identity, memoize, partial
 
@@ -40,6 +41,8 @@ LANGS = {
 }
 
 _INSTALLED_MODELS = spacy.util.get_installed_models()
+
+DocLike = Union[Doc, List[Token]]
 
 
 class Corpus:
@@ -536,22 +539,22 @@ def _noun_chunks(doc: Doc, normalize: bool) -> List[str]:
     ]
 
 
-def _remove_stop_words(doc: Doc) -> Doc:
+def _remove_stop_words(doc: DocLike) -> DocLike:
     """Return document without stop words."""
     return [word for word in doc if not word.is_stop]
 
 
-def _remove_urls(doc: Doc) -> Doc:
+def _remove_urls(doc: DocLike) -> DocLike:
     """Return document without URLs or email addresses."""
     return [word for word in doc if not word.like_url and not word.like_email]
 
 
-def _remove_numbers(doc: Doc) -> Doc:
+def _remove_numbers(doc: DocLike) -> DocLike:
     """Return document without numbers."""
     return [word for word in doc if not word.like_num]
 
 
-def _remove_punctuation(doc: Doc) -> Doc:
+def _remove_punctuation(doc: DocLike) -> DocLike:
     """Return document without punctuation, brackets and quotation marks."""
     return [
         word
@@ -560,12 +563,12 @@ def _remove_punctuation(doc: Doc) -> Doc:
     ]
 
 
-def _stem(doc: Doc) -> List[str]:
+def _stem(doc: DocLike) -> List[str]:
     """Return list of word stem strings."""
     return [word.lemma_ for word in doc]
 
 
-def _as_text(doc: Doc) -> List[str]:
+def _as_text(doc: DocLike) -> List[str]:
     """Turn document into list of strings."""
     return [word.text for word in doc]
 

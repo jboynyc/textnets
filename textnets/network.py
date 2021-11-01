@@ -652,10 +652,6 @@ class ProjectedTextnet(TextnetBase):
             File or path that the plot should be saved to (e.g., ``plot.png``).
         kwargs
             Additional arguments to pass to `igraph.drawing.plot`.
-
-        See Also
-        --------
-        Parameters for `Textnet.plot`.
         """
         if alpha is not None:
             to_plot = self.alpha_cut(alpha)

@@ -135,6 +135,7 @@ def test_textnet_save_and_load(corpus, tmpdir):
 
 
 def test_config_save_and_load(tmpdir):
+    """Test roundtrip of saving and loading configuration parameters."""
     out = tmpdir.join("out.params")
     defaults = tn.params.copy()
     tn.params.update({"lang": "cs", "autodownload": True})
