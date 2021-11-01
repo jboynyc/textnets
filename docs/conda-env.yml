@@ -11,5 +11,5 @@ dependencies:
   - toolz
   - jupyter_sphinx
   - sphinx
-  - sphinx_rtd_theme
+  - pydata-sphinx-theme
   - sphinxcontrib-bibtex
