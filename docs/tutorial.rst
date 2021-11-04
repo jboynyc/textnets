@@ -39,7 +39,8 @@ Construct the corpus from the example data:
 
    corpus = tn.Corpus(tn.examples.moon_landing)
 
-What is this `moon_landing` example all about?
+What is this `moon_landing` example all about? (Hint: Click on the output below
+to see what's in our corpus.)
 
 .. jupyter-execute::
 
@@ -153,7 +154,8 @@ From a Dictionary
 
 You may already have your texts in a Python data structure, such as a
 dictionary mapping document labels (keys) to documents (values). In that case,
-you can use the `from_dict` method to construct your `Corpus`.
+you can use the `from_dict <Corpus.from_dict>` method to construct your
+`Corpus`.
 
 .. code:: python
 
@@ -217,7 +219,7 @@ From Files
 
 Perhaps you have each document you want to include in your textnet stored on
 disk in a separate text file. For such cases, `Corpus` comes with a utility,
-`from_files()`. You can simply pass a path to it using a `globbing
+`from_files`. You can simply pass a path to it using a `globbing
 <https://en.wikipedia.org/wiki/Glob_(programming)>`__ pattern:
 
 .. code:: python
