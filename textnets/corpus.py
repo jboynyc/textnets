@@ -8,7 +8,7 @@ import os
 import sqlite3
 from glob import glob
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Callable, Optional, Union, Sequence
 from warnings import warn
 
 import pandas as pd
@@ -40,9 +40,10 @@ LANGS = {
     "zh": "zh_core_web_sm",  # Chinese
 }
 
-_INSTALLED_MODELS = spacy.util.get_installed_models()
+#: Custom type for objects resembling documents (token sequences).
+DocLike = Union[Doc, Sequence[Token]]
 
-DocLike = Union[Doc, List[Token]]
+_INSTALLED_MODELS = spacy.util.get_installed_models()
 
 
 class Corpus:
@@ -150,7 +151,7 @@ class Corpus:
     @classmethod
     def from_dict(
         cls,
-        data: Dict[Any, str],
+        data: dict[Any, str],
         lang: Optional[str] = None,
     ) -> Corpus:
         """
@@ -173,8 +174,8 @@ class Corpus:
     @classmethod
     def from_files(
         cls,
-        files: Union[str, List[str], List[Path]],
-        doc_labels: Optional[List[str]] = None,
+        files: Union[str, list[str], list[Path]],
+        doc_labels: Optional[list[str]] = None,
         lang: Optional[str] = None,
     ) -> Corpus:
         """Construct corpus from files.
@@ -330,7 +331,7 @@ class Corpus:
 
     def tokenized(
         self,
-        remove: Optional[List[str]] = None,
+        remove: Optional[list[str]] = None,
         stem: bool = True,
         remove_stop_words: bool = True,
         remove_urls: bool = True,
@@ -378,7 +379,7 @@ class Corpus:
         return self._return_tidy_text(func)
 
     def noun_phrases(
-        self, normalize: bool = False, remove: Optional[List[str]] = None
+        self, normalize: bool = False, remove: Optional[list[str]] = None
     ) -> TidyText:
         """Return noun phrases from corpus in tidy format.
 
@@ -406,7 +407,7 @@ class Corpus:
     def ngrams(
         self,
         size: int,
-        remove: Optional[List[str]] = None,
+        remove: Optional[list[str]] = None,
         stem: bool = False,
         remove_stop_words: bool = False,
         remove_urls: bool = False,
@@ -456,7 +457,7 @@ class Corpus:
         )
         return self._return_tidy_text(func)
 
-    def _return_tidy_text(self, func: Callable[[Doc], List[str]]) -> TidyText:
+    def _return_tidy_text(self, func: Callable[[Doc], list[str]]) -> TidyText:
         df = (
             pd.melt(
                 self.nlp.map(func).apply(pd.Series).reset_index(),
@@ -530,7 +531,7 @@ def _normalize_whitespace(string: str) -> str:
     return " ".join(string.split())
 
 
-def _noun_chunks(doc: Doc, normalize: bool) -> List[str]:
+def _noun_chunks(doc: Doc, normalize: bool) -> list[str]:
     """Return only the noun chunks in lower case."""
     return [
         (chunk.lemma_ if normalize else " ".join([t.lower_ for t in chunk]))
@@ -539,22 +540,22 @@ def _noun_chunks(doc: Doc, normalize: bool) -> List[str]:
     ]
 
 
-def _remove_stop_words(doc: DocLike) -> DocLike:
+def _remove_stop_words(doc: DocLike) -> list[Token]:
     """Return document without stop words."""
     return [word for word in doc if not word.is_stop]
 
 
-def _remove_urls(doc: DocLike) -> DocLike:
+def _remove_urls(doc: DocLike) -> list[Token]:
     """Return document without URLs or email addresses."""
     return [word for word in doc if not word.like_url and not word.like_email]
 
 
-def _remove_numbers(doc: DocLike) -> DocLike:
+def _remove_numbers(doc: DocLike) -> list[Token]:
     """Return document without numbers."""
     return [word for word in doc if not word.like_num]
 
 
-def _remove_punctuation(doc: DocLike) -> DocLike:
+def _remove_punctuation(doc: DocLike) -> list[Token]:
     """Return document without punctuation, brackets and quotation marks."""
     return [
         word
@@ -563,27 +564,27 @@ def _remove_punctuation(doc: DocLike) -> DocLike:
     ]
 
 
-def _stem(doc: DocLike) -> List[str]:
+def _stem(doc: DocLike) -> list[str]:
     """Return list of word stem strings."""
     return [word.lemma_ for word in doc]
 
 
-def _as_text(doc: DocLike) -> List[str]:
+def _as_text(doc: DocLike) -> list[str]:
     """Turn document into list of strings."""
     return [word.text for word in doc]
 
 
-def _lower(doc: List[str]) -> List[str]:
+def _lower(doc: list[str]) -> list[str]:
     """Return list of strings in lower case."""
     return [s.lower() for s in doc]
 
 
-def _remove_additional(doc: List[str], token_list: List[str]) -> List[str]:
+def _remove_additional(doc: list[str], token_list: list[str]) -> list[str]:
     """Return list of strings without specified tokens."""
     return [s for s in doc if s not in token_list]
 
 
-def _ngrams(doc: List[str], n: int) -> List[str]:
+def _ngrams(doc: list[str], n: int) -> list[str]:
     """Returns list of n-gram strings."""
     return [" ".join(t) for t in zip(*[doc[offset:] for offset in range(n)])]
 
