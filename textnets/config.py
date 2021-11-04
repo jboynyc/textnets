@@ -38,14 +38,14 @@ from __future__ import annotations
 import os
 import json
 import sqlite3
+import random
 from collections import UserDict
 from typing import Union
 from pathlib import Path
-from random import randint
 from warnings import warn
 
 
-class _Configuration(UserDict):
+class TextnetsConfiguration(UserDict):
     """Container for global parameters."""
 
     _valid = {
@@ -106,4 +106,9 @@ default_params = {
 }
 
 #: Container for global parameters
-params = _Configuration(seed=randint(0, 10_000), **default_params)
+params = TextnetsConfiguration(seed=random.randint(0, 10_000), **default_params)
+
+
+#: Initialize the random seed
+def init_seed():
+    random.seed(params["seed"])

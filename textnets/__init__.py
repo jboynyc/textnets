@@ -14,21 +14,29 @@ except ImportError:
     from importlib_metadata import version  # type: ignore
 
 from . import examples  # noqa: F401
-from .config import params  # noqa: F401
+from .config import params, init_seed  # noqa: F401
 from .corpus import Corpus  # noqa: F401
 from .network import Textnet  # noqa: F401
 
-__all__ = ["Corpus", "load_corpus", "Textnet", "load_textnet", "params", "examples"]
+__all__ = [
+    "Corpus",
+    "load_corpus",
+    "Textnet",
+    "load_textnet",
+    "params",
+    "init_seed",
+    "examples",
+]
+
+__author__ = "John D. Boy"
+__email__ = "jboy@bius.moe"
+__version__ = version(__name__)
 
 #: Load a corpus from file.
 load_corpus = Corpus.load
 
 #: Load a textnet from file.
 load_textnet = Textnet.load
-
-__author__ = "John D. Boy"
-__email__ = "jboy@bius.moe"
-__version__ = version(__name__)
 
 
 def _repr_html_() -> str:
