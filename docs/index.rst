@@ -6,6 +6,7 @@
 
    installation
    tutorial
+   advanced
 
    reference
 
