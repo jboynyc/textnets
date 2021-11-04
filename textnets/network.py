@@ -6,12 +6,11 @@ from __future__ import annotations
 
 import os
 import json
-import random
 import sqlite3
 import warnings
 from collections import Counter
 from pathlib import Path
-from typing import Callable, Dict, Iterator, List, Optional, Union
+from typing import Callable, Iterator, Optional, Union
 from typing.io import IO
 from warnings import warn
 
@@ -62,7 +61,7 @@ class TextnetBase:
     """
 
     def __init__(self, graph: ig.Graph) -> None:
-        self.graph = graph
+        self.graph: ig.Graph = graph
 
     @property
     def summary(self) -> str:
@@ -131,17 +130,41 @@ class TextnetBase:
         )
 
     @cached_property
-    def node_types(self) -> List[bool]:
+    def node_types(self) -> list[bool]:
         """Returns boolean list to distinguish node types."""
         return [t == "term" for t in self.nodes["type"]]
 
+    _partition: Optional[ig.VertexClustering] = None
+
     @property
     def clusters(self) -> ig.VertexClustering:
-        """Return partition of graph detected by the Leiden algorithm."""
-        return self._partition_graph(
-            resolution=tn.params["resolution_parameter"],
-            seed=tn.params["seed"],
-        )
+        """Return partition of graph detected by the Leiden algorithm, or a
+        different partition that was supplied to the setter."""
+        if self._partition is None:
+            self._partition = self._partition_graph(
+                resolution=tn.params["resolution_parameter"],
+                seed=tn.params["seed"],
+            )
+        return self._partition
+
+    @clusters.setter
+    def clusters(self, value: Union[ig.VertexClustering, dict[int, list[int]]]) -> None:
+        if isinstance(value, ig.VertexClustering):
+            self._partition = value
+        elif isinstance(value, dict):
+            sorted_node_community_map = dict(sorted(value.items()))
+            part = ig.VertexClustering(
+                self.graph,
+                membership=[i[0] for i in sorted_node_community_map.values()],
+            )
+            self._partition = part
+        elif isinstance(value, list):
+            part = ig.VertexClustering(self.graph, membership=value)
+            self._partition = part
+
+    @clusters.deleter
+    def clusters(self) -> None:
+        self._partition = None
 
     @property
     def modularity(self) -> float:
@@ -267,10 +290,9 @@ class TextnetBase:
         self,
         **kwargs,
     ) -> ig.Plot:
-        random.seed(tn.params["seed"])
+        tn.init_seed()
         return ig.plot(self.graph, **kwargs)
 
-    @memoize
     def _partition_graph(self, resolution: float, seed: int) -> ig.VertexClustering:
         if self.graph.is_bipartite():
             part, part0, part1 = la.CPMVertexPartition.Bipartite(
@@ -376,7 +398,7 @@ class Textnet(TextnetBase, FormalContext):
         sublinear: bool = True,
         min_docs: int = 2,
         connected: bool = False,
-        doc_attrs: Optional[Dict[str, Dict[str, str]]] = None,
+        doc_attrs: Optional[dict[str, dict[str, str]]] = None,
     ) -> None:
         self._connected = connected
         self._doc_attrs = doc_attrs
