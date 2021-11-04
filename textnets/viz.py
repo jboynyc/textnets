@@ -11,6 +11,7 @@ from typing import Callable, Iterator, List
 
 import textnets as tn
 import igraph as ig
+from pandas import Series
 from igraph.drawing.colors import (
     PrecalculatedPalette,
     color_name_to_rgba,
@@ -136,7 +137,10 @@ def decorate_plot(plot_func: Callable) -> Callable:
         # Node scaling
         scale_nodes_by = kwargs.pop("scale_nodes_by", False)
         if scale_nodes_by:
-            dist = getattr(textnet, scale_nodes_by)
+            try:
+                dist = getattr(textnet, scale_nodes_by)
+            except AttributeError:
+                dist = Series(textnet.nodes[scale_nodes_by])
             if abs(dist.skew()) < 2:
                 dist **= 2
             norm = (dist - dist.mean()) / dist.std()
