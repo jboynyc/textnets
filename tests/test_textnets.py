@@ -15,11 +15,11 @@ def test_corpus(corpus):
     assert len(corpus.documents) == 7
 
     noun_phrases = corpus.noun_phrases()
-    assert noun_phrases.sum().n == 27
+    assert noun_phrases.sum().n == 26
     assert set(noun_phrases.columns) == {"term", "n"}
 
     noun_phrases_remove = corpus.noun_phrases(remove=["moon"])
-    assert noun_phrases_remove.sum().n == 23
+    assert noun_phrases_remove.sum().n == 22
     assert set(noun_phrases_remove.columns) == {"term", "n"}
 
     noun_phrases_remove = corpus.noun_phrases(normalize=True)
