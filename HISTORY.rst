@@ -4,15 +4,16 @@ History
 
 0.6.1 (unreleased)
 ------------------
-* Add abilitiy to save and load an instance of `Corpus`, `Textnet` and `params`
-  to and from file using `Corpus.save`, `load_corpus`, `Textnet.save`,
+* Adds abilitiy to save and load an instance of `Corpus`, `Textnet` and
+  `params` to and from file using `Corpus.save`, `load_corpus`, `Textnet.save`,
   `load_textnet`, `params.save` and `params.load`. The same file can be used
   for all three kinds of objects, so all relevant data for a project can be
-  saved in one file. TODO: Update documentation.
+  saved in one file.
 * Some further optimization of backbone extraction.
 * Improved testing and type hints.
-* Expanded documentation with some advanced topics. Docs now use the PyData
-  theme.
+* Expanded documentation with some advanced topics, including the new save/load
+  feature. Docs now use the PyData theme.
+* Adds Python 3.10 compatibility
 * Updates dependencies, including ``igraph`` with some relevant upstream
   changes contributed by yours truly.
 
