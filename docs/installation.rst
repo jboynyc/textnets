@@ -14,8 +14,7 @@ it can either be installed using `conda`_ or `pip`_.
 
 .. note::
 
-   Please note that **textnets** requires Python 3.7 or newer to run. It has
-   not been tested with Python 3.10 yet.
+   Please note that **textnets** requires Python 3.7 or newer to run.
 
 Using conda
 -----------
