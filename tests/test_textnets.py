@@ -3,6 +3,7 @@
 
 """Tests for `textnets` package."""
 
+import pytest
 import sqlite3
 
 import pandas as pd
@@ -53,6 +54,7 @@ def test_corpus_missing(testdata, recwarn):
     assert len(corpus.documents) == 7
 
 
+@pytest.mark.filterwarnings("ignore:SelectableGroups dict interface")
 def test_corpus_czech(recwarn):
     """Test Corpus class using Czech language documents."""
     s = pd.Series(
