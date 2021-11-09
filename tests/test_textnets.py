@@ -166,7 +166,7 @@ def test_textnet(corpus):
 def test_context(corpus):
     """Test formal context creation from textnet."""
 
-    n = tn.Textnet(corpus.tokenized(), sublinear=False)
+    n = tn.Textnet(corpus.tokenized(sublinear=False))
     ctx = n.context
     assert len(ctx) == 3
 
