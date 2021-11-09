@@ -306,10 +306,10 @@ class TextnetBase:
         else:
             part = la.find_partition(
                 self.graph,
-                la.CPMVertexPartition,
-                resolution_parameter=resolution,
-                seed=seed,
+                la.ModularityVertexPartition,
                 weights="weight",
+                n_iterations=-1,
+                seed=seed,
             )
         return part
 
@@ -375,8 +375,6 @@ class Textnet(TextnetBase, FormalContext):
         * DataFrame of tokens with per-document counts, as created by
           `Corpus.tokenized` `Corpus.ngrams`, and `Corpus.noun_phrases`.
         * An incidence matrix relating documents to terms.
-    sublinear : bool, optional
-        Apply sublinear scaling to *tf-idf* values (default: True).
     min_docs : int, optional
         Minimum number of documents a term must appear in to be included
         in the network (default: 2).
@@ -395,7 +393,6 @@ class Textnet(TextnetBase, FormalContext):
     def __init__(
         self,
         data: pd.DataFrame,
-        sublinear: bool = True,
         min_docs: int = 2,
         connected: bool = False,
         doc_attrs: Optional[dict[str, dict[str, str]]] = None,
@@ -407,7 +404,7 @@ class Textnet(TextnetBase, FormalContext):
         if isinstance(data, IncidenceMatrix):
             self.im = data
         elif isinstance(data, TidyText) or isinstance(data, pd.DataFrame):
-            self.im = _im_from_tidy_text(data, sublinear, min_docs)
+            self.im = _im_from_tidy_text(data, min_docs)
 
     @cached_property
     def graph(self):
@@ -682,34 +679,6 @@ class ProjectedTextnet(TextnetBase):
         return to_plot._plot(**kwargs)
 
 
-def _tf_idf(tidy_text: pd.DataFrame, sublinear: bool, min_docs: int) -> pd.DataFrame:
-    """Calculate term frequency/inverse document frequency."""
-    if sublinear:
-        tidy_text["tf"] = tidy_text["n"].map(_sublinear_scaling)
-    else:
-        totals = tidy_text.groupby(tidy_text.index).sum().rename(columns={"n": "total"})
-        tidy_text = tidy_text.merge(totals, right_index=True, left_index=True)
-        tidy_text["tf"] = tidy_text["n"] / tidy_text["total"]
-    idfs = np.log10(len(set(tidy_text.index)) / tidy_text["term"].value_counts())
-    tt = tidy_text.merge(pd.DataFrame(idfs), left_on="term", right_index=True).rename(
-        columns={"term_y": "idf"}
-    )
-    tt["tf_idf"] = tt["tf"] * tt["idf"]
-    wc = tt.groupby("term").count()["tf"]
-    tt = (
-        tt.reset_index()
-        .merge(wc >= min_docs, on="term", how="left")
-        .rename(columns={"tf_y": "keep"})
-        .set_index("label")
-    )
-    return tt[tt["keep"]][["term", "n", "tf_idf"]]
-
-
-def _sublinear_scaling(n: Union[int, float]) -> float:
-    """Logarithmic scaling function."""
-    return 1 + np.log10(n) if n > 0 else 0
-
-
 def _disparity_filter(g: ig.Graph) -> Iterator[float]:
     """Compute significance scores of edge weights."""
     for edge in g.es:
@@ -741,11 +710,16 @@ def _giant_component(g: ig.Graph) -> ig.Graph:
     return g.subgraph(g.components()[pos])
 
 
-def _im_from_tidy_text(
-    tidy_text: TidyText, sublinear: bool, min_docs: int
-) -> pd.DataFrame:
-    df = _tf_idf(tidy_text, sublinear, min_docs)
-    im = df.pivot(values="tf_idf", columns="term").fillna(0)
+def _im_from_tidy_text(tidy_text: TidyText, min_docs: int) -> pd.DataFrame:
+    count = tidy_text.groupby("term").count()["n"]
+    tt = (
+        tidy_text.reset_index()
+        .merge(count >= min_docs, on="term", how="left")
+        .rename(columns={"n_y": "keep"})
+        .rename(columns={"n_x": "n"})
+        .set_index("label")
+    )
+    im = tt[tt["keep"]].pivot(values="term_weight", columns="term").fillna(0)
     return IncidenceMatrix(im)
 
 

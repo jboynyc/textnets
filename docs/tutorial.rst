@@ -116,17 +116,17 @@ headline themes of the East Coast newspapers to the others.
 It's because the *Times* uses the word "walk" in its headline, linking the "One
 Small Step" cluster to the "Man on Moon" cluster.
 
-We can produce the term graph plot again, this time scaling nodes according to
-their betweenness centrality, and pruning edges from the graph using "backbone
-extraction" :cite:p`Serrano2009`.
+We can produce the term network plot again, this time scaling nodes according
+to their betweenness centrality, and pruning edges from the network using
+"backbone extraction" :cite:p`Serrano2009`.
 
 We can also use ``color_clusters`` (instead of ``show_clusters``) to color
 nodes according to their partition.
 
 And we can filter node labels, labeling only those nodes that have a
 betweenness centrality score above the median. This is particularly useful in
-high-order graphs where labeling every single node would cause too much visual
-clutter.
+high-order networks where labeling every single node would cause too much
+visual clutter.
 
 .. jupyter-execute::
 
@@ -261,6 +261,13 @@ minister,” or “the virus.”
    Use your friendly neighborhood HPC cluster or be prepared for your laptop to
    get hot.
 
+An optional boolean argument, ``sublinear``, can be passed to `tokenized`,
+`ngrams`, and `noun_phrases`. It decides whether to use sublinear (logarithmic)
+scaling when calculating *tf-idf* term weights. The default is ``True``,
+because sublinear scaling is considered good practice in the information
+retrieval literature :cite:p:`Manning2008`, but there may be good reason to
+turn it off.
+
 Calling these methods results in another data frame, which we can feed to
 `Textnet` to make our textnet.
 
@@ -285,15 +292,13 @@ graph, and usually only terms that appear in a significant proportion of
 documents really indicate latent topics, so it is common to pass a higher
 value.
 
-A boolean argument, ``sublinear``, decides whether to use sublinear
-(logarithmic) scaling when calculating *tf-idf* for edge weights. The default
-is ``True`` because sublinear scaling is considered good practice in the
-information retrieval literature :cite:p:`Manning2008`, but there may be good
-reason to turn it off.
+``connected`` is a boolean argument that decides whether only the largest
+connected component of the resulting network should be kept. It defaults to
+``False``.
 
 ``doc_attrs`` allows setting additional attributes for documents that become
-node attributes in the resulting network graph. For instance, if texts
-represent views of members of different parties, we can set a party attribute.
+node attributes in the resulting network. For instance, if texts represent
+views of members of different parties, we can set a party attribute.
 
 .. code:: python
 
@@ -303,15 +308,15 @@ Seeing Results
 --------------
 
 You are now ready to see the first results. `Textnet` comes with a utility
-method, `plot <Textnet.plot>`, which allows you to quickly visualize the bipartite
-graph.
+method, `plot <Textnet.plot>`, which allows you to quickly visualize the
+bipartite network.
 
-For bipartite graphs, it can be helpful to use a layout option, such as
+For bipartite network, it can be helpful to use a layout option, such as
 ``bipartite_layout``, ``circular_layout``, or ``sugiyama_layout``, which help
 to spatially separate the two node types.
 
 You may want terms that are used in more documents to appear bigger in the
-graph. In that case, use the ``scale_nodes_by`` argument with the value
+plot. In that case, use the ``scale_nodes_by`` argument with the value
 ``degree``. Other useful options include ``label_term_nodes``,
 ``label_doc_nodes``, and ``label_edges``. These are all boolean options, so
 simply pass the value ``True`` to enable them.
@@ -339,7 +344,7 @@ Like the bipartite network, the projected textnet also has a `plot
 which can help "de-clutter" the resulting visualization by removing edges. The
 value for this argument is a significance value, and only edges with a
 significance value at or below the chosen value are kept. What remains in the
-pruned graph is called the "backbone" in the network science literature.
+pruned network is called the "backbone" in the network science literature.
 Commonly chosen values for ``alpha`` are in the range between 0.2 and 0.6 (with
 lower values resulting in more aggressive pruning).
 
@@ -361,8 +366,8 @@ they each output the ten top nodes for each centrality measure.
 
 In addition, you can use `top_cluster_nodes <TextnetBase.top_cluster_nodes>` to
 help interpret the community structure of your textnet. Clusters can either be
-interpreted as latent themes (in the word graph) or as groupings of documents
-using similar words or phrases (in the document graph).
+interpreted as latent themes (in the word network) or as groupings of documents
+using similar words or phrases (in the document network).
 
 Saving
 ------

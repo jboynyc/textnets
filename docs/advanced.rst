@@ -77,6 +77,30 @@ To return to the default (clusters detected by the Leiden algorithm), simply del
 
    del terms.clusters
 
+Implemented in leidenalg
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The ``leidenalg`` package is installed as a dependency of **textnets**. It can
+produce a variety of different partition types, and in some cases, you may want
+to use a different one that the default. In this example, ``leidenalg`` is
+instructed to use the method of "asymptotic surprise" to determine the graph
+partition.
+
+.. code:: python
+
+   import leidenalg as la
+
+   terms.clusters = la.find_partition(terms.graph,
+                                      partition_type=la.SurpriseVertexPartition, 
+                                      weights="weight",
+                                      n_iterations=-1,
+                                      seed=tn.params["seed"])
+
+After setting the clusters like this, you can plot the network as before. You
+can also output a list of nodes per partition::
+
+   terms.top_cluster_nodes()
+
 Implemented in cdlib
 ~~~~~~~~~~~~~~~~~~~~
 

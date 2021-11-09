@@ -12,6 +12,7 @@ from typing import Any, Callable, Optional, Union, Sequence
 from warnings import warn
 
 import pandas as pd
+import numpy as np
 import spacy
 import textnets as tn
 from spacy.tokens import Token
@@ -338,6 +339,7 @@ class Corpus:
         remove_numbers: bool = True,
         remove_punctuation: bool = True,
         lower: bool = True,
+        sublinear: bool = True,
     ) -> TidyText:
         """Return tokenized version of corpus in tidy format.
 
@@ -358,6 +360,9 @@ class Corpus:
             (default: True).
         lower : bool, optional
             Make lower-case (default: True).
+        sublinear : bool, optional
+            Apply sublinear scaling when calculating *tf-idf* term weights
+            (default: True).
 
         Returns
         -------
@@ -376,10 +381,14 @@ class Corpus:
             _remove_numbers if remove_numbers else identity,
             _remove_punctuation if remove_punctuation else identity,
         )
-        return self._return_tidy_text(func)
+        tt = self._make_tidy_text(func)
+        return _tf_idf(tt, sublinear)
 
     def noun_phrases(
-        self, normalize: bool = False, remove: Optional[list[str]] = None
+        self,
+        normalize: bool = False,
+        remove: Optional[list[str]] = None,
+        sublinear: bool = True,
     ) -> TidyText:
         """Return noun phrases from corpus in tidy format.
 
@@ -389,6 +398,9 @@ class Corpus:
             Return lemmas of noun phrases (default: False).
         remove : list of str, optional
             Additional tokens to remove.
+        sublinear : bool, optional
+            Apply sublinear scaling when calculating *tf-idf* term weights
+            (default: True).
 
         Returns
         -------
@@ -402,7 +414,8 @@ class Corpus:
             else identity,
             partial(_noun_chunks, normalize=normalize),
         )
-        return self._return_tidy_text(func)
+        tt = self._make_tidy_text(func)
+        return _tf_idf(tt, sublinear)
 
     def ngrams(
         self,
@@ -414,6 +427,7 @@ class Corpus:
         remove_numbers: bool = False,
         remove_punctuation: bool = False,
         lower: bool = False,
+        sublinear: bool = True,
     ) -> TidyText:
         """Return n-grams of length n from corpus in tidy format.
 
@@ -436,6 +450,9 @@ class Corpus:
             (default: False).
         lower : bool, optional
             Make lower-case (default: False).
+        sublinear : bool, optional
+            Apply sublinear scaling when calculating *tf-idf* term weights
+            (default: True).
 
         Returns
         -------
@@ -455,10 +472,11 @@ class Corpus:
             _remove_numbers if remove_numbers else identity,
             _remove_punctuation if remove_punctuation else identity,
         )
-        return self._return_tidy_text(func)
+        tt = self._make_tidy_text(func)
+        return _tf_idf(tt, sublinear)
 
-    def _return_tidy_text(self, func: Callable[[Doc], list[str]]) -> TidyText:
-        df = (
+    def _make_tidy_text(self, func: Callable[[Doc], list[str]]) -> TidyText:
+        tt = (
             pd.melt(
                 self.nlp.map(func).apply(pd.Series).reset_index(),
                 id_vars="label",
@@ -470,7 +488,7 @@ class Corpus:
             .reset_index()
             .set_index("label")
         )
-        return TidyText(df)
+        return TidyText(tt)
 
     def __repr__(self) -> str:
         return (
@@ -587,6 +605,27 @@ def _remove_additional(doc: list[str], token_list: list[str]) -> list[str]:
 def _ngrams(doc: list[str], n: int) -> list[str]:
     """Returns list of n-gram strings."""
     return [" ".join(t) for t in zip(*[doc[offset:] for offset in range(n)])]
+
+
+def _tf_idf(tidy_text: TidyText, sublinear: bool) -> pd.DataFrame:
+    """Calculate term frequency/inverse document frequency."""
+    if sublinear:
+        tidy_text["tf"] = tidy_text["n"].map(_sublinear_scaling)
+    else:
+        totals = tidy_text.groupby(tidy_text.index).sum().rename(columns={"n": "total"})
+        tidy_text = tidy_text.merge(totals, right_index=True, left_index=True)
+        tidy_text["tf"] = tidy_text["n"] / tidy_text["total"]
+    idfs = np.log10(len(set(tidy_text.index)) / tidy_text["term"].value_counts())
+    tt = tidy_text.merge(pd.DataFrame(idfs), left_on="term", right_index=True).rename(
+        columns={"term_y": "idf"}
+    )
+    tt["term_weight"] = tt["tf"] * tt["idf"]
+    return tt[["term", "n", "term_weight"]]
+
+
+def _sublinear_scaling(n: Union[int, float]) -> float:
+    """Logarithmic scaling function."""
+    return 1 + np.log10(n) if n > 0 else 0
 
 
 class NoDocumentColumnException(Exception):
