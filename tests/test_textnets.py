@@ -17,31 +17,31 @@ def test_corpus(corpus):
 
     noun_phrases = corpus.noun_phrases()
     assert noun_phrases.sum().n == 26
-    assert set(noun_phrases.columns) == {"term", "n"}
+    assert set(noun_phrases.columns) == {"term", "n", "term_weight"}
 
     noun_phrases_remove = corpus.noun_phrases(remove=["moon"])
     assert noun_phrases_remove.sum().n == 22
-    assert set(noun_phrases_remove.columns) == {"term", "n"}
+    assert set(noun_phrases_remove.columns) == {"term", "n", "term_weight"}
 
     noun_phrases_remove = corpus.noun_phrases(normalize=True)
-    assert set(noun_phrases_remove.columns) == {"term", "n"}
+    assert set(noun_phrases_remove.columns) == {"term", "n", "term_weight"}
 
     tokenized = corpus.tokenized()
     assert tokenized.sum().n == 43
-    assert set(tokenized.columns) == {"term", "n"}
+    assert set(tokenized.columns) == {"term", "n", "term_weight"}
 
     nostem = corpus.tokenized(stem=False)
-    assert set(nostem.columns) == {"term", "n"}
+    assert set(nostem.columns) == {"term", "n", "term_weight"}
 
     nopunct = corpus.tokenized(remove_punctuation=False)
-    assert set(nopunct.columns) == {"term", "n"}
+    assert set(nopunct.columns) == {"term", "n", "term_weight"}
 
     upper = corpus.tokenized(lower=False)
-    assert set(upper.columns) == {"term", "n"}
+    assert set(upper.columns) == {"term", "n", "term_weight"}
 
     ngrams = corpus.ngrams(3)
     assert ngrams.sum().n == 67
-    assert set(ngrams.columns) == {"term", "n"}
+    assert set(ngrams.columns) == {"term", "n", "term_weight"}
 
 
 def test_corpus_missing(testdata, recwarn):
