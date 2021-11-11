@@ -47,7 +47,7 @@ from warnings import warn
 from wasabi import msg
 
 
-class TextnetsConfiguration(UserDict):
+class TextnetsConfiguration(UserDict[str, Any]):
     """Container for global parameters."""
 
     _valid = {
@@ -59,20 +59,20 @@ class TextnetsConfiguration(UserDict):
         "tuning_parameter",
     }
 
-    def __setitem__(self, key, item) -> None:
+    def __setitem__(self, key: str, item: Any) -> None:
         if key not in self._valid:
             warn(f"Parameter '{key}' not known. Skipping.")
         else:
             self.data[key] = item
 
-    def save(self, target: Union[os.PathLike, str]) -> None:
+    def save(self, target: Union[os.PathLike[str], str]) -> None:
         """Save parameters to file."""
         conn = sqlite3.connect(Path(target))
         with conn as c:
             c.execute("CREATE TABLE IF NOT EXISTS params(data json)")
             c.execute("INSERT INTO params VALUES (?)", [json.dumps(self.data)])
 
-    def load(self, source: Union[os.PathLike, str]) -> None:
+    def load(self, source: Union[os.PathLike[str], str]) -> None:
         """Load parameters from file."""
         if not Path(source).exists():
             raise FileNotFoundError(f"File '{source}' does not exist.")
@@ -112,5 +112,5 @@ params = TextnetsConfiguration(seed=random.randint(0, 10_000), **default_params)
 
 
 #: Initialize the random seed
-def init_seed():
+def init_seed() -> None:
     random.seed(params["seed"])
