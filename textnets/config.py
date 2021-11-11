@@ -83,7 +83,7 @@ class TextnetsConfiguration(UserDict[str, Any]):
             ).fetchone()[1]
         params = json.loads(ser)
         self.update(params)
-        print(f"Updated global parameters with values loaded from '{source}'.")
+        msg.info(f"Updated global parameters with values loaded from '{source}'.")
 
     def _repr_html_(self) -> str:
         rows = [f"<tr><td>{par}</td><td>{val}</td></tr>" for par, val in self.items()]
