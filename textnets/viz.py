@@ -63,8 +63,13 @@ def decorate_plot(plot_func: Callable) -> Callable:
     """Style the plot produced by igraph's plot function."""
 
     @wraps(plot_func)
-    def wrapper(textnet: tn.network.TextnetBase, **kwargs) -> ig.Plot:
-        graph = textnet.graph
+    def wrapper(net: tn.network.TextnetBase, **kwargs) -> ig.Plot:
+        graph = net.graph
+        # Rewrite node_* arguments as vertex_* arguments
+        node_opts = [k for k, _ in kwargs.items() if k.startswith("node_")]
+        for opt in node_opts:
+            val = kwargs.pop(opt)
+            kwargs[opt.replace("node_", "vertex_")] = val
         # Marking and coloring clusters
         show_clusters = kwargs.pop("show_clusters", False)
         color_clusters = kwargs.pop("color_clusters", False)
@@ -76,7 +81,7 @@ def decorate_plot(plot_func: Callable) -> Callable:
                 )
             else:
                 markers = zip(
-                    _cluster_node_indices(textnet.clusters),
+                    _cluster_node_indices(net.clusters),
                     repeat(_add_opacity("limegreen", 0.4)),
                 )
             kwargs.setdefault("mark_groups", markers)
@@ -88,30 +93,32 @@ def decorate_plot(plot_func: Callable) -> Callable:
                 ]
             else:
                 kwargs["vertex_color"] = [
-                    TextnetPalette(textnet.clusters._len)[c]
-                    for c in textnet.clusters.membership
+                    TextnetPalette(net.clusters._len)[c]
+                    for c in net.clusters.membership
                 ]
         # Default appearance
         kwargs.setdefault("autocurve", True)
         kwargs.setdefault("edge_color", "lightgray")
-        kwargs.setdefault("edge_label_size", 8)
+        kwargs.setdefault("edge_label_size", 6)
+        kwargs.setdefault("edge_width", 1.5)
         kwargs.setdefault("margin", 50)
-        kwargs.setdefault("vertex_frame_width", 0.2)
-        kwargs.setdefault("vertex_label_size", 10)
+        kwargs.setdefault("vertex_frame_width", 0.25)
+        kwargs.setdefault("vertex_label_size", 9)
+        kwargs.setdefault("vertex_size", 20)
         kwargs.setdefault("wrap_labels", True)
         kwargs.setdefault(
             "layout", graph.layout_fruchterman_reingold(weights="weight", grid=False)
         )
         kwargs.setdefault(
             "vertex_color",
-            ["orangered" if v else "dodgerblue" for v in textnet.node_types],
+            ["orangered" if v else "dodgerblue" for v in net.node_types],
         )
         kwargs.setdefault(
-            "vertex_shape", ["circle" if t else "square" for t in textnet.node_types]
+            "vertex_shape", ["circle" if t else "square" for t in net.node_types]
         )
         kwargs.setdefault(
             "vertex_frame_color",
-            ["black" if t else "white" for t in textnet.node_types],
+            ["black" if t else "white" for t in net.node_types],
         )
         # Layouts
         bipartite_layout = kwargs.pop("bipartite_layout", False)
@@ -120,7 +127,7 @@ def decorate_plot(plot_func: Callable) -> Callable:
         kamada_kawai_layout = kwargs.pop("kamada_kawai_layout", False)
         drl_layout = kwargs.pop("drl_layout", False)
         if bipartite_layout:
-            layout = graph.layout_bipartite(types=textnet.node_types)
+            layout = graph.layout_bipartite(types=net.node_types)
             layout.rotate(90)
             kwargs["wrap_labels"] = False
             kwargs["layout"] = layout
@@ -135,21 +142,37 @@ def decorate_plot(plot_func: Callable) -> Callable:
             kwargs["layout"] = graph.layout_kamada_kawai()
         elif drl_layout:
             kwargs["layout"] = graph.layout_drl(weights="weight")
-        # Node scaling
-        scale_nodes_by = kwargs.pop("scale_nodes_by", False)
-        if scale_nodes_by:
+        # Node and edge scaling
+        scale_nodes_by = kwargs.pop("scale_nodes_by", None)
+        if scale_nodes_by is not None:
             try:
-                dist = getattr(textnet, scale_nodes_by)
+                dist = getattr(net, scale_nodes_by)
             except AttributeError:
-                dist = Series(textnet.nodes[scale_nodes_by])
+                dist = Series(net.nodes[scale_nodes_by])
+            except TypeError:
+                dist = Series(scale_nodes_by)
             if abs(dist.skew()) < 2:
                 dist **= 2
             norm = (dist - dist.mean()) / dist.std()
-            mult = 20 / abs(norm).max()
-            sizes = (norm * mult + 25).fillna(0)
+            basesize = np.array(kwargs.pop("vertex_size"))
+            mult = basesize / abs(norm).max()
+            sizes = (norm * mult / 1.618 + basesize).fillna(0)
             kwargs["vertex_size"] = sizes
+        scale_edges_by = kwargs.pop("scale_edges_by", None)
+        if scale_edges_by is not None:
+            if scale_edges_by in net.graph.edge_attributes():
+                dist = Series(net.edges[scale_edges_by])
+            else:
+                dist = Series(scale_edges_by)
+            if abs(dist.skew()) < 2:
+                dist **= 2
+            norm = (dist - dist.mean()) / dist.std()
+            basewidth = np.array(kwargs.pop("edge_width"))
+            mult = basewidth / abs(norm).max()
+            widths = (1.618 * norm * mult + basewidth).fillna(0)
+            kwargs["edge_width"] = widths
         # Node and edge opacity
-        node_opacity = kwargs.pop("node_opacity", None)
+        node_opacity = kwargs.pop("vertex_opacity", None)
         edge_opacity = kwargs.pop("edge_opacity", None)
         if node_opacity is not None:
             kwargs["vertex_color"] = [
@@ -170,39 +193,31 @@ def decorate_plot(plot_func: Callable) -> Callable:
                 or (node["type"] == "term" and label_term_nodes)
                 or label_nodes
                 else None
-                for node in textnet.nodes
+                for node in net.nodes
             ],
         )
         kwargs.setdefault(
             "edge_label",
-            [
-                f"{edge['weight']:.2f}" if label_edges else None
-                for edge in textnet.edges
-            ],
+            [f"{edge['weight']:.2f}" if label_edges else None for edge in net.edges],
         )
         # Node and edge label filters
-        node_label_filter = kwargs.pop("node_label_filter", False)
+        node_label_filter = kwargs.pop("vertex_label_filter", False)
         edge_label_filter = kwargs.pop("edge_label_filter", False)
         if node_label_filter and "vertex_label" in kwargs:
             node_labels = kwargs.pop("vertex_label")
-            filtered_node_labels = map(node_label_filter, textnet.nodes)
+            filtered_node_labels = map(node_label_filter, net.nodes)
             kwargs["vertex_label"] = [
                 lbl if keep else None
                 for lbl, keep in zip(node_labels, filtered_node_labels)
             ]
         if edge_label_filter and "edge_label" in kwargs:
             edge_labels = kwargs.pop("edge_label")
-            filtered_edge_labels = map(edge_label_filter, textnet.edges)
+            filtered_edge_labels = map(edge_label_filter, net.edges)
             kwargs["edge_label"] = [
                 lbl if keep else None
                 for lbl, keep in zip(edge_labels, filtered_edge_labels)
             ]
-        # Rewrite any remaining node_* arguments as vertex_* arguments
-        node_opts = [k for k, _ in kwargs.items() if k.startswith("node_")]
-        for opt in node_opts:
-            val = kwargs.pop(opt)
-            kwargs[opt.replace("node_", "vertex_")] = val
-        return plot_func(textnet, **kwargs)
+        return plot_func(net, **kwargs)
 
     return wrapper
 
