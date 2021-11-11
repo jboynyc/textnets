@@ -59,6 +59,11 @@ class Corpus:
     lang : str, optional
         The langugage model to use (default set by "lang" parameter).
 
+    Raises
+    ------
+    ValueError
+        If the supplied data is empty.
+
     Attributes
     ----------
     documents : Series
@@ -132,11 +137,15 @@ class Corpus:
             DataFrame containing documents. The index must contain document
             labels.
         doc_col : str, optional
-            If ``data`` is a data frame, this indicates which column contains the
-            document texts. If none is specified, the first column with strings is
-            used.
+            Indicates which column of ``data`` contains the document texts. If
+            none is specified, the first column with strings is used.
         lang : str, optional
             The langugage model to use (default set by "lang" parameter).
+
+        Raises
+        ------
+        NoDocumentColumnException
+            If no document column can be detected.
 
         Returns
         -------
@@ -189,6 +198,13 @@ class Corpus:
             Labels for documents (default: file name without suffix).
         lang : str, optional
             The langugage model to use (default set by "lang" parameter).
+
+        Raises
+        ------
+        IsADirectoryError
+            If the provided path is a directory. (Use globbing.)
+        FileNotFoundError
+            If the provided path does not exist.
 
         Returns
         -------
@@ -314,6 +330,11 @@ class Corpus:
             File to read the corpus from. This should be a file created by
             `Corpus.save`.
 
+        Raises
+        ------
+        FileNotFoundError
+            If the specified path does not exist.
+
         Returns
         -------
         `Corpus`
@@ -321,11 +342,11 @@ class Corpus:
         if not Path(source).exists():
             raise FileNotFoundError(f"File '{source}' does not exist.")
         conn = sqlite3.connect(Path(source))
-        with conn as c:
+        with conn:
             documents = pd.read_sql(
-                "SELECT * FROM corpus_documents", c, index_col="label"
+                "SELECT * FROM corpus_documents", conn, index_col="label"
             )
-            meta = pd.read_sql("SELECT * FROM corpus_meta", c, index_col="keys")[
+            meta = pd.read_sql("SELECT * FROM corpus_meta", conn, index_col="keys")[
                 "values"
             ]
         return cls.from_df(documents, lang=meta["lang"])

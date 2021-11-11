@@ -66,14 +66,33 @@ class TextnetsConfiguration(UserDict[str, Any]):
             self.data[key] = item
 
     def save(self, target: Union[os.PathLike[str], str]) -> None:
-        """Save parameters to file."""
+        """
+        Save parameters to file.
+
+        Parameters
+        ----------
+        target : path
+            Location of file to save parameters to.
+        """
         conn = sqlite3.connect(Path(target))
-        with conn as c:
-            c.execute("CREATE TABLE IF NOT EXISTS params(data json)")
-            c.execute("INSERT INTO params VALUES (?)", [json.dumps(self.data)])
+        with conn:
+            conn.execute("CREATE TABLE IF NOT EXISTS params(data json)")
+            conn.execute("INSERT INTO params VALUES (?)", [json.dumps(self.data)])
 
     def load(self, source: Union[os.PathLike[str], str]) -> None:
-        """Load parameters from file."""
+        """
+        Load parameters from file.
+
+        Parameters
+        ----------
+        source : path
+            Location of file to load parameters from.
+
+        Raises
+        ------
+        FileNotFoundError
+            If the path does not exist.
+        """
         if not Path(source).exists():
             raise FileNotFoundError(f"File '{source}' does not exist.")
         conn = sqlite3.connect(Path(source))
@@ -107,10 +126,10 @@ default_params = {
     "tuning_parameter": 0.5,
 }
 
-#: Container for global parameters
+#: Container for global parameters.
 params = TextnetsConfiguration(seed=random.randint(0, 10_000), **default_params)
 
 
-#: Initialize the random seed
 def init_seed() -> None:
+    """Initialize the random seed."""
     random.seed(params["seed"])

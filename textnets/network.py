@@ -319,6 +319,11 @@ class Textnet(TextnetBase, FormalContext):
     doc_attrs : dict of dict, optional
         Additional attributes of document nodes.
 
+    Raises
+    ------
+    ValueError
+        If the supplied data is empty.
+
     Attributes
     ----------
     im : `IncidenceMatrix`
@@ -338,7 +343,7 @@ class Textnet(TextnetBase, FormalContext):
             raise ValueError("Data is empty.")
         if isinstance(data, IncidenceMatrix):
             self.im = data
-        elif isinstance(data, TidyText) or isinstance(data, pd.DataFrame):
+        elif isinstance(data, (TidyText, pd.DataFrame)):
             self.im = _im_from_tidy_text(data, min_docs)
 
     @cached_property
@@ -366,6 +371,11 @@ class Textnet(TextnetBase, FormalContext):
         connected : bool, optional
             Keep only the largest connected component of the projected network
             (default: False).
+
+        Raises
+        ------
+        ValueError
+            If no valid node type is specified.
 
         Returns
         -------
@@ -409,11 +419,11 @@ class Textnet(TextnetBase, FormalContext):
         """
         conn = sqlite3.connect(Path(target))
         meta = {"connected": self._connected, "doc_attrs": json.dumps(self._doc_attrs)}
-        with conn as c, warnings.catch_warnings():
+        with conn, warnings.catch_warnings():
             warnings.simplefilter("ignore")  # catch warning from pandas.to_sql
-            self.im.T.to_sql("textnet_im", c, if_exists="replace")
+            self.im.T.to_sql("textnet_im", conn, if_exists="replace")
             pd.Series(meta, name="values").to_sql(
-                "textnet_meta", c, if_exists="replace", index_label="keys"
+                "textnet_meta", conn, if_exists="replace", index_label="keys"
             )
 
     @classmethod
@@ -426,6 +436,11 @@ class Textnet(TextnetBase, FormalContext):
         source : str or path
             File to read the corpus from. This should be a file created by
             `Textnet.save`.
+
+        Raises
+        ------
+        FileNotFoundError
+            If the provided path does not exist.
 
         Returns
         -------
@@ -812,29 +827,30 @@ def _graph_from_im(im: pd.DataFrame) -> ig.Graph:
     return g
 
 
-def disparity_filter(g: ig.Graph) -> Iterator[float]:
+def disparity_filter(graph: ig.Graph) -> Iterator[float]:
     """
     Compute significance scores of edge weights.
 
     Parameters
     ----------
-    `igraph.Graph`
+    graph : Graph
         The one-mode graph to compute the significance scores for.
 
-    Returns
-    -------
-    Iterator of floats.
+    Yields
+    ------
+    float
+        Iterator of significance scores.
 
     Notes
     -----
-    Provided the package was installed properly, a compiled extension will
-    be used for a significant speedup.
+    Provided the package was installed properly, a compiled extension will be
+    used for a significant speedup.
 
     References
     ----------
     :cite:`Serrano2009`
     """
-    for edge in g.es:
+    for edge in graph.es:
         source, target = edge.vertex_tuple
         degree_t = target.degree()
         if degree_t <= 1:
@@ -901,6 +917,11 @@ def bipartite_rank(
         specified tolerance).
     tolerance : float
         Error tolerance when checking for convergence.
+
+    Raises
+    ------
+    ValueError
+        If an invalid normalizer is specified.
 
     Returns
     -------
