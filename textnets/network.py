@@ -4,8 +4,8 @@
 
 from __future__ import annotations
 
-import os
 import json
+import os
 import sqlite3
 import warnings
 from collections import Counter
@@ -113,23 +113,6 @@ class TextnetBase:
         return pd.Series(self.graph.strength(weights="weight"), index=self.nodes["id"])
 
     @cached_property
-    def betweenness(self) -> pd.Series:
-        """Weighted betweenness centrality."""
-        return pd.Series(self.graph.betweenness(weights="cost"), index=self.nodes["id"])
-
-    @cached_property
-    def closeness(self) -> pd.Series:
-        """Weighted closeness centrality."""
-        return pd.Series(self.graph.closeness(weights="cost"), index=self.nodes["id"])
-
-    @cached_property
-    def eigenvector_centrality(self) -> pd.Series:
-        """Weighted eigenvector centrality."""
-        return pd.Series(
-            self.graph.eigenvector_centrality(weights="weight"), index=self.nodes["id"]
-        )
-
-    @cached_property
     def node_types(self) -> list[bool]:
         """Returns boolean list to distinguish node types."""
         return [t == "term" for t in self.nodes["type"]]
@@ -203,54 +186,6 @@ class TextnetBase:
             Ranked nodes.
         """
         return self.strength.sort_values(ascending=False).head(n)
-
-    def top_betweenness(self, n: int = 10) -> pd.Series:
-        """
-        Show nodes sorted by betweenness.
-
-        Parameters
-        ----------
-        n : int, optional
-            How many nodes to show (default: 10)
-
-        Returns
-        -------
-        `pandas.Series`
-            Ranked nodes.
-        """
-        return self.betweenness.sort_values(ascending=False).head(n)
-
-    def top_closeness(self, n: int = 10) -> pd.Series:
-        """
-        Show nodes sorted by closeness.
-
-        Parameters
-        ----------
-        n : int, optional
-            How many nodes to show (default: 10)
-
-        Returns
-        -------
-        `pandas.Series`
-            Ranked nodes.
-        """
-        return self.closeness.sort_values(ascending=False).head(n)
-
-    def top_ev(self, n: int = 10) -> pd.Series:
-        """
-        Show nodes sorted by eigenvector centrality.
-
-        Parameters
-        ----------
-        n : int, optional
-            How many nodes to show (default: 10)
-
-        Returns
-        -------
-        `pandas.Series`
-            Ranked nodes.
-        """
-        return self.eigenvector_centrality.sort_values(ascending=False).head(n)
 
     def top_cluster_nodes(
         self, n: int = 10, part: Optional[ig.VertexClustering] = None
@@ -414,7 +349,7 @@ class Textnet(TextnetBase, FormalContext):
             for name, attr in self._doc_attrs.items():
                 g.vs[name] = [attr.get(doc) for doc in g.vs["id"]]
         if self._connected:
-            return _giant_component(g)
+            return giant_component(g)
         else:
             return g
 
@@ -459,7 +394,7 @@ class Textnet(TextnetBase, FormalContext):
             1 / pow(w, tn.params["tuning_parameter"]) for w in g.es["weight"]
         ]
         if connected:
-            g = _giant_component(g)
+            g = giant_component(g)
         return ProjectedTextnet(g)
 
     def save(self, target: Union[os.PathLike, str]) -> None:
@@ -583,9 +518,9 @@ class Textnet(TextnetBase, FormalContext):
             Function returning boolean value mapped to iterator of edges to
             decide whether or not to suppress labels.
         scale_nodes_by : str, optional
-            Name of centrality measure to scale nodes by. Possible values:
-            ``betweenness``, ``closeness``, ``degree``, ``strength``,
-            ``eigenvector_centrality`` (default: None).
+            Name of centrality measure or node attribute to scale nodes by.
+            Possible values: ``degree``, ``strength``, ``hits``, ``cohits``,
+            ``birank`` or any node attribute (default: None).
 
         Other Parameters
         ----------------
@@ -605,6 +540,100 @@ class Textnet(TextnetBase, FormalContext):
         kwargs.update(args)
         return self._plot(**kwargs)
 
+    @cached_property
+    def hits(self) -> pd.Series:
+        """HITS rank of nodes."""
+        return bipartite_rank(self, normalizer="HITS")
+
+    @cached_property
+    def cohits(self) -> pd.Series:
+        """CoHITS rank of nodes."""
+        return bipartite_rank(self, normalizer="CoHITS")
+
+    @cached_property
+    def birank(self) -> pd.Series:
+        """BiRank of nodes."""
+        return bipartite_rank(self, normalizer="BiRank")
+
+    def top_hits(self, n: int = 10) -> pd.Series:
+        """
+        Show nodes sorted by HITS rank.
+
+        Parameters
+        ----------
+        n : int, optional
+            How many nodes to show (default: 10)
+
+        Returns
+        -------
+        `pandas.Series`
+            Ranked nodes.
+        """
+        return self.hits.sort_values(ascending=False).head(n)
+
+    def top_cohits(self, n: int = 10) -> pd.Series:
+        """
+        Show nodes sorted by CoHITS rank.
+
+        Parameters
+        ----------
+        n : int, optional
+            How many nodes to show (default: 10)
+
+        Returns
+        -------
+        `pandas.Series`
+            Ranked nodes.
+        """
+        return self.cohits.sort_values(ascending=False).head(n)
+
+    def top_birank(self, n: int = 10) -> pd.Series:
+        """
+        Show nodes sorted by BiRank.
+
+        Parameters
+        ----------
+        n : int, optional
+            How many nodes to show (default: 10)
+
+        Returns
+        -------
+        `pandas.Series`
+            Ranked nodes.
+        """
+        return self.birank.sort_values(ascending=False).head(n)
+
+    @cached_property
+    def clustering(self) -> pd.Series:
+        """
+        Calculate the unweighted bipartite clustering coefficient.
+
+        Returns
+        -------
+        `pandas.Series`
+            The clustering cofficients indexed by node label.
+
+        Notes
+        -----
+        Adapted from the ``networkx`` implementation.
+
+        References
+        ----------
+        :cite:`Latapy2008`
+        """
+        ccs = []
+        for node in self.nodes:
+            cc: float = 0
+            fon = set(node.neighbors())
+            son = {nn for nbr in fon for nn in nbr.neighbors()} - {node}
+            for nn in son:
+                nnn = set(nn.neighbors())
+                cc += len(nnn & fon) / len(nnn | fon)
+            if cc > 0:
+                cc /= len(son)
+            ccs.append(cc)
+        return pd.Series(ccs, index=self.nodes["id"])
+
 
 class ProjectedTextnet(TextnetBase):
     """
@@ -617,6 +646,92 @@ class ProjectedTextnet(TextnetBase):
     graph : `igraph.Graph`
         Direct access to the igraph object.
     """
+
+    @cached_property
+    def betweenness(self) -> pd.Series:
+        """Weighted betweenness centrality."""
+        return pd.Series(self.graph.betweenness(weights="cost"), index=self.nodes["id"])
+
+    @cached_property
+    def closeness(self) -> pd.Series:
+        """Weighted closeness centrality."""
+        return pd.Series(self.graph.closeness(weights="cost"), index=self.nodes["id"])
+
+    @cached_property
+    def eigenvector_centrality(self) -> pd.Series:
+        """Weighted eigenvector centrality."""
+        return pd.Series(
+            self.graph.eigenvector_centrality(weights="weight"), index=self.nodes["id"]
+        )
+
+    @cached_property
+    def pagerank(self) -> pd.Series:
+        """Weighted PageRank centrality."""
+        return pd.Series(self.graph.pagerank(weights="weight"), index=self.nodes["id"])
+
+    def top_betweenness(self, n: int = 10) -> pd.Series:
+        """
+        Show nodes sorted by betweenness.
+
+        Parameters
+        ----------
+        n : int, optional
+            How many nodes to show (default: 10)
+
+        Returns
+        -------
+        `pandas.Series`
+            Ranked nodes.
+        """
+        return self.betweenness.sort_values(ascending=False).head(n)
+
+    def top_closeness(self, n: int = 10) -> pd.Series:
+        """
+        Show nodes sorted by closeness.
+
+        Parameters
+        ----------
+        n : int, optional
+            How many nodes to show (default: 10)
+
+        Returns
+        -------
+        `pandas.Series`
+            Ranked nodes.
+        """
+        return self.closeness.sort_values(ascending=False).head(n)
+
+    def top_ev(self, n: int = 10) -> pd.Series:
+        """
+        Show nodes sorted by eigenvector centrality.
+
+        Parameters
+        ----------
+        n : int, optional
+            How many nodes to show (default: 10)
+
+        Returns
+        -------
+        `pandas.Series`
+            Ranked nodes.
+        """
+        return self.eigenvector_centrality.sort_values(ascending=False).head(n)
+
+    def top_pagerank(self, n: int = 10) -> pd.Series:
+        """
+        Show nodes sorted by PageRank centrality.
+
+        Parameters
+        ----------
+        n : int, optional
+            How many nodes to show (default: 10)
+
+        Returns
+        -------
+        `pandas.Series`
+            Ranked nodes.
+        """
+        return self.pagerank.sort_values(ascending=False).head(n)
 
     def alpha_cut(self, alpha: float) -> ProjectedTextnet:
         """
@@ -632,21 +747,12 @@ class ProjectedTextnet(TextnetBase):
         -------
         `ProjectedTextnet`
             New textnet sans pruned edges.
-
-        Notes
-        -----
-        Provided the package was installed properly, a compiled extension will
-        be used for a significant speedup.
-
-        References
-        ----------
-        :cite:`Serrano2009`
         """
         if "alpha" not in self.graph.vertex_attributes():
-            self.graph.es["alpha"] = list(_disparity_filter(self.graph))
+            self.graph.es["alpha"] = list(disparity_filter(self.graph))
         pruned = self.graph.copy()
         pruned.delete_edges(pruned.es.select(alpha_ge=alpha))
-        return ProjectedTextnet(_giant_component(pruned))
+        return ProjectedTextnet(giant_component(pruned))
 
     def plot(self, *, alpha: Optional[float] = None, **kwargs) -> ig.Plot:
         """
@@ -658,6 +764,11 @@ class ProjectedTextnet(TextnetBase):
             Threshold for edge elimination. Must be between 0 and 1. Edges with
             an alpha value above the specified threshold are removed. This is
             useful when plotting "hairball" graphs.
+        scale_nodes_by : str, optional
+            Name of centrality measure or node attribute to scale nodes by.
+            Possible values: ``degree``, ``strength``, ``betweenness``,
+            ``closeness``, ``eigenvector_centrality``, ``pagerank`` or any node
+            attribute (default: None).
 
         Returns
         -------
@@ -679,8 +790,50 @@ class ProjectedTextnet(TextnetBase):
         return to_plot._plot(**kwargs)
 
 
-def _disparity_filter(g: ig.Graph) -> Iterator[float]:
-    """Compute significance scores of edge weights."""
+def _im_from_tidy_text(tidy_text: TidyText, min_docs: int) -> IncidenceMatrix:
+    count = tidy_text.groupby("term").count()["n"]
+    tt = (
+        tidy_text.reset_index()
+        .merge(count >= min_docs, on="term", how="left")
+        .rename(columns={"n_y": "keep"})
+        .rename(columns={"n_x": "n"})
+        .set_index("label")
+    )
+    im = tt[tt["keep"]].pivot(values="term_weight", columns="term").fillna(0)
+    return IncidenceMatrix(im)
+
+
+def _graph_from_im(im: pd.DataFrame) -> ig.Graph:
+    g = ig.Graph.Incidence(im.to_numpy().tolist(), directed=False)
+    g.vs["id"] = np.append(im.index, im.columns).tolist()
+    g.es["weight"] = im.to_numpy().flatten()[np.flatnonzero(im)]
+    g.es["cost"] = [1 / pow(w, tn.params["tuning_parameter"]) for w in g.es["weight"]]
+    g.vs["type"] = ["term" if t else "doc" for t in g.vs["type"]]
+    return g
+
+
+def disparity_filter(g: ig.Graph) -> Iterator[float]:
+    """
+    Compute significance scores of edge weights.
+
+    Parameters
+    ----------
+    `igraph.Graph`
+        The one-mode graph to compute the significance scores for.
+
+    Returns
+    -------
+    Iterator of floats.
+
+    Notes
+    -----
+    Provided the package was installed properly, a compiled extension will
+    be used for a significant speedup.
+
+    References
+    ----------
+    :cite:`Serrano2009`
+    """
     for edge in g.es:
         source, target = edge.vertex_tuple
         degree_t = target.degree()
@@ -703,33 +856,122 @@ def _disparity_filter_integral(norm_weight: float, degree: int) -> float:
     return quad(integrand, 0, norm_weight, args=(degree))
 
 
-def _giant_component(g: ig.Graph) -> ig.Graph:
-    """Return the subgraph corresponding to the giant component."""
+def giant_component(g: ig.Graph) -> ig.Graph:
+    """
+    Return the subgraph corresponding to the giant component.
+
+    Parameters
+    ----------
+    `igraph.Graph`
+        The (possibly) disconnected graph.
+
+    Returns
+    -------
+    `igraph.Graph`
+        The graph consisting of just the largest connected component.
+    """
     size = max(g.components().sizes())
     pos = g.components().sizes().index(size)
     return g.subgraph(g.components()[pos])
 
 
-def _im_from_tidy_text(tidy_text: TidyText, min_docs: int) -> pd.DataFrame:
-    count = tidy_text.groupby("term").count()["n"]
-    tt = (
-        tidy_text.reset_index()
-        .merge(count >= min_docs, on="term", how="left")
-        .rename(columns={"n_y": "keep"})
-        .rename(columns={"n_x": "n"})
-        .set_index("label")
-    )
-    im = tt[tt["keep"]].pivot(values="term_weight", columns="term").fillna(0)
-    return IncidenceMatrix(im)
+def bipartite_rank(
+    net: Textnet,
+    normalizer: Literal["HITS", "CoHITS", "BGRM", "BiRank"],
+    alpha: float = 0.85,
+    beta: float = 0.85,
+    max_iter: int = -1,
+    tolerance: float = 1.0e-4,
+) -> pd.Series:
+    """
+    Calculate centralities of nodes in the bipartite network.
 
+    Parameters
+    ----------
+    normalizer : string
+        The normalizer to use: ``HITS``, ``CoHITS``, ``BGRM``, or ``BiRank``.
+        See reference for details.
+    alpha : float
+        Damping factor for the rows and columns.
+    beta : float
+        Damping factor for the rows and columns.
+    max_iter : int
+        Maximum number of iterations to run before reaching convergence
+        (default: -1, meaning iterate until the errors are within the
+        specified tolerance).
+    tolerance : float
+        Error tolerance when checking for convergence.
 
-def _graph_from_im(im: pd.DataFrame) -> ig.Graph:
-    g = ig.Graph.Incidence(im.to_numpy().tolist(), directed=False)
-    g.vs["id"] = np.append(im.index, im.columns).tolist()
-    g.es["weight"] = im.to_numpy().flatten()[np.flatnonzero(im)]
-    g.es["cost"] = [1 / pow(w, tn.params["tuning_parameter"]) for w in g.es["weight"]]
-    g.vs["type"] = ["term" if t else "doc" for t in g.vs["type"]]
-    return g
+    Returns
+    -------
+    `pandas.Series`
+        The BiRank for both sets of nodes indexed by node label.
+
+    Notes
+    -----
+    Adapted from the implementation by :cite:t`Yang2020`.
+
+    References
+    ----------
+    :cite:`He2017`
+    """
+    if normalizer not in ("HITS", "CoHITS", "BGRM", "BiRank"):
+        raise ValueError(f"'{normalizer}' is not a valid normalization option.")
+
+    W = net.im.values
+    Kd = np.array(W.sum(axis=1)).flatten()
+    Kp = np.array(W.T.sum(axis=1)).flatten()
+
+    Kd[np.where(Kd == 0)] += 1
+    Kp[np.where(Kp == 0)] += 1
+
+    Kd_ = np.diagflat(1 / Kd)
+    Kp_ = np.diagflat(1 / Kp)
+
+    if normalizer == "HITS":
+        Sp = W.T
+        Sd = W
+    elif normalizer == "CoHITS":
+        Sp = W.T.dot(Kd_)
+        Sd = W.dot(Kp_)
+    elif normalizer == "BGRM":
+        Sp = Kp_.dot(W.T).dot(Kd_)
+        Sd = Sp.T
+    elif normalizer == "BiRank":
+        Kd_bi = np.diagflat(1 / np.sqrt(Kd))
+        Kp_bi = np.diagflat(1 / np.sqrt(Kp))
+        Sp = Kp_bi.dot(W.T).dot(Kd_bi)
+        Sd = Sp.T
+
+    p0 = np.repeat(1 / Kp_.shape[0], Kp_.shape[0])
+    p_last = p0.copy()
+    d0 = np.repeat(1 / Kd_.shape[0], Kd_.shape[0])
+    d_last = d0.copy()
+
+    iter_count = 0
+    continue_iter = iter_count < max_iter or max_iter < 0
+
+    while continue_iter:
+        p = alpha * (Sp.dot(d_last)) + (1 - alpha) * p0
+        d = beta * (Sd.dot(p_last)) + (1 - beta) * d0
+
+        if normalizer == "HITS":
+            p = p / p.sum()
+            d = d / d.sum()
+
+        err_p = np.absolute(p - p_last).sum()
+        err_d = np.absolute(d - d_last).sum()
+
+        iter_count += 1
+        if err_p < tolerance and err_d < tolerance:
+            continue_iter = False
+        else:
+            continue_iter = iter_count < max_iter or max_iter < 0
+
+        p_last = p
+        d_last = d
+
+    return pd.Series(np.append(d, p), index=net.nodes["id"])
 
 
 class IncidenceMatrix(pd.DataFrame):

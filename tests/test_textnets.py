@@ -149,7 +149,6 @@ def test_config_save_and_load(tmpdir):
 
 def test_textnet(corpus):
     """Test Textnet class using sample data."""
-
     noun_phrases = corpus.noun_phrases()
 
     n_np = tn.Textnet(noun_phrases)
@@ -161,6 +160,28 @@ def test_textnet(corpus):
     g_np_words = n_np.project(node_type="term")
     assert g_np_words.vcount() > 0
     assert g_np_words.ecount() > 0
+
+
+def test_textnet_birank(corpus):
+    """Test calculating BiRank."""
+
+    noun_phrases = corpus.noun_phrases()
+    n_np = tn.Textnet(noun_phrases, connected=True)
+
+    assert len(n_np.birank) == n_np.graph.vcount()
+    assert len(n_np.cohits) == n_np.graph.vcount()
+    assert len(n_np.hits) == n_np.graph.vcount()
+    bgrm = tn.network.bipartite_rank(n_np, normalizer="BGRM", max_iter=200)
+    assert len(bgrm) == n_np.graph.vcount()
+
+
+def test_textnet_clustering(corpus):
+    """Test calculating clustering coefficients."""
+
+    noun_phrases = corpus.noun_phrases()
+    n_np = tn.Textnet(noun_phrases, connected=True)
+
+    assert len(n_np.clustering) == n_np.graph.vcount()
 
 
 def test_context(corpus):
