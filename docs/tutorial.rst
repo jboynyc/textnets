@@ -77,6 +77,17 @@ You may be wondering: why is the moon drifting off by itself in the network
 plot? That's because the word moon appears exactly once in each document, so
 its *tf-idf* value for each document is 0.
 
+Let's visualize the same thing again, but this time scale the nodes according
+to their BiRank (a centrality measure for bipartite networks) and the edges
+according to their weights.
+
+.. jupyter-execute::
+
+   t.plot(label_nodes=True,
+          show_clusters=True,
+          scale_nodes_by="birank",
+          scale_edges_by="weight")
+
 We can also visualize the projected networks.
 
 First, the network of newspapers:
@@ -334,7 +345,7 @@ single-mode network of either kind.
 .. code:: python
 
    groups = t.project(node_type="doc")
-   groups.summary()
+   print(groups.summary)
 
 The resulting network only contains nodes of the chosen type (``doc`` or
 ``term``). Edge weights are calculated, and node attributes are maintained.
@@ -361,8 +372,10 @@ Analysis
 The tutorial above gives some examples of using centrality measures to analyze
 your corpus. Aside from `top_betweenness`, the package also provides the
 methods `top_closeness`, `top_degree` (for unweighted degree), `top_strength`
-(for weighted degree), and `top_ev` (for eigenvector centrality). By default,
-they each output the ten top nodes for each centrality measure.
+(for weighted degree), and `top_ev` (for eigenvector centrality). In the
+bipartite network, you can use `top_birank`, `top_hits` and `top_cohits` to see
+nodes ranked by variations of a bipartite centrality measure :cite:p:`He2017`.
+By default, they each output the ten top nodes for each centrality measure.
 
 In addition, you can use `top_cluster_nodes <TextnetBase.top_cluster_nodes>` to
 help interpret the community structure of your textnet. Clusters can either be

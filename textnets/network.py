@@ -909,7 +909,7 @@ def bipartite_rank(
 
     Notes
     -----
-    Adapted from the implementation by :cite:t`Yang2020`.
+    Adapted from the implementation by :cite:t:`Yang2020`.
 
     References
     ----------

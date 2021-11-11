@@ -33,12 +33,7 @@ texts.
    following the acquittal vote in the 2020 Senate impeachment trial (`source
    <https://www.jboy.space/blog/enemies-foreign-and-partisan.html>`_).
 
-This is a Python implementation of `Chris Bail's textnets package for R`_. It
-is free software under the terms of the GNU General Public License v3.
-
-.. _`Chris Bail's textnets package for R`: https://github.com/cbail/textnets/
-
-The idea underlying **textnets** is presented in this paper:
+The ideas underlying **textnets** are presented in this paper:
 
   Christopher A. Bail, "`Combining natural language processing and network
   analysis to examine how advocacy organizations stimulate conversation on social
@@ -47,21 +42,30 @@ The idea underlying **textnets** is presented in this paper:
 
 __ https://doi.org/10.1073/pnas.1607151113
 
+Initially begun as a Python implementation of `Chris Bail's textnets package
+for R`_, **textnets** now comprises unique features for term extraction and
+weighing, visualization, and analysis.
+
+.. _`Chris Bail's textnets package for R`: https://github.com/cbail/textnets/
+
+**textnets** is free software under the terms of the GNU General Public License
+v3.
+
 Features
 --------
 
-**textnets** builds on the state-of-the-art library `spaCy`_ for
-natural-language processing and `igraph`_ for network analysis. It uses the
+**textnets** builds on `spaCy`_, a state-of-the-art library for
+natural-language processing, and `igraph`_ for network analysis. It uses the
 `Leiden algorithm`_ for community detection, which is able to perform community
 detection on the bipartite (word–group) network.
 
-.. _`Leiden algorithm`: https://arxiv.org/abs/1810.08473
 .. _`igraph`: http://igraph.org/python/
+.. _`Leiden algorithm`: https://doi.org/10.1038/s41598-019-41695-z
 .. _`spaCy`: https://spacy.io/
 
 **textnets** seamlessly integrates with Python's excellent `scientific stack`_.
-That means that you can use **textnets** in Jupyter notebooks to analyze and
-visualize your data!
+That means that you can use **textnets** to analyze and visualize your data in
+Jupyter notebooks!
 
 .. _`scientific stack`: https://numfocus.org/
 

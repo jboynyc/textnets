@@ -128,7 +128,8 @@ bipartite network::
 
    net.plot(label_nodes=True, show_clusters=True)
 
-This example applies the Paris hierarchical clustering algorithm to the projected network::
+This example applies the Paris hierarchical clustering algorithm to the
+projected network::
 
    docs = net.project(node_type="doc")
 
@@ -167,11 +168,12 @@ This example requires you to first have installed ``karateclub``.
 Additional measures for centrality analysis
 -------------------------------------------
 
-The `tutorial` provides examples of using betweenness, closeness and (weighted
-and unweighted) degree to analyze a textnet. The `NetworkX
+The `tutorial` provides examples of using BiRank, betweenness, closeness and
+(weighted and unweighted) degree to analyze a textnet. The `NetworkX
 <https://networkx.org>`__ library implements a large variety of other
 centrality measures that may also prove helpful that aren't available in
-``igraph``, the library that ``textnets`` builds on.
+``igraph``, the library that ``textnets`` builds on, including additional
+centrality measures for bipartite networks.
 
 This example requires ``networkx`` to be installed.
 
@@ -179,6 +181,10 @@ This example requires ``networkx`` to be installed.
 
    import networkx as nx
 
-   katz_centrality = nx.katz_centrality(net.graph.to_networkx(), weight="weight")
-   net.nodes["katz"] = list(katz_centrality.values())
-   net.plot(scale_nodes_by="katz")
+   bi_btwn = nx.algorithms.bipartite.betweenness_centrality(net.graph.to_networkx())
+   net.nodes["btwn"] = list(bi_btwn.values())
+   docs.plot(scale_nodes_by="btwn")
+
+   katz_centrality = nx.katz_centrality(docs.graph.to_networkx(), weight="weight")
+   docs.nodes["katz"] = list(katz_centrality.values())
+   docs.plot(scale_nodes_by="katz")
