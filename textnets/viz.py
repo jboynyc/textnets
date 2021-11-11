@@ -9,15 +9,16 @@ from itertools import repeat
 from math import ceil
 from typing import Callable, Iterator, List
 
-import textnets as tn
 import igraph as ig
-from pandas import Series
+import numpy as np
+import textnets as tn
 from igraph.drawing.colors import (
     PrecalculatedPalette,
     color_name_to_rgba,
     darken,
     lighten,
 )
+from pandas import Series
 
 #: Base colors for textnets color palette.
 BASE_COLORS = [

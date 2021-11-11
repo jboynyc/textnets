@@ -8,11 +8,11 @@ import os
 import sqlite3
 from glob import glob
 from pathlib import Path
-from typing import Any, Callable, Optional, Union, Sequence
+from typing import Any, Callable, Optional, Sequence, Union
 from warnings import warn
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 import spacy
 import textnets as tn
 from spacy.tokens import Token
