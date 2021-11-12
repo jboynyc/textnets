@@ -47,7 +47,7 @@ from warnings import warn
 from wasabi import msg, table
 
 
-class TextnetsConfiguration(UserDict[str, Any]):
+class TextnetsConfiguration(UserDict):
     """Container for global parameters."""
 
     _valid = {
