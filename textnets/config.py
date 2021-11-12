@@ -44,7 +44,7 @@ from pathlib import Path
 from typing import Any, Union
 from warnings import warn
 
-from wasabi import msg
+from wasabi import msg, table
 
 
 class TextnetsConfiguration(UserDict[str, Any]):
@@ -104,6 +104,9 @@ class TextnetsConfiguration(UserDict[str, Any]):
         params = json.loads(ser)
         self.update(params)
         msg.info(f"Updated global parameters with values loaded from '{source}'.")
+
+    def __repr__(self) -> str:
+        return table(self.data, header=["Parameter", "Value"], divider=True)
 
     def _repr_html_(self) -> str:
         rows = [f"<tr><td>{par}</td><td>{val}</td></tr>" for par, val in self.items()]
