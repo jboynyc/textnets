@@ -17,7 +17,7 @@ else they are created and saved to file.
    import textnets as tn
 
 
-   working_dir = Path('.')
+   working_dir = Path(".")
    project_file = working_dir / "my_project.db"
 
    if project_file.exists():
@@ -188,3 +188,46 @@ This example requires ``networkx`` to be installed.
    katz_centrality = nx.katz_centrality(docs.graph.to_networkx(), weight="weight")
    docs.nodes["katz"] = list(katz_centrality.values())
    docs.plot(scale_nodes_by="katz")
+
+Alternative methods of term extraction and weighing
+---------------------------------------------------
+
+By default, **textnets** leverages spaCy language models to break up your
+corpus when you call `noun_phrases`, `ngrams` or `tokenized`, and it uses
+*tf-idf* term weights. There are many alternative ways of extracting terms and
+weighing them, and by defining a simple function, you can use them with
+**textnets**.
+
+This example uses `YAKE! <http://yake.inesctec.pt/>`__, the popular library for
+keyword extraction, to extract keywords from a corpus and weighs them according
+to their significance.
+
+This example requires ``yake`` to be installed.
+
+.. code:: python
+
+   import textnets as tn
+   from yake import KeywordExtractor
+
+   def yake(
+      corpus: tn.Corpus,
+      lang: str="en",
+      ngram_size: int=3,
+      top: int=50,
+      window: int=2
+   ) -> tn.corpus.TidyText:
+      """Use YAKE keyword extraction to break up corpus."""
+      kw = KeywordExtractor(
+               lan=lang,
+               n=ngram_size,
+               top=top,
+               windowsSize=window
+           )
+      tt = []
+      for label, doc in corpus.documents.iteritems():
+          for term, sig in kw.extract_keywords(doc):
+              tt.append({"label": label, "term": term, "term_weight": 1-sig, "n": 1})
+      return tn.corpus.TidyText(tt).set_index("label")
+
+The result of calling ``yake`` on an instance of ``Corpus`` can be passed to
+``Textnet``.

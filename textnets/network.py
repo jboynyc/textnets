@@ -70,20 +70,20 @@ class TextnetBase:
 
     @property
     def nodes(self) -> ig.VertexSeq:
-        """Iterator of nodes."""
+        """Iterate over nodes."""
         return self.graph.vs
 
     @property
     def edges(self) -> ig.EdgeSeq:
-        """Iterator of edges."""
+        """Iterate of edges."""
         return self.graph.es
 
     def vcount(self) -> int:
-        """Returns the number of vertices (nodes)."""
+        """Return the number of vertices (nodes)."""
         return self.graph.vcount()
 
     def ecount(self) -> int:
-        """Returns the number of edges."""
+        """Return the number of edges."""
         return self.graph.ecount()
 
     def save_graph(
@@ -114,15 +114,19 @@ class TextnetBase:
 
     @cached_property
     def node_types(self) -> list[bool]:
-        """Returns boolean list to distinguish node types."""
+        """Return boolean list to distinguish node types."""
         return [t == "term" for t in self.nodes["type"]]
 
     _partition: Optional[ig.VertexClustering] = None
 
     @property
     def clusters(self) -> ig.VertexClustering:
-        """Return partition of graph detected by the Leiden algorithm, or a
-        different partition that was supplied to the setter."""
+        """
+        Return graph partition.
+
+        The partition is detected by the Leiden algorithm, unless a different
+        partition that was supplied to the setter.
+        """
         if self._partition is None:
             self._partition = self._partition_graph(
                 resolution=tn.params["resolution_parameter"],
@@ -151,8 +155,7 @@ class TextnetBase:
 
     @property
     def modularity(self) -> float:
-        """Returns graph modularity based on the partition detected by the
-        Leiden algorithm."""
+        """Return modularity based on graph partition."""
         return self.graph.modularity(self.clusters, weights="weight")
 
     def top_degree(self, n: int = 10) -> pd.Series:

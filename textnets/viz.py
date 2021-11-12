@@ -223,7 +223,7 @@ def decorate_plot(plot_func: Callable) -> Callable:
 
 
 def _add_opacity(color: str, alpha: float) -> tuple:
-    """Turns a color name into a RGBA tuple with specified opacity."""
+    """Turn a color name into a RGBA tuple with specified opacity."""
     return tuple([*color_name_to_rgba(color)[:3], alpha])
 
 

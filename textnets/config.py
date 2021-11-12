@@ -60,6 +60,7 @@ class TextnetsConfiguration(UserDict[str, Any]):
     }
 
     def __setitem__(self, key: str, item: Any) -> None:
+        """Set configuration value."""
         if key not in self._valid:
             warn(f"Parameter '{key}' not known. Skipping.")
         else:

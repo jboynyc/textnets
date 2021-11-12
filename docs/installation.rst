@@ -36,14 +36,16 @@ If you don't know how to enter this command, you can use the Anaconda Navigator
 instead. It provides a graphical interface that allows you to install new
 packages.
 
-1. Go to the **Environments** tab.
-2. Click the **Channels** button.
-3. Click the **Add** button.
-4. Enter the channel URL https://conda.anaconda.org/conda-forge/
-5. Hit your keyboard's **Enter** key.
-6. Click the **Update channels** button.
-7. Now you can install **textnets** in a new environment. (Make sure the
-   package filter on the **Environments** tab is set to "all.")
+.. admonition:: Installing **textnets** in Anaconda Navigator
+
+   1. Go to the **Environments** tab.
+   2. Click the **Channels** button.
+   3. Click the **Add** button.
+   4. Enter the channel URL https://conda.anaconda.org/conda-forge/
+   5. Hit your keyboard's **Enter** key.
+   6. Click the **Update channels** button.
+   7. Now you can install **textnets** in a new environment. (Make sure the
+      package filter on the **Environments** tab is set to "all.")
 
 Using pip
 ---------

@@ -624,7 +624,7 @@ def _remove_additional(doc: list[str], token_list: list[str]) -> list[str]:
 
 
 def _ngrams(doc: list[str], n: int) -> list[str]:
-    """Returns list of n-gram strings."""
+    """Return list of n-gram strings."""
     return [" ".join(t) for t in zip(*[doc[offset:] for offset in range(n)])]
 
 
