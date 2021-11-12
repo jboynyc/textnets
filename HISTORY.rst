@@ -2,7 +2,7 @@
 History
 =======
 
-0.6.1 (unreleased)
+0.7.0 (unreleased)
 ------------------
 * Adds abilitiy to save and load an instance of `Corpus`, `Textnet` and
   `params` to and from file using `Corpus.save`, `load_corpus`, `Textnet.save`,
@@ -10,12 +10,23 @@ History
   for all three kinds of objects, so all relevant data for a project can be
   saved in one file.
 * Some further optimization of backbone extraction.
+* Adds bipartite centrality measures (HITS, CoHITS and BiRank) and a bipartite
+  clustering coefficient.
 * Improved testing and type hints.
-* Expanded documentation with some advanced topics, including the new save/load
-  feature. Docs now use the PyData theme.
-* Adds Python 3.10 compatibility
+* Expanded documentation with advanced topics, including the new save/load
+  feature and interacting with other libraries for network analysis and machine
+  learning. Docs now use the PyData theme.
+* Improvements to visualization. When plotting, nodes and edges can now be
+  scaled by any attribute.
+* Breaking change: Term weighing now happens in the ``corpus`` submodule, so
+  the ``sublinear`` argument has to be passed to the methods for term
+  extraction (``tokenized``, ``noun_phrases`` and ``ngrams``). This change will
+  make it easier to add additional term extraction and weighing options.
+* Adds ``tn.init_seed()`` utility to quickly initialize pseudorandom number
+  generator.
+* Adds Python 3.10 compatibility.
 * Updates dependencies, including ``igraph`` with some relevant upstream
-  changes contributed by yours truly.
+  changes contributed by yours truly, as well as spaCy.
 
 0.6.0 (2021-10-14)
 ------------------
