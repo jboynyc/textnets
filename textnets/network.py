@@ -53,7 +53,6 @@ except ImportError:
 class TextnetBase:
     """
     Base class for `Textnet` and `ProjectedTextnet`.
-
     Attributes
     ----------
     graph : `igraph.Graph`
@@ -91,7 +90,6 @@ class TextnetBase:
     ) -> None:
         """
         Save the underlying graph.
-
         Parameters
         ----------
         target : str or path or file
@@ -123,7 +121,6 @@ class TextnetBase:
     def clusters(self) -> ig.VertexClustering:
         """
         Return graph partition.
-
         The partition is detected by the Leiden algorithm, unless a different
         partition that was supplied to the setter.
         """
@@ -161,12 +158,10 @@ class TextnetBase:
     def top_degree(self, n: int = 10) -> pd.Series:
         """
         Show nodes sorted by unweighted degree.
-
         Parameters
         ----------
         n : int, optional
             How many nodes to show (default: 10).
-
         Returns
         -------
         `pandas.Series`
@@ -177,12 +172,10 @@ class TextnetBase:
     def top_strength(self, n: int = 10) -> pd.Series:
         """
         Show nodes sorted by weighted degree.
-
         Parameters
         ----------
         n : int, optional
             How many nodes to show (default: 10).
-
         Returns
         -------
         `pandas.Series`
@@ -195,14 +188,12 @@ class TextnetBase:
     ) -> pd.Series:
         """
         Show top nodes ranked by weighted degree per cluster.
-
         Parameters
         ----------
         n : int, optional
             How many nodes to show per cluster (default: 10)
         part : igraph.VertexClustering, optional
             Partition to use (default: Leiden partition).
-
         Returns
         -------
         `pandas.Series`
@@ -296,17 +287,13 @@ class TextnetBase:
 class Textnet(TextnetBase, FormalContext):
     """
     Textnet for the relational analysis of meanings.
-
     A textnet is a bipartite network of documents and terms. Links exist
     only between the two types of nodes. Documents have a tie with terms
     they contain; the tie is weighted by *tf-idf*.
-
     The bipartite network can be projected into two different kinds of
     single-mode networks: document-to-document, and term-to-term.
-
     Experimental: The underlying incidence matrix can also be turned into a
     formal context, which can be used to construct a concept lattice.
-
     Parameters
     ----------
     data: DataFrame
@@ -321,12 +308,10 @@ class Textnet(TextnetBase, FormalContext):
         False).
     doc_attrs : dict of dict, optional
         Additional attributes of document nodes.
-
     Raises
     ------
     ValueError
         If the supplied data is empty.
-
     Attributes
     ----------
     im : `IncidenceMatrix`
@@ -366,7 +351,6 @@ class Textnet(TextnetBase, FormalContext):
     ) -> ProjectedTextnet:
         """
         Project to one-mode network.
-
         Parameters
         ----------
         node_type : {"doc", "term"}
@@ -374,12 +358,10 @@ class Textnet(TextnetBase, FormalContext):
         connected : bool, optional
             Keep only the largest connected component of the projected network
             (default: False).
-
         Raises
         ------
         ValueError
             If no valid node type is specified.
-
         Returns
         -------
         `ProjectedTextnet`
@@ -413,7 +395,6 @@ class Textnet(TextnetBase, FormalContext):
     def save(self, target: Union[os.PathLike, str]) -> None:
         """
         Save a textnet to file.
-
         Parameters
         ----------
         target : str or path
@@ -433,18 +414,15 @@ class Textnet(TextnetBase, FormalContext):
     def load(cls, source: Union[os.PathLike, str]) -> Textnet:
         """
         Load a textnet from file.
-
         Parameters
         ----------
         source : str or path
             File to read the corpus from. This should be a file created by
             `Textnet.save`.
-
         Raises
         ------
         FileNotFoundError
             If the provided path does not exist.
-
         Returns
         -------
         `Textnet`
@@ -484,7 +462,6 @@ class Textnet(TextnetBase, FormalContext):
     ) -> ig.Plot:
         """
         Plot the bipartite graph.
-
         Parameters
         ----------
         color_clusters : bool or VertexClustering, optional
@@ -539,14 +516,12 @@ class Textnet(TextnetBase, FormalContext):
             Name of centrality measure or node attribute to scale nodes by.
             Possible values: ``degree``, ``strength``, ``hits``, ``cohits``,
             ``birank`` or any node attribute (default: None).
-
         Other Parameters
         ----------------
         target : str or file, optional
             File or path that the plot should be saved to (e.g., ``plot.png``).
         kwargs
             Additional arguments to pass to `igraph.drawing.plot`.
-
         Returns
         -------
         `igraph.drawing.Plot`
@@ -576,12 +551,10 @@ class Textnet(TextnetBase, FormalContext):
     def top_hits(self, n: int = 10) -> pd.Series:
         """
         Show nodes sorted by HITS rank.
-
         Parameters
         ----------
         n : int, optional
             How many nodes to show (default: 10)
-
         Returns
         -------
         `pandas.Series`
@@ -592,12 +565,10 @@ class Textnet(TextnetBase, FormalContext):
     def top_cohits(self, n: int = 10) -> pd.Series:
         """
         Show nodes sorted by CoHITS rank.
-
         Parameters
         ----------
         n : int, optional
             How many nodes to show (default: 10)
-
         Returns
         -------
         `pandas.Series`
@@ -608,12 +579,10 @@ class Textnet(TextnetBase, FormalContext):
     def top_birank(self, n: int = 10) -> pd.Series:
         """
         Show nodes sorted by BiRank.
-
         Parameters
         ----------
         n : int, optional
             How many nodes to show (default: 10)
-
         Returns
         -------
         `pandas.Series`
@@ -625,16 +594,13 @@ class Textnet(TextnetBase, FormalContext):
     def clustering(self) -> pd.Series:
         """
         Calculate the unweighted bipartite clustering coefficient.
-
         Returns
         -------
         `pandas.Series`
             The clustering cofficients indexed by node label.
-
         Notes
         -----
         Adapted from the ``networkx`` implementation.
-
         References
         ----------
         :cite:`Latapy2008`
@@ -656,9 +622,7 @@ class Textnet(TextnetBase, FormalContext):
 class ProjectedTextnet(TextnetBase):
     """
     One-mode projection of a textnet.
-
     Created by calling `Textnet.project()` with the desired ``node_type``.
-
     Attributes
     ----------
     graph : `igraph.Graph`
@@ -687,15 +651,28 @@ class ProjectedTextnet(TextnetBase):
         """Weighted PageRank centrality."""
         return pd.Series(self.graph.pagerank(weights="weight"), index=self.nodes["id"])
 
+    @cached_property
+    def katz_centrality(self) -> pd.Series:
+        """Weighted Katz centrality."""
+        return pd.Series(self.graph.katz_centrality(weights="weight"), index=self.nodes["id"])
+
+    @cached_property
+    def information_centrality(self) -> pd.Series:
+        """Weighted Katz centrality."""
+        return pd.Series(self.graph.information_centrality(weights="weight"), index=self.nodes["id"])
+
+    @cached_property
+    def load_centrality(self) -> pd.Series:
+        """Weighted Katz centrality."""
+        return pd.Series(self.graph.load_centrality(weights="weight"), index=self.nodes["id"])
+
     def top_betweenness(self, n: int = 10) -> pd.Series:
         """
         Show nodes sorted by betweenness.
-
         Parameters
         ----------
         n : int, optional
             How many nodes to show (default: 10)
-
         Returns
         -------
         `pandas.Series`
@@ -706,12 +683,10 @@ class ProjectedTextnet(TextnetBase):
     def top_closeness(self, n: int = 10) -> pd.Series:
         """
         Show nodes sorted by closeness.
-
         Parameters
         ----------
         n : int, optional
             How many nodes to show (default: 10)
-
         Returns
         -------
         `pandas.Series`
@@ -722,12 +697,10 @@ class ProjectedTextnet(TextnetBase):
     def top_ev(self, n: int = 10) -> pd.Series:
         """
         Show nodes sorted by eigenvector centrality.
-
         Parameters
         ----------
         n : int, optional
             How many nodes to show (default: 10)
-
         Returns
         -------
         `pandas.Series`
@@ -738,12 +711,10 @@ class ProjectedTextnet(TextnetBase):
     def top_pagerank(self, n: int = 10) -> pd.Series:
         """
         Show nodes sorted by PageRank centrality.
-
         Parameters
         ----------
         n : int, optional
             How many nodes to show (default: 10)
-
         Returns
         -------
         `pandas.Series`
@@ -751,16 +722,58 @@ class ProjectedTextnet(TextnetBase):
         """
         return self.pagerank.sort_values(ascending=False).head(n)
 
+    def top_katz(self, n: int = 10) -> pd.Series:
+        """
+        Show nodes sorted by Katz centrality.
+        Parameters
+        ----------
+        n : int, optional
+            How many nodes to show (default: 10)
+        Returns
+        -------
+        `pandas.Series`
+            Ranked nodes.
+        """
+        return self.katz_centrality.sort_values(ascending=False).head(n)
+
+    def top_information(self, n: int = 10) -> pd.Series:
+        """
+        Show nodes sorted by Information centrality.
+        Parameters
+        ----------
+        n : int, optional
+            How many nodes to show (default: 10)
+        Returns
+        -------
+        `pandas.Series`
+            Ranked nodes.
+        """
+        return self.information_centrality.sort_values(ascending=False).head(n)
+
+    def top_load(self, n: int = 10) -> pd.Series:
+        """
+        Show nodes sorted by Load centrality.
+        Parameters
+        ----------
+        n : int, optional
+            How many nodes to show (default: 10)
+        Returns
+        -------
+        `pandas.Series`
+            Ranked nodes.
+        """
+        return self.load_centrality.sort_values(ascending=False).head(n)
+
+# TODO: Automate the top_* method to be created from the centrality method
+
     def alpha_cut(self, alpha: float) -> ProjectedTextnet:
         """
         Return graph backbone.
-
         Parameters
         ----------
         alpha : float
             Threshold for edge elimination. Must be between 0 and 1. Edges with
             an alpha value above the specified threshold are removed.
-
         Returns
         -------
         `ProjectedTextnet`
@@ -775,7 +788,6 @@ class ProjectedTextnet(TextnetBase):
     def plot(self, *, alpha: Optional[float] = None, **kwargs) -> ig.Plot:
         """
         Plot the projected graph.
-
         Parameters
         ----------
         alpha : float, optional
@@ -787,13 +799,11 @@ class ProjectedTextnet(TextnetBase):
             Possible values: ``degree``, ``strength``, ``betweenness``,
             ``closeness``, ``eigenvector_centrality``, ``pagerank`` or any node
             attribute (default: None).
-
         Returns
         -------
         `igraph.drawing.Plot`
             The plot can be directly displayed in a Jupyter notebook or saved
             as an image file.
-
         Other Parameters
         ----------------
         target : str or file, optional
@@ -833,22 +843,18 @@ def _graph_from_im(im: pd.DataFrame) -> ig.Graph:
 def disparity_filter(graph: ig.Graph) -> Iterator[float]:
     """
     Compute significance scores of edge weights.
-
     Parameters
     ----------
     graph : Graph
         The one-mode graph to compute the significance scores for.
-
     Yields
     ------
     float
         Iterator of significance scores.
-
     Notes
     -----
     Provided the package was installed properly, a compiled extension will be
     used for a significant speedup.
-
     References
     ----------
     :cite:`Serrano2009`
@@ -878,12 +884,10 @@ def _disparity_filter_integral(norm_weight: float, degree: int) -> float:
 def giant_component(g: ig.Graph) -> ig.Graph:
     """
     Return the subgraph corresponding to the giant component.
-
     Parameters
     ----------
     `igraph.Graph`
         The (possibly) disconnected graph.
-
     Returns
     -------
     `igraph.Graph`
@@ -904,7 +908,6 @@ def bipartite_rank(
 ) -> pd.Series:
     """
     Calculate centralities of nodes in the bipartite network.
-
     Parameters
     ----------
     normalizer : string
@@ -920,21 +923,17 @@ def bipartite_rank(
         specified tolerance).
     tolerance : float
         Error tolerance when checking for convergence.
-
     Raises
     ------
     ValueError
         If an invalid normalizer is specified.
-
     Returns
     -------
     `pandas.Series`
         The BiRank for both sets of nodes indexed by node label.
-
     Notes
     -----
     Adapted from the implementation by :cite:t:`Yang2020`.
-
     References
     ----------
     :cite:`He2017`
