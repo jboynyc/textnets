@@ -54,8 +54,8 @@ push: ## push code and tags to remote repository
 lint: format ## check style with flake8
 	$(COMMAND_PREFIX) flake8 textnets tests
 
-format: ## format code with black
-	$(COMMAND_PREFIX) black textnets tests
+format: ## format code
+	$(COMMAND_PREFIX) ufmt format textnets tests
 
 test: ## run tests quickly with the default Python
 	$(COMMAND_PREFIX) pytest
