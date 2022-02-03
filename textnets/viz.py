@@ -101,7 +101,7 @@ def decorate_plot(plot_func: Callable) -> Callable:
         kwargs.setdefault("autocurve", True)
         kwargs.setdefault("edge_color", "lightgray")
         kwargs.setdefault("edge_label_size", 6)
-        kwargs.setdefault("edge_width", 1.5)
+        kwargs.setdefault("edge_width", 2)
         kwargs.setdefault("margin", 50)
         kwargs.setdefault("vertex_frame_width", 0.25)
         kwargs.setdefault("vertex_label_size", 9)
@@ -144,6 +144,7 @@ def decorate_plot(plot_func: Callable) -> Callable:
         elif drl_layout:
             kwargs["layout"] = graph.layout_drl(weights="weight")
         # Node and edge scaling
+        PHI = 1.618
         scale_nodes_by = kwargs.pop("scale_nodes_by", None)
         if scale_nodes_by is not None:
             try:
@@ -157,7 +158,7 @@ def decorate_plot(plot_func: Callable) -> Callable:
             norm = (dist - dist.mean()) / dist.std()
             basesize = np.array(kwargs.pop("vertex_size"))
             mult = basesize / abs(norm).max()
-            sizes = (norm * mult / 1.618 + basesize).fillna(0)
+            sizes = (norm * mult / PHI + basesize).fillna(0)
             kwargs["vertex_size"] = sizes
         scale_edges_by = kwargs.pop("scale_edges_by", None)
         if scale_edges_by is not None:
@@ -170,7 +171,7 @@ def decorate_plot(plot_func: Callable) -> Callable:
             norm = (dist - dist.mean()) / dist.std()
             basewidth = np.array(kwargs.pop("edge_width"))
             mult = basewidth / abs(norm).max()
-            widths = (1.618 * norm * mult + basewidth).fillna(0)
+            widths = (PHI / 2 * norm * mult + (basewidth * PHI / 2)).fillna(0)
             kwargs["edge_width"] = widths
         # Node and edge opacity
         node_opacity = kwargs.pop("vertex_opacity", None)
