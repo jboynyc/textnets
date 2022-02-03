@@ -2,6 +2,11 @@
 History
 =======
 
+0.7.1 (unreleased)
+------------------
+* Fixes #35 (invisible edges when scaling by weight).
+* Updates some dependencies.
+
 0.7.0 (2021-11-12)
 ------------------
 * Adds abilitiy to save and load an instance of `Corpus`, `Textnet` and
