@@ -11,14 +11,15 @@ from typing import Callable, Iterator, List
 
 import igraph as ig
 import numpy as np
-import textnets as tn
 from igraph.drawing.colors import (
-    PrecalculatedPalette,
     color_name_to_rgba,
     darken,
     lighten,
+    PrecalculatedPalette,
 )
 from pandas import Series
+
+import textnets as tn
 
 #: Base colors for textnets color palette.
 BASE_COLORS = [

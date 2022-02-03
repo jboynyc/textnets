@@ -14,10 +14,11 @@ from warnings import warn
 import numpy as np
 import pandas as pd
 import spacy
-import textnets as tn
 from spacy.tokens import Token
 from spacy.tokens.doc import Doc
 from toolz import compose, identity, memoize, partial
+
+import textnets as tn
 
 #: Mapping of language codes to spacy language model names.
 LANGS = {

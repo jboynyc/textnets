@@ -5,8 +5,9 @@
 from typing import List, Tuple
 
 import pandas as pd
-import textnets as tn
 from toolz import memoize
+
+import textnets as tn
 
 
 class FormalContext:
