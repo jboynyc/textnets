@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Documentation
+    url: https://textnets.readthedocs.io
+    about: The documentation might address your issue. Take a look!
+  - name: 📝 Binder
+    url: https://mybinder.org/v2/gh/jboynyc/textnets-binder/trunk?filepath=Tutorial.ipynb
+    about: Run the tutorial interactively without installing anything.
