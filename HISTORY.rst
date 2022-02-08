@@ -2,7 +2,7 @@
 History
 =======
 
-0.7.1 (unreleased)
+0.7.1 (2022-02-08)
 ------------------
 * Fixes #35 (invisible edges when scaling by weight).
 * Updates some dependencies.
