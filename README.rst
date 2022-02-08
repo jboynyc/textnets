@@ -43,8 +43,8 @@ The ideas underlying **textnets** are presented in this paper:
 __ https://doi.org/10.1073/pnas.1607151113
 
 Initially begun as a Python implementation of `Chris Bail's textnets package
-for R`_, **textnets** now comprises unique features for term extraction and
-weighing, visualization, and analysis.
+for R`_, **textnets** now comprises several unique features for term extraction
+and weighing, visualization, and analysis.
 
 .. _`Chris Bail's textnets package for R`: https://github.com/cbail/textnets/
 
@@ -103,6 +103,7 @@ Learn More
 **Issues & Ideas**  https://github.com/jboynyc/textnets/issues
 **Conda-Forge**     https://anaconda.org/conda-forge/textnets
 **PyPI**            https://pypi.org/project/textnets/
+**FOSDEM '22**      https://fosdem.org/2022/schedule/event/open_research_textnets/
 **DOI**             `10.21105/joss.02594 <https://doi.org/10.21105/joss.02594>`_
 **Archive**         `10.5281/zenodo.3866676 <https://doi.org/10.5281/zenodo.3866676>`_
 ==================  =============================================
