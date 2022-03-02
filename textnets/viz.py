@@ -226,7 +226,7 @@ def decorate_plot(plot_func: Callable) -> Callable:
 
 def _add_opacity(color: str, alpha: float) -> tuple:
     """Turn a color name into a RGBA tuple with specified opacity."""
-    return tuple([*color_name_to_rgba(color)[:3], alpha])
+    return (*color_name_to_rgba(color)[:3], alpha)
 
 
 def _cluster_node_indices(vc: ig.VertexClustering) -> Iterator[List[int]]:
