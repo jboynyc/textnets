@@ -42,7 +42,7 @@ load_textnet = Textnet.load
 def _repr_html_() -> str:
     import spacy
 
-    packages = ["python-igraph", "leidenalg", "spacy"]
+    packages = ["igraph", "leidenalg", "spacy"]
     package_versions = map(version, packages)
     language_models = spacy.util.get_installed_models()
     model_versions = map(spacy.util.get_package_version, language_models)
