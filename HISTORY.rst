@@ -2,6 +2,11 @@
 History
 =======
 
+0.7.2 (2022-03-20)
+------------------
+* Fixes a bug in the HTML representation of the top-level module.
+* Updates some dependencies.
+
 0.7.1 (2022-02-08)
 ------------------
 * Fixes #35 (invisible edges when scaling by weight).
