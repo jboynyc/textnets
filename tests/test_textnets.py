@@ -272,3 +272,9 @@ def test_plot_filtered(tmpdir, corpus):
     )
     assert len(plot._objects) > 0
     assert len(tmpdir.listdir()) == 1
+
+
+def test_html_repr(corpus):
+    assert tn._repr_html_() != ""
+    assert corpus._repr_html_() != ""
+    assert tn.Textnet(corpus.tokenized())._repr_html_() != ""
