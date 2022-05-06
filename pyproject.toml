@@ -22,8 +22,8 @@ exclude = ["docs/conda-env.yml", "textnets/_ext.c"]
 [tool.poetry.dependencies]
 python = ">=3.7.1,<3.11"
 Cython = "^0.29.24"
-igraph = "^0.9.8,!=0.9.9"
-leidenalg = "^0.8.4"
+igraph = "^0.9.7,!=0.9.9,!=0.9.10"
+leidenalg = "^0.8.9"
 pandas = "^1.3.5"
 cairocffi = {version = "^1.2.0", markers = "sys_platform=='linux' or sys_platform=='darwin'"}
 pycairo = {version = "^1.20.1", markers = "sys_platform=='win32'"}
