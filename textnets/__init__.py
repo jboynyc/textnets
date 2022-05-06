@@ -8,10 +8,7 @@ Citation for this package: :cite:t:`Boy2020`.
 Functionality based on :cite:t:`Bail2016`.
 """
 
-try:
-    from importlib.metadata import version
-except ImportError:
-    from importlib_metadata import version
+from importlib.metadata import version
 
 from . import examples  # noqa: F401
 from .config import init_seed, params  # noqa: F401
