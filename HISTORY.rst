@@ -2,10 +2,11 @@
 History
 =======
 
-0.7.2 (2022-03-20)
+0.7.2 (unreleased)
 ------------------
 * Fixes a bug in the HTML representation of the top-level module.
-* Updates some dependencies.
+* Removes Python 3.7 compatibility.
+* Updates dependencies, including spaCy.
 
 0.7.1 (2022-02-08)
 ------------------
