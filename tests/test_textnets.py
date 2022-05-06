@@ -45,7 +45,7 @@ def test_corpus(corpus):
 
 def test_corpus_missing(testdata, recwarn):
     """Test Corpus class on series with missing data."""
-    s = testdata.append(pd.Series([None], index=["Missing"]))
+    s = pd.concat([testdata, pd.Series([None], index=["Missing"])])
     corpus = tn.Corpus(s)
     assert len(recwarn) == 1
     w = recwarn.pop(UserWarning)

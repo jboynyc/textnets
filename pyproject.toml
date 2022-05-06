@@ -20,21 +20,17 @@ exclude = ["docs/conda-env.yml", "textnets/_ext.c"]
 "Changelog" = "https://textnets.readthedocs.io/en/stable/history.html"
 
 [tool.poetry.dependencies]
-python = ">=3.7.1,<3.11"
+python = ">=3.8.0,<3.11"
 Cython = "^0.29.24"
 igraph = "^0.9.7,!=0.9.9,!=0.9.10"
 leidenalg = "^0.8.9"
-pandas = "^1.3.5"
+pandas = "^1.4.0"
 cairocffi = {version = "^1.2.0", markers = "sys_platform=='linux' or sys_platform=='darwin'"}
 pycairo = {version = "^1.20.1", markers = "sys_platform=='win32'"}
 scipy = "^1.7.0"
 spacy = "^3.3.0"
 toolz = "^0.11.1"
 wasabi = "^0.9.1"
-
-cached-property = {version = "^1.5.2", python = "<3.8"}
-importlib-metadata = {version = "^4.10.1", python = "<3.8"}
-typing-extensions = {version = "^3.10.0", python = "<3.8"}
 
 jupyter-sphinx = {version = "^0.3.2", optional = true}
 sphinxcontrib-bibtex = {version = "^2.3.0", optional = true}

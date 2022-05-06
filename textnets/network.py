@@ -9,20 +9,11 @@ import os
 import sqlite3
 import warnings
 from collections import Counter
+from functools import cached_property
 from pathlib import Path
-from typing import Callable, Iterator, Optional, Union
+from typing import Callable, Iterator, Literal, Optional, Union
 from typing.io import IO
 from warnings import warn
-
-try:
-    from typing import Literal
-except ImportError:
-    from typing_extensions import Literal  # type: ignore
-
-try:
-    from functools import cached_property
-except ImportError:
-    from cached_property import cached_property  # type: ignore
 
 import igraph as ig
 import leidenalg as la
