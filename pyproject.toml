@@ -25,8 +25,8 @@ Cython = "^0.29.24"
 igraph = "^0.9.7,!=0.9.9,!=0.9.10"
 leidenalg = "^0.8.9"
 pandas = "^1.4.0"
-cairocffi = {version = "^1.2.0", markers = "sys_platform=='linux' or sys_platform=='darwin'"}
-pycairo = {version = "^1.20.1", markers = "sys_platform=='win32'"}
+cairocffi = {version = "^1.3.0", markers = "sys_platform=='linux' or sys_platform=='darwin'"}
+pycairo = {version = "^1.21.0", markers = "sys_platform=='win32'"}
 scipy = "^1.7.0"
 spacy = "^3.3.0"
 toolz = "^0.11.1"
@@ -39,8 +39,8 @@ pydata-sphinx-theme = {version = "^0.8.0", optional = true}
 
 [tool.poetry.dev-dependencies]
 coverage = "^6.0.2"
-flake8 = "^3.9.2"
-mypy = "^0.931"
+flake8 = "^4.0.1"
+mypy = "^0.950"
 pytest = "^6.2.4"
 watchdog = {extras = ["watchmedo"], version = "^2.1.3"}
 ufmt = "^1.3.1"
