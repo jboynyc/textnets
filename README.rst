@@ -70,7 +70,7 @@ Jupyter notebooks!
 .. _`scientific stack`: https://numfocus.org/
 
 **textnets** is easily installable using the ``conda`` and ``pip`` package
-managers. It requires Python 3.7 or higher.
+managers. It requires Python 3.8 or higher.
 
 Read `the documentation <https://textnets.readthedocs.io>`_ to learn more about
 the package's features.
