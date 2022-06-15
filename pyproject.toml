@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "textnets"
-version = "0.8.0"
+version = "0.8.1"
 description = "Automated text analysis with networks"
 license = "GNU General Public License v3"
 keywords = ["computational social science", "network analysis", "nlp", "text analysis", "visualization"]

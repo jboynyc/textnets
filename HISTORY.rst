@@ -2,6 +2,10 @@
 History
 =======
 
+0.8.1 (unreleased)
+------------------
+* Updates dependencies, including ``igraph`` and spaCy.
+
 0.8.0 (2022-05-06)
 ------------------
 * Removes Python 3.7 compatibility.
