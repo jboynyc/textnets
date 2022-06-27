@@ -166,13 +166,19 @@ def test_textnet_birank(corpus):
     """Test calculating BiRank."""
 
     noun_phrases = corpus.noun_phrases()
-    n_np = tn.Textnet(noun_phrases, connected=True)
+    n_np = tn.Textnet(noun_phrases)
 
     assert len(n_np.birank) == n_np.graph.vcount()
     assert len(n_np.cohits) == n_np.graph.vcount()
     assert len(n_np.hits) == n_np.graph.vcount()
     bgrm = tn.network.bipartite_rank(n_np, normalizer="BGRM", max_iter=200)
     assert len(bgrm) == n_np.graph.vcount()
+
+
+def test_textnet_birank_connected(corpus):
+    n_np = tn.Textnet(corpus.tokenized(), min_docs=1, connected=True)
+
+    assert len(n_np.birank) == n_np.graph.vcount()
 
 
 def test_textnet_clustering(corpus):

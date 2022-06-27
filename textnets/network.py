@@ -337,21 +337,36 @@ class Textnet(TextnetBase, FormalContext):
         if data.empty:
             raise ValueError("Data is empty.")
         if isinstance(data, IncidenceMatrix):
-            self.im = data
+            self._matrix = data
         elif isinstance(data, (TidyText, pd.DataFrame)):
-            self.im = _im_from_tidy_text(data, min_docs)
+            self._matrix = _im_from_tidy_text(data, min_docs)
 
     @cached_property
     def graph(self):
         """Direct access to the underlying igraph object."""
-        g = _graph_from_im(self.im)
+        g = _graph_from_im(self._matrix)
         if self._doc_attrs:
             for name, attr in self._doc_attrs.items():
                 g.vs[name] = [attr.get(doc) for doc in g.vs["id"]]
         if self._connected:
             return giant_component(g)
-        else:
-            return g
+        return g
+
+    @cached_property
+    def im(self) -> IncidenceMatrix:
+        """Incidence matrix of the bipartite graph."""
+        if not self._connected:
+            return self._matrix
+        a = np.array(self.graph.get_incidence(types=self.node_types)[0]).astype(
+            "float64"
+        )
+        a[a == 1] = self.edges["weight"]
+        doc_count, _ = a.shape
+        im = IncidenceMatrix(
+            a, index=self.nodes["id"][:doc_count], columns=self.nodes["id"][doc_count:]
+        )
+        im.T.index.name = "term"
+        return im
 
     def project(
         self, *, node_type: Literal["doc", "term"], connected: Optional[bool] = False
