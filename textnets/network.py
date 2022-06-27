@@ -301,7 +301,7 @@ class Textnet(TextnetBase, FormalContext):
 
     Parameters
     ----------
-    data: DataFrame
+    data: TidyText
         * DataFrame of tokens with per-document counts, as created by
           `Corpus.tokenized` `Corpus.ngrams`, and `Corpus.noun_phrases`.
         * An incidence matrix relating documents to terms.
@@ -321,13 +321,15 @@ class Textnet(TextnetBase, FormalContext):
 
     Attributes
     ----------
+    graph : ig.Graph
+        Direct access to the underlying igraph object.
     im : `IncidenceMatrix`
         Incidence matrix of the bipartite graph.
     """
 
     def __init__(
         self,
-        data: pd.DataFrame,
+        data: TidyText,
         min_docs: int = 2,
         connected: bool = False,
         doc_attrs: Optional[dict[str, dict[str, str]]] = None,
