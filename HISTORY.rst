@@ -2,7 +2,7 @@
 History
 =======
 
-0.8.1 (unreleased)
+0.8.1 (2022-06-27)
 ------------------
 * Fix `bug #36 <https://github.com/jboynyc/textnets/issues/36>`__.
 * Updates dependencies, including ``igraph`` and spaCy.
