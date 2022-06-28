@@ -8,6 +8,7 @@ import json
 import os
 import sqlite3
 import warnings
+from abc import ABC, abstractmethod
 from collections import Counter
 from functools import cached_property
 from pathlib import Path
@@ -110,6 +111,14 @@ class TextnetBase(ABC):
     def node_types(self) -> list[bool]:
         """Return boolean list to distinguish node types."""
         return [t == "term" for t in self.nodes["type"]]
+
+    @abstractmethod
+    def plot(self, **kwargs) -> ig.Plot:
+        pass
+
+    @abstractmethod
+    def _partition_graph(self, resolution: float, seed: int) -> ig.VertexClustering:
+        pass
 
     _partition: Optional[ig.VertexClustering] = None
 
@@ -224,26 +233,6 @@ class TextnetBase(ABC):
     ) -> ig.Plot:
         tn.init_seed()
         return ig.plot(self.graph, **kwargs)
-
-    def _partition_graph(self, resolution: float, seed: int) -> ig.VertexClustering:
-        if self.graph.is_bipartite():
-            part, part0, part1 = la.CPMVertexPartition.Bipartite(
-                self.graph, resolution_parameter_01=resolution, weights="weight"
-            )
-            opt = la.Optimiser()
-            opt.set_rng_seed(seed)
-            opt.optimise_partition_multiplex(
-                [part, part0, part1], layer_weights=[1, -1, -1], n_iterations=-1
-            )
-        else:
-            part = la.find_partition(
-                self.graph,
-                la.ModularityVertexPartition,
-                weights="weight",
-                n_iterations=-1,
-                seed=seed,
-            )
-        return part
 
     def __repr__(self) -> str:
         type_counts: Counter[Literal["doc", "term"]] = Counter(self.nodes["type"])
@@ -663,6 +652,17 @@ class Textnet(TextnetBase, FormalContext):
             ccs.append(cc)
         return pd.Series(ccs, index=self.nodes["id"])
 
+    def _partition_graph(self, resolution: float, seed: int) -> ig.VertexClustering:
+        part, part0, part1 = la.CPMVertexPartition.Bipartite(
+            self.graph, resolution_parameter_01=resolution, weights="weight"
+        )
+        opt = la.Optimiser()
+        opt.set_rng_seed(seed)
+        opt.optimise_partition_multiplex(
+            [part, part0, part1], layer_weights=[1, -1, -1], n_iterations=-1
+        )
+        return part
+
 
 class ProjectedTextnet(TextnetBase):
     """
@@ -817,6 +817,16 @@ class ProjectedTextnet(TextnetBase):
         else:
             to_plot = self
         return to_plot._plot(**kwargs)
+
+    def _partition_graph(self, resolution: float, seed: int) -> ig.VertexClustering:
+        part = la.find_partition(
+            self.graph,
+            la.ModularityVertexPartition,
+            weights="weight",
+            n_iterations=-1,
+            seed=seed,
+        )
+        return part
 
 
 def _im_from_tidy_text(tidy_text: TidyText, min_docs: int) -> IncidenceMatrix:
