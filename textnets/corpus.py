@@ -28,6 +28,7 @@ LANGS = {
     "el": "el_core_news_sm",  # Greek
     "en": "en_core_web_sm",  # English
     "es": "es_core_news_sm",  # Spanish
+    "fi": "fi_core_news_sm",  # Finnish
     "fr": "fr_core_news_sm",  # French
     "it": "it_core_news_sm",  # Italian
     "ja": "ja_core_news_sm",  # Japanese
@@ -39,6 +40,7 @@ LANGS = {
     "pt": "pt_core_news_sm",  # Portuguese
     "ro": "ro_core_news_sm",  # Romanian
     "ru": "ru_core_news_sm",  # Russian
+    "sv": "sv_core_news_sm",  # Swedish
     "zh": "zh_core_web_sm",  # Chinese
 }
 
