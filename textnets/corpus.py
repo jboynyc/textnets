@@ -81,8 +81,7 @@ class Corpus:
         if data.empty:
             raise ValueError("Corpus data is empty.")
         documents = data.copy()
-        if documents.isna().any():
-            missings = documents.isna().sum()
+        if missings := documents.isna().sum():
             warn(f"Dropping {missings} empty document(s).")
             documents = documents[~documents.isna()]
         documents.index = documents.index.set_names(["label"])
