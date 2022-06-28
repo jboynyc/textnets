@@ -108,7 +108,8 @@ Before you submit a pull request, check that it meets these guidelines:
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add
    illustrative code examples to the tutorial.
-3. The pull request should work for Python 3.7, 3.8, and 3.9. Check
+3. The pull request should work for all supported Python versions (currently
+   3.8, 3.9, and 3.10). Check
    https://github.com/jboynyc/textnets/actions/workflows/ci.yml to make sure
    that the tests pass.
 
