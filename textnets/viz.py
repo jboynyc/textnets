@@ -7,11 +7,12 @@ from __future__ import annotations
 from functools import wraps
 from itertools import repeat
 from math import ceil
-from typing import Callable, Iterator, List
+from typing import Any, Callable, Iterator, List
 
 import igraph as ig
 import numpy as np
 from igraph.drawing.colors import (
+    color_name_to_rgb,
     color_name_to_rgba,
     darken,
     lighten,

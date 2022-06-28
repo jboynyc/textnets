@@ -302,7 +302,7 @@ class Corpus:
             data = data.set_index(data.columns[0])
         return cls.from_df(data, doc_col=doc_col, lang=lang)
 
-    def save(self, target: Union[os.PathLike, str]) -> None:
+    def save(self, target: Union[os.PathLike[Any], str]) -> None:
         """
         Save a corpus to file.
 
@@ -321,7 +321,7 @@ class Corpus:
             )
 
     @classmethod
-    def load(cls, source: Union[os.PathLike, str]) -> Corpus:
+    def load(cls, source: Union[os.PathLike[Any], str]) -> Corpus:
         """
         Load a corpus from file.
 
@@ -629,7 +629,7 @@ def _ngrams(doc: list[str], n: int) -> list[str]:
     return [" ".join(t) for t in zip(*[doc[offset:] for offset in range(n)])]
 
 
-def _tf_idf(tidy_text: TidyText, sublinear: bool) -> pd.DataFrame:
+def _tf_idf(tidy_text: TidyText, sublinear: bool) -> TidyText:
     """Calculate term frequency/inverse document frequency."""
     if sublinear:
         tidy_text["tf"] = tidy_text["n"].map(_sublinear_scaling)

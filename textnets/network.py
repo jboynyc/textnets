@@ -11,7 +11,7 @@ import warnings
 from collections import Counter
 from functools import cached_property
 from pathlib import Path
-from typing import Callable, Iterator, Literal, Optional, Union
+from typing import Any, Callable, Iterator, Literal, Optional, Union
 from typing.io import IO
 from warnings import warn
 
@@ -42,9 +42,9 @@ except ImportError:
     warn("Could not import compiled extension, backbone extraction will be slow.")
 
 
-class TextnetBase:
+class TextnetBase(ABC):
     """
-    Base class for `Textnet` and `ProjectedTextnet`.
+    Abstract base class for `Textnet` and `ProjectedTextnet`.
 
     Attributes
     ----------
@@ -79,7 +79,9 @@ class TextnetBase:
         return self.graph.ecount()
 
     def save_graph(
-        self, target: Union[str, bytes, os.PathLike, IO], format: Optional[str] = None
+        self,
+        target: Union[str, bytes, os.PathLike[Any], IO],
+        format: Optional[str] = None,
     ) -> None:
         """
         Save the underlying graph.
@@ -244,14 +246,14 @@ class TextnetBase:
         return part
 
     def __repr__(self) -> str:
-        type_counts: Counter = Counter(self.nodes["type"])
+        type_counts: Counter[Literal["doc", "term"]] = Counter(self.nodes["type"])
         return (
             f"""<{self.__class__.__name__} with {type_counts["doc"]} documents, """
             + f"""{type_counts["term"]} terms, and {self.ecount()} edges>"""
         )
 
     def _repr_html_(self) -> str:
-        type_counts: Counter = Counter(self.nodes["type"])
+        type_counts: Counter[Literal["doc", "term"]] = Counter(self.nodes["type"])
         return f"""
             <style scoped>
               .full-width {{ width: 100%; }}
@@ -321,7 +323,7 @@ class Textnet(TextnetBase, FormalContext):
 
     Attributes
     ----------
-    graph : ig.Graph
+    graph : igraph.Graph
         Direct access to the underlying igraph object.
     im : `IncidenceMatrix`
         Incidence matrix of the bipartite graph.
@@ -344,7 +346,7 @@ class Textnet(TextnetBase, FormalContext):
             self._matrix = _im_from_tidy_text(data, min_docs)
 
     @cached_property
-    def graph(self):
+    def graph(self) -> ig.Graph:
         """Direct access to the underlying igraph object."""
         g = _graph_from_im(self._matrix)
         if self._doc_attrs:
@@ -419,7 +421,7 @@ class Textnet(TextnetBase, FormalContext):
             g = giant_component(g)
         return ProjectedTextnet(g)
 
-    def save(self, target: Union[os.PathLike, str]) -> None:
+    def save(self, target: Union[os.PathLike[Any], str]) -> None:
         """
         Save a textnet to file.
 
@@ -439,7 +441,7 @@ class Textnet(TextnetBase, FormalContext):
             )
 
     @classmethod
-    def load(cls, source: Union[os.PathLike, str]) -> Textnet:
+    def load(cls, source: Union[os.PathLike[Any], str]) -> Textnet:
         """
         Load a textnet from file.
 
@@ -830,7 +832,7 @@ def _im_from_tidy_text(tidy_text: TidyText, min_docs: int) -> IncidenceMatrix:
     return IncidenceMatrix(im)
 
 
-def _graph_from_im(im: pd.DataFrame) -> ig.Graph:
+def _graph_from_im(im: IncidenceMatrix) -> ig.Graph:
     g = ig.Graph.Incidence(im.to_numpy().tolist(), directed=False)
     g.vs["id"] = np.append(im.index, im.columns).tolist()
     g.es["weight"] = im.to_numpy().flatten()[np.flatnonzero(im)]
