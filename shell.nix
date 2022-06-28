@@ -8,7 +8,7 @@ mkShell rec {
     cairo
     zlib
     poetry
-    python39.pkgs.venvShellHook
+    python310.pkgs.venvShellHook
   ];
   postShellHook = ''
     export PS1="\$(__git_ps1) $PS1"
