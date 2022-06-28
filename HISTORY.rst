@@ -2,9 +2,18 @@
 History
 =======
 
+0.8.2 (2022-06-28)
+------------------
+* Makes `TextnetBase` an abstract base class, since it is not meant to be
+  instantiated. Implements separate graph partition methods for the classes
+  `Textnet` and `ProjectedTextnet` to work around an occasional bug.
+* Adds Finnish and Swedish language codes.
+* Improves type hints.
+* Adds dark mode to docs!
+
 0.8.1 (2022-06-27)
 ------------------
-* Fix `bug #36 <https://github.com/jboynyc/textnets/issues/36>`__.
+* Fixes `bug #36 <https://github.com/jboynyc/textnets/issues/36>`__.
 * Updates dependencies, including ``igraph`` and spaCy.
 
 0.8.0 (2022-05-06)
