@@ -30,6 +30,7 @@ LANGS = {
     "es": "es_core_news_sm",  # Spanish
     "fi": "fi_core_news_sm",  # Finnish
     "fr": "fr_core_news_sm",  # French
+    "hr": "hr_core_news_sm",  # Croatian
     "it": "it_core_news_sm",  # Italian
     "ja": "ja_core_news_sm",  # Japanese
     "lt": "lt_core_news_sm",  # Lithuanian
