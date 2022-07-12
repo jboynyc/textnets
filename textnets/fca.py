@@ -3,6 +3,7 @@
 """Implements experimental features for formal concept analysis."""
 
 from typing import List, Tuple
+from warnings import warn
 
 import pandas as pd
 from toolz import memoize
@@ -38,9 +39,14 @@ class FormalContext:
         # The incidence matrix is a "fuzzy formal context." We can binarize it
         # by using a cutoff. This is known as an alpha-cut. This feature is
         # experimental.
+        try:
+            from concepts import Context
+        except ImportError:
+            warn("Install textnets[fca] to use FCA features.")
+            raise
         crisp = self.im.applymap(lambda x: x >= alpha)
         reduced = crisp[crisp.any(axis=1)].loc[:, crisp.any(axis=0)]
         objects = reduced.index.tolist()
         properties = reduced.columns.tolist()
         bools = reduced.to_numpy().tolist()
-        return objects, properties, bools
+        return Context(objects, properties, bools)

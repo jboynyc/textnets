@@ -193,9 +193,9 @@ def test_textnet_clustering(corpus):
 def test_context(corpus):
     """Test formal context creation from textnet."""
 
-    n = tn.Textnet(corpus.tokenized(sublinear=False))
+    n = tn.Textnet(corpus.tokenized(sublinear=True))
     ctx = n.context
-    assert len(ctx) == 3
+    assert "lattice" in dir(ctx)
 
 
 def test_save(tmpdir, corpus):
