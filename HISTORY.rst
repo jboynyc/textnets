@@ -2,6 +2,14 @@
 History
 =======
 
+0.8.3 (unreleased)
+------------------
+* Updates to spaCy 3.4, bringing support for Croatian to **textnets**.
+* Updates various other dependencies.
+* Adds optional dependency for experimental Formal Concept Analysis features.
+  To install, run ``pip install textnets[fca]``. `Graphviz
+  <https://graphviz.org/>`__ must also be installed separately.
+
 0.8.2 (2022-06-28)
 ------------------
 * Makes `TextnetBase` an abstract base class, since it is not meant to be
