@@ -72,13 +72,5 @@ docs: ## generate Sphinx HTML documentation, including API docs
 	$(COMMAND_PREFIX) $(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html
 
-api-docs:
-	rm -f docs/reference.rst
-	$(COMMAND_PREFIX) sphinx-apidoc -T -M -H "API Reference" -o docs/ textnets
-	mv docs/textnets.rst docs/reference.rst
-
-servedocs: docs ## compile the docs watching for changes
-	$(COMMAND_PREFIX) watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
-
 install: clean ## install the package and its dependencies
 	poetry install
