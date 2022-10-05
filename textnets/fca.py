@@ -2,30 +2,27 @@
 
 """Implements experimental features for formal concept analysis."""
 
+from abc import ABC, abstractmethod
 from typing import List, Tuple
 from warnings import warn
 
-import pandas as pd
 from toolz import memoize
 
 import textnets as tn
 
 
-class FormalContext:
+class FormalContext(ABC):
     """
-    Class providing experimental FCA features.
+    Abstract base class providing experimental FCA features.
 
     Textnets inherits methods from this class for treating its incidence matrix
     as a formal context.
-
-    Parameters
-    ----------
-    im : pandas.DataFrame
-        Incidence matrix of bipartite graph.
     """
 
-    def __init__(self, im: pd.DataFrame) -> None:
-        self.im = im
+    @property
+    @abstractmethod
+    def im(self):
+        pass
 
     @property
     def context(self) -> Tuple[List[str], List[str], List[List[bool]]]:

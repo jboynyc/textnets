@@ -320,7 +320,7 @@ class Textnet(TextnetBase, FormalContext):
 
     def __init__(
         self,
-        data: TidyText,
+        data: Union[TidyText, IncidenceMatrix],
         min_docs: int = 2,
         connected: bool = False,
         doc_attrs: Optional[dict[str, dict[str, str]]] = None,

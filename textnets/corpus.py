@@ -155,10 +155,10 @@ class Corpus:
         `Corpus`
         """
         object_cols = data.select_dtypes(include="object").columns
-        if not doc_col and object_cols.empty:
+        if doc_col is None and object_cols.empty:
             raise NoDocumentColumnException("No suitable document column.")
-        if not doc_col:
-            doc_col = object_cols[0]
+        if doc_col is None:
+            doc_col = str(object_cols[0])
         return cls(data.copy()[doc_col], lang=lang)
 
     @classmethod
@@ -503,7 +503,7 @@ class Corpus:
         tt = (
             pd.melt(
                 self.nlp.map(func).apply(pd.Series).reset_index(),
-                id_vars="label",
+                id_vars=["label"],
                 value_name="term",
             )
             .rename(columns={"variable": "n"})
@@ -631,7 +631,7 @@ def _ngrams(doc: list[str], n: int) -> list[str]:
     return [" ".join(t) for t in zip(*[doc[offset:] for offset in range(n)])]
 
 
-def _tf_idf(tidy_text: TidyText, sublinear: bool) -> TidyText:
+def _tf_idf(tidy_text: Union[pd.DataFrame, TidyText], sublinear: bool) -> TidyText:
     """Calculate term frequency/inverse document frequency."""
     if sublinear:
         tidy_text["tf"] = tidy_text["n"].map(_sublinear_scaling)
@@ -644,7 +644,7 @@ def _tf_idf(tidy_text: TidyText, sublinear: bool) -> TidyText:
         columns={"term_y": "idf"}
     )
     tt["term_weight"] = tt["tf"] * tt["idf"]
-    return tt[["term", "n", "term_weight"]]
+    return TidyText(tt[["term", "n", "term_weight"]])
 
 
 def _sublinear_scaling(n: Union[int, float]) -> float:
