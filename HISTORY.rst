@@ -2,6 +2,10 @@
 History
 =======
 
+0.8.4 (unreleased)
+------------------
+* Updates to spaCy 3.4.1, igraph 0.10.1, and leidenalg 0.9.
+
 0.8.3 (2022-07-15)
 ------------------
 * Updates to spaCy 3.4, bringing support for Croatian to **textnets**.
