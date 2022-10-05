@@ -2,7 +2,7 @@
 
 with pkgs;
 
-mkShell rec {
+mkShell {
   venvDir = "./.VENV";
   buildInputs = [
     cairo
