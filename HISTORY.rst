@@ -2,9 +2,11 @@
 History
 =======
 
-0.8.4 (unreleased)
+0.8.4 (2022-10-05)
 ------------------
 * Updates to spaCy 3.4.1, igraph 0.10.1, and leidenalg 0.9.
+* Adds Ukrainian language code.
+* Improves type checking.
 
 0.8.3 (2022-07-15)
 ------------------
