@@ -1814,7 +1814,7 @@ fca = ["concepts"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8.0,<3.11"
-content-hash = "50c866d40565ff2491a39ad36e97d2e39d2be53a24f9bc753a8ae10626fd1852"
+content-hash = "9b5e5a1a5391f41a8f9907b645f6a93e701c6b4e81641c8661500d0c283cbddd"
 
 [metadata.files]
 alabaster = [
