@@ -338,7 +338,7 @@ class Textnet(TextnetBase, FormalContext):
     def graph(self) -> ig.Graph:
         """Direct access to the underlying igraph object."""
         g = _graph_from_im(self._matrix)
-        if self._doc_attrs:
+        if self._doc_attrs is not None:
             for name, attr in self._doc_attrs.items():
                 g.vs[name] = [attr.get(doc) for doc in g.vs["id"]]
         if self._connected:
