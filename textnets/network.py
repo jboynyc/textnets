@@ -168,6 +168,18 @@ class TextnetBase(ABC):
         """Return modularity based on graph partition."""
         return self.graph.modularity(self.clusters, weights="weight")
 
+    @property
+    def cluster_strength(self) -> pd.Series:
+        """Weighted node degree within each cluster's subgraph."""
+        d = {}
+        for c in self.clusters:
+            subgraph = self.graph.subgraph(c)
+            subgraph_strength = subgraph.strength(weights="weight")
+            for n, strength in zip(c, subgraph_strength):
+                node = self.nodes[n]
+                d[node["id"]] = strength
+        return pd.Series(d).reindex(self.strength.index)
+
     def top_degree(self, n: int = 10) -> pd.Series:
         """
         Show nodes sorted by unweighted degree.
@@ -200,9 +212,7 @@ class TextnetBase(ABC):
         """
         return self.strength.sort_values(ascending=False).head(n)
 
-    def top_cluster_nodes(
-        self, n: int = 10, part: Optional[ig.VertexClustering] = None
-    ) -> pd.Series:
+    def top_cluster_nodes(self, n: int = 10) -> pd.DataFrame:
         """
         Show top nodes ranked by weighted degree per cluster.
 
@@ -210,27 +220,24 @@ class TextnetBase(ABC):
         ----------
         n : int, optional
             How many nodes to show per cluster (default: 10)
-        part : igraph.VertexClustering, optional
-            Partition to use (default: Leiden partition).
 
         Returns
         -------
-        `pandas.Series`
-            Ranked nodes.
+        `pandas.DataFrame`
+            Clusters with representative nodes.
         """
-        if part is None:
-            part = self.clusters
         return (
             pd.DataFrame(
                 {
                     "nodes": self.nodes["id"],
-                    "strength": self.strength,
-                    "cluster": part.membership,
+                    "strength": self.cluster_strength,
+                    "cluster": self.clusters.membership,
                 }
             )
             .sort_values("strength", ascending=False)
-            .groupby("cluster")
-            .agg({"nodes": lambda x: ", ".join(x[:n])})["nodes"]
+            .groupby("cluster")["nodes"]
+            .agg(lambda x: x[:n])
+            .to_frame()
         )
 
     @decorate_plot
