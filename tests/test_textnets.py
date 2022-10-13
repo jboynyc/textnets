@@ -162,6 +162,14 @@ def test_textnet(corpus):
     assert g_np_words.ecount() > 0
 
 
+def test_textnet_remove_weak_edges(corpus):
+    """Test removing weak edges."""
+    noun_phrases = corpus.noun_phrases()
+
+    n_np = tn.Textnet(noun_phrases, remove_weak_edges=True)
+    assert n_np.graph.ecount() > 0
+
+
 def test_textnet_birank(corpus):
     """Test calculating BiRank."""
 

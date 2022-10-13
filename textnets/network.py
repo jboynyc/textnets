@@ -292,7 +292,7 @@ class Textnet(TextnetBase, FormalContext):
 
     Parameters
     ----------
-    data: TidyText
+    data: TidyText or IncidenceMatrix
         * DataFrame of tokens with per-document counts, as created by
           `Corpus.tokenized` `Corpus.ngrams`, and `Corpus.noun_phrases`.
         * An incidence matrix relating documents to terms.
@@ -302,6 +302,8 @@ class Textnet(TextnetBase, FormalContext):
     connected : bool, optional
         Keep only the largest connected component of the network (default:
         False).
+    remove_weak_edges : bool, optional
+        Remove edges with weights far below average (default: False).
     doc_attrs : dict of dict, optional
         Additional attributes of document nodes.
 
@@ -320,10 +322,11 @@ class Textnet(TextnetBase, FormalContext):
 
     def __init__(
         self,
-        data: Union[TidyText, IncidenceMatrix],
+        data: Union[TidyText, IncidenceMatrix, pd.DataFrame],
         min_docs: int = 2,
         connected: bool = False,
-        doc_attrs: Optional[dict[str, dict[str, str]]] = None,
+        remove_weak_edges: bool = False,
+        doc_attrs: Optional[dict[str, dict[str, Any]]] = None,
     ) -> None:
         self._connected = connected
         self._doc_attrs = doc_attrs
@@ -333,6 +336,14 @@ class Textnet(TextnetBase, FormalContext):
             self._matrix = data
         elif isinstance(data, (TidyText, pd.DataFrame)):
             self._matrix = _im_from_tidy_text(data, min_docs)
+        if remove_weak_edges:
+            pairs: pd.Series[float] = self._matrix.stack()  # type: ignore
+            edge_weights: pd.Series[float] = pairs[pairs > 0]
+            iqr: float = edge_weights.quantile(0.75) - edge_weights.quantile(0.25)
+            cutoff: float = edge_weights.median() - 1.5 * iqr
+            self._matrix = IncidenceMatrix(
+                self._matrix[self._matrix > cutoff].dropna(how="all").fillna(0)
+            )
 
     @cached_property
     def graph(self) -> ig.Graph:
@@ -821,15 +832,18 @@ class ProjectedTextnet(TextnetBase):
     def _partition_graph(self, resolution: float, seed: int) -> ig.VertexClustering:
         part = la.find_partition(
             self.graph,
-            la.ModularityVertexPartition,
+            la.CPMVertexPartition,
             weights="weight",
             n_iterations=-1,
             seed=seed,
+            resolution_parameter=resolution,
         )
         return part
 
 
-def _im_from_tidy_text(tidy_text: TidyText, min_docs: int) -> IncidenceMatrix:
+def _im_from_tidy_text(
+    tidy_text: Union[TidyText, pd.DataFrame], min_docs: int
+) -> IncidenceMatrix:
     count = tidy_text.groupby("term").count()["n"]
     tt = (
         tidy_text.reset_index()
