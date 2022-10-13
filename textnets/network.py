@@ -138,9 +138,14 @@ class TextnetBase(ABC):
         return self._partition
 
     @clusters.setter
-    def clusters(self, value: Union[ig.VertexClustering, dict[int, list[int]]]) -> None:
+    def clusters(
+        self,
+        value: Union[ig.VertexClustering, ig.VertexDendrogram, dict[int, list[int]]],
+    ) -> None:
         if isinstance(value, ig.VertexClustering):
             self._partition = value
+        elif isinstance(value, ig.VertexDendrogram):
+            self._partition = value.as_clustering()
         elif isinstance(value, dict):
             sorted_node_community_map = dict(sorted(value.items()))
             part = ig.VertexClustering(
@@ -151,6 +156,8 @@ class TextnetBase(ABC):
         elif isinstance(value, list):
             part = ig.VertexClustering(self.graph, membership=value)
             self._partition = part
+        else:
+            raise ValueError("No valid clusters supplied.")
 
     @clusters.deleter
     def clusters(self) -> None:
