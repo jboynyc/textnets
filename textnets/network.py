@@ -846,11 +846,10 @@ class ProjectedTextnet(TextnetBase):
     def _partition_graph(self, resolution: float, seed: int) -> ig.VertexClustering:
         part = la.find_partition(
             self.graph,
-            la.CPMVertexPartition,
+            la.ModularityVertexPartition,
             weights="weight",
             n_iterations=-1,
             seed=seed,
-            resolution_parameter=resolution,
         )
         return part
 

@@ -2,6 +2,14 @@
 History
 =======
 
+0.8.5 (unreleased)
+------------------
+* Fixes a several bugs that occurred when setting document attributes.
+* Adds an optional parameter ``remove_weak_edges`` to `Textnet`.
+* Adds `TextnetBase.cluster_strength` to calculate the weighted degree of nodes
+  within the subgraph formed by the cluster they belong to.
+* Improves display of top nodes per cluster (`top_cluster_nodes`).
+
 0.8.4 (2022-10-05)
 ------------------
 * Updates to spaCy 3.4.1, igraph 0.10.1, and leidenalg 0.9.
