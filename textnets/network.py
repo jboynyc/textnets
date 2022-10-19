@@ -224,14 +224,18 @@ class TextnetBase(ABC):
         """
         return self.strength.sort_values(ascending=False).head(n)
 
-    def top_cluster_nodes(self, n: int = 10) -> pd.DataFrame:
+    def top_cluster_nodes(
+        self, n: int = 10, rank_nodes_by: str = "cluster_strength"
+    ) -> pd.DataFrame:
         """
-        Show top nodes ranked by weighted degree per cluster.
+        Show top nodes per cluster, ranked by a chosen metric.
 
         Parameters
         ----------
         n : int, optional
             How many nodes to show per cluster (default: 10)
+        rank_nodes_by : str, optional
+            Metric to rank nodes within each cluster by (default: cluster_strength).
 
         Returns
         -------
@@ -242,14 +246,14 @@ class TextnetBase(ABC):
             pd.DataFrame(
                 {
                     "nodes": self.nodes["id"],
-                    "strength": self.cluster_strength,
+                    "metric": getattr(self, rank_nodes_by),
                     "cluster": self.clusters.membership,
                 }
             )
-            .sort_values("strength", ascending=False)
-            .groupby("cluster")["nodes"]
-            .agg(lambda x: x[:n])
-            .to_frame()
+            .sort_values("metric", ascending=False)
+            .groupby("cluster")
+            .agg({"nodes": lambda x: x[:n], "metric": len})
+            .rename(columns={"metric": "size"})
         )
 
     @decorate_plot
