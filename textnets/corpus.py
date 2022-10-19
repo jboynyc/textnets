@@ -33,6 +33,7 @@ LANGS = {
     "hr": "hr_core_news_sm",  # Croatian
     "it": "it_core_news_sm",  # Italian
     "ja": "ja_core_news_sm",  # Japanese
+    "ko": "ko_core_news_sm",  # Korean
     "lt": "lt_core_news_sm",  # Lithuanian
     "mk": "mk_core_news_sm",  # Macedonian
     "nb": "nb_core_news_sm",  # Norwegian
