@@ -180,6 +180,18 @@ class TextnetBase(ABC):
                 d[node["id"]] = strength
         return pd.Series(d).reindex(self.strength.index)
 
+    @property
+    def cluster_local_cc(self) -> pd.Series:
+        """Weighted local clustering coefficient within each cluster's subgraph."""
+        d = {}
+        for c in self.clusters:
+            subgraph = self.graph.subgraph(c)
+            subgraph_cc = subgraph.transitivity_local_undirected(weights="weight")
+            for n, cc in zip(c, subgraph_cc):
+                node = self.nodes[n]
+                d[node["id"]] = cc
+        return pd.Series(d).reindex(self.strength.index)
+
     def top_degree(self, n: int = 10) -> pd.Series:
         """
         Show nodes sorted by unweighted degree.
