@@ -647,7 +647,7 @@ class Textnet(TextnetBase, FormalContext):
         return self.birank.sort_values(ascending=False).head(n)
 
     @cached_property
-    def clustering(self) -> pd.Series:
+    def bipartite_cc(self) -> pd.Series:
         """
         Calculate the unweighted bipartite clustering coefficient.
 

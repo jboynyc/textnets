@@ -197,12 +197,12 @@ def test_textnet_birank_connected(corpus):
 
 
 def test_textnet_clustering(corpus):
-    """Test calculating clustering coefficients."""
+    """Test calculating bipartite clustering coefficient."""
 
     noun_phrases = corpus.noun_phrases()
     n_np = tn.Textnet(noun_phrases, connected=True)
 
-    assert len(n_np.clustering) == n_np.graph.vcount()
+    assert len(n_np.bipartite_cc) == n_np.graph.vcount()
 
 
 def test_context(corpus):
