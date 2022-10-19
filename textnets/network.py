@@ -371,9 +371,10 @@ class Textnet(TextnetBase, FormalContext):
             edge_weights: pd.Series[float] = pairs[pairs > 0]
             iqr: float = edge_weights.quantile(0.75) - edge_weights.quantile(0.25)
             cutoff: float = edge_weights.median() - 1.5 * iqr
-            self._matrix = IncidenceMatrix(
-                self._matrix[self._matrix > cutoff].dropna(how="all").fillna(0)
-            )
+            if cutoff > 0:
+                self._matrix = IncidenceMatrix(
+                    self._matrix[self._matrix > cutoff].dropna(how="all").fillna(0)
+                )
 
     @cached_property
     def graph(self) -> ig.Graph:
