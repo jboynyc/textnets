@@ -20,6 +20,7 @@ import igraph as ig
 import leidenalg as la
 import numpy as np
 import pandas as pd
+from numpy.typing import ArrayLike
 from scipy import LowLevelCallable
 from scipy.integrate import quad
 from toolz import memoize
@@ -716,7 +717,20 @@ class ProjectedTextnet(TextnetBase):
     ----------
     graph : `igraph.Graph`
         Direct access to the igraph object.
+    m : `pandas.DataFrame`
+        The adjacency matrix.
     """
+
+    @cached_property
+    def m(self) -> pd.DataFrame:
+        """Matrix representation."""
+        d = self.graph.get_adjacency().data
+        m = np.array(d, dtype=float)
+        for i in self.edges.indices:
+            edge = self.graph.es[i]
+            source, target = edge.source, edge.target
+            m[source, target] = m[target, source] = edge["weight"]
+        return pd.DataFrame(m, index=self.nodes["id"], columns=self.nodes["id"])
 
     @cached_property
     def betweenness(self) -> pd.Series:
@@ -739,6 +753,19 @@ class ProjectedTextnet(TextnetBase):
     def pagerank(self) -> pd.Series:
         """Weighted PageRank centrality."""
         return pd.Series(self.graph.pagerank(weights="weight"), index=self.nodes["id"])
+
+    @property
+    def spanning(self) -> pd.Series:
+        """Textual spanning measure."""
+        if any(self.node_types):
+            warn("Textual spanning is only defined for document nodes.")
+        if not self.graph.is_connected():
+            warn(
+                "Graph is disconnected. "
+                "The textual spanning measure is not effective on disconnected graphs."
+            )
+        a = self.m.to_numpy()
+        return pd.Series(textual_spanning(a), index=self.nodes["id"])
 
     def top_betweenness(self, n: int = 10) -> pd.Series:
         """
@@ -1061,6 +1088,44 @@ def bipartite_rank(
         d_last = d
 
     return pd.Series(np.append(d, p), index=net.nodes["id"])
+
+
+def textual_spanning(m: ArrayLike, alpha: float = 1.0) -> pd.Series:
+    """
+    Calculate textual spanning of documents in a similarity matrix.
+
+    m : array
+        Document similarity matrix.
+    alpha : float, optional
+        Tuning parameter to change relevance of edge weights vs. document
+        counts in calculating the spanning score.
+
+    Returns
+    -------
+    `numpy.array`
+        Each node's textual spanning measure.
+
+    Notes
+    -----
+    The textual spanning measure is not effective on disconnected graphs.
+
+    References
+    ----------
+    :cite:`Stoltz2019`
+    """
+    np.fill_diagonal(m, 0)  # type: ignore
+    den = np.sum(m != 0, axis=1) * (
+        (np.sum(m, axis=1) / np.sum(m != 0, axis=1)) ** alpha
+    )
+    ps = m / den[:, np.newaxis]
+    nonzero = ps > 0
+    eps = np.zeros_like(ps)
+    eps[nonzero] = ps[nonzero] ** -1
+    ps2 = eps @ ps
+    sp = (ps + ps2) ** 2
+    csp = np.sum(sp, axis=1)
+    csp_norm = ((csp - csp.mean()) / csp.std(ddof=1)) ** -1
+    return csp_norm
 
 
 class IncidenceMatrix(pd.DataFrame):

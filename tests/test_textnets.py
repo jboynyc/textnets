@@ -5,6 +5,8 @@
 
 import sqlite3
 
+import numpy as np
+
 import pandas as pd
 import textnets as tn
 
@@ -162,6 +164,18 @@ def test_textnet(corpus):
     assert g_np_words.ecount() > 0
 
 
+def test_textnet_matrix(corpus):
+    """Test Textnet class using sample data."""
+    noun_phrases = corpus.noun_phrases()
+    n_np = tn.Textnet(noun_phrases)
+    g_np_groups = n_np.project(node_type="doc")
+    crossprod = n_np.im @ n_np.im.T
+    np.fill_diagonal(crossprod.values, 0)
+    pd.testing.assert_frame_equal(
+        g_np_groups.m, crossprod, check_names=False, check_exact=False
+    )
+
+
 def test_textnet_remove_weak_edges(corpus):
     """Test removing weak edges."""
     noun_phrases = corpus.noun_phrases()
@@ -203,6 +217,15 @@ def test_textnet_clustering(corpus):
     n_np = tn.Textnet(noun_phrases, connected=True)
 
     assert len(n_np.bipartite_cc) == n_np.graph.vcount()
+
+
+def test_textnet_spanning(corpus):
+    """Test calculating textual spanning measure."""
+
+    noun_phrases = corpus.noun_phrases()
+    n_np = tn.Textnet(noun_phrases, connected=True)
+    g_np_groups = n_np.project(node_type="doc")
+    assert len(g_np_groups.spanning) == g_np_groups.graph.vcount()
 
 
 def test_context(corpus):
