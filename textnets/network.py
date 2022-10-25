@@ -831,6 +831,22 @@ class ProjectedTextnet(TextnetBase):
         """
         return self.pagerank.sort_values(ascending=False).head(n)
 
+    def top_spanning(self, n: int = 10) -> pd.Series:
+        """
+        Show nodes sorted by textual spanning.
+
+        Parameters
+        ----------
+        n : int, optional
+            How many nodes to show (default: 10)
+
+        Returns
+        -------
+        `pandas.Series`
+            Ranked nodes.
+        """
+        return self.spanning.sort_values(ascending=False).head(n)
+
     def alpha_cut(self, alpha: float) -> ProjectedTextnet:
         """
         Return graph backbone.

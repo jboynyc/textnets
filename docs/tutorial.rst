@@ -149,6 +149,19 @@ visual clutter.
               edge_opacity=0.4,
               node_label_filter=lambda n: n.betweenness() > words.betweenness.median())
 
+Another measure we can use is the textual spanning measure introduced by
+:cite:t:`Stoltz2019`, which can help identify "discursive holes" in the
+document-to-document network.
+
+.. jupyter-execute::
+
+   papers.plot(label_nodes=True,
+               scale_nodes_by="spanning")
+
+Larger document nodes are similar to nodes that are dissimilar from one
+another, so they can be thought of as spanning a wider "distance" in the
+discursive field than the smaller ones.
+
 Wrangling Text & Mangling Data
 ------------------------------
 
@@ -372,7 +385,8 @@ Analysis
 The tutorial above gives some examples of using centrality measures to analyze
 your corpus. Aside from `top_betweenness`, the package also provides the
 methods `top_closeness`, `top_degree` (for unweighted degree), `top_strength`
-(for weighted degree), and `top_ev` (for eigenvector centrality). In the
+(for weighted degree), `top_ev` (for eigenvector centrality), `top_pagerank`
+(for PageRank centrality), and `top_spanning` (for textual spanning). In the
 bipartite network, you can use `top_birank`, `top_hits` and `top_cohits` to see
 nodes ranked by variations of a bipartite centrality measure :cite:p:`He2017`.
 By default, they each output the ten top nodes for each centrality measure.
