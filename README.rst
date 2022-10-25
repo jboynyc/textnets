@@ -14,7 +14,7 @@ Textnets: text analysis with networks
    :target: https://textnets.readthedocs.io/en/stable/?badge=stable
    :alt: Documentation Status
 
-.. image:: https://anaconda.org/conda-forge/textnets/badges/installer/conda.svg
+.. image:: https://anaconda.org/conda-forge/textnets/badges/version.svg
    :target: https://anaconda.org/conda-forge/textnets
    :alt: Install with conda
 
