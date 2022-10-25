@@ -105,7 +105,7 @@ class Corpus:
     @memoize
     def _nlp(self, lang: str) -> pd.Series:
         try:
-            nlp = spacy.load(lang, disable=["ner", "textcat"])
+            nlp = spacy.load(lang, exclude=["ner", "textcat"])
         except OSError as err:
             if tn.params["autodownload"]:
                 try:

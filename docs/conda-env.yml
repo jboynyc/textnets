@@ -7,7 +7,7 @@ dependencies:
   - leidenalg==0.9.*
   - pandas==1.5.*
   - spacy==3.4.*
-  - spacy-model-en_core_web_sm==3.4.0
+  - spacy-model-en_core_web_sm==3.4.1
   - toolz
   - jupyter_sphinx
   - sphinx
