@@ -5,10 +5,15 @@ History
 0.8.5 (unreleased)
 ------------------
 * Fixes a several bugs that occurred when setting document attributes.
-* Adds an optional parameter ``remove_weak_edges`` to `Textnet`.
-* Adds `TextnetBase.cluster_strength` to calculate the weighted degree of nodes
+* Updates to spaCy 3.4.1.
+* Adds Korean language code.
+* Adds an optional parameter ``remove_weak_edges`` to `Textnet` to create a
+  sparser graph.
+* Adds `TextnetBase.cluster_strength` and `TextnetBase.cluster_local_cc` to
+  calculate the weighted degree and local clustering coefficient of nodes
   within the subgraph formed by the cluster they belong to.
 * Improves display of top nodes per cluster (`top_cluster_nodes`).
+* Adds Stoltz and Taylor's textual spanning measure.
 
 0.8.4 (2022-10-05)
 ------------------
