@@ -103,7 +103,7 @@ Learn More
 **Issues & Ideas**  https://github.com/jboynyc/textnets/issues
 **Conda-Forge**     https://anaconda.org/conda-forge/textnets
 **PyPI**            https://pypi.org/project/textnets/
-**FOSDEM '22**      https://fosdem.org/2022/schedule/event/open_research_textnets/
+**FOSDEM ’22**      https://fosdem.org/2022/schedule/event/open_research_textnets/
 **DOI**             `10.21105/joss.02594 <https://doi.org/10.21105/joss.02594>`_
 **Archive**         `10.5281/zenodo.3866676 <https://doi.org/10.5281/zenodo.3866676>`_
 ==================  =============================================

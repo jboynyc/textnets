@@ -20,7 +20,7 @@ exclude = ["docs/conda-env.yml", "textnets/_ext.c"]
 "Changelog" = "https://textnets.readthedocs.io/en/stable/history.html"
 
 [tool.poetry.dependencies]
-python = ">=3.8.0,<3.11"
+python = ">=3.8.0,<3.12"
 Cython = "^0.29.24"
 igraph = "^0.10.1"
 leidenalg = "^0.9.0"
@@ -44,7 +44,7 @@ flake8 = "^5.0.4"
 mypy = "^0.982"
 pytest = "^7.1.2"
 ufmt = "^2.0.0"
-pandas-stubs = "^1.5.0"
+#pandas-stubs = "^1.5.0"
 
 [tool.poetry.extras]
 doc = ["jupyter-sphinx", "sphinx", "pydata-sphinx-theme", "sphinxcontrib-bibtex"]
