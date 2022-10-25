@@ -1133,16 +1133,14 @@ def textual_spanning(m: ArrayLike, alpha: float = 1.0) -> pd.Series:
     :cite:`Stoltz2019`
     """
     np.fill_diagonal(m, 0)  # type: ignore
-    den = np.sum(m != 0, axis=1) * (
-        (np.sum(m, axis=1) / np.sum(m != 0, axis=1)) ** alpha
-    )
+    k = np.sum(m != 0, axis=1)
+    den = k * (m.sum(axis=1) / k**alpha)
     ps = m / den[:, np.newaxis]
-    nonzero = ps > 0
     eps = np.zeros_like(ps)
-    eps[nonzero] = ps[nonzero] ** -1
+    eps[ps > 0] = ps[ps > 0] ** -1
     ps2 = eps @ ps
     sp = (ps + ps2) ** 2
-    csp = np.sum(sp, axis=1)
+    csp = sp.sum(axis=1)
     csp_norm = ((csp - csp.mean()) / csp.std(ddof=1)) ** -1
     return csp_norm
 
