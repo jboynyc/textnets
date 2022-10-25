@@ -1002,15 +1002,15 @@ def bipartite_rank(
     normalizer : string
         The normalizer to use: ``HITS``, ``CoHITS``, ``BGRM``, or ``BiRank``.
         See reference for details.
-    alpha : float
+    alpha : float, optional
         Damping factor for the rows and columns.
-    beta : float
+    beta : float, optional
         Damping factor for the rows and columns.
-    max_iter : int
+    max_iter : int, optional
         Maximum number of iterations to run before reaching convergence
         (default: -1, meaning iterate until the errors are within the
         specified tolerance).
-    tolerance : float
+    tolerance : float, optional
         Error tolerance when checking for convergence.
 
     Raises
