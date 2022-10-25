@@ -236,7 +236,8 @@ class TextnetBase(ABC):
         n : int, optional
             How many nodes to show per cluster (default: 10)
         rank_nodes_by : str, optional
-            Metric to rank nodes within each cluster by (default: cluster_strength).
+            Metric to rank nodes within each cluster by (default:
+            cluster_strength).
 
         Returns
         -------
@@ -1110,11 +1111,13 @@ def textual_spanning(m: ArrayLike, alpha: float = 1.0) -> pd.Series:
     """
     Calculate textual spanning of documents in a similarity matrix.
 
+    Parameters
+    ----------
     m : array
         Document similarity matrix.
     alpha : float, optional
         Tuning parameter to change relevance of edge weights vs. document
-        counts in calculating the spanning score.
+        counts in calculating the spanning score (default: 1.0).
 
     Returns
     -------
