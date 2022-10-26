@@ -310,7 +310,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "exceptiongroup"
-version = "1.0.0rc9"
+version = "1.0.0"
 description = "Backport of PEP 654 (exception groups)"
 category = "dev"
 optional = false
@@ -444,7 +444,7 @@ python-versions = "*"
 
 [[package]]
 name = "ipykernel"
-version = "6.16.1"
+version = "6.16.2"
 description = "IPython Kernel for Jupyter"
 category = "main"
 optional = true
@@ -569,7 +569,7 @@ format-nongpl = ["fqdn", "idna", "isoduration", "jsonpointer (>1.13)", "rfc3339-
 
 [[package]]
 name = "jupyter-client"
-version = "7.4.3"
+version = "7.4.4"
 description = "Jupyter protocol implementation and client libraries"
 category = "main"
 optional = true
@@ -783,7 +783,7 @@ sphinx = ["sphinx-book-theme", "Sphinx (>=1.7)", "myst-parser", "moto", "mock", 
 
 [[package]]
 name = "nbconvert"
-version = "7.2.2"
+version = "7.2.3"
 description = "Converting Jupyter Notebooks"
 category = "main"
 optional = true
@@ -1617,11 +1617,11 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "tomlkit"
-version = "0.11.5"
+version = "0.11.6"
 description = "Style preserving TOML library"
 category = "dev"
 optional = false
-python-versions = ">=3.6,<4.0"
+python-versions = ">=3.6"
 
 [[package]]
 name = "toolz"
@@ -1815,7 +1815,7 @@ fca = ["concepts"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8.0,<3.12"
-content-hash = "8c938d551f23e07019efdc79bba5d1860c5304d65b2edc648335647a4934a06c"
+content-hash = "d081b72ec6a723285669eda0760d8cb9fcc560bb129507f599ae4b552b6d9be4"
 
 [metadata.files]
 alabaster = [
