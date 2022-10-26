@@ -374,7 +374,9 @@ lower values resulting in more aggressive pruning).
 
 In visualizations of the projected network, you may want to scale nodes
 according to centrality. Pass the argument ``scale_nodes_by`` with a value of
-"betweenness," "closeness," "degree," "strength," or "eigenvector_centrality."
+"betweenness," "closeness," "harmonic," "degree," "strength," or
+"eigenvector_centrality." In the document network, you can also use textual
+spanning, as demonstrated above.
 
 Label nodes using the boolean argument ``label_nodes``. As above,
 ``show_clusters`` will mark groups of nodes with a community structure.
@@ -382,19 +384,21 @@ Label nodes using the boolean argument ``label_nodes``. As above,
 Analysis
 --------
 
+Use `top_cluster_nodes <TextnetBase.top_cluster_nodes>` to interpret the
+community structure of your textnet. Clusters in the bipartite or word network
+can be interpreted as discursive categories or latent themes in the corpus
+:cite:p:`Gerlach2018`. Clusters in the document network can be interpreted as
+groupings.
+
 The tutorial above gives some examples of using centrality measures to analyze
 your corpus. Aside from `top_betweenness`, the package also provides the
-methods `top_closeness`, `top_degree` (for unweighted degree), `top_strength`
-(for weighted degree), `top_ev` (for eigenvector centrality), `top_pagerank`
-(for PageRank centrality), and `top_spanning` (for textual spanning). In the
-bipartite network, you can use `top_birank`, `top_hits` and `top_cohits` to see
-nodes ranked by variations of a bipartite centrality measure :cite:p:`He2017`.
-By default, they each output the ten top nodes for each centrality measure.
-
-In addition, you can use `top_cluster_nodes <TextnetBase.top_cluster_nodes>` to
-help interpret the community structure of your textnet. Clusters can either be
-interpreted as latent themes (in the word network) or as groupings of documents
-using similar words or phrases (in the document network).
+methods `top_closeness` (weighted closeness), `top_harmonic` (weighted harmonic
+centrality), `top_degree` (unweighted degree), `top_strength` (weighted
+degree), `top_ev` (eigenvector centrality), `top_pagerank` (PageRank
+centrality), and `top_spanning` (textual spanning). In the bipartite network,
+you can use `top_birank`, `top_hits` and `top_cohits` to see nodes ranked by
+variations of a bipartite centrality measure :cite:p:`He2017`. By default, they
+each output the ten top nodes for each centrality measure.
 
 Saving
 ------

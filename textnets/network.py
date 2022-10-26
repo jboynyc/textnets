@@ -744,6 +744,13 @@ class ProjectedTextnet(TextnetBase):
         return pd.Series(self.graph.closeness(weights="cost"), index=self.nodes["id"])
 
     @cached_property
+    def harmonic(self) -> pd.Series:
+        """Weighted harmonic centrality."""
+        return pd.Series(
+            self.graph.harmonic_centrality(weights="cost"), index=self.nodes["id"]
+        )
+
+    @cached_property
     def eigenvector_centrality(self) -> pd.Series:
         """Weighted eigenvector centrality."""
         return pd.Series(
@@ -799,6 +806,22 @@ class ProjectedTextnet(TextnetBase):
             Ranked nodes.
         """
         return self.closeness.sort_values(ascending=False).head(n)
+
+    def top_harmonic(self, n: int = 10) -> pd.Series:
+        """
+        Show nodes sorted by harmonic centrality.
+
+        Parameters
+        ----------
+        n : int, optional
+            How many nodes to show (default: 10)
+
+        Returns
+        -------
+        `pandas.Series`
+            Ranked nodes.
+        """
+        return self.harmonic.sort_values(ascending=False).head(n)
 
     def top_ev(self, n: int = 10) -> pd.Series:
         """
