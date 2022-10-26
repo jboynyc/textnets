@@ -62,6 +62,10 @@ like. However, we're overriding the default setting for ``min_docs``, opting to
 keep even words that appear in only one document (that is, a single newspaper
 headline).
 
+When dealing with large corpora, you may also want to supply the argument
+``remove_weak_edges=True`` to remove edges with a weight far below the average.
+This will result in a sparser graph.
+
 Let's take a look:
 
 .. jupyter-execute::
@@ -361,7 +365,9 @@ single-mode network of either kind.
    print(groups.summary)
 
 The resulting network only contains nodes of the chosen type (``doc`` or
-``term``). Edge weights are calculated, and node attributes are maintained.
+``term``). Edge weights are calculated, and node attributes are maintained. The
+`m <ProjectedTextnet.m>` property gives you access to the projected graph's
+weighted adjacency matrix.
 
 Like the bipartite network, the projected textnet also has a `plot
 <ProjectedTextnet.plot>` method. This takes an optional argument, ``alpha``,
