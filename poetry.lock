@@ -444,7 +444,7 @@ python-versions = "*"
 
 [[package]]
 name = "ipykernel"
-version = "6.16.1"
+version = "6.16.2"
 description = "IPython Kernel for Jupyter"
 category = "main"
 optional = true
@@ -569,7 +569,7 @@ format-nongpl = ["fqdn", "idna", "isoduration", "jsonpointer (>1.13)", "rfc3339-
 
 [[package]]
 name = "jupyter-client"
-version = "7.4.3"
+version = "7.4.4"
 description = "Jupyter protocol implementation and client libraries"
 category = "main"
 optional = true
@@ -1815,7 +1815,7 @@ fca = ["concepts"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8.0,<3.12"
-content-hash = "8c938d551f23e07019efdc79bba5d1860c5304d65b2edc648335647a4934a06c"
+content-hash = "d081b72ec6a723285669eda0760d8cb9fcc560bb129507f599ae4b552b6d9be4"
 
 [metadata.files]
 alabaster = [
