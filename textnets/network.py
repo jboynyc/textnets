@@ -20,7 +20,6 @@ import igraph as ig
 import leidenalg as la
 import numpy as np
 import pandas as pd
-from numpy.typing import ArrayLike
 from scipy import LowLevelCallable
 from scipy.integrate import quad
 from toolz import memoize
@@ -1130,7 +1129,7 @@ def bipartite_rank(
     return pd.Series(np.append(d, p), index=net.nodes["id"])
 
 
-def textual_spanning(m: ArrayLike, alpha: float = 1.0) -> pd.Series:
+def textual_spanning(m: np.ndarray, alpha: float = 1.0) -> pd.Series:
     """
     Calculate textual spanning of documents in a similarity matrix.
 
@@ -1155,7 +1154,7 @@ def textual_spanning(m: ArrayLike, alpha: float = 1.0) -> pd.Series:
     ----------
     :cite:`Stoltz2019`
     """
-    np.fill_diagonal(m, 0)  # type: ignore
+    np.fill_diagonal(m, 0)
     k = np.sum(m != 0, axis=1)
     den = k * (m.sum(axis=1) / k**alpha)
     ps = m / den[:, np.newaxis]
