@@ -2,18 +2,20 @@
 History
 =======
 
-0.8.5 (unreleased)
+0.8.5 (2022-10-28)
 ------------------
-* Fixes a several bugs that occurred when setting document attributes.
-* Updates to spaCy 3.4.1.
-* Adds Korean language code.
+* Python 3.11 compatibility!
 * Adds an optional parameter ``remove_weak_edges`` to `Textnet` to create a
   sparser graph.
+* Adds `ProjectedTextnet.m` property to access one-mode graphs' adjacency
+  matrices.
+* Adds Stoltz and Taylor's textual spanning measure.
 * Adds `TextnetBase.cluster_strength` and `TextnetBase.cluster_local_cc` to
   calculate the weighted degree and local clustering coefficient of nodes
   within the subgraph formed by the cluster they belong to.
 * Improves display of top nodes per cluster (`top_cluster_nodes`).
-* Adds Stoltz and Taylor's textual spanning measure.
+* Adds Korean language code.
+* Fixes several bugs that occurred when setting document attributes.
 
 0.8.4 (2022-10-05)
 ------------------
