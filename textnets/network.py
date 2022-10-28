@@ -1157,13 +1157,13 @@ def textual_spanning(m: np.ndarray, alpha: float = 1.0) -> pd.Series:
     np.fill_diagonal(m, 0)
     k = np.sum(m != 0, axis=1)
     den = k * (m.sum(axis=1) / k**alpha)
-    ps = m / den[:, np.newaxis]
+    ps = m.T / den[:, np.newaxis]
     eps = np.zeros_like(ps)
     eps[ps > 0] = ps[ps > 0] ** -1
     ps2 = eps @ ps
     sp = (ps + ps2) ** 2
     csp = sp.sum(axis=1)
-    csp_norm = ((csp - csp.mean()) / csp.std(ddof=1)) ** -1
+    csp_norm = ((csp - csp.mean()) / csp.std(ddof=1)) * -1
     return csp_norm
 
 
