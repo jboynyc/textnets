@@ -23,6 +23,7 @@ import pandas as pd
 from scipy import LowLevelCallable
 from scipy.integrate import quad
 from toolz import memoize
+from tqdm.auto import tqdm
 
 import textnets as tn
 
@@ -984,7 +985,9 @@ def disparity_filter(graph: ig.Graph) -> Iterator[float]:
     ----------
     :cite:`Serrano2009`
     """
-    for edge in graph.es:
+    for edge in tqdm(
+        graph.es, unit="edges", disable=not tn.params["progress_bar"] or None
+    ):
         source, target = edge.vertex_tuple
         degree_t = target.degree()
         if degree_t <= 1:

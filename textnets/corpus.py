@@ -17,8 +17,10 @@ import spacy
 from spacy.tokens import Token
 from spacy.tokens.doc import Doc
 from toolz import compose, identity, memoize, partial
+from tqdm.auto import tqdm
 
 import textnets as tn
+
 
 #: Mapping of language codes to spacy language model names.
 LANGS = {
@@ -104,6 +106,7 @@ class Corpus:
 
     @memoize
     def _nlp(self, lang: str) -> pd.Series:
+        tqdm.pandas(unit="docs", disable=not tn.params["progress_bar"] or None)
         try:
             nlp = spacy.load(lang, exclude=["ner", "textcat"])
         except OSError as err:
@@ -118,7 +121,7 @@ class Corpus:
                 raise err
             nlp = spacy.blank(lang)
             warn(f"Using basic '{lang}' language model.")
-        return self.documents.map(_normalize_whitespace).map(nlp)
+        return self.documents.map(_normalize_whitespace).progress_map(nlp)
 
     def __len__(self) -> int:
         return len(self.documents)

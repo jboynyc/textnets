@@ -20,6 +20,9 @@ Global Parameters
 ``lang`` (default: en_core_web_sm)
   Default language model to use.
 
+``progress_bar`` (default: True)
+  If True, display a progress bar for long-running tasks in interactive use.
+
 ``resolution_parameter`` (default: 0.1)
   Resolution parameter (*gamma*) for community detection (see
   :cite:t:`Reichardt2006,Traag2019`).
@@ -54,6 +57,7 @@ class TextnetsConfiguration(UserDict):
         "autodownload",
         "ffca_cutoff",
         "lang",
+        "progress_bar",
         "resolution_parameter",
         "seed",
         "tuning_parameter",
@@ -126,6 +130,7 @@ default_params = {
     "autodownload": False,
     "ffca_cutoff": 0.3,
     "lang": "en_core_web_sm",
+    "progress_bar": True,
     "resolution_parameter": 0.1,
     "tuning_parameter": 0.5,
 }
