@@ -224,7 +224,7 @@ This example requires ``yake`` to be installed.
                windowsSize=window
            )
       tt = []
-      for label, doc in corpus.documents.iteritems():
+      for label, doc in corpus.documents.items():
           for term, sig in kw.extract_keywords(doc):
               tt.append({"label": label, "term": term, "term_weight": 1-sig, "n": 1})
       return tn.corpus.TidyText(tt).set_index("label")
