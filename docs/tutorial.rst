@@ -133,7 +133,7 @@ Small Step" cluster to the "Man on Moon" cluster.
 
 We can produce the term network plot again, this time scaling nodes according
 to their betweenness centrality, and pruning edges from the network using
-"backbone extraction" :cite:p`Serrano2009`.
+"backbone extraction" :cite:p:`Serrano2009`.
 
 We can also use ``color_clusters`` (instead of ``show_clusters``) to color
 nodes according to their partition.
