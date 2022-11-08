@@ -954,9 +954,8 @@ def _im_from_tidy_text(
 
 
 def _graph_from_im(im: IncidenceMatrix) -> ig.Graph:
-    g = ig.Graph.Incidence(im.to_numpy().tolist(), directed=False)
+    g = ig.Graph.Incidence(im.to_numpy().tolist(), directed=False, weighted=True)
     g.vs["id"] = np.append(im.index, im.columns).tolist()
-    g.es["weight"] = im.to_numpy().flatten()[np.flatnonzero(im)]
     g.es["cost"] = [1 / pow(w, tn.params["tuning_parameter"]) for w in g.es["weight"]]
     g.vs["type"] = ["term" if t else "doc" for t in g.vs["type"]]
     return g
