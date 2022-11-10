@@ -344,13 +344,6 @@ class Textnet(TextnetBase, FormalContext):
     ------
     ValueError
         If the supplied data is empty.
-
-    Attributes
-    ----------
-    graph : igraph.Graph
-        Direct access to the underlying igraph object.
-    im : `IncidenceMatrix`
-        Incidence matrix of the bipartite graph.
     """
 
     def __init__(
@@ -720,13 +713,11 @@ class ProjectedTextnet(TextnetBase):
     ----------
     graph : `igraph.Graph`
         Direct access to the igraph object.
-    m : `pandas.DataFrame`
-        The adjacency matrix.
     """
 
     @cached_property
     def m(self) -> pd.DataFrame:
-        """Matrix representation."""
+        """Weighted adjacency matrix."""
         d = self.graph.get_adjacency().data
         m = np.array(d, dtype=float)
         for i in self.edges.indices:
