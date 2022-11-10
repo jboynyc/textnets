@@ -21,6 +21,8 @@ from tqdm.auto import tqdm
 
 import textnets as tn
 
+from ._util import LiteFrame
+
 
 #: Mapping of language codes to spacy language model names.
 LANGS = {
@@ -661,5 +663,5 @@ class NoDocumentColumnException(Exception):
     """Raised if no suitable document column is specified or found."""
 
 
-class TidyText(pd.DataFrame):
+class TidyText(LiteFrame):
     """Collection of tokens with per-document counts."""

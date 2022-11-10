@@ -26,6 +26,7 @@ from toolz import memoize
 from tqdm.auto import tqdm
 
 import textnets as tn
+from ._util import LiteFrame
 
 from .corpus import TidyText
 from .fca import FormalContext
@@ -369,8 +370,8 @@ class Textnet(TextnetBase, FormalContext):
         elif isinstance(data, (TidyText, pd.DataFrame)):
             self._matrix = _im_from_tidy_text(data, min_docs)
         if remove_weak_edges:
-            pairs: pd.Series[float] = self._matrix.stack()  # type: ignore
-            edge_weights: pd.Series[float] = pairs[pairs > 0]
+            pairs: pd.Series = self._matrix.stack()
+            edge_weights: pd.Series = pairs[pairs > 0]
             iqr: float = edge_weights.quantile(0.75) - edge_weights.quantile(0.25)
             cutoff: float = edge_weights.median() - 1.5 * iqr
             if cutoff > 0:
@@ -434,9 +435,9 @@ class Textnet(TextnetBase, FormalContext):
         graph_to_return = 0
         if node_type == "term":
             graph_to_return = 1
-            weights = self.im.T.dot(self.im)
+            weights = self.im.T @ self.im
         else:
-            weights = self.im.dot(self.im.T)
+            weights = self.im @ self.im.T
         g = self.graph.bipartite_projection(
             types=self.node_types, which=graph_to_return
         )
@@ -446,6 +447,7 @@ class Textnet(TextnetBase, FormalContext):
             if source == target:
                 edge["weight"] = 0
             else:
+                weights.columns = weights.index
                 edge["weight"] = weights.loc[source, target]
         g.es["cost"] = [
             1 / pow(w, tn.params["tuning_parameter"]) for w in g.es["weight"]
@@ -1169,5 +1171,5 @@ def textual_spanning(m: np.ndarray, alpha: float = 1.0) -> pd.Series:
     return csp_norm
 
 
-class IncidenceMatrix(pd.DataFrame):
+class IncidenceMatrix(LiteFrame):
     """Matrix relating documents to terms."""
