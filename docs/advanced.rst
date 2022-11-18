@@ -51,8 +51,8 @@ Implemented in igraph
 
 When plotting a textnet, you can supply the arguments ``show_clusters`` or
 ``color_clusters``. These accept a boolean value, but you can also pass a
-`VertexClustering <igraph.VertexClustering>`, which is the data structure used
-by ``igraph``.
+`VertexClustering <igraph.clustering.VertexClustering>`, which is the data
+structure used by ``igraph``.
 
 If you want to use Blondel et al.'s multilevel algorithm to color the nodes of
 a projected textnet, you can do so as follows:
@@ -168,8 +168,8 @@ This example requires you to first have installed ``karateclub``.
 Additional measures for centrality analysis
 -------------------------------------------
 
-The `tutorial` provides examples of using BiRank, betweenness, closeness and
-(weighted and unweighted) degree to analyze a textnet. The `NetworkX
+The :doc:`tutorial` provides examples of using BiRank, betweenness, closeness
+and (weighted and unweighted) degree to analyze a textnet. The `NetworkX
 <https://networkx.org>`__ library implements a large variety of other
 centrality measures that may also prove helpful that aren't available in
 ``igraph``, the library that ``textnets`` builds on, including additional

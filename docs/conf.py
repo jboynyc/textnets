@@ -48,6 +48,7 @@ napoleon_numpy_docstring = True
 intersphinx_mapping = {
     "ig": ("https://igraph.org/python/api/latest/", None),
     "la": ("https://leidenalg.readthedocs.io/en/stable/", None),
+    "np": ("https://numpy.org/doc/stable/", None),
     "pd": ("https://pandas.pydata.org/docs/", None),
     "py": ("https://docs.python.org/3", None),
 }
