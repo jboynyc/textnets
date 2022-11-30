@@ -2,6 +2,14 @@
 History
 =======
 
+0.8.6 (2022-11-30)
+------------------
+* Improves documentation.
+* Progress bar for long-running operations (NLP and disparity filter). The
+  progress bar is not shown during non-interactive use. To disable, set
+  ``tn.params["progress_bar"]`` to ``False``.
+* Python 3.11 compatibility now confirmed on Windows, too.
+
 0.8.5 (2022-10-28)
 ------------------
 * Python 3.11 compatibility!
