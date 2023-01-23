@@ -45,6 +45,28 @@ except ImportError:
     warn("Could not import compiled extension, backbone extraction will be slow.")
 
 
+def _make_top(prop, desc):
+    """Helper function to create top_* methods for Textnet classes."""
+
+    def method(cls, n=10):
+        return getattr(cls, prop).sort_values(ascending=False).head(n)
+
+    method.__doc__ = f"""
+        Show nodes sorted by {desc}.
+
+        Parameters
+        ----------
+        n : int, optional
+            How many nodes to show (default: 10).
+
+        Returns
+        -------
+        `pandas.Series`
+            Ranked nodes.
+        """
+    return method
+
+
 class TextnetBase(ABC):
     """
     Abstract base class for `Textnet` and `ProjectedTextnet`.
@@ -194,38 +216,6 @@ class TextnetBase(ABC):
                 d[node["id"]] = cc
         return pd.Series(d).reindex(self.strength.index)
 
-    def top_degree(self, n: int = 10) -> pd.Series:
-        """
-        Show nodes sorted by unweighted degree.
-
-        Parameters
-        ----------
-        n : int, optional
-            How many nodes to show (default: 10).
-
-        Returns
-        -------
-        `pandas.Series`
-            Ranked nodes.
-        """
-        return self.degree.sort_values(ascending=False).head(n)
-
-    def top_strength(self, n: int = 10) -> pd.Series:
-        """
-        Show nodes sorted by weighted degree.
-
-        Parameters
-        ----------
-        n : int, optional
-            How many nodes to show (default: 10).
-
-        Returns
-        -------
-        `pandas.Series`
-            Ranked nodes.
-        """
-        return self.strength.sort_values(ascending=False).head(n)
-
     def top_cluster_nodes(
         self, n: int = 10, rank_nodes_by: str = "cluster_strength"
     ) -> pd.DataFrame:
@@ -307,6 +297,10 @@ class TextnetBase(ABC):
                 </td>
               </tr>
             </table>"""
+
+
+for prop, desc in [("degree", "unweighted degree"), ("strength", "weighted degree")]:
+    setattr(TextnetBase, f"top_{prop}", _make_top(prop, desc))
 
 
 class Textnet(TextnetBase, FormalContext):
@@ -612,54 +606,6 @@ class Textnet(TextnetBase, FormalContext):
         """BiRank of nodes."""
         return bipartite_rank(self, normalizer="BiRank")
 
-    def top_hits(self, n: int = 10) -> pd.Series:
-        """
-        Show nodes sorted by HITS rank.
-
-        Parameters
-        ----------
-        n : int, optional
-            How many nodes to show (default: 10)
-
-        Returns
-        -------
-        `pandas.Series`
-            Ranked nodes.
-        """
-        return self.hits.sort_values(ascending=False).head(n)
-
-    def top_cohits(self, n: int = 10) -> pd.Series:
-        """
-        Show nodes sorted by CoHITS rank.
-
-        Parameters
-        ----------
-        n : int, optional
-            How many nodes to show (default: 10)
-
-        Returns
-        -------
-        `pandas.Series`
-            Ranked nodes.
-        """
-        return self.cohits.sort_values(ascending=False).head(n)
-
-    def top_birank(self, n: int = 10) -> pd.Series:
-        """
-        Show nodes sorted by BiRank.
-
-        Parameters
-        ----------
-        n : int, optional
-            How many nodes to show (default: 10)
-
-        Returns
-        -------
-        `pandas.Series`
-            Ranked nodes.
-        """
-        return self.birank.sort_values(ascending=False).head(n)
-
     @cached_property
     def bipartite_cc(self) -> pd.Series:
         """
@@ -701,6 +647,15 @@ class Textnet(TextnetBase, FormalContext):
             [part, part0, part1], layer_weights=[1, -1, -1], n_iterations=-1
         )
         return part
+
+
+for prop, desc in [
+    ("hits", "HITS rank"),
+    ("cohits", "CoHITS rank"),
+    ("birank", "BiRank"),
+    ("bipartite_cc", "bipartite clustering coefficient"),
+]:
+    setattr(Textnet, f"top_{prop}", _make_top(prop, desc))
 
 
 class ProjectedTextnet(TextnetBase):
@@ -768,102 +723,6 @@ class ProjectedTextnet(TextnetBase):
         a = self.m.to_numpy()
         return pd.Series(textual_spanning(a), index=self.nodes["id"])
 
-    def top_betweenness(self, n: int = 10) -> pd.Series:
-        """
-        Show nodes sorted by betweenness.
-
-        Parameters
-        ----------
-        n : int, optional
-            How many nodes to show (default: 10)
-
-        Returns
-        -------
-        `pandas.Series`
-            Ranked nodes.
-        """
-        return self.betweenness.sort_values(ascending=False).head(n)
-
-    def top_closeness(self, n: int = 10) -> pd.Series:
-        """
-        Show nodes sorted by closeness.
-
-        Parameters
-        ----------
-        n : int, optional
-            How many nodes to show (default: 10)
-
-        Returns
-        -------
-        `pandas.Series`
-            Ranked nodes.
-        """
-        return self.closeness.sort_values(ascending=False).head(n)
-
-    def top_harmonic(self, n: int = 10) -> pd.Series:
-        """
-        Show nodes sorted by harmonic centrality.
-
-        Parameters
-        ----------
-        n : int, optional
-            How many nodes to show (default: 10)
-
-        Returns
-        -------
-        `pandas.Series`
-            Ranked nodes.
-        """
-        return self.harmonic.sort_values(ascending=False).head(n)
-
-    def top_ev(self, n: int = 10) -> pd.Series:
-        """
-        Show nodes sorted by eigenvector centrality.
-
-        Parameters
-        ----------
-        n : int, optional
-            How many nodes to show (default: 10)
-
-        Returns
-        -------
-        `pandas.Series`
-            Ranked nodes.
-        """
-        return self.eigenvector_centrality.sort_values(ascending=False).head(n)
-
-    def top_pagerank(self, n: int = 10) -> pd.Series:
-        """
-        Show nodes sorted by PageRank centrality.
-
-        Parameters
-        ----------
-        n : int, optional
-            How many nodes to show (default: 10)
-
-        Returns
-        -------
-        `pandas.Series`
-            Ranked nodes.
-        """
-        return self.pagerank.sort_values(ascending=False).head(n)
-
-    def top_spanning(self, n: int = 10) -> pd.Series:
-        """
-        Show nodes sorted by textual spanning.
-
-        Parameters
-        ----------
-        n : int, optional
-            How many nodes to show (default: 10)
-
-        Returns
-        -------
-        `pandas.Series`
-            Ranked nodes.
-        """
-        return self.spanning.sort_values(ascending=False).head(n)
-
     def alpha_cut(self, alpha: float) -> ProjectedTextnet:
         """
         Return graph backbone.
@@ -929,6 +788,19 @@ class ProjectedTextnet(TextnetBase):
             seed=seed,
         )
         return part
+
+
+for prop, desc in [
+    ("betweenness", "betweenness"),
+    ("closeness", "closeness"),
+    ("harmonic", "harmonic centrality"),
+    ("pagerank", "PageRank centrality"),
+    ("eigenvector_centrality", "eigenvector centrality"),
+    ("spanning", "textual spanning"),
+]:
+    setattr(ProjectedTextnet, f"top_{prop}", _make_top(prop, desc))
+
+ProjectedTextnet.top_ev = ProjectedTextnet.top_eigenvector_centrality  # type: ignore
 
 
 def _im_from_tidy_text(
