@@ -2,6 +2,10 @@
 History
 =======
 
+0.8.7 (unreleased)
+------------------
+* Updates to spaCy 3.5.
+
 0.8.6 (2022-11-30)
 ------------------
 * Improves documentation.
