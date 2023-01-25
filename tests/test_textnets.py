@@ -107,11 +107,20 @@ def test_corpus_dict(testdata):
     assert len(c.documents) == 7
 
 
-def test_corpus_csv(tmpdir, testdata):
+def test_corpus_csv(tmp_path, testdata):
     """Test creating a corpus from a CSV file."""
-    out = tmpdir.join("corpus.csv")
+    out = tmp_path / "corpus.csv"
     testdata.to_csv(out)
     c = tn.Corpus.from_csv(out)
+    assert len(c.documents) == 7
+
+
+def test_corpus_files(tmp_path, testdata):
+    """Test creating a corpus from a collection of plain text files."""
+    for fn, text in testdata.items():
+        out = tmp_path / fn
+        out.with_suffix(".txt").write_text(text)
+    c = tn.Corpus.from_files(tmp_path.glob("*.txt"))
     assert len(c.documents) == 7
 
 
@@ -123,18 +132,18 @@ def test_corpus_sql(testdata):
     assert len(c.documents) == 7
 
 
-def test_corpus_save_and_load(corpus, tmpdir):
+def test_corpus_save_and_load(corpus, tmp_path):
     """Test roundtrip of saving and loading a corpus from file."""
-    out = tmpdir.join("out.corpus")
+    out = tmp_path / "out.corpus"
     corpus.save(out)
     loaded = tn.load_corpus(out)
     assert all(corpus.documents == loaded.documents)
     assert corpus.lang == loaded.lang
 
 
-def test_textnet_save_and_load(corpus, tmpdir):
+def test_textnet_save_and_load(corpus, tmp_path):
     """Test roundtrip of saving and loading a textnet from file."""
-    out = tmpdir.join("out.textnet")
+    out = tmp_path / "out.textnet"
     net = tn.Textnet(
         corpus.tokenized(),
         connected=True,
@@ -147,9 +156,9 @@ def test_textnet_save_and_load(corpus, tmpdir):
     assert net.summary == loaded.summary
 
 
-def test_config_save_and_load(tmpdir):
+def test_config_save_and_load(tmp_path):
     """Test roundtrip of saving and loading configuration parameters."""
-    out = tmpdir.join("out.params")
+    out = tmp_path / "out.params"
     defaults = tn.params.copy()
     tn.params.update({"lang": "cs", "autodownload": True})
     changed = tn.params.copy()
@@ -246,77 +255,77 @@ def test_context(corpus):
     assert "lattice" in dir(ctx)
 
 
-def test_save(tmpdir, corpus):
+def test_save(tmp_path, corpus):
     """Test Textnet graph saving."""
 
     noun_phrases = corpus.noun_phrases()
     n_np = tn.Textnet(noun_phrases)
-    out = tmpdir.join("graph.graphml")
+    out = tmp_path / "graph.graphml"
     n_np.save_graph(str(out))
-    assert len(tmpdir.listdir()) == 1
+    assert len(list(tmp_path.iterdir())) == 1
 
 
-def test_plot(tmpdir, corpus):
+def test_plot(tmp_path, corpus):
     """Test Textnet plotting."""
 
     noun_phrases = corpus.noun_phrases()
     n_np = tn.Textnet(noun_phrases)
-    out = tmpdir.join("plot-0.png")
+    out = tmp_path / "plot-0.png"
     plot = n_np.plot(target=str(out))
     assert len(plot._objects) > 0
-    assert len(tmpdir.listdir()) == 1
+    assert len(list(tmp_path.iterdir())) == 1
 
 
-def test_plot_layout(tmpdir, corpus):
+def test_plot_layout(tmp_path, corpus):
     """Test Textnet plotting with bipartite layout and node labels."""
 
     noun_phrases = corpus.noun_phrases()
     n_np = tn.Textnet(noun_phrases)
-    out = tmpdir.join("plot-1.png")
+    out = tmp_path / "plot-1.png"
     plot = n_np.plot(target=str(out), bipartite_layout=True, label_nodes=True)
     assert len(plot._objects) > 0
-    assert len(tmpdir.listdir()) == 1
+    assert len(list(tmp_path.iterdir())) == 1
 
 
-def test_plot_projected(tmpdir, corpus):
+def test_plot_projected(tmp_path, corpus):
     """Test ProjectedTextnet plotting."""
 
     n = tn.Textnet(corpus.tokenized())
     papers = n.project(node_type="doc")
-    out = tmpdir.join("plot-2.png")
+    out = tmp_path / "plot-2.png"
     plot = papers.plot(show_clusters=True, label_nodes=True, target=str(out))
     assert len(plot._objects) > 0
-    assert len(tmpdir.listdir()) == 1
+    assert len(list(tmp_path.iterdir())) == 1
 
 
-def test_plot_backbone(tmpdir, corpus):
+def test_plot_backbone(tmp_path, corpus):
     """Test ProjectedTextnet plotting with alpha cut."""
 
     n = tn.Textnet(corpus.tokenized())
     papers = n.project(node_type="doc")
-    out = tmpdir.join("plot-3.png")
+    out = tmp_path / "plot-3.png"
     plot = papers.plot(alpha=0.4, label_nodes=True, target=str(out))
     assert len(plot._objects) > 0
-    assert len(tmpdir.listdir()) == 1
+    assert len(list(tmp_path.iterdir())) == 1
 
 
-def test_plot_scaled(tmpdir, corpus):
+def test_plot_scaled(tmp_path, corpus):
     """Test ProjectedTextnet plotting with scaled nodes."""
 
     n = tn.Textnet(corpus.tokenized())
     papers = n.project(node_type="doc")
-    out = tmpdir.join("plot-4.png")
+    out = tmp_path / "plot-4.png"
     plot = papers.plot(scale_nodes_by="betweenness", label_nodes=True, target=str(out))
     assert len(plot._objects) > 0
-    assert len(tmpdir.listdir()) == 1
+    assert len(list(tmp_path.iterdir())) == 1
 
 
-def test_plot_filtered(tmpdir, corpus):
+def test_plot_filtered(tmp_path, corpus):
     """Test ProjectedTextnet plotting filtered labels."""
 
     n = tn.Textnet(corpus.tokenized())
     papers = n.project(node_type="doc")
-    out = tmpdir.join("plot-5.png")
+    out = tmp_path / "plot-5.png"
     plot = papers.plot(
         label_nodes=True,
         label_edges=True,
@@ -325,7 +334,7 @@ def test_plot_filtered(tmpdir, corpus):
         target=str(out),
     )
     assert len(plot._objects) > 0
-    assert len(tmpdir.listdir()) == 1
+    assert len(list(tmp_path.iterdir())) == 1
 
 
 def test_html_repr(corpus):
