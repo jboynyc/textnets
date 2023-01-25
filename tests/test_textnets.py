@@ -45,6 +45,16 @@ def test_corpus(corpus):
     assert set(ngrams.columns) == {"term", "n", "term_weight"}
 
 
+def test_corpus_duplicated(testdata, recwarn):
+    """Test Corpus class on series with duplicated labels."""
+    s = pd.concat([testdata, testdata[:3], testdata[:2]])
+    corpus = tn.Corpus(s)
+    assert len(recwarn) == 1
+    w = recwarn.pop(UserWarning)
+    assert str(w.message) == "There are 5 duplicate labels. Concatenating documents."
+    assert len(corpus.documents) == 7
+
+
 def test_corpus_missing(testdata, recwarn):
     """Test Corpus class on series with missing data."""
     s = pd.concat([testdata, pd.Series([None], index=["Missing"])])

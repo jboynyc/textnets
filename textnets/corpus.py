@@ -93,6 +93,9 @@ class Corpus:
         if missings := documents.isna().sum():
             warn(f"Dropping {missings} empty document(s).")
             documents = documents[~documents.isna()]
+        if duplicated := documents.index.duplicated().sum():
+            warn(f"There are {duplicated} duplicate labels. Concatenating documents.")
+            documents = documents.groupby(level=0).agg("\n\n".join)
         documents.index = documents.index.set_names(["label"])
         self.documents = documents
         if lang is None:

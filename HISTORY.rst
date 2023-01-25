@@ -5,6 +5,10 @@ History
 0.8.7 (unreleased)
 ------------------
 * Updates to spaCy 3.5.
+* When initializing `Corpus` with data that includes duplicated document
+  labels, issue a warning, and concatenate documents with shared labels.
+  (Implemented in response to `#54
+  <https://github.com/jboynyc/textnets/issues/54>`__.
 
 0.8.6 (2022-11-30)
 ------------------
