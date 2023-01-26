@@ -12,8 +12,7 @@ from abc import ABC, abstractmethod
 from collections import Counter
 from functools import cached_property
 from pathlib import Path
-from typing import Any, Callable, Iterator, Literal, Optional, Union
-from typing.io import IO
+from typing import Any, Callable, IO, Iterator, Literal, Optional, Union
 from warnings import warn
 
 import igraph as ig
