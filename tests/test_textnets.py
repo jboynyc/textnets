@@ -90,8 +90,7 @@ def test_corpus_czech(recwarn):
     assert len(corpus.documents) == 8
     # This raises another warning about lacking a language model
     tokenized = corpus.tokenized()
-    # Relax this test for now because of a deprecation warning in Python 3.10
-    assert len(recwarn) >= 2
+    assert len(recwarn) == 2
     assert tokenized.sum().n > 8
     w1 = recwarn.pop(UserWarning)
     assert str(w1.message) == "Language model 'cs' is not yet installed."
