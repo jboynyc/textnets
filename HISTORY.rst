@@ -2,13 +2,14 @@
 History
 =======
 
-0.8.7 (unreleased)
+0.8.7 (2023-02-02)
 ------------------
-* Updates to spaCy 3.5.
+* Updates to spaCy 3.5 and igraph 0.10.4.
 * When initializing `Corpus` with data that includes duplicated document
   labels, issue a warning, and concatenate documents with shared labels.
   (Implemented in response to `#54
-  <https://github.com/jboynyc/textnets/issues/54>`__.
+  <https://github.com/jboynyc/textnets/issues/54>`__).
+* Various code quality improvements.
 
 0.8.6 (2022-11-30)
 ------------------
