@@ -6,7 +6,7 @@ import os
 import sqlite3
 from glob import glob
 from pathlib import Path
-from typing import Any, Callable, Sequence
+from typing import Any, Callable, Sequence, Union
 from warnings import warn
 
 import numpy as np
@@ -50,7 +50,7 @@ LANGS = {
 }
 
 #: Custom type for objects resembling documents (token sequences).
-DocLike = Doc | Sequence[Token]
+DocLike = Union[Doc, Sequence[Token]]
 
 _INSTALLED_MODELS = spacy.util.get_installed_models()
 
