@@ -343,6 +343,7 @@ def test_plot_filtered(tmp_path, corpus):
 
 
 def test_html_repr(corpus):
+    """Test HTML representations of the top-level module and core classes."""
     assert tn._repr_html_() != ""
     assert corpus._repr_html_() != ""
     assert tn.Textnet(corpus.tokenized())._repr_html_() != ""
