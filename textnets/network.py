@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Implements the features relating to networks."""
 
 from __future__ import annotations
@@ -12,7 +10,7 @@ from abc import ABC, abstractmethod
 from collections import Counter
 from functools import cached_property
 from pathlib import Path
-from typing import Any, Callable, IO, Iterator, Literal, Optional, Union
+from typing import Any, Callable, IO, Iterator, Literal
 from warnings import warn
 
 import igraph as ig
@@ -104,8 +102,8 @@ class TextnetBase(ABC):
 
     def save_graph(
         self,
-        target: Union[str, bytes, os.PathLike[Any], IO],
-        format: Optional[str] = None,
+        target: str | bytes | os.PathLike[Any] | IO,
+        format: str | None = None,
     ) -> None:
         """
         Save the underlying graph.
@@ -143,7 +141,7 @@ class TextnetBase(ABC):
     def _partition_graph(self, resolution: float, seed: int) -> ig.VertexClustering:
         pass
 
-    _partition: Optional[ig.VertexClustering] = None
+    _partition: ig.VertexClustering | None = None
 
     @property
     def clusters(self) -> ig.VertexClustering:
@@ -163,7 +161,7 @@ class TextnetBase(ABC):
     @clusters.setter
     def clusters(
         self,
-        value: Union[ig.VertexClustering, ig.VertexDendrogram, dict[int, list[int]]],
+        value: ig.VertexClustering | ig.VertexDendrogram | dict[int, list[int]],
     ) -> None:
         if isinstance(value, ig.VertexClustering):
             self._partition = value
@@ -341,11 +339,11 @@ class Textnet(TextnetBase, FormalContext):
 
     def __init__(
         self,
-        data: Union[TidyText, IncidenceMatrix, pd.DataFrame],
+        data: TidyText | IncidenceMatrix | pd.DataFrame,
         min_docs: int = 2,
         connected: bool = False,
         remove_weak_edges: bool = False,
-        doc_attrs: Optional[dict[str, dict[str, Any]]] = None,
+        doc_attrs: dict[str, dict[str, Any]] | None = None,
     ) -> None:
         self._connected = connected
         self._doc_attrs = doc_attrs
@@ -393,7 +391,7 @@ class Textnet(TextnetBase, FormalContext):
         return im
 
     def project(
-        self, *, node_type: Literal["doc", "term"], connected: Optional[bool] = False
+        self, *, node_type: Literal["doc", "term"], connected: bool | None = False
     ) -> ProjectedTextnet:
         """
         Project to one-mode network.
@@ -442,7 +440,7 @@ class Textnet(TextnetBase, FormalContext):
             g = giant_component(g)
         return ProjectedTextnet(g)
 
-    def save(self, target: Union[os.PathLike[Any], str]) -> None:
+    def save(self, target: os.PathLike[Any] | str) -> None:
         """
         Save a textnet to file.
 
@@ -462,7 +460,7 @@ class Textnet(TextnetBase, FormalContext):
             )
 
     @classmethod
-    def load(cls, source: Union[os.PathLike[Any], str]) -> Textnet:
+    def load(cls, source: os.PathLike[Any] | str) -> Textnet:
         """
         Load a textnet from file.
 
@@ -496,22 +494,22 @@ class Textnet(TextnetBase, FormalContext):
     def plot(
         self,
         *,
-        color_clusters: Union[bool, ig.VertexClustering] = False,
-        show_clusters: Union[bool, ig.VertexClustering] = False,
+        color_clusters: bool | ig.VertexClustering = False,
+        show_clusters: bool | ig.VertexClustering = False,
         bipartite_layout: bool = False,
         sugiyama_layout: bool = False,
         circular_layout: bool = False,
         kamada_kawai_layout: bool = False,
         drl_layout: bool = False,
-        node_opacity: Optional[float] = None,
-        edge_opacity: Optional[float] = None,
+        node_opacity: float | None = None,
+        edge_opacity: float | None = None,
         label_term_nodes: bool = False,
         label_doc_nodes: bool = False,
         label_nodes: bool = False,
         label_edges: bool = False,
-        node_label_filter: Optional[Callable[[ig.Vertex], bool]] = None,
-        edge_label_filter: Optional[Callable[[ig.Edge], bool]] = None,
-        scale_nodes_by: Optional[str] = None,
+        node_label_filter: Callable[[ig.Vertex], bool] | None = None,
+        edge_label_filter: Callable[[ig.Edge], bool] | None = None,
+        scale_nodes_by: str | None = None,
         **kwargs,
     ) -> ig.Plot:
         """
@@ -743,7 +741,7 @@ class ProjectedTextnet(TextnetBase):
         pruned.delete_edges(pruned.es.select(alpha_ge=alpha))
         return ProjectedTextnet(giant_component(pruned))
 
-    def plot(self, *, alpha: Optional[float] = None, **kwargs) -> ig.Plot:
+    def plot(self, *, alpha: float | None = None, **kwargs) -> ig.Plot:
         """
         Plot the projected graph.
 
@@ -803,7 +801,7 @@ ProjectedTextnet.top_ev = ProjectedTextnet.top_eigenvector_centrality  # type: i
 
 
 def _im_from_tidy_text(
-    tidy_text: Union[TidyText, pd.DataFrame], min_docs: int
+    tidy_text: TidyText | pd.DataFrame, min_docs: int
 ) -> IncidenceMatrix:
     count = tidy_text.groupby("term").count()["n"]
     tt = (

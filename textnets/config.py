@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Implements configuration parameter features.
 
 Global Parameters
@@ -44,7 +42,7 @@ import random
 import sqlite3
 from collections import UserDict
 from pathlib import Path
-from typing import Any, Union
+from typing import Any
 from warnings import warn
 
 from wasabi import msg, table
@@ -70,7 +68,7 @@ class TextnetsConfiguration(UserDict):
         else:
             self.data[key] = item
 
-    def save(self, target: Union[os.PathLike[str], str]) -> None:
+    def save(self, target: os.PathLike[str] | str) -> None:
         """
         Save parameters to file.
 
@@ -84,7 +82,7 @@ class TextnetsConfiguration(UserDict):
             conn.execute("CREATE TABLE IF NOT EXISTS params(data json)")
             conn.execute("INSERT INTO params VALUES (?)", [json.dumps(self.data)])
 
-    def load(self, source: Union[os.PathLike[str], str]) -> None:
+    def load(self, source: os.PathLike[str] | str) -> None:
         """
         Load parameters from file.
 

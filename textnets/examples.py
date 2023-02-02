@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Example data for feature demonstrations."""
 
 from pandas import Series

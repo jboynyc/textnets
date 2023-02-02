@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
-
 """Implements experimental features for formal concept analysis."""
 
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
-from typing import List, Tuple
 from warnings import warn
 
 from toolz import memoize
@@ -25,14 +24,14 @@ class FormalContext(ABC):
         pass
 
     @property
-    def context(self) -> Tuple[List[str], List[str], List[List[bool]]]:
+    def context(self) -> tuple[list[str], list[str], list[list[bool]]]:
         """Return formal context of terms and documents."""
         return self._formal_context(alpha=tn.params["ffca_cutoff"])
 
     @memoize
     def _formal_context(
         self, alpha: float
-    ) -> Tuple[List[str], List[str], List[List[bool]]]:
+    ) -> tuple[list[str], list[str], list[list[bool]]]:
         # The incidence matrix is a "fuzzy formal context." We can binarize it
         # by using a cutoff. This is known as an alpha-cut. This feature is
         # experimental.

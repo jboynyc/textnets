@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Implements the features relating to language."""
 
 from __future__ import annotations
@@ -8,7 +6,7 @@ import os
 import sqlite3
 from glob import glob
 from pathlib import Path
-from typing import Any, Callable, Optional, Sequence, Union
+from typing import Any, Callable, Sequence
 from warnings import warn
 
 import numpy as np
@@ -52,7 +50,7 @@ LANGS = {
 }
 
 #: Custom type for objects resembling documents (token sequences).
-DocLike = Union[Doc, Sequence[Token]]
+DocLike = Doc | Sequence[Token]
 
 _INSTALLED_MODELS = spacy.util.get_installed_models()
 
@@ -85,7 +83,7 @@ class Corpus:
     def __init__(
         self,
         data: pd.Series,
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> None:
         if data.empty:
             raise ValueError("Corpus data is empty.")
@@ -138,8 +136,8 @@ class Corpus:
     def from_df(
         cls,
         data: pd.DataFrame,
-        doc_col: Optional[str] = None,
-        lang: Optional[str] = None,
+        doc_col: str | None = None,
+        lang: str | None = None,
     ) -> Corpus:
         """
         Create corpus from data frame.
@@ -175,7 +173,7 @@ class Corpus:
     def from_dict(
         cls,
         data: dict[Any, str],
-        lang: Optional[str] = None,
+        lang: str | None = None,
     ) -> Corpus:
         """
         Create corpus from dictionary.
@@ -197,9 +195,9 @@ class Corpus:
     @classmethod
     def from_files(
         cls,
-        files: Union[str, list[str], list[Path]],
-        doc_labels: Optional[list[str]] = None,
-        lang: Optional[str] = None,
+        files: str | list[str] | list[Path],
+        doc_labels: list[str] | None = None,
+        lang: str | None = None,
     ) -> Corpus:
         """Construct corpus from files.
 
@@ -243,9 +241,9 @@ class Corpus:
     def from_csv(
         cls,
         path: str,
-        label_col: Optional[str] = None,
-        doc_col: Optional[str] = None,
-        lang: Optional[str] = None,
+        label_col: str | None = None,
+        doc_col: str | None = None,
+        lang: str | None = None,
         **kwargs,
     ) -> Corpus:
         """Read corpus from comma-separated value file.
@@ -279,10 +277,10 @@ class Corpus:
     def from_sql(
         cls,
         qry: str,
-        conn: Union[str, object],
-        label_col: Optional[str] = None,
-        doc_col: Optional[str] = None,
-        lang: Optional[str] = None,
+        conn: str | object,
+        label_col: str | None = None,
+        doc_col: str | None = None,
+        lang: str | None = None,
         **kwargs,
     ) -> Corpus:
         """Read corpus from SQL database.
@@ -314,7 +312,7 @@ class Corpus:
             data = data.set_index(data.columns[0])
         return cls.from_df(data, doc_col=doc_col, lang=lang)
 
-    def save(self, target: Union[os.PathLike[Any], str]) -> None:
+    def save(self, target: os.PathLike[Any] | str) -> None:
         """
         Save a corpus to file.
 
@@ -333,7 +331,7 @@ class Corpus:
             )
 
     @classmethod
-    def load(cls, source: Union[os.PathLike[Any], str]) -> Corpus:
+    def load(cls, source: os.PathLike[Any] | str) -> Corpus:
         """
         Load a corpus from file.
 
@@ -366,7 +364,7 @@ class Corpus:
 
     def tokenized(
         self,
-        remove: Optional[list[str]] = None,
+        remove: list[str] | None = None,
         stem: bool = True,
         remove_stop_words: bool = True,
         remove_urls: bool = True,
@@ -421,7 +419,7 @@ class Corpus:
     def noun_phrases(
         self,
         normalize: bool = False,
-        remove: Optional[list[str]] = None,
+        remove: list[str] | None = None,
         sublinear: bool = True,
     ) -> TidyText:
         """Return noun phrases from corpus in tidy format.
@@ -454,7 +452,7 @@ class Corpus:
     def ngrams(
         self,
         size: int,
-        remove: Optional[list[str]] = None,
+        remove: list[str] | None = None,
         stem: bool = False,
         remove_stop_words: bool = False,
         remove_urls: bool = False,
@@ -641,7 +639,7 @@ def _ngrams(doc: list[str], n: int) -> list[str]:
     return [" ".join(t) for t in zip(*[doc[offset:] for offset in range(n)])]
 
 
-def _tf_idf(tidy_text: Union[pd.DataFrame, TidyText], sublinear: bool) -> TidyText:
+def _tf_idf(tidy_text: pd.DataFrame | TidyText, sublinear: bool) -> TidyText:
     """Calculate term frequency/inverse document frequency."""
     if sublinear:
         tidy_text["tf"] = tidy_text["n"].map(_sublinear_scaling)
@@ -657,7 +655,7 @@ def _tf_idf(tidy_text: Union[pd.DataFrame, TidyText], sublinear: bool) -> TidyTe
     return TidyText(tt[["term", "n", "term_weight"]])
 
 
-def _sublinear_scaling(n: Union[int, float]) -> float:
+def _sublinear_scaling(n: int | float) -> float:
     """Logarithmic scaling function."""
     return 1 + np.log10(n) if n > 0 else 0
 

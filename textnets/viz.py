@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Extends visualization features."""
 
 from __future__ import annotations
@@ -7,7 +5,7 @@ from __future__ import annotations
 from functools import wraps
 from itertools import repeat
 from math import ceil
-from typing import Any, Callable, Iterator, List
+from typing import Any, Callable, Iterator
 
 import igraph as ig
 import numpy as np
@@ -230,7 +228,7 @@ def _add_opacity(color: str, alpha: float) -> tuple[Any, ...]:
     return (*color_name_to_rgb(color), alpha)
 
 
-def _cluster_node_indices(vc: ig.VertexClustering) -> Iterator[List[int]]:
+def _cluster_node_indices(vc: ig.VertexClustering) -> Iterator[list[int]]:
     """Return node indices for nodes in each cluster."""
     for n in range(vc._len):
         yield [i for i, x in enumerate(vc.membership) if x == n]
