@@ -2,7 +2,7 @@
 History
 =======
 
-0.8.7 (2023-02-02)
+0.8.7 (2023-02-10)
 ------------------
 * Updates to spaCy 3.5 and igraph 0.10.4.
 * When initializing `Corpus` with data that includes duplicated document
