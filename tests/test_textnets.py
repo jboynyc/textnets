@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import textnets as tn
 
-from pytest import approx
+from pytest import approx, mark
 from toolz import partial
 
 
@@ -251,6 +251,9 @@ def test_textnet_spanning(corpus):
     assert len(g_np_groups.spanning) == g_np_groups.graph.vcount()
 
 
+@mark.xfail(
+    raises=ModuleNotFoundError, reason="experimental feature requires additional import"
+)
 def test_context(corpus):
     """Test formal context creation from textnet."""
 
