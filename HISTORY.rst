@@ -2,6 +2,11 @@
 History
 =======
 
+0.8.8 (unreleased)
+------------------
+* Updates various dependencies.
+* Improves testing.
+
 0.8.7 (2023-02-10)
 ------------------
 * Updates to spaCy 3.5 and igraph 0.10.4.
