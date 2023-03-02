@@ -3,17 +3,15 @@
 with pkgs;
 
 mkShell {
-  venvDir = "./.VENV";
-  buildInputs = [
-    cairo
+  packages = [
     graphviz
     poetry
-    zlib
     python310.pkgs.venvShellHook
   ];
+  venvDir = "./.VENV";
   postShellHook = ''
     export LD_LIBRARY_PATH=${stdenv.cc.cc.lib}/lib/:${cairo}/lib/:${zlib}/lib:$LD_LIBRARY_PATH
-    poetry install -E fca -E doc
+    poetry install -E doc #-E fca
     spacy validate | grep en_core_web_sm || poetry run pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0.tar.gz
   '';
 }
