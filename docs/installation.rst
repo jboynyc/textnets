@@ -4,13 +4,16 @@
 Installation
 ============
 
-**textnets** is included in `conda-forge`_ and the `Python Package Index`_, so
-it can either be installed using `conda`_ or `pip`_.
+**textnets** is included in `conda-forge`_, the `Python Package Index`_, and
+`nixpkgs`_. That means you can install the package using `conda`_, `pip`_, or
+`nix`_.
 
 .. _conda-forge: https://anaconda.org/conda-forge/textnets/
 .. _`Python Package Index`: https://pypi.org/project/textnets/
+.. _`nixpkgs`: https://search.nixos.org/packages?query=textnets
 .. _conda: https://conda.io/
 .. _pip: https://pip.pypa.io
+.. _nix: https://nixos.org
 
 .. note::
 
@@ -57,6 +60,14 @@ manger to install **textnets**. In a `virtual environment`_, run::
 
 .. _`virtual environment`: https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments
 
+Using nix
+---------
+
+Users of ``nix`` can use the version from nixpkgs, for instance by using
+``nix-shell``::
+
+   $ nix-shell -p 'python3.withPackages (p: with p; [ ipython textnets spacy_models.en_core_web_sm ])' --run ipython
+
 Plotting
 --------
 
@@ -67,9 +78,9 @@ Plotting
 
 .. _install CFFI: https://cffi.readthedocs.io/en/latest/installation.html
 
-**textnets** installs the `Cairo`_ graphics library as a dependency for
-plotting. If you are using a Mac without Anaconda, you will probably have to
-install Cairo separately using the `Homebrew`_ package manager.
+**textnets** depends on the `Cairo`_ graphics library for plotting. If you are
+using a Mac without Anaconda or Nix, you will probably have to install Cairo
+separately using the `Homebrew`_ package manager.
 
 .. _Cairo: https://www.cairographics.org/
 .. _Homebrew: https://formulae.brew.sh/formula/cairo
@@ -98,6 +109,6 @@ Run the following command to check::
 
 If there are no language models available for your corpus language, there may
 be some `basic support <https://spacy.io/usage/models#languages>`_. Even in
-that case, some languages (including Korean, Vietnamese, Thai, Russian, and
-Ukrainian) require additional installs for tokenization support. Consult the
-spaCy documentation for details.
+that case, some languages (including Japanese, Russian, Thai, Vietnamese,
+Ukrainian, and Chinese) require additional installs for tokenization support.
+Consult the spaCy documentation for details.
