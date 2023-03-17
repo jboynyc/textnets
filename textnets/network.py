@@ -991,7 +991,7 @@ def bipartite_rank(
     return pd.Series(np.append(d, p), index=net.nodes["id"])
 
 
-def textual_spanning(m: np.ndarray, alpha: float = 1.0) -> pd.Series:
+def textual_spanning(m: np.ndarray, alpha: float = 1.0) -> np.ndarray:
     """
     Calculate textual spanning of documents in a similarity matrix.
 
