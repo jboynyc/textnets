@@ -35,9 +35,9 @@ try:
     integrand = LowLevelCallable.from_cython(_ext, "df_integrand")
 except ImportError:
 
-    def integrand(x: float, degree: int) -> float:
+    def integrand(x: float, degree: int) -> np.float64:
         """Fallback version of integrand function for the disparity filter."""
-        return (1 - x) ** (degree - 2)
+        return np.float64(1 - x) ** (degree - 2)
 
     warn("Could not import compiled extension, backbone extraction will be slow.")
 
@@ -851,8 +851,6 @@ def disparity_filter(graph: ig.Graph) -> Iterator[float]:
     ):
         source, target = edge.vertex_tuple
         degree_t = target.degree()
-        if degree_t <= 1:
-            yield 0
         degree_s = source.degree()
         sum_weights_s = source.strength(weights="weight")
         norm_weight_s = edge["weight"] / sum_weights_s
