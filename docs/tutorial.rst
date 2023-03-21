@@ -13,7 +13,7 @@ Example
 .. tip::
 
    Download this example as a Jupyter notebook so you can follow along:
-   :jupyter-download:notebook:`tutorial`.
+   :jupyter-download-notebook:`tutorial`.
 
    You can also make this tutorial "live" so you can adjust the example code
    and re-run it.
