@@ -2,9 +2,10 @@
 History
 =======
 
-0.8.8 (unreleased)
+0.8.8 (2023-03-21)
 ------------------
-* Updates various dependencies.
+* Fixes bug in disparity filter.
+* Updates to spaCy 3.5.1, along various other dependencies.
 * Improves testing.
 
 0.8.7 (2023-02-10)
