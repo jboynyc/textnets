@@ -174,8 +174,8 @@ The following snippets are meant to help you get started. The first thing is to
 get your data in the right shape.
 
 A textnet is built from a collection—or *corpus*—of texts, so we use the
-`Corpus` class to get our data ready. Each of the following snippets assumes
-that you have imported `Corpus` and `Textnet` like in the preceding example.
+`Corpus` class to get our data ready. The following snippets assume that you
+have imported textnets as above.
 
 From a Dictionary
 ~~~~~~~~~~~~~~~~~
@@ -419,7 +419,7 @@ visualizations. Assuming you want to save the projected term network, called
 
 This will create a file in the current directory in Graph Modeling Language
 (GML) format. This can then be opened by Pajek, yEd, Gephi and other programs.
-Consult the docs for ``save_graph`` for a list of supported formats.
+Consult the docs for `Textnet.save_graph` for a list of supported formats.
 
 If instead you want to save a plot of a network, the easiest thing is to pass
 the ``target`` keyword to the `Textnet.plot` method.

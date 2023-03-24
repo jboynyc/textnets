@@ -82,7 +82,7 @@ Implemented in leidenalg
 
 The ``leidenalg`` package is installed as a dependency of **textnets**. It can
 produce a variety of different partition types, and in some cases, you may want
-to use a different one that the default. In this example, ``leidenalg`` is
+to use a different one than the default. In this example, ``leidenalg`` is
 instructed to use the method of "asymptotic surprise" to determine the graph
 partition.
 

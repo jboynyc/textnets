@@ -104,12 +104,13 @@ Pull Request Guidelines
 
 Before you submit a pull request, check that it meets these guidelines:
 
-1. The pull request should include tests.
-2. If the pull request adds functionality, the docs should be updated. Put
-   your new functionality into a function with a docstring, and add
-   illustrative code examples to the tutorial.
-3. The pull request should work for all supported Python versions (currently
-   3.8, 3.9, and 3.10). Check
+1. The pull request should include unit tests if introducing new functionality.
+2. Use docstrings, type annotations, and keep the documentation updated. Add
+   illustrative code examples to the tutorial or advanced topics guide, as
+   appropriate.
+3. The pull request should work for all supported Python versions and
+   platforms. Currently, these are CPython 3.8, 3.9, 3.10, and 3.11 on Mac,
+   Windows, and Linux. (PyPy may be supported but is untested). Check
    https://github.com/jboynyc/textnets/actions/workflows/ci.yml to make sure
    that the tests pass.
 
@@ -125,4 +126,6 @@ $ git commit -a -m "Bump to version $(poetry version -s)"
 $ git tag -a v$(poetry version -s)
 $ make push
 
-Tagged releases are automatically published to PyPI.
+Tagged releases are immediately published to PyPI. Conda-Forge and nixpkgs may
+lag behind for a number of days after a new release but are generally kept in
+sync.

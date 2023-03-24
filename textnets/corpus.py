@@ -22,7 +22,7 @@ import textnets as tn
 from ._util import LiteFrame
 
 
-#: Mapping of language codes to spacy language model names.
+#: Mapping of language codes to spaCy language model names.
 LANGS = {
     "ca": "ca_core_news_sm",  # Catalan
     "da": "da_core_news_sm",  # Danish
