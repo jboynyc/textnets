@@ -2,6 +2,12 @@
 History
 =======
 
+0.9.0 (unreleased)
+------------------
+* Improves documentation.
+* Parallelizes execution of NLP and backbone extraction for large corpora and
+  networks.
+
 0.8.8 (2023-03-21)
 ------------------
 * Fixes bug in disparity filter.
