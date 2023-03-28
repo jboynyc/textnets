@@ -5,6 +5,8 @@ from __future__ import annotations
 import os
 import sqlite3
 from glob import glob
+
+from os import cpu_count
 from pathlib import Path
 from typing import Any, Callable, Sequence, Union
 from warnings import warn
@@ -16,6 +18,7 @@ from spacy.tokens import Token
 from spacy.tokens.doc import Doc
 from toolz import compose, identity, memoize, partial
 from tqdm.auto import tqdm
+from tqdm.contrib.concurrent import thread_map
 
 import textnets as tn
 
@@ -109,7 +112,6 @@ class Corpus:
 
     @memoize
     def _nlp(self, lang: str) -> pd.Series:
-        tqdm.pandas(unit="docs", disable=not tn.params["progress_bar"] or None)
         try:
             nlp = spacy.load(lang, exclude=["ner", "textcat"])
         except OSError as err:
@@ -124,7 +126,15 @@ class Corpus:
                 raise err
             nlp = spacy.blank(lang)
             warn(f"Using basic '{lang}' language model.")
-        return self.documents.map(_normalize_whitespace).progress_map(nlp)
+        norm_docs = self.documents.map(_normalize_whitespace)
+        tqdm_args = dict(disable=not tn.params["progress_bar"] or None, unit="docs")
+        cores = cpu_count() or 1
+        if cores > 1 and len(self.documents) >= cores:
+            nlp_ufunc = np.frompyfunc(nlp, 1, 1)
+            doc_chunks = np.array_split(norm_docs, cores)
+            return pd.concat(thread_map(nlp_ufunc, doc_chunks, **tqdm_args))
+        tqdm.pandas(**tqdm_args)
+        return norm_docs.progress_map(nlp)
 
     def __len__(self) -> int:
         return len(self.documents)

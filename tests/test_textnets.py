@@ -97,6 +97,37 @@ def test_corpus_czech(recwarn):
     assert str(w2.message) == "Using basic 'cs' language model."
 
 
+def test_corpus_long(testdata, recwarn):
+    """Test parallelized NLP on a long series."""
+    s = pd.Series(
+        [
+            "one",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+            "eleven",
+            "twelve",
+            "thirteen",
+            "fourteen",
+            "fifteen",
+            "sixteen",
+            "seventeen",
+            "eighteen",
+            "nineteen",
+            "twenty",
+        ]
+        * 50
+    )
+    corpus = tn.Corpus(s)
+    assert len(corpus.nlp) == 1000
+
+
 def test_corpus_df(testdata):
     """Test creating a corpus from a data frame."""
     df = pd.DataFrame({"headlines": testdata, "meta": list("ABCDEFG")})

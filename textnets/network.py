@@ -9,6 +9,7 @@ import warnings
 from abc import ABC, abstractmethod
 from collections import Counter
 from functools import cached_property
+from os import cpu_count
 from pathlib import Path
 from typing import Any, Callable, IO, Iterator, Literal
 from warnings import warn
@@ -21,6 +22,7 @@ from scipy import LowLevelCallable
 from scipy.integrate import quad
 from toolz import memoize
 from tqdm.auto import tqdm
+from tqdm.contrib.concurrent import thread_map
 
 import textnets as tn
 from ._util import LiteFrame
@@ -846,21 +848,28 @@ def disparity_filter(graph: ig.Graph) -> Iterator[float]:
     ----------
     :cite:`Serrano2009`
     """
-    for edge in tqdm(
-        graph.es, unit="edges", disable=not tn.params["progress_bar"] or None
-    ):
-        source, target = edge.vertex_tuple
-        degree_t = target.degree()
-        degree_s = source.degree()
-        sum_weights_s = source.strength(weights="weight")
-        norm_weight_s = edge["weight"] / sum_weights_s
-        sum_weights_t = target.strength(weights="weight")
-        norm_weight_t = edge["weight"] / sum_weights_t
-        integral_s = _disparity_filter_integral(norm_weight_s, degree_s)
-        integral_t = _disparity_filter_integral(norm_weight_t, degree_t)
-        yield min(
-            1 - (degree_s - 1) * integral_s[0], 1 - (degree_t - 1) * integral_t[0]
-        )
+    tqdm_args = dict(disable=not tn.params["progress_bar"] or None, unit="edges")
+    cores = cpu_count() or 1
+    if cores > 1 and len(graph.es) >= cores:
+        sig_ufunc = np.frompyfunc(_edge_significance, 1, 1)
+        edge_chunks = np.array_split(pd.Series(list(graph.es)), cores)
+        yield from pd.concat(thread_map(sig_ufunc, edge_chunks, **tqdm_args))
+    else:
+        for edge in tqdm(graph.es, **tqdm_args):
+            yield _edge_significance(edge)
+
+
+def _edge_significance(edge: ig.Edge) -> float:
+    source, target = edge.vertex_tuple
+    degree_t = target.degree()
+    degree_s = source.degree()
+    sum_weights_s = source.strength(weights="weight")
+    norm_weight_s = edge["weight"] / sum_weights_s
+    sum_weights_t = target.strength(weights="weight")
+    norm_weight_t = edge["weight"] / sum_weights_t
+    integral_s = _disparity_filter_integral(norm_weight_s, degree_s)
+    integral_t = _disparity_filter_integral(norm_weight_t, degree_t)
+    return min(1 - (degree_s - 1) * integral_s[0], 1 - (degree_t - 1) * integral_t[0])
 
 
 @memoize
