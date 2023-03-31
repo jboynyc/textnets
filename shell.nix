@@ -12,6 +12,6 @@ mkShell {
   postShellHook = ''
     export LD_LIBRARY_PATH=${stdenv.cc.cc.lib}/lib/:${cairo}/lib/:${zlib}/lib:$LD_LIBRARY_PATH
     poetry config virtualenvs.prefer-active-python true
-    poetry install --all-extras
+    poetry install --with doc --all-extras
   '';
 }
