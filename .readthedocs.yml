@@ -4,17 +4,17 @@ build:
   os: "ubuntu-20.04"
   tools:
     python: "mambaforge-4.10"
+  jobs:
+    pre_create_environment:
+      - asdf plugin add poetry
+      - asdf install poetry latest
+      - asdf global poetry latest
+      - poetry config virtualenvs.create false
+    post_install:
+      - poetry install -E docs
 
 conda:
   environment: docs/conda-env.yml
-
-# Optionally set the version of Python and requirements required to build your docs
-python:
-  install:
-    - method: pip
-      path: .
-      extra_requirements:
-        - doc
 
 # Build documentation in the doc/source directory with Sphinx
 sphinx:
