@@ -13,7 +13,7 @@ authors = ["John D. Boy <jboy@bius.moe>"]
 readme = "README.rst"
 build = "build.py"
 include = ["docs/*.rst", "docs/*.py", "docs/refs.bib", "docs/*.svg", "docs/_static", "LICENSE", "*.rst", "tests/*.py"]
-exclude = ["docs/conda-env.yml", "textnets/_ext.c"]
+exclude = ["textnets/_ext.c"]
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/jboynyc/textnets/issues"
