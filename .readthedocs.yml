@@ -8,8 +8,8 @@ build:
     pre_create_environment:
       - asdf plugin add poetry
       - asdf install poetry 1.2.2
-      - asdf global poetry latest
-      - poetry config virtualenvs.prefer-active-python true
+      - asdf global poetry 1.2.2
+      - poetry config virtualenvs.create false
     post_install:
       - poetry install -E doc
 
