@@ -30,10 +30,6 @@ class LiteFrame:
     def T(self) -> DataFrame:
         return self._df.T
 
-    @property
-    def values(self) -> ndarray:
-        return self._df.values
-
     def applymap(self, *args, **kwargs) -> DataFrame:
         return self._df.applymap(*args, **kwargs)
 

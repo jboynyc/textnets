@@ -953,7 +953,7 @@ def bipartite_rank(
     if normalizer not in ("HITS", "CoHITS", "BGRM", "BiRank"):
         raise ValueError(f"'{normalizer}' is not a valid normalization option.")
 
-    W = net.im.values
+    W = net.im.to_numpy()
     Kd = np.array(W.sum(axis=1)).flatten()
     Kp = np.array(W.T.sum(axis=1)).flatten()
 
