@@ -98,7 +98,7 @@ First, the network of newspapers:
 
 .. jupyter-execute::
 
-    papers = t.project(node_type="doc")
+    papers = t.project(node_type=tn.DOC)
     papers.plot(label_nodes=True)
 
 As before in the bipartite network, we can see the *Houston Chronicle*,
@@ -108,7 +108,7 @@ Next, the term network:
 
 .. jupyter-execute::
 
-   words = t.project(node_type="term")
+   words = t.project(node_type=tn.TERM)
    words.plot(label_nodes=True,
               show_clusters=True)
 
@@ -361,7 +361,7 @@ single-mode network of either kind.
 
 .. code:: python
 
-   groups = t.project(node_type="doc")
+   groups = t.project(node_type=tn.DOC)
    print(groups.summary)
 
 The resulting network only contains nodes of the chosen type (``doc`` or

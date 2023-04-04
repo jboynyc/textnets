@@ -8,6 +8,7 @@ import sqlite3
 import warnings
 from abc import ABC, abstractmethod
 from collections import Counter
+from enum import Flag
 from functools import cached_property
 from os import cpu_count
 from pathlib import Path
@@ -42,6 +43,11 @@ except ImportError:
         return np.float64(1 - x) ** (degree - 2)
 
     warn("Could not import compiled extension, backbone extraction will be slow.")
+
+
+NodeType = Flag("NodeType", [("TERM", True), ("DOC", False)])
+TERM = NodeType.TERM
+DOC = NodeType.DOC
 
 
 def _make_top(prop, desc):
@@ -131,9 +137,9 @@ class TextnetBase(ABC):
         return pd.Series(self.graph.strength(weights="weight"), index=self.nodes["id"])
 
     @cached_property
-    def node_types(self) -> list[bool]:
-        """Return boolean list to distinguish node types."""
-        return [t == "term" for t in self.nodes["type"]]
+    def node_types(self) -> list[NodeType]:
+        """Return list of node types."""
+        return [TERM if t == "term" else DOC for t in self.nodes["type"]]
 
     @abstractmethod
     def plot(self, **kwargs) -> ig.Plot:
@@ -393,15 +399,18 @@ class Textnet(TextnetBase, FormalContext):
         return im
 
     def project(
-        self, *, node_type: Literal["doc", "term"], connected: bool | None = False
+        self,
+        *,
+        node_type: Literal["doc", "term"] | NodeType,
+        connected: bool | None = False,
     ) -> ProjectedTextnet:
         """
         Project to one-mode network.
 
         Parameters
         ----------
-        node_type : {"doc", "term"}
-            Either ``doc`` or ``term``, depending on desired node type.
+        node_type : {NodeType.DOC, NodeType.TERM, "doc", "term"}
+            Either `DOC` or `TERM`, depending on desired node type.
         connected : bool, optional
             Keep only the largest connected component of the projected network
             (default: False).
@@ -416,10 +425,10 @@ class Textnet(TextnetBase, FormalContext):
         `ProjectedTextnet`
             A one-mode textnet.
         """
-        if node_type not in {"doc", "term"}:
+        if not isinstance(node_type, NodeType) and node_type not in {"doc", "term"}:
             raise ValueError("No valid node_type specified.")
         graph_to_return = 0
-        if node_type == "term":
+        if node_type in (TERM, "term"):
             graph_to_return = 1
             weights = self.im.T @ self.im
         else:

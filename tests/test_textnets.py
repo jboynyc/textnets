@@ -210,10 +210,10 @@ def test_textnet(corpus):
     n_np = tn.Textnet(noun_phrases)
     assert n_np.graph.vcount() > 0
     assert n_np.graph.ecount() > 0
-    g_np_groups = n_np.project(node_type="doc")
+    g_np_groups = n_np.project(node_type=tn.DOC)
     assert g_np_groups.vcount() > 0
     assert g_np_groups.ecount() > 0
-    g_np_words = n_np.project(node_type="term")
+    g_np_words = n_np.project(node_type=tn.TERM)
     assert g_np_words.vcount() > 0
     assert g_np_words.ecount() > 0
 
@@ -222,7 +222,7 @@ def test_textnet_matrix(corpus):
     """Test Textnet class using sample data."""
     noun_phrases = corpus.noun_phrases()
     n_np = tn.Textnet(noun_phrases)
-    g_np_groups = n_np.project(node_type="doc")
+    g_np_groups = n_np.project(node_type=tn.DOC)
     crossprod = n_np.im @ n_np.im.T
     np.fill_diagonal(crossprod.values, 0)
     pd.testing.assert_frame_equal(
@@ -278,7 +278,7 @@ def test_textnet_spanning(corpus):
 
     noun_phrases = corpus.noun_phrases()
     n_np = tn.Textnet(noun_phrases, connected=True)
-    g_np_groups = n_np.project(node_type="doc")
+    g_np_groups = n_np.project(node_type=tn.DOC)
     assert len(g_np_groups.spanning) == g_np_groups.graph.vcount()
 
 
@@ -329,7 +329,7 @@ def test_plot_projected(tmp_path, corpus):
     """Test ProjectedTextnet plotting."""
 
     n = tn.Textnet(corpus.tokenized())
-    papers = n.project(node_type="doc")
+    papers = n.project(node_type=tn.DOC)
     out = tmp_path / "plot-2.png"
     plot = papers.plot(show_clusters=True, label_nodes=True, target=str(out))
     assert len(plot._objects) > 0
@@ -340,7 +340,7 @@ def test_plot_backbone(tmp_path, corpus):
     """Test ProjectedTextnet plotting with alpha cut."""
 
     n = tn.Textnet(corpus.tokenized())
-    papers = n.project(node_type="doc")
+    papers = n.project(node_type=tn.DOC)
     out = tmp_path / "plot-3.png"
     plot = papers.plot(alpha=0.4, label_nodes=True, target=str(out))
     assert len(plot._objects) > 0
@@ -351,7 +351,7 @@ def test_plot_scaled(tmp_path, corpus):
     """Test ProjectedTextnet plotting with scaled nodes."""
 
     n = tn.Textnet(corpus.tokenized())
-    papers = n.project(node_type="doc")
+    papers = n.project(node_type=tn.DOC)
     out = tmp_path / "plot-4.png"
     plot = papers.plot(scale_nodes_by="betweenness", label_nodes=True, target=str(out))
     assert len(plot._objects) > 0
@@ -362,7 +362,7 @@ def test_plot_filtered(tmp_path, corpus):
     """Test ProjectedTextnet plotting filtered labels."""
 
     n = tn.Textnet(corpus.tokenized())
-    papers = n.project(node_type="doc")
+    papers = n.project(node_type=tn.DOC)
     out = tmp_path / "plot-5.png"
     plot = papers.plot(
         label_nodes=True,

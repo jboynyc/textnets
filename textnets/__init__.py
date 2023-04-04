@@ -11,7 +11,7 @@ from importlib.metadata import version
 from . import examples  # noqa: F401
 from .config import init_seed, params  # noqa: F401
 from .corpus import Corpus  # noqa: F401
-from .network import Textnet  # noqa: F401
+from .network import DOC, TERM, Textnet  # noqa: F401
 
 __all__ = [
     "Corpus",
