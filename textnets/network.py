@@ -817,8 +817,7 @@ def _im_from_tidy_text(
     tt = (
         tidy_text.reset_index()
         .merge(count >= min_docs, on="term", how="left")
-        .rename(columns={"n_y": "keep"})
-        .rename(columns={"n_x": "n"})
+        .rename(columns={"n_y": "keep", "n_x": "n"})
         .set_index("label")
     )
     im = tt[tt["keep"]].pivot(values="term_weight", columns="term").fillna(0)
