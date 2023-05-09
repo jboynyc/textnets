@@ -659,7 +659,7 @@ def _tf_idf(tidy_text: pd.DataFrame | TidyText, sublinear: bool) -> TidyText:
         tidy_text["tf"] = tidy_text["n"] / tidy_text["total"]
     idfs = np.log10(len(set(tidy_text.index)) / tidy_text["term"].value_counts())
     tt = tidy_text.merge(pd.DataFrame(idfs), left_on="term", right_index=True).rename(
-        columns={"term_y": "idf"}
+        columns={"count": "idf"}
     )
     tt["term_weight"] = tt["tf"] * tt["idf"]
     return TidyText(tt[["term", "n", "term_weight"]])

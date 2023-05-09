@@ -25,7 +25,7 @@ setuptools = ">=41"
 Cython = "^0.29.24"
 igraph = "^0.10.4"
 leidenalg = "^0.9.0"
-pandas = "^1.5.0"
+pandas = "^2.0.1"
 cairocffi = {version = "^1.4.0", markers = "sys_platform=='linux' or sys_platform=='darwin'"}
 pycairo = {version = "^1.22.0", markers = "sys_platform=='win32'"}
 scipy = "^1.9.1"
@@ -49,7 +49,7 @@ flake8 = "^6.0.0"
 mypy = "^0.991"
 pytest = "^7.1.2"
 ufmt = "^2.0.0"
-pandas-stubs = "^1.5.2"
+pandas-stubs = "^2.0.1.230501"
 
 [tool.poetry.extras]
 fca = ["concepts"]
