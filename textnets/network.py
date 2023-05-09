@@ -45,6 +45,7 @@ except ImportError:
     warn("Could not import compiled extension, backbone extraction will be slow.")
 
 
+#: Flag to distinguish node types.
 NodeType = Flag("NodeType", [("TERM", True), ("DOC", False)])
 TERM = NodeType.TERM
 DOC = NodeType.DOC

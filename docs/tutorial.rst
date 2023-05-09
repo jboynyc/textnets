@@ -364,9 +364,9 @@ single-mode network of either kind.
    groups = t.project(node_type=tn.DOC)
    print(groups.summary)
 
-The resulting network only contains nodes of the chosen type (``doc`` or
-``term``). Edge weights are calculated, and node attributes are maintained. The
-`m <ProjectedTextnet.m>` property gives you access to the projected graph's
+The resulting network only contains nodes of the chosen type (`DOC` or `TERM`).
+Edge weights are calculated, and node attributes are maintained. The `m
+<ProjectedTextnet.m>` property gives you access to the projected graph's
 weighted adjacency matrix.
 
 Like the bipartite network, the projected textnet also has a `plot
