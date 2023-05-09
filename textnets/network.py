@@ -430,20 +430,18 @@ class Textnet(TextnetBase, FormalContext):
         graph_to_return = 0
         if node_type in (TERM, "term"):
             graph_to_return = 1
-            weights = self.im.T @ self.im
+            sparse_array = self.im.to_sparse_array()
+            weights = sparse_array.T @ sparse_array
         else:
-            weights = self.im @ self.im.T
+            array = self.im.to_array()
+            weights = array @ array.T
         g = self.graph.bipartite_projection(
             types=self.node_types, which=graph_to_return
         )
-        for i in g.es.indices:
-            edge = g.es[i]
-            source, target = edge.source_vertex["id"], edge.target_vertex["id"]
-            if source == target:
-                edge["weight"] = 0
-            else:
-                weights.columns = weights.index
-                edge["weight"] = weights.loc[source, target]
+        pairs = [
+            (s.index, t.index) for s, t in (g.es[i].vertex_tuple for i in g.es.indices)
+        ]
+        g.es.set_attribute_values("weight", [weights[i] for i in pairs])
         g.es["cost"] = [
             1 / pow(w, tn.params["tuning_parameter"]) for w in g.es["weight"]
         ]

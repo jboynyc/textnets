@@ -4,8 +4,9 @@ from __future__ import annotations
 
 from typing import Any
 
-from numpy import ndarray
+import numpy as np
 from pandas import DataFrame, Index, Series
+from scipy.sparse import csr_array
 
 
 class LiteFrame:
@@ -51,7 +52,7 @@ class LiteFrame:
     def sum(self, *args, **kwargs) -> Series[Any]:
         return self._df.sum(*args, **kwargs)
 
-    def to_numpy(self, *args, **kwargs) -> ndarray:
+    def to_numpy(self, *args, **kwargs) -> np.ndarray:
         return self._df.to_numpy(*args, **kwargs)
 
     def __getitem__(self, *args, **kwargs):
@@ -72,5 +73,20 @@ class LiteFrame:
     def __eq__(self, *args):
         return self._df.__eq__(*args)
 
-    def __array__(self, dtype=None) -> ndarray:
+    def __array__(self, dtype=None) -> np.ndarray:
         return self._df.__array__(dtype=dtype)
+
+    @property
+    def density(self) -> float:
+        """Proportion of nonzero values."""
+        a = self.to_numpy()
+        return np.count_nonzero(a) / a.size
+
+    def to_array(self) -> np.ndarray:
+        """Return numpy array with float32 numeric data."""
+        a = self.to_numpy()
+        return a.astype("float32")
+
+    def to_sparse_array(self) -> csr_array:
+        """Return CSR sparse array with float32 numeric data."""
+        return csr_array(self.to_array())
