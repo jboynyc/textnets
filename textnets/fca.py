@@ -24,12 +24,12 @@ class FormalContext(ABC):
         pass
 
     @property
-    def context(self) -> "Context":  # type: ignore
+    def context(self):
         """Return formal context of terms and documents."""
         return self._formal_context(alpha=tn.params["ffca_cutoff"])
 
     @memoize
-    def _formal_context(self, alpha: float) -> "Context":  # type: ignore
+    def _formal_context(self, alpha: float):
         # The incidence matrix is a "fuzzy formal context." We can binarize it
         # by using a cutoff. This is known as an alpha-cut. This feature is
         # experimental.
