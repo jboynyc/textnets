@@ -110,7 +110,7 @@ Before you submit a pull request, check that it meets these guidelines:
    appropriate.
 3. The pull request should work for all supported Python versions and
    platforms. Currently, these are CPython 3.8, 3.9, 3.10, and 3.11 on Mac,
-   Windows, and Linux. (PyPy may be supported but is untested). Check
+   Windows and Linux, as well as PyPy 3.9 (Linux only). Check
    https://github.com/jboynyc/textnets/actions/workflows/ci.yml to make sure
    that the tests pass.
 
