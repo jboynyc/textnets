@@ -818,10 +818,15 @@ def _im_from_tidy_text(
         tidy_text.reset_index()
         .merge(count >= min_docs, on="term", how="left")
         .rename(columns={"n_y": "keep", "n_x": "n"})
-        .set_index("label")
     )
-    im = tt[tt["keep"]].pivot(values="term_weight", columns="term").fillna(0)
-    return IncidenceMatrix(im)
+    im = (
+        tt[tt["keep"]]
+        .groupby(["label", "term"])
+        .first()["term_weight"]
+        .astype(pd.SparseDtype("float"))
+        .unstack(fill_value=0)
+    )
+    return IncidenceMatrix(im.astype("float64"))
 
 
 def _graph_from_im(im: IncidenceMatrix) -> ig.Graph:
