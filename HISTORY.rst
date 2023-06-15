@@ -2,11 +2,16 @@
 History
 =======
 
-0.9.0 (unreleased)
+0.9.0 (2023-06-15)
 ------------------
 * Improves documentation.
 * Parallelizes execution of NLP and backbone extraction for large corpora and
   networks.
+* Uses sparse matrices for some operations to avoid running out of memory.
+* Makes other improvements to efficiency.
+* Introduces a `NodeType` enum to differentiate document and term nodes.
+* Updates to pandas 2.0 and spaCy 3.5.3.
+* Now also tested for compatibility with PyPy 3.9!
 
 0.8.8 (2023-03-21)
 ------------------

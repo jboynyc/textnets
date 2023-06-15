@@ -1,6 +1,4 @@
 """
-Top-level package for Textnets.
-
 Citation for this package: :cite:t:`Boy2020`.
 
 Functionality based on :cite:t:`Bail2016`.
