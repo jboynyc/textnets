@@ -3,6 +3,7 @@
 .. toctree::
    :maxdepth: 2
    :caption: User Guide
+   :hidden:
 
    installation
    tutorial
@@ -12,11 +13,10 @@
 
    bibliography
 
-* :ref:`genindex`
-
 .. toctree::
    :maxdepth: 2
    :caption: Project Information
+   :hidden:
 
    contributing
    history

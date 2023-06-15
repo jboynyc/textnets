@@ -1,4 +1,8 @@
+{% if fullname == "textnets" %}
+{{ "API Reference" | escape | underline }}
+{% else %}
 {{ fullname | escape | underline}}
+{% endif %}
 
 .. automodule:: {{ fullname }}
 
