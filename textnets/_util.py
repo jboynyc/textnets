@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 import numpy as np
-from pandas import DataFrame, Index, Series
+from pandas import DataFrame, Index, Series, SparseDtype
 from scipy.sparse import csr_array
 
 
@@ -76,12 +76,6 @@ class LiteFrame:
     def __array__(self, dtype=None) -> np.ndarray:
         return self._df.__array__(dtype=dtype)
 
-    @property
-    def density(self) -> float:
-        """Proportion of nonzero values."""
-        a = self.to_numpy()
-        return np.count_nonzero(a) / a.size
-
     def to_array(self) -> np.ndarray:
         """Return numpy array with float32 numeric data."""
         a = self.to_numpy()
@@ -90,3 +84,7 @@ class LiteFrame:
     def to_sparse_array(self) -> csr_array:
         """Return CSR sparse array with float32 numeric data."""
         return csr_array(self.to_array())
+
+    @property
+    def density(self) -> float:
+        return self._df.astype(SparseDtype("float32", 0)).sparse.density  # type: ignore
