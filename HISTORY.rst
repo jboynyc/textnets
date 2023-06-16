@@ -2,6 +2,10 @@
 History
 =======
 
+0.9.1 (2023-06-16)
+------------------
+* Only fixes deployment to PyPI, otherwise unchanged from previous version.
+
 0.9.0 (2023-06-15)
 ------------------
 * Improves documentation.
@@ -240,7 +244,6 @@ History
 
 0.4.4 (2020-06-19)
 ------------------
-
 * Methods to report centrality measures in `TextnetBase` now return
   `pandas.Series` objects. This has some nice benefits, like seeing node labels
   alongside centrality measures and being able to call ``.hist()`` on them to
@@ -252,7 +255,6 @@ History
 
 0.4.3 (2020-06-17)
 ------------------
-
 * Python 3.7 compatibility is here.
 * New ``circular_layout`` option for `Textnet.plot`. This is based on "`Tidier
   Drawings <https://www.reingold.co/graph-drawing.shtml>`_" and looks very nice
@@ -262,7 +264,6 @@ History
 
 0.4.2 (2020-06-16)
 ------------------
-
 * `ProjectedTextnet.plot` now takes an argument, ``alpha``, that allows for
   pruning the graph in order to visualize its "backbone." This is useful when
   working with hairball graphs, which is common when creating textnets. Right
@@ -276,7 +277,6 @@ History
 
 0.4.1 (2020-06-12)
 ------------------
-
 * Documented `TextnetBase` methods to output lists of nodes ranked by various
   centrality measures: `top_betweenness` and several more.
 * Added `top_cluster_nodes` to output list of top nodes per cluster found via
@@ -287,7 +287,6 @@ History
 
 0.4.0 (2020-06-11)
 ------------------
-
 Lots of changes, some of them breaking, but overall just providing nicer
 abstractions over the underlying pandas and igraph stuff.
 
@@ -303,31 +302,26 @@ abstractions over the underlying pandas and igraph stuff.
 
 0.3.6 (2020-06-03)
 ------------------
-
 * Small change to *finally* get automatic deployments to PyPI to work.
 
 0.3.5 (2020-06-03)
 ------------------
-
 * Overall improvements to documentation.
 * Added ``label_edges`` argument to `Textnet.plot`.
 
 0.3.4 (2020-06-02)
 ------------------
-
 * Integrated self-contained example that can be downloaded as Jupyter notebook
   into tutorial.
 * Still trying to get automatic deployments to PyPI working.
 
 0.3.3 (2020-06-02)
 ------------------
-
 * More documentation.
 * Attempt to get automatic deployments to PyPI working.
 
 0.3.2 (2020-06-02)
 ------------------
-
 * Set up continuous integration with Travis CI.
 * Set up pyup.io dependency safety checks.
 * Expanded documentation.
@@ -335,15 +329,12 @@ abstractions over the underlying pandas and igraph stuff.
 
 0.3.2 (2020-05-31)
 ------------------
-
 * Further improvements to documentation.
 
 0.3.1 (2020-05-31)
 ------------------
-
 * Improvements to documentation.
 
 0.3.0 (2020-05-31)
 ------------------
-
 * First release on PyPI.
