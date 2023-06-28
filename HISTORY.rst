@@ -2,6 +2,12 @@
 History
 =======
 
+0.9.2 (2023-06-28)
+------------------
+* Improves documentation.
+* Updates to scipy 1.10.
+* Fixes how the compiled extension is built.
+
 0.9.1 (2023-06-16)
 ------------------
 * Only fixes deployment to PyPI, otherwise unchanged from previous version.
