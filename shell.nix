@@ -1,4 +1,4 @@
-{ pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/refs/tags/22.11.tar.gz") {} }:
+{ pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/refs/tags/23.05.tar.gz") {} }:
 
 with pkgs;
 
@@ -6,7 +6,7 @@ mkShell {
   packages = [
     graphviz
     poetry
-    python310.pkgs.venvShellHook
+    python311.pkgs.venvShellHook
   ];
   venvDir = "./.VENV";
   postShellHook = ''
