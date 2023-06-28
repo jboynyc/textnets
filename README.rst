@@ -33,6 +33,9 @@ texts.
    following the acquittal vote in the 2020 Senate impeachment trial (`source
    <https://www.jboy.space/blog/enemies-foreign-and-partisan.html>`_).
 
+**textnets** is free software under the terms of the GNU General Public License
+v3.
+
 The ideas underlying **textnets** are presented in this paper:
 
   Christopher A. Bail, "`Combining natural language processing and network
@@ -48,9 +51,6 @@ and weighing, visualization, and analysis.
 
 .. _`Chris Bail's textnets package for R`: https://github.com/cbail/textnets/
 
-**textnets** is free software under the terms of the GNU General Public License
-v3.
-
 Features
 --------
 
@@ -63,14 +63,14 @@ detection on the bipartite (word–group) network.
 .. _`Leiden algorithm`: https://doi.org/10.1038/s41598-019-41695-z
 .. _`spaCy`: https://spacy.io/
 
-**textnets** seamlessly integrates with Python's excellent `scientific stack`_.
+**textnets** is installable using the ``conda``, ``pip`` and ``nix`` package
+managers. It requires Python 3.8 or higher.
+
+**textnets** integrates seamlessly with Python's excellent `scientific stack`_.
 That means that you can use **textnets** to analyze and visualize your data in
 Jupyter notebooks!
 
-.. _`scientific stack`: https://numfocus.org/
-
-**textnets** is easily installable using the ``conda`` and ``pip`` package
-managers. It requires Python 3.8 or higher.
+.. _`scientific stack`: https://scientific-python.org
 
 Read `the documentation <https://textnets.readthedocs.io>`_ to learn more about
 the package's features.

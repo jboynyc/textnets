@@ -1,17 +1,50 @@
 [tool]
 [tool.poetry]
 name = "textnets"
-version = "0.9.1"
+version = "0.9.2"
 description = "Automated text analysis with networks"
 license = "GNU General Public License v3"
-keywords = ["computational social science", "network analysis", "nlp", "text analysis", "visualization"]
-classifiers = ["Development Status :: 4 - Beta", "Intended Audience :: Science/Research", "License :: OSI Approved :: GNU General Public License v3 (GPLv3)", "Natural Language :: English", "Programming Language :: Python :: 3 :: Only", "Programming Language :: Python :: 3.8", "Programming Language :: Python :: 3.9", "Programming Language :: Python :: 3.10", "Programming Language :: Python :: 3.11", "Topic :: Scientific/Engineering :: Visualization", "Topic :: Sociology"]
+keywords = [
+    "computational social science",
+    "network analysis",
+    "nlp",
+    "text analysis",
+    "visualization"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Natural Language :: English",
+    "Programming Language :: Cython",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Topic :: Sociology"
+]
 homepage = "https://textnets.readthedocs.io"
 repository = "https://github.com/jboynyc/textnets"
 authors = ["John D. Boy <jboy@bius.moe>"]
 readme = "README.rst"
-include = ["docs/*.rst", "docs/*.py", "docs/refs.bib", "docs/*.svg", "docs/_static", "LICENSE", "*.rst", "tests/*.py"]
-exclude = ["textnets/_ext.c"]
+include = [
+    "docs/*.rst",
+    "docs/*.py",
+    "docs/refs.bib",
+    "docs/*.svg",
+    "docs/_static",
+    "LICENSE",
+    "*.rst",
+    "tests/*.py"
+]
+exclude = [
+    "textnets/_ext.c"
+]
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/jboynyc/textnets/issues"
@@ -58,7 +91,10 @@ script = "build.py"
 generate-setup-file = true
 
 [build-system]
-requires = ["poetry-core>=1.0.0", "Cython", "setuptools>=41"]
+requires = [
+    "Cython",
+    "poetry-core>=1.0.0",
+]
 build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]

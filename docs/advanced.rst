@@ -73,7 +73,8 @@ Alternately, we can also overwrite the textnet's ``clusters`` property::
 
    terms.clusters = part
 
-To return to the default (clusters detected by the Leiden algorithm), simply delete the clusters property::
+To return to the default (clusters detected by the Leiden algorithm), delete
+the clusters property::
 
    del terms.clusters
 
@@ -195,7 +196,7 @@ Alternative methods of term extraction and weighing
 By default, **textnets** leverages spaCy language models to break up your
 corpus when you call `noun_phrases`, `ngrams` or `tokenized`, and it uses
 *tf-idf* term weights. There are many alternative ways of extracting terms and
-weighing them, and by defining a simple function, you can use them with
+weighing them, and by defining a custom function, you can use them with
 **textnets**.
 
 This example uses `YAKE! <http://yake.inesctec.pt/>`__, the popular library for

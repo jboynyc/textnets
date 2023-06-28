@@ -23,8 +23,8 @@ Using conda
 -----------
 
 This is the preferred method for most users. The `Anaconda Python
-distribution`_ is an easy way to get up and running with Python, especially if
-you are on a Mac or Windows system.
+distribution`_ is a convenient way to get up and running with Python,
+especially if you are on a Mac or Windows system.
 
 .. _Anaconda Python distribution: https://www.anaconda.com/products/individual
 

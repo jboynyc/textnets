@@ -201,7 +201,7 @@ From Pandas
 
 `Corpus` can read documents directly from pandas' `Series <pd:pandas.Series>`
 or `DataFrame <pd:pandas.DataFrame>`; mangling your data into the appropriate
-format should only take :doc:`one or two easy steps
+format should only take :doc:`one or two steps
 <pd:getting_started/intro_tutorials/10_text_data>`. The important thing is to
 have the texts in one column, and the document labels as the index.
 
@@ -247,7 +247,7 @@ From Files
 
 Perhaps you have each document you want to include in your textnet stored on
 disk in a separate text file. For such cases, `Corpus` comes with a utility,
-`from_files`. You can simply pass a path to it using a `globbing
+`from_files`. You can pass it a path using a `globbing
 <https://en.wikipedia.org/wiki/Glob_(programming)>`__ pattern:
 
 .. code:: python
@@ -347,7 +347,7 @@ You may want terms that are used in more documents to appear bigger in the
 plot. In that case, use the ``scale_nodes_by`` argument with the value
 ``degree``. Other useful options include ``label_term_nodes``,
 ``label_doc_nodes``, and ``label_edges``. These are all boolean options, so
-simply pass the value ``True`` to enable them.
+your can enable them by passing the value ``True``.
 
 Finally, enabling ``show_clusters`` will draw polygons around detected groups
 of nodes with a community structure.
@@ -421,8 +421,8 @@ This will create a file in the current directory in Graph Modeling Language
 (GML) format. This can then be opened by Pajek, yEd, Gephi and other programs.
 Consult the docs for `Textnet.save_graph` for a list of supported formats.
 
-If instead you want to save a plot of a network, the easiest thing is to pass
-the ``target`` keyword to the `Textnet.plot` method.
+If instead you want to save a plot of a network, pass the ``target`` keyword to
+the `Textnet.plot` method.
 
 .. code:: python
 
