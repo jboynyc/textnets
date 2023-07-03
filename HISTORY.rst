@@ -2,6 +2,10 @@
 History
 =======
 
+0.9.3 (unreleased)
+------------------
+* Updates to spaCy 3.5.4 and igraph 0.10.5.
+
 0.9.2 (2023-06-28)
 ------------------
 * Improves documentation.
