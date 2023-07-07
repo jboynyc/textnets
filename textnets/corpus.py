@@ -47,6 +47,7 @@ LANGS = {
     "pt": "pt_core_news_sm",  # Portuguese
     "ro": "ro_core_news_sm",  # Romanian
     "ru": "ru_core_news_sm",  # Russian
+    "sl": "sl_core_news_sm",  # Slovenian
     "sv": "sv_core_news_sm",  # Swedish
     "uk": "uk_core_news_sm",  # Ukrainian
     "zh": "zh_core_web_sm",  # Chinese
