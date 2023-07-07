@@ -4,7 +4,10 @@ History
 
 0.9.3 (unreleased)
 ------------------
-* Updates to spaCy 3.5.4 and igraph 0.10.5.
+* Updates to igraph 0.10.5.
+* Updates to spaCy 3.6.0, bringing support for Slovenian.
+* Add dependency on ``spacy-lookups-data`` for better support of languages
+  without pre-trained models (e.g., Turkish).
 
 0.9.2 (2023-06-28)
 ------------------
