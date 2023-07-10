@@ -33,17 +33,15 @@ repository = "https://github.com/jboynyc/textnets"
 authors = ["John D. Boy <jboy@bius.moe>"]
 readme = "README.rst"
 include = [
-    "docs/*.rst",
+    { path = "textnets/_ext*.so", format = "wheel" },
     "docs/*.py",
     "docs/refs.bib",
-    "docs/*.svg",
+    "docs/*.rst",
     "docs/_static",
+    "docs/*.svg",
     "LICENSE",
     "*.rst",
-    "tests/*.py"
-]
-exclude = [
-    "textnets/_ext.c"
+    "tests/*.py",
 ]
 
 [tool.poetry.urls]
@@ -105,3 +103,8 @@ warn_unused_ignores = true
 warn_unreachable = true
 ignore_missing_imports = true
 pretty = true
+
+[tool.ufmt]
+excludes = [
+    "textnets/_ext*.so"
+]
