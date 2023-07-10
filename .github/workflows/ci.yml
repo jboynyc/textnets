@@ -52,6 +52,6 @@ jobs:
           brew install cairo
         fi
         python -m pip install poetry
-        poetry install -with doc --all-extras
+        poetry install --with doc --all-extras
     - name: Test with pytest
       run: poetry run pytest
