@@ -2,7 +2,7 @@
 History
 =======
 
-0.9.3 (unreleased)
+0.9.3 (2023-07-11)
 ------------------
 * Updates to igraph 0.10.5.
 * Updates to spaCy 3.6.0, bringing support for Slovenian.
