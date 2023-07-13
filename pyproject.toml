@@ -55,7 +55,7 @@ setuptools = ">=41"
 Cython = "^0.29.24"
 cairocffi = {version = "^1.4.0", markers = "sys_platform=='linux' or sys_platform=='darwin'"}
 pycairo = {version = "^1.22.0", markers = "sys_platform=='win32'"}
-igraph = "^0.10.5"
+igraph = "^0.10.6"
 leidenalg = "^0.9.0"
 pandas = "^2.0.1"
 scipy = "^1.10.0"

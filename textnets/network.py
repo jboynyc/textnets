@@ -320,15 +320,15 @@ class Textnet(TextnetBase, FormalContext):
     The bipartite network can be projected into two different kinds of
     single-mode networks: document-to-document, and term-to-term.
 
-    Experimental: The underlying incidence matrix can also be turned into a
-    formal context, which can be used to construct a concept lattice.
+    Experimental: The underlying bipartite adjacency matrix can also be turned
+    into a formal context, which can be used to construct a concept lattice.
 
     Parameters
     ----------
-    data: TidyText or IncidenceMatrix
+    data: TidyText or BiadjacencyMatrix
         * DataFrame of tokens with per-document counts, as created by
           `Corpus.tokenized` `Corpus.ngrams`, and `Corpus.noun_phrases`.
-        * An incidence matrix relating documents to terms.
+        * A bipartite adjacency matrix relating documents to terms.
     min_docs : int, optional
         Minimum number of documents a term must appear in to be included
         in the network (default: 2).
@@ -348,7 +348,7 @@ class Textnet(TextnetBase, FormalContext):
 
     def __init__(
         self,
-        data: TidyText | IncidenceMatrix | pd.DataFrame,
+        data: TidyText | BiadjacencyMatrix | pd.DataFrame,
         min_docs: int = 2,
         connected: bool = False,
         remove_weak_edges: bool = False,
@@ -358,24 +358,24 @@ class Textnet(TextnetBase, FormalContext):
         self._doc_attrs = doc_attrs
         if data.empty:
             raise ValueError("Data is empty.")
-        if isinstance(data, IncidenceMatrix):
+        if isinstance(data, BiadjacencyMatrix):
             self._matrix = data
         elif isinstance(data, (TidyText, pd.DataFrame)):
-            self._matrix = _im_from_tidy_text(data, min_docs)
+            self._matrix = _matrix_from_tidy_text(data, min_docs)
         if remove_weak_edges:
             pairs: pd.Series = self._matrix.stack()
             edge_weights: pd.Series = pairs[pairs > 0]
             iqr: float = edge_weights.quantile(0.75) - edge_weights.quantile(0.25)
             cutoff: float = edge_weights.median() - 1.5 * iqr
             if cutoff > 0:
-                self._matrix = IncidenceMatrix(
+                self._matrix = BiadjacencyMatrix(
                     self._matrix[self._matrix > cutoff].dropna(how="all").fillna(0)
                 )
 
     @cached_property
     def graph(self) -> ig.Graph:
         """Direct access to the underlying igraph object."""
-        g = _graph_from_im(self._matrix)
+        g = _graph_from_matrix(self._matrix)
         if self._doc_attrs is not None:
             for name, attr in self._doc_attrs.items():
                 g.vs[name] = [attr.get(doc) for doc in g.vs["id"]]
@@ -384,20 +384,20 @@ class Textnet(TextnetBase, FormalContext):
         return g
 
     @cached_property
-    def im(self) -> IncidenceMatrix:
-        """Incidence matrix of the bipartite graph."""
+    def m(self) -> BiadjacencyMatrix:
+        """Weighted bipartite adjacency matrix of the bipartite graph."""
         if not self._connected:
             return self._matrix
-        a = np.array(self.graph.get_incidence(types=self.node_types)[0]).astype(
+        a = np.array(self.graph.get_biadjacency(types=self.node_types)[0]).astype(
             "float64"
         )
         a[a == 1] = self.edges["weight"]
         doc_count, _ = a.shape
-        im = IncidenceMatrix(
+        m = BiadjacencyMatrix(
             a, index=self.nodes["id"][:doc_count], columns=self.nodes["id"][doc_count:]
         )
-        im.T.index.name = "term"
-        return im
+        m.T.index.name = "term"
+        return m
 
     def project(
         self,
@@ -431,10 +431,10 @@ class Textnet(TextnetBase, FormalContext):
         graph_to_return = 0
         if node_type in (TERM, "term"):
             graph_to_return = 1
-            sparse_array = self.im.to_sparse_array()
+            sparse_array = self.m.to_sparse_array()
             weights = sparse_array.T @ sparse_array
         else:
-            array = self.im.to_array()
+            array = self.m.to_array()
             weights = array @ array.T
         g = self.graph.bipartite_projection(
             types=self.node_types, which=graph_to_return
@@ -464,7 +464,7 @@ class Textnet(TextnetBase, FormalContext):
         meta = {"connected": self._connected, "doc_attrs": json.dumps(self._doc_attrs)}
         with conn, warnings.catch_warnings():
             warnings.simplefilter("ignore")  # catch warning from pandas.to_sql
-            self.im.T.to_sql("textnet_im", conn, if_exists="replace")
+            self.m.T.to_sql("textnet_im", conn, if_exists="replace")
             pd.Series(meta, name="values").to_sql(
                 "textnet_meta", conn, if_exists="replace", index_label="keys"
             )
@@ -493,13 +493,13 @@ class Textnet(TextnetBase, FormalContext):
             raise FileNotFoundError(f"File '{source}' does not exist.")
         conn = sqlite3.connect(Path(source))
         with conn as c:
-            im = pd.read_sql("SELECT * FROM textnet_im", c, index_col="term")
+            m = pd.read_sql("SELECT * FROM textnet_im", c, index_col="term")
             meta = pd.read_sql("SELECT * FROM textnet_meta", c, index_col="keys")[
                 "values"
             ]
         connected = meta["connected"] == "1"
         doc_attrs = json.loads(meta["doc_attrs"])
-        return cls(IncidenceMatrix(im.T), connected=connected, doc_attrs=doc_attrs)
+        return cls(BiadjacencyMatrix(m.T), connected=connected, doc_attrs=doc_attrs)
 
     def plot(
         self,
@@ -810,28 +810,28 @@ for prop, desc in [
 ProjectedTextnet.top_ev = ProjectedTextnet.top_eigenvector_centrality  # type: ignore
 
 
-def _im_from_tidy_text(
+def _matrix_from_tidy_text(
     tidy_text: TidyText | pd.DataFrame, min_docs: int
-) -> IncidenceMatrix:
+) -> BiadjacencyMatrix:
     count = tidy_text.groupby("term").count()["n"]
     tt = (
         tidy_text.reset_index()
         .merge(count >= min_docs, on="term", how="left")
         .rename(columns={"n_y": "keep", "n_x": "n"})
     )
-    im = (
+    m = (
         tt[tt["keep"]]
         .groupby(["label", "term"])
         .first()["term_weight"]
         .astype(pd.SparseDtype("float"))
         .unstack(fill_value=0)
     )
-    return IncidenceMatrix(im.astype("float64"))
+    return BiadjacencyMatrix(m.astype("float64"))
 
 
-def _graph_from_im(im: IncidenceMatrix) -> ig.Graph:
-    g = ig.Graph.Incidence(im.to_numpy().tolist(), directed=False, weighted=True)
-    g.vs["id"] = np.append(im.index, im.columns).tolist()
+def _graph_from_matrix(m: BiadjacencyMatrix) -> ig.Graph:
+    g = ig.Graph.Biadjacency(m.to_numpy().tolist(), directed=False, weighted=True)
+    g.vs["id"] = np.append(m.index, m.columns).tolist()
     g.es["cost"] = [1 / pow(w, tn.params["tuning_parameter"]) for w in g.es["weight"]]
     g.vs["type"] = ["term" if t else "doc" for t in g.vs["type"]]
     return g
@@ -956,7 +956,7 @@ def bipartite_rank(
     if normalizer not in ("HITS", "CoHITS", "BGRM", "BiRank"):
         raise ValueError(f"'{normalizer}' is not a valid normalization option.")
 
-    W = net.im.to_numpy()
+    W = net.m.to_numpy()
     Kd = np.array(W.sum(axis=1)).flatten()
     Kp = np.array(W.T.sum(axis=1)).flatten()
 
@@ -1050,5 +1050,5 @@ def textual_spanning(m: np.ndarray, alpha: float = 1.0) -> np.ndarray:
     return csp_norm
 
 
-class IncidenceMatrix(LiteFrame):
+class BiadjacencyMatrix(LiteFrame):
     """Matrix relating documents to terms."""

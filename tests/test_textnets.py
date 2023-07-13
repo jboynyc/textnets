@@ -223,7 +223,7 @@ def test_textnet_matrix(corpus):
     noun_phrases = corpus.noun_phrases()
     n_np = tn.Textnet(noun_phrases)
     g_np_groups = n_np.project(node_type=tn.DOC)
-    crossprod = n_np.im @ n_np.im.T
+    crossprod = n_np.m @ n_np.m.T
     np.fill_diagonal(crossprod.values, 0)
     pd.testing.assert_frame_equal(
         g_np_groups.m, crossprod, check_names=False, check_exact=False
