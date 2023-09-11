@@ -52,7 +52,7 @@ include = [
 [tool.poetry.dependencies]
 python = ">=3.8.1,<3.12"
 setuptools = ">=41"
-Cython = "^0.29.24"
+Cython = "^3.0.2"
 cairocffi = {version = "^1.4.0", markers = "sys_platform=='linux' or sys_platform=='darwin'"}
 pycairo = {version = "^1.22.0", markers = "sys_platform=='win32'"}
 igraph = "^0.10.6"
