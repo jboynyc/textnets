@@ -79,7 +79,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "textnets"
-copyright = "2023"
+copyright = "&copy; 2023"
 author = "John D. Boy"
 
 # The version info for the project you're documenting, acts as replacement
