@@ -7,6 +7,7 @@ History
 * Updates to spaCy 3.6.1.
 * If the corpus contains long documents, adjust spaCy's maximum document length
   parameter as needed.
+* Fixes a bug in how *tf-idf* is calculated without sublinear scaling.
 
 0.9.3 (2023-07-11)
 ------------------

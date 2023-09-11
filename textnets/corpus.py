@@ -659,7 +659,12 @@ def _tf_idf(tidy_text: pd.DataFrame | TidyText, sublinear: bool) -> TidyText:
     if sublinear:
         tidy_text["tf"] = tidy_text["n"].map(_sublinear_scaling)
     else:
-        totals = tidy_text.groupby(tidy_text.index).sum().rename(columns={"n": "total"})
+        totals = (
+            tidy_text.groupby(tidy_text.index)
+            .sum()
+            .rename(columns={"n": "total"})
+            .drop("term", axis=1)
+        )
         tidy_text = tidy_text.merge(totals, right_index=True, left_index=True)
         tidy_text["tf"] = tidy_text["n"] / tidy_text["total"]
     idfs = np.log10(len(set(tidy_text.index)) / tidy_text["term"].value_counts())

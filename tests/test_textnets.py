@@ -176,6 +176,12 @@ def test_corpus_save_and_load(corpus, tmp_path):
     assert corpus.lang == loaded.lang
 
 
+def test_corpus_sublinear_false(corpus):
+    noun_phrases = corpus.noun_phrases(sublinear=False)
+    assert noun_phrases.sum().n == roughly(26)
+    assert set(noun_phrases.columns) == {"term", "n", "term_weight"}
+
+
 def test_textnet_save_and_load(corpus, tmp_path):
     """Test roundtrip of saving and loading a textnet from file."""
     out = tmp_path / "out.textnet"
