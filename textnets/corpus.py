@@ -128,6 +128,10 @@ class Corpus:
             nlp = spacy.blank(lang)
             warn(f"Using basic '{lang}' language model.")
         norm_docs = self.documents.map(_normalize_whitespace)
+        max_length = max(map(len, norm_docs))
+        if max_length > 1_000_000:
+            warn("Corpus contains very long documents. Memory usage will be high.")
+            nlp.max_length = max_length
         tqdm_args = dict(disable=not tn.params["progress_bar"] or None, unit="docs")
         cores = cpu_count() or 1
         if cores > 1 and len(self.documents) >= cores:
