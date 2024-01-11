@@ -4,7 +4,7 @@ History
 
 0.9.4 (unreleased)
 ------------------
-* Updates to spaCy 3.6.1.
+* Updates to spaCy 3.7.2.
 * If the corpus contains long documents, adjust spaCy's maximum document length
   parameter as needed.
 * Fixes a bug in how *tf-idf* is calculated without sublinear scaling.
