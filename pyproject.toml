@@ -108,3 +108,6 @@ pretty = true
 excludes = [
     "textnets/_ext*.so"
 ]
+
+[tool.pytest.ini_options]
+filterwarnings = ["ignore:invalid escape sequence:DeprecationWarning"]
