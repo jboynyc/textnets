@@ -31,8 +31,8 @@ class LiteFrame:
     def T(self) -> DataFrame:
         return self._df.T
 
-    def applymap(self, *args, **kwargs) -> DataFrame:
-        return self._df.applymap(*args, **kwargs)
+    def map(self, *args, **kwargs) -> DataFrame:
+        return self._df.map(*args, **kwargs)
 
     def groupby(self, *args, **kwargs):
         return self._df.groupby(*args, **kwargs)

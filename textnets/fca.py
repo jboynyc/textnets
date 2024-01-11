@@ -38,7 +38,7 @@ class FormalContext(ABC):
         except ImportError:
             warn("Install textnets[fca] to use FCA features.")
             raise
-        crisp = self.m.applymap(lambda x: x >= alpha)
+        crisp = self.m.map(lambda x: x >= alpha)
         reduced = crisp[crisp.any(axis=1)].loc[:, crisp.any(axis=0)]
         objects = reduced.index.tolist()
         properties = reduced.columns.tolist()
