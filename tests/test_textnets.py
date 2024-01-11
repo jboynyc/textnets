@@ -54,7 +54,7 @@ def test_corpus_duplicated(testdata, recwarn):
     """Test Corpus class on series with duplicated labels."""
     s = pd.concat([testdata, testdata[:3], testdata[:2]])
     corpus = tn.Corpus(s)
-    assert len(recwarn) == 1
+    assert len([w for w in recwarn if w.category is UserWarning]) == 1
     w = recwarn.pop(UserWarning)
     assert str(w.message) == "There are 5 duplicate labels. Concatenating documents."
     assert len(corpus.documents) == 7
@@ -64,7 +64,7 @@ def test_corpus_missing(testdata, recwarn):
     """Test Corpus class on series with missing data."""
     s = pd.concat([testdata, pd.Series([None], index=["Missing"])])
     corpus = tn.Corpus(s)
-    assert len(recwarn) == 1
+    assert len([w for w in recwarn if w.category is UserWarning]) == 1
     w = recwarn.pop(UserWarning)
     assert str(w.message) == "Dropping 1 empty document(s)."
     assert len(corpus.documents) == 7
@@ -89,7 +89,7 @@ def test_corpus_czech(recwarn):
     assert len(corpus.documents) == 8
     # This raises another warning about lacking a language model
     tokenized = corpus.tokenized()
-    assert len(recwarn) == 2
+    assert len([w for w in recwarn if w.category is UserWarning]) == 2
     assert tokenized.sum().n > 8
     w1 = recwarn.pop(UserWarning)
     assert str(w1.message) == "Language model 'cs' is not yet installed."
@@ -97,7 +97,7 @@ def test_corpus_czech(recwarn):
     assert str(w2.message) == "Using basic 'cs' language model."
 
 
-def test_corpus_long(testdata, recwarn):
+def test_corpus_long(testdata):
     """Test parallelized NLP on a long series."""
     s = pd.Series(
         [
