@@ -2,12 +2,14 @@
 History
 =======
 
-0.9.4 (unreleased)
+0.9.4 (2024-01-16)
 ------------------
-* Updates to spaCy 3.7.2.
+* Updates to spaCy 3.7.2 and to igraph 0.10.5.
+* Adds Python 3.12 compatibility. (In response to `#61
+  <https://github.com/jboynyc/textnets/issues/61>`__).
+* Fixes a bug in how *tf-idf* is calculated without sublinear scaling.
 * If the corpus contains long documents, adjust spaCy's maximum document length
   parameter as needed.
-* Fixes a bug in how *tf-idf* is calculated without sublinear scaling.
 
 0.9.3 (2023-07-11)
 ------------------
