@@ -5,7 +5,7 @@ name: textnets PyPI upload
 
 on:
   release:
-    types: published
+    types: [published, edited]
 
 jobs:
 
@@ -28,7 +28,7 @@ jobs:
     - name: Build wheels
       uses: pypa/cibuildwheel@v2.16.2
       env:
-        CIBW_BUILD: cp38-* cp39-* cp310-* cp311-* cp312-* pp38-* pp39-* pp310-*
+        CIBW_BUILD: cp39-* cp310-* cp311-* cp312-* pp39-* pp310-*
         CIBW_ARCHS_LINUX: "auto aarch64"
         CIBW_ARCHS_MACOS: "arm64" # removed x86_64 to avoid AlreadyBuiltWheelError
     - uses: actions/upload-artifact@v3
