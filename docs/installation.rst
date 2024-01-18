@@ -17,7 +17,7 @@ Installation
 
 .. note::
 
-   Please note that **textnets** requires Python 3.8 or newer to run.
+   Please note that **textnets** requires Python 3.9 or newer to run.
 
 Using conda
 -----------

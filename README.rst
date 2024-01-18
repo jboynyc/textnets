@@ -64,7 +64,7 @@ detection on the bipartite (word–group) network.
 .. _`spaCy`: https://spacy.io/
 
 **textnets** is installable using the ``conda``, ``pip`` and ``nix`` package
-managers. It requires Python 3.8 or higher.
+managers. It requires Python 3.9 or higher.
 
 **textnets** integrates seamlessly with Python's excellent `scientific stack`_.
 That means that you can use **textnets** to analyze and visualize your data in

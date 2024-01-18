@@ -51,7 +51,7 @@ include = [
 "Documentation" = "https://textnets.readthedocs.io"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.13"
+python = ">=3.9,<=3.13"
 setuptools = ">=41"
 Cython = "^3.0.2"
 cairocffi = {version = "^1.6.0", markers = "sys_platform=='linux' or sys_platform=='darwin'"}
