@@ -22,7 +22,7 @@ from tqdm.contrib.concurrent import thread_map
 
 import textnets as tn
 
-from ._util import LiteFrame
+from ._util import df_split, LiteFrame
 
 
 #: Mapping of language codes to spaCy language model names.
@@ -136,7 +136,7 @@ class Corpus:
         cores = cpu_count() or 1
         if cores > 1 and len(self.documents) >= cores:
             nlp_ufunc = np.frompyfunc(nlp, 1, 1)
-            doc_chunks = np.array_split(norm_docs, cores)
+            doc_chunks = df_split(norm_docs, cores)
             return pd.concat(thread_map(nlp_ufunc, doc_chunks, **tqdm_args))
         tqdm.pandas(**tqdm_args)
         return norm_docs.progress_map(nlp)

@@ -26,7 +26,7 @@ from tqdm.auto import tqdm
 from tqdm.contrib.concurrent import thread_map
 
 import textnets as tn
-from ._util import LiteFrame
+from ._util import df_split, LiteFrame
 
 from .corpus import TidyText
 from .fca import FormalContext
@@ -864,7 +864,7 @@ def disparity_filter(graph: ig.Graph) -> Iterator[float]:
     cores = cpu_count() or 1
     if cores > 1 and len(graph.es) >= cores:
         sig_ufunc = np.frompyfunc(_edge_significance, 1, 1)
-        edge_chunks = np.array_split(pd.Series(list(graph.es)), cores)
+        edge_chunks = df_split(pd.Series(list(graph.es)), cores)
         yield from pd.concat(thread_map(sig_ufunc, edge_chunks, **tqdm_args))
     else:
         for edge in tqdm(graph.es, **tqdm_args):
