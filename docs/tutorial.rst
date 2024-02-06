@@ -320,6 +320,13 @@ graph, and usually only terms that appear in a significant proportion of
 documents really indicate latent topics, so it is common to pass a higher
 value.
 
+``max_docs`` determines the maximum number of documents a term can appear in
+while still being included in the textnet. By default, a term can appear in any
+number of documents, as a term that appears frequently is likely to play an
+important role in the corpus. However, some terms that appear in a large
+proportion of documents may be irrelevant. In such cases it may be useful to
+pass a lower value to exclude very common terms.
+
 ``connected`` is a boolean argument that decides whether only the largest
 connected component of the resulting network should be kept. It defaults to
 ``False``.

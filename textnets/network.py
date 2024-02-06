@@ -332,6 +332,9 @@ class Textnet(TextnetBase, FormalContext):
     min_docs : int, optional
         Minimum number of documents a term must appear in to be included
         in the network (default: 2).
+    max_docs : int, optional
+        Maximum number of documents a term can appear in and still be included
+        in the network (default: None, meaning any number).
     connected : bool, optional
         Keep only the largest connected component of the network (default:
         False).
@@ -343,13 +346,15 @@ class Textnet(TextnetBase, FormalContext):
     Raises
     ------
     ValueError
-        If the supplied data is empty.
+        If the supplied data is empty or if min_docs is not smaller than
+        max_docs.
     """
 
     def __init__(
         self,
         data: TidyText | BiadjacencyMatrix | pd.DataFrame,
         min_docs: int = 2,
+        max_docs: int | None = None,
         connected: bool = False,
         remove_weak_edges: bool = False,
         doc_attrs: dict[str, dict[str, Any]] | None = None,
@@ -361,7 +366,7 @@ class Textnet(TextnetBase, FormalContext):
         if isinstance(data, BiadjacencyMatrix):
             self._matrix = data
         elif isinstance(data, (TidyText, pd.DataFrame)):
-            self._matrix = _matrix_from_tidy_text(data, min_docs)
+            self._matrix = _matrix_from_tidy_text(data, min_docs, max_docs)
         if remove_weak_edges:
             pairs: pd.Series = self._matrix.stack()
             edge_weights: pd.Series = pairs[pairs > 0]
@@ -811,12 +816,17 @@ ProjectedTextnet.top_ev = ProjectedTextnet.top_eigenvector_centrality  # type: i
 
 
 def _matrix_from_tidy_text(
-    tidy_text: TidyText | pd.DataFrame, min_docs: int
+    tidy_text: TidyText | pd.DataFrame, min_docs: int, max_docs: int | None
 ) -> BiadjacencyMatrix:
+    if max_docs is None:
+        max_docs = tidy_text.index.unique().shape[0]
+    if min_docs >= max_docs:
+        raise ValueError(f"min_docs must be smaller than max_docs ({max_docs}).")
     count = tidy_text.groupby("term").count()["n"]
+    filter_condition = (count >= min_docs) & (count <= max_docs)
     tt = (
         tidy_text.reset_index()
-        .merge(count >= min_docs, on="term", how="left")
+        .merge(filter_condition, on="term", how="left")
         .rename(columns={"n_y": "keep", "n_x": "n"})
     )
     m = (

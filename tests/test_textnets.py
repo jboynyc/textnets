@@ -244,6 +244,14 @@ def test_textnet_remove_weak_edges(corpus):
     assert n_np.graph.ecount() > 0
 
 
+def test_textnet_max_docs(corpus):
+    """Test maximum document count."""
+    noun_phrases = corpus.noun_phrases()
+
+    n_np = tn.Textnet(noun_phrases, max_docs=3)
+    assert n_np.graph.ecount() > 0
+
+
 def test_textnet_cluster_strength(corpus):
     noun_phrases = corpus.noun_phrases()
 
