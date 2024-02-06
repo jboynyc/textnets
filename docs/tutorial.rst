@@ -320,6 +320,13 @@ graph, and usually only terms that appear in a significant proportion of
 documents really indicate latent topics, so it is common to pass a higher
 value.
 
+``max_docs``. It determines how many documents a term can appear in whilst
+still being included in the textnet. A term that appears more frequently is
+more likely to indicate latent topics, so the default is no max threshold.
+However, sometimes terms in a significant proportion of documents can be
+irrelevant or obscure more nuanced latent topics, so it may be useful to
+pass a lower value.
+
 ``connected`` is a boolean argument that decides whether only the largest
 connected component of the resulting network should be kept. It defaults to
 ``False``.
