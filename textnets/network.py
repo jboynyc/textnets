@@ -820,7 +820,6 @@ def _matrix_from_tidy_text(
     if min_docs > max_docs:
         raise ValueError(f"'{min_docs}' min_docs value exceeds '{max_docs}' max_docs value.")
     count = tidy_text.groupby("term").count()["n"]
-    print(count)
     filter_condition = (count >= min_docs) & (count <= max_docs)
     tt = (
         tidy_text.reset_index()
