@@ -2,6 +2,7 @@
 
 from pandas import Series
 
+
 #: Example dataset with newspaper headlines about the Apollo 11 landing.
 moon_landing = Series(
     [

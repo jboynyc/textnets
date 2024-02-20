@@ -189,11 +189,13 @@ def decorate_plot(plot_func: Callable) -> Callable:
         kwargs.setdefault(
             "vertex_label",
             [
-                node["id"]
-                if (node["type"] == "doc" and label_doc_nodes)
-                or (node["type"] == "term" and label_term_nodes)
-                or label_nodes
-                else None
+                (
+                    node["id"]
+                    if (node["type"] == "doc" and label_doc_nodes)
+                    or (node["type"] == "term" and label_term_nodes)
+                    or label_nodes
+                    else None
+                )
                 for node in net.nodes
             ],
         )

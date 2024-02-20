@@ -418,9 +418,11 @@ class Corpus:
             per-document counts (n).
         """
         func = compose(
-            partial(_remove_additional, token_list=remove)
-            if remove is not None
-            else identity,
+            (
+                partial(_remove_additional, token_list=remove)
+                if remove is not None
+                else identity
+            ),
             _lower if lower else identity,
             _stem if stem else _as_text,
             _remove_stop_words if remove_stop_words else identity,
@@ -456,9 +458,11 @@ class Corpus:
             (term), and per-document counts (n).
         """
         func = compose(
-            partial(_remove_additional, token_list=remove)
-            if remove is not None
-            else identity,
+            (
+                partial(_remove_additional, token_list=remove)
+                if remove is not None
+                else identity
+            ),
             partial(_noun_chunks, normalize=normalize),
         )
         tt = self._make_tidy_text(func)
@@ -509,9 +513,11 @@ class Corpus:
         """
         func = compose(
             partial(_ngrams, n=size),
-            partial(_remove_additional, token_list=remove)
-            if remove is not None
-            else identity,
+            (
+                partial(_remove_additional, token_list=remove)
+                if remove is not None
+                else identity
+            ),
             _lower if lower else identity,
             _stem if stem else _as_text,
             _remove_stop_words if remove_stop_words else identity,
