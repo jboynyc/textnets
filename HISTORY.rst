@@ -2,6 +2,15 @@
 History
 =======
 
+0.9.5 (2024-02-20)
+------------------
+* Sets ``language_level`` compiler directive for Cython. (In response to `#63
+  <https://github.com/jboynyc/textnets/issues/63>`__).
+* Updates to spaCy 3.7.4 and igraph 0.11.3.
+* Removes references to conda-forge package as it has become difficult to keep
+  updated.
+* Adds dependency on pyarrow to satisfy future pandas releases.
+
 0.9.4 (2024-01-16)
 ------------------
 * Updates to spaCy 3.7.2 and to igraph 0.10.5.
