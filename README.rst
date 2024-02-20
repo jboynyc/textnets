@@ -8,15 +8,11 @@ Textnets: text analysis with networks
 
 .. image:: https://github.com/jboynyc/textnets/actions/workflows/ci.yml/badge.svg
    :target: https://github.com/jboynyc/textnets/actions/workflows/ci.yml
-   :alt: CI status
+   :alt: CI Status
 
 .. image:: https://readthedocs.org/projects/textnets/badge/?version=stable
    :target: https://textnets.readthedocs.io/en/stable/?badge=stable
    :alt: Documentation Status
-
-.. image:: https://anaconda.org/conda-forge/textnets/badges/version.svg
-   :target: https://anaconda.org/conda-forge/textnets
-   :alt: Install with conda
 
 .. image:: https://joss.theoj.org/papers/10.21105/joss.02594/status.svg
    :target: https://doi.org/10.21105/joss.02594
@@ -63,8 +59,8 @@ detection on the bipartite (word–group) network.
 .. _`Leiden algorithm`: https://doi.org/10.1038/s41598-019-41695-z
 .. _`spaCy`: https://spacy.io/
 
-**textnets** is installable using the ``conda``, ``pip`` and ``nix`` package
-managers. It requires Python 3.9 or higher.
+**textnets** is installable using the ``pip`` and ``nix`` package managers. It
+requires Python 3.9 or higher.
 
 **textnets** integrates seamlessly with Python's excellent `scientific stack`_.
 That means that you can use **textnets** to analyze and visualize your data in
@@ -101,7 +97,6 @@ Learn More
 **Documentation**   https://textnets.readthedocs.io/
 **Repository**      https://github.com/jboynyc/textnets
 **Issues & Ideas**  https://github.com/jboynyc/textnets/issues
-**Conda-Forge**     https://anaconda.org/conda-forge/textnets
 **PyPI**            https://pypi.org/project/textnets/
 **FOSDEM ’22**      https://fosdem.org/2022/schedule/event/open_research_textnets/
 **DOI**             `10.21105/joss.02594 <https://doi.org/10.21105/joss.02594>`_

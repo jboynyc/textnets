@@ -126,6 +126,5 @@ $ git commit -a -m "Bump to version $(poetry version -s)"
 $ git tag -a v$(poetry version -s)
 $ make push
 
-Tagged releases are immediately published to PyPI. Conda-Forge and nixpkgs may
-lag behind for a number of days after a new release but are generally kept in
-sync.
+Tagged releases are immediately published to PyPI. `nixpkgs` may lag behind
+after a new release but is generally kept in sync.
