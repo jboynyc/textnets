@@ -10,5 +10,6 @@ def build(setup_kwargs):
             name="textnets._ext",
             sources=["textnets/_ext.pyx"],
         ),
+        compiler_directives={"language_level": 3},
     )
     setup_kwargs.update({"ext_modules": cy_ext})
