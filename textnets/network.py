@@ -818,7 +818,7 @@ def _matrix_from_tidy_text(
     tidy_text: TidyText | pd.DataFrame, min_docs: int, max_docs: int
 ) -> BiadjacencyMatrix:
     if min_docs > max_docs:
-        raise ValueError(f"'{min_docs}' min_docs value exceeds '{max_docs}' max_docs value.")
+        raise ValueError(f"'{min_docs}' min_docs exceeds '{max_docs}' max_docs.")
     count = tidy_text.groupby("term").count()["n"]
     filter_condition = (count >= min_docs) & (count <= max_docs)
     tt = (
