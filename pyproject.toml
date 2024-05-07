@@ -53,17 +53,17 @@ include = [
 [tool.poetry.dependencies]
 python = ">=3.9,<=3.13"
 setuptools = ">=41"
-Cython = "^3.0.3"
+Cython = ">=0.29"
 cairocffi = {version = "^1.6.1", markers = "sys_platform=='linux' or sys_platform=='darwin'"}
 pycairo = {version = "^1.24.0", markers = "sys_platform=='win32'"}
-igraph = "^0.11.3"
-leidenalg = "^0.10.1"
+igraph = "*"
+leidenalg = "*"
 pandas = "^2.1.1"
 scipy = "^1.11.3"
-spacy = "^3.7.4"
+spacy = "^3.7.2"
 spacy-lookups-data = "^1.0.5"
 toolz = "^0.12.0"
-tqdm = "^4.64.1"
+tqdm = "^4.66.1"
 wasabi = "^1.1.2"
 concepts = {version = "^0.9.2", optional = true}
 pyarrow = {version = "^14.0.1", markers = "implementation_name!='pypy'"}
@@ -71,8 +71,8 @@ pyarrow = {version = "^14.0.1", markers = "implementation_name!='pypy'"}
 [tool.poetry.group.doc.dependencies]
 en-core-web-sm = {url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl"}
 ipykernel = "^6.27.1"
-jupyter-sphinx = "^0.5.3"
-shibuya = {version = "^2024.1.2", allow-prereleases = true}
+jupyter-sphinx = ">=0.4.0"
+shibuya = {version = "^2024.4.27", allow-prereleases = true}
 sphinx = "^7.2.6"
 sphinxcontrib-bibtex = "^2.6.1"
 
