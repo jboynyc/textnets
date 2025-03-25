@@ -61,20 +61,3 @@ be some `basic support <https://spacy.io/usage/models#languages>`_. Even in
 that case, some languages (including Japanese, Russian, Thai, Vietnamese,
 Ukrainian, and Chinese) require additional installs for tokenization support.
 Consult the spaCy documentation for details.
-
-Plotting
---------
-
-.. sidebar::
-
-    In rare cases you may have to `install CFFI`_ separately for plotting to
-    work.
-
-.. _install CFFI: https://cffi.readthedocs.io/en/latest/installation.html
-
-**textnets** depends on the `Cairo`_ graphics library for plotting. If you are
-using a Mac, you may have to install Cairo separately. This can be achieved
-using the `Homebrew`_ package manager.
-
-.. _Cairo: https://www.cairographics.org/
-.. _Homebrew: https://formulae.brew.sh/formula/cairo

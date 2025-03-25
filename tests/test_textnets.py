@@ -4,6 +4,8 @@
 
 import sqlite3
 
+import matplotlib.pyplot as plt
+
 import numpy as np
 
 import pandas as pd
@@ -312,8 +314,8 @@ def test_plot(tmp_path, corpus):
     noun_phrases = corpus.noun_phrases()
     n_np = tn.Textnet(noun_phrases)
     out = tmp_path / "plot-0.png"
-    plot = n_np.plot(target=str(out))
-    assert len(plot._objects) > 0
+    n_np.plot()
+    plt.savefig(out)
     assert len(list(tmp_path.iterdir())) == 1
 
 
@@ -323,8 +325,8 @@ def test_plot_layout(tmp_path, corpus):
     noun_phrases = corpus.noun_phrases()
     n_np = tn.Textnet(noun_phrases)
     out = tmp_path / "plot-1.png"
-    plot = n_np.plot(target=str(out), bipartite_layout=True, label_nodes=True)
-    assert len(plot._objects) > 0
+    n_np.plot(bipartite_layout=True, label_nodes=True)
+    plt.savefig(out)
     assert len(list(tmp_path.iterdir())) == 1
 
 
@@ -334,8 +336,8 @@ def test_plot_projected(tmp_path, corpus):
     n = tn.Textnet(corpus.tokenized())
     papers = n.project(node_type=tn.DOC)
     out = tmp_path / "plot-2.png"
-    plot = papers.plot(show_clusters=True, label_nodes=True, target=str(out))
-    assert len(plot._objects) > 0
+    papers.plot(show_clusters=True, label_nodes=True)
+    plt.savefig(out)
     assert len(list(tmp_path.iterdir())) == 1
 
 
@@ -345,8 +347,8 @@ def test_plot_backbone(tmp_path, corpus):
     n = tn.Textnet(corpus.tokenized())
     papers = n.project(node_type=tn.DOC)
     out = tmp_path / "plot-3.png"
-    plot = papers.plot(alpha=0.4, label_nodes=True, target=str(out))
-    assert len(plot._objects) > 0
+    papers.plot(alpha=0.4, label_nodes=True)
+    plt.savefig(out)
     assert len(list(tmp_path.iterdir())) == 1
 
 
@@ -356,8 +358,8 @@ def test_plot_scaled(tmp_path, corpus):
     n = tn.Textnet(corpus.tokenized())
     papers = n.project(node_type=tn.DOC)
     out = tmp_path / "plot-4.png"
-    plot = papers.plot(scale_nodes_by="betweenness", label_nodes=True, target=str(out))
-    assert len(plot._objects) > 0
+    papers.plot(scale_nodes_by="betweenness", label_nodes=True)
+    plt.savefig(out)
     assert len(list(tmp_path.iterdir())) == 1
 
 
@@ -367,14 +369,13 @@ def test_plot_filtered(tmp_path, corpus):
     n = tn.Textnet(corpus.tokenized())
     papers = n.project(node_type=tn.DOC)
     out = tmp_path / "plot-5.png"
-    plot = papers.plot(
+    papers.plot(
         label_nodes=True,
         label_edges=True,
         node_label_filter=lambda v: v.degree() > 2,
         edge_label_filter=lambda e: e["weight"] > 0.1,
-        target=str(out),
     )
-    assert len(plot._objects) > 0
+    plt.savefig(out)
     assert len(list(tmp_path.iterdir())) == 1
 
 

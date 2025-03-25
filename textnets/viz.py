@@ -6,6 +6,7 @@ from functools import wraps
 from itertools import repeat
 from math import ceil
 from typing import Any, Callable, Iterator
+from warnings import warn
 
 import igraph as ig
 import numpy as np
@@ -65,7 +66,7 @@ def decorate_plot(plot_func: Callable) -> Callable:
 
     # Produce SVG if running inside a Jupyter notebook
     try:
-        cfg = get_ipython().config
+        cfg = get_ipython().config  # type:ignore
         cfg.InlineBackend.figure_formats = ["svg"]
     except NameError:
         pass
@@ -231,9 +232,10 @@ def decorate_plot(plot_func: Callable) -> Callable:
                 for lbl, keep in zip(edge_labels, filtered_edge_labels)
             ]
         # Use matplotlib
-        if "target" not in kwargs:
-            fig, ax = subplots(figsize=tn.params["figsize"])
-            kwargs["target"] = ax
+        if "target" in kwargs:
+            warn("Please use plt.savefig to save the network plot.")
+        fig, ax = subplots(figsize=tn.params["figsize"])
+        kwargs["target"] = ax
         return plot_func(net, **kwargs)
 
     return wrapper

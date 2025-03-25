@@ -142,7 +142,7 @@ class TextnetBase(ABC):
         return [TERM if t == "term" else DOC for t in self.nodes["type"]]
 
     @abstractmethod
-    def plot(self, **kwargs) -> ig.Plot:
+    def plot(self, **kwargs) -> ig.drawing.matplotlib.graph.Artist:
         pass
 
     @abstractmethod
@@ -258,7 +258,7 @@ class TextnetBase(ABC):
     def _plot(
         self,
         **kwargs,
-    ) -> ig.Plot:
+    ) -> ig.drawing.matplotlib.graph.Artist:
         tn.init_seed()
         return ig.plot(self.graph, **kwargs)
 
@@ -522,7 +522,7 @@ class Textnet(TextnetBase):
         edge_label_filter: Callable[[ig.Edge], bool] | None = None,
         scale_nodes_by: str | None = None,
         **kwargs,
-    ) -> ig.Plot:
+    ) -> ig.drawing.matplotlib.graph.Artist:
         """
         Plot the bipartite graph.
 
@@ -752,7 +752,9 @@ class ProjectedTextnet(TextnetBase):
         pruned.delete_edges(pruned.es.select(alpha_ge=alpha))
         return ProjectedTextnet(giant_component(pruned))
 
-    def plot(self, *, alpha: float | None = None, **kwargs) -> ig.Plot:
+    def plot(
+        self, *, alpha: float | None = None, **kwargs
+    ) -> ig.drawing.matplotlib.graph.Artist:
         """
         Plot the projected graph.
 
