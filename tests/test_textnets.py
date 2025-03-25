@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import textnets as tn
 
-from pytest import approx, mark
+from pytest import approx
 from toolz import partial
 
 
