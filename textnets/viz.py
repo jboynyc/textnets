@@ -63,6 +63,7 @@ class TextnetPalette(PrecalculatedPalette):
 def decorate_plot(plot_func: Callable) -> Callable:
     """Style the plot produced by igraph's plot function."""
 
+    # Produce SVG if running inside a Jupyter notebook
     try:
         cfg = get_ipython().config
         cfg.InlineBackend.figure_formats = ["svg"]
@@ -228,10 +229,9 @@ def decorate_plot(plot_func: Callable) -> Callable:
                 for lbl, keep in zip(edge_labels, filtered_edge_labels)
             ]
         # Use matplotlib
-        if not "target" in kwargs:
-            global fig
+        if "target" not in kwargs:
             fig, ax = subplots(figsize=tn.params["figsize"])
-            kwargs.setdefault("target", ax)
+            kwargs["target"] = ax
         return plot_func(net, **kwargs)
 
     return wrapper
