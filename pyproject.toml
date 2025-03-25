@@ -84,8 +84,6 @@ pytest = "^7.4.3"
 ufmt = "^2.1.0"
 pandas-stubs = "^2.1.4.231227"
 
-[tool.poetry.extras]
-fca = ["concepts"]
 
 [tool.poetry.build]
 script = "build.py"

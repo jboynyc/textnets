@@ -296,17 +296,6 @@ def test_textnet_spanning(corpus):
     assert len(g_np_groups.spanning) == g_np_groups.graph.vcount()
 
 
-@mark.xfail(
-    raises=ModuleNotFoundError, reason="experimental feature requires additional import"
-)
-def test_context(corpus):
-    """Test formal context creation from textnet."""
-
-    n = tn.Textnet(corpus.tokenized(sublinear=True))
-    ctx = n.context
-    assert "lattice" in dir(ctx)
-
-
 def test_save(tmp_path, corpus):
     """Test Textnet graph saving."""
 

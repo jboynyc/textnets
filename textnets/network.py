@@ -29,7 +29,6 @@ import textnets as tn
 from ._util import df_split, LiteFrame
 
 from .corpus import TidyText
-from .fca import FormalContext
 from .viz import decorate_plot
 
 try:
@@ -309,7 +308,7 @@ for prop, desc in [("degree", "unweighted degree"), ("strength", "weighted degre
     setattr(TextnetBase, f"top_{prop}", _make_top(prop, desc))
 
 
-class Textnet(TextnetBase, FormalContext):
+class Textnet(TextnetBase):
     """
     Textnet for the relational analysis of meanings.
 
@@ -319,9 +318,6 @@ class Textnet(TextnetBase, FormalContext):
 
     The bipartite network can be projected into two different kinds of
     single-mode networks: document-to-document, and term-to-term.
-
-    Experimental: The underlying bipartite adjacency matrix can also be turned
-    into a formal context, which can be used to construct a concept lattice.
 
     Parameters
     ----------
