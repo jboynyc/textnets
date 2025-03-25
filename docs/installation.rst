@@ -14,7 +14,7 @@ means you can install the package using `pip`_ or `nix`_.
 
 .. note::
 
-   Please note that **textnets** requires Python 3.9 or newer to run.
+   Please note that **textnets** requires Python 3.10 or newer to run.
 
 Using pip
 ---------
