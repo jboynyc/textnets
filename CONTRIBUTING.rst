@@ -126,5 +126,5 @@ $ git commit -a -m "Bump to version $(poetry version -s)"
 $ git tag -a v$(poetry version -s)
 $ make push
 
-Tagged releases are immediately published to PyPI. `nixpkgs` may lag behind
+Tagged releases are immediately published to PyPI. ``nixpkgs`` may lag behind
 after a new release but is generally kept in sync.

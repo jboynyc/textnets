@@ -2,10 +2,19 @@
 History
 =======
 
+0.10.0 (2025-03-25)
+------------------
+* Switches to ``matplotlib`` for plotting; removes dependency on Cairo.
+* Drops support for Python 3.9 and adds support for Python 3.13.
+* Updates to spaCy 3.8.
+* Removes experimental FCA features.
+* Adds a ``max_docs`` option. (Contributed by MrWashr in `#62
+  <https://github.com/jboynyc/textnets/pull/62>`__.)
+
 0.9.5 (2024-02-20)
 ------------------
 * Sets ``language_level`` compiler directive for Cython. (In response to `#63
-  <https://github.com/jboynyc/textnets/issues/63>`__).
+  <https://github.com/jboynyc/textnets/issues/63>`__.)
 * Updates to spaCy 3.7.4 and igraph 0.11.3.
 * Removes references to conda-forge package as it has become difficult to keep
   updated.
@@ -15,7 +24,7 @@ History
 ------------------
 * Updates to spaCy 3.7.2 and to igraph 0.10.5.
 * Adds Python 3.12 compatibility. (In response to `#61
-  <https://github.com/jboynyc/textnets/issues/61>`__).
+  <https://github.com/jboynyc/textnets/issues/61>`__.)
 * Fixes a bug in how *tf-idf* is calculated without sublinear scaling.
 * If the corpus contains long documents, adjust spaCy's maximum document length
   parameter as needed.
@@ -60,7 +69,7 @@ History
 * When initializing `Corpus` with data that includes duplicated document
   labels, issue a warning, and concatenate documents with shared labels.
   (Implemented in response to `#54
-  <https://github.com/jboynyc/textnets/issues/54>`__).
+  <https://github.com/jboynyc/textnets/issues/54>`__.)
 * Various code quality improvements.
 
 0.8.6 (2022-11-30)
