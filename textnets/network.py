@@ -342,8 +342,7 @@ class Textnet(TextnetBase):
     Raises
     ------
     ValueError
-        If the supplied data is empty or if min_docs is not smaller than
-        max_docs.
+        If the supplied data is empty or if min_docs is larger than max_docs.
     """
 
     def __init__(
@@ -818,8 +817,8 @@ def _matrix_from_tidy_text(
 ) -> BiadjacencyMatrix:
     if max_docs is None:
         max_docs = tidy_text.index.unique().shape[0]
-    if min_docs >= max_docs:
-        raise ValueError(f"min_docs must be smaller than max_docs ({max_docs}).")
+    if min_docs > max_docs:
+        raise ValueError(f"min_docs must be smaller or equal to max_docs ({max_docs}).")
     count = tidy_text.groupby("term").count()["n"]
     filter_condition = (count >= min_docs) & (count <= max_docs)
     tt = (
