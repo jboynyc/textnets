@@ -8,7 +8,7 @@ History
 * Drops support for Python 3.9.
 * Updates to spaCy 3.8.
 * Removes experimental FCA features.
-* Adds a ``max_docs`` option. (Contributed by MrWashr in `#62
+* Adds a ``max_docs`` option. (Contributed by McWashr in `#62
   <https://github.com/jboynyc/textnets/pull/62>`__.)
 
 0.9.5 (2024-02-20)
