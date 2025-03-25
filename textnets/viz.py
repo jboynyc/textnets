@@ -71,7 +71,9 @@ def decorate_plot(plot_func: Callable) -> Callable:
         pass
 
     @wraps(plot_func)
-    def wrapper(net: tn.network.TextnetBase, **kwargs) -> ig.drawing.matplotlib.graph.Artist:
+    def wrapper(
+        net: tn.network.TextnetBase, **kwargs
+    ) -> ig.drawing.matplotlib.graph.Artist:
         graph = net.graph
         # Rewrite node_* arguments as vertex_* arguments
         node_opts = [k for k, _ in kwargs.items() if k.startswith("node_")]

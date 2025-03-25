@@ -125,7 +125,7 @@ class TextnetsConfiguration(UserDict):
 
 default_params = {
     "autodownload": False,
-    "figsize": [16,9],
+    "figsize": [16, 9],
     "lang": "en_core_web_sm",
     "progress_bar": True,
     "resolution_parameter": 0.1,
