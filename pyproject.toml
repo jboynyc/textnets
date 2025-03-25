@@ -24,7 +24,6 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering :: Visualization",
     "Topic :: Sociology"
 ]
@@ -50,14 +49,14 @@ include = [
 "Documentation" = "https://textnets.readthedocs.io"
 
 [tool.poetry.dependencies]
-python = ">=3.10,<=3.14"
+python = ">=3.10,<3.13"
 setuptools = ">=49"
 Cython = ">=0.29"
 igraph = "*"
 leidenalg = "*"
 pandas = "^2.2.3"
 scipy = "^1.14.1"
-spacy = "^3.8.2"
+spacy = "^3.8.3"
 spacy-lookups-data = "^1.0.5"
 toolz = "^0.12.1"
 tqdm = "^4.66.5"

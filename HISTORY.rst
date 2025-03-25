@@ -5,7 +5,7 @@ History
 0.10.0 (2025-03-25)
 ------------------
 * Switches to ``matplotlib`` for plotting; removes dependency on Cairo.
-* Drops support for Python 3.9 and adds support for Python 3.13.
+* Drops support for Python 3.9.
 * Updates to spaCy 3.8.
 * Removes experimental FCA features.
 * Adds a ``max_docs`` option. (Contributed by MrWashr in `#62
