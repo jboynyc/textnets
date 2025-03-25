@@ -3,7 +3,7 @@
 name = "textnets"
 version = "0.10.0"
 description = "Automated text analysis with networks"
-license = "GNU General Public License v3"
+license = "GPL-3.0-only"
 keywords = [
     "computational social science",
     "network analysis",

@@ -48,9 +48,6 @@ jobs:
     - name: Install dependencies
       shell: bash
       run: |
-        if [ "$RUNNER_OS" == "macOS" ]; then
-          brew install cairo
-        fi
         python -m pip install poetry
         poetry install --with doc --all-extras
     - name: Test with pytest
