@@ -11,6 +11,8 @@ Global Parameters
   If True, **textnets** should attempt to download any required language
   models.
 
+``figsize`` (default: (16,9))
+  Figure size for plots.
 
 ``lang`` (default: en_core_web_sm)
   Default language model to use.
@@ -50,6 +52,7 @@ class TextnetsConfiguration(UserDict):
 
     _valid = {
         "autodownload",
+        "figsize",
         "lang",
         "progress_bar",
         "resolution_parameter",
@@ -122,6 +125,7 @@ class TextnetsConfiguration(UserDict):
 
 default_params = {
     "autodownload": False,
+    "figsize": [16,9],
     "lang": "en_core_web_sm",
     "progress_bar": True,
     "resolution_parameter": 0.1,

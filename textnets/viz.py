@@ -16,6 +16,7 @@ from igraph.drawing.colors import (
     lighten,
     PrecalculatedPalette,
 )
+from matplotlib.pyplot import subplots
 from pandas import Series
 
 import textnets as tn
@@ -62,8 +63,14 @@ class TextnetPalette(PrecalculatedPalette):
 def decorate_plot(plot_func: Callable) -> Callable:
     """Style the plot produced by igraph's plot function."""
 
+    try:
+        cfg = get_ipython().config
+        cfg.InlineBackend.figure_formats = ["svg"]
+    except NameError:
+        pass
+
     @wraps(plot_func)
-    def wrapper(net: tn.network.TextnetBase, **kwargs) -> ig.Plot:
+    def wrapper(net: tn.network.TextnetBase, **kwargs) -> ig.drawing.matplotlib.graph.Artist:
         graph = net.graph
         # Rewrite node_* arguments as vertex_* arguments
         node_opts = [k for k, _ in kwargs.items() if k.startswith("node_")]
@@ -220,6 +227,11 @@ def decorate_plot(plot_func: Callable) -> Callable:
                 lbl if keep else None
                 for lbl, keep in zip(edge_labels, filtered_edge_labels)
             ]
+        # Use matplotlib
+        if not "target" in kwargs:
+            global fig
+            fig, ax = subplots(figsize=tn.params["figsize"])
+            kwargs.setdefault("target", ax)
         return plot_func(net, **kwargs)
 
     return wrapper
