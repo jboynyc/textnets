@@ -91,7 +91,7 @@ class Corpus:
     ) -> None:
         if data.empty:
             raise ValueError("Corpus data is empty.")
-        documents = data.copy()
+        documents: pd.Series = data.copy()
         if missings := documents.isna().sum():
             warn(f"Dropping {missings} empty document(s).")
             documents = documents[~documents.isna()]
@@ -127,7 +127,7 @@ class Corpus:
                 raise err
             nlp = spacy.blank(lang)
             warn(f"Using basic '{lang}' language model.")
-        norm_docs = self.documents.map(_normalize_whitespace)
+        norm_docs: pd.Series = self.documents.map(_normalize_whitespace)
         max_length = max(map(len, norm_docs))
         if max_length > 1_000_000:
             warn("Corpus contains very long documents. Memory usage will be high.")
