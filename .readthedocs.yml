@@ -5,11 +5,11 @@ sphinx:
   configuration: docs/conf.py
 
 build:
-  os: "ubuntu-22.04"
+  os: "ubuntu-lts-latest"
   tools:
-    python: "3.11"
+    python: "3.12"
   jobs:
     post_install:
-      - pip install poetry==1.3.2
+      - pip install poetry==1.8.4
       - poetry config virtualenvs.create false
       - poetry install --with doc
