@@ -112,7 +112,6 @@ def decorate_plot(plot_func: Callable) -> Callable:
         kwargs.setdefault("edge_color", "lightgray")
         kwargs.setdefault("edge_label_size", 6)
         kwargs.setdefault("edge_width", 2)
-        kwargs.setdefault("margin", 50)
         kwargs.setdefault("vertex_frame_width", 0.25)
         kwargs.setdefault("vertex_label_size", 9)
         kwargs.setdefault("vertex_size", 20)
