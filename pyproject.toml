@@ -97,6 +97,7 @@ lint = [
     "ufmt<3.0.0,>=2.7.3",
 ]
 test =[
+    "en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl",
     "pytest<9.0.0,>=8.3.3",
 ]
 typing = [

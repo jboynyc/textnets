@@ -5,7 +5,7 @@
 groups = ["default", "dev", "doc", "lint", "test", "typing", "zh"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:4b6688b878ed2198db80db3edd6c23aceeb4796b92f2841e449d0451903a177a"
+content_hash = "sha256:cc9c9563f1a934da1fb7e87a49552e5bc0fa89d07f55a2381a08cf8dac6ec67a"
 
 [[metadata.targets]]
 requires_python = ">=3.10,<3.13"
@@ -633,7 +633,7 @@ name = "en-core-web-sm"
 version = "3.8.0"
 url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl"
 summary = "English pipeline optimized for CPU. Components: tok2vec, tagger, parser, senter, ner, attribute_ruler, lemmatizer."
-groups = ["doc"]
+groups = ["doc", "test"]
 files = [
     {file = "en_core_web_sm-3.8.0-py3-none-any.whl", hash = "sha256:1932429db727d4bff3deed6b34cfc05df17794f4a52eeb26cf8928f7c1a0fb85"},
 ]
