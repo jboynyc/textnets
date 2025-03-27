@@ -1,10 +1,12 @@
 [project]
+name = "textnets"
+version = "0.10.0"
 authors = [
     {name = "John D. Boy", email = "jboy@bius.moe"},
 ]
-name = "textnets"
-version = "0.10.0"
+license = {text = "GPL-3.0-only"}
 description = "Automated text analysis with networks"
+readme = "README.rst"
 keywords = [
     "computational social science",
     "network analysis",
@@ -28,8 +30,6 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Visualization",
     "Topic :: Sociology",
 ]
-readme = "README.rst"
-license = {text = "GPL-3.0-only"}
 requires-python = "<3.13,>=3.10"
 dependencies = [
     "igraph",
