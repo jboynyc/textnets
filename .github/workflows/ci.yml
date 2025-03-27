@@ -22,7 +22,7 @@ jobs:
         uses: pdm-project/setup-pdm@v4
       - name: Install linter
         shell: bash
-        run: pdm install -G test
+        run: pdm install -G lint
       - name: Lint with flake8
         run: pdm run flake8
 
