@@ -113,8 +113,8 @@ pygments_style = "sphinx"
 # a list of builtin themes.
 html_theme = "shibuya"
 html_theme_options = {
-  "dark_code": True,
-  "github_url": "https://github.com/jboynyc/textnets"
+    "dark_code": True,
+    "github_url": "https://github.com/jboynyc/textnets",
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
