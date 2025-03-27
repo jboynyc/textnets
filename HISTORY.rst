@@ -2,17 +2,17 @@
 History
 =======
 
-0.10.0 (unreleased)
-------------------
+0.10.0 (2025-03-27)
+-------------------
 * Switches to ``matplotlib`` for plotting; removes dependency on Cairo.
 * Adds ``figsize`` option to `params`.
-* Enables proper tokenization of Chinese text. (In response to `#65
-  <https://github.com/jboynyc/textnets/issues/65>`__.)
 * Drops support for Python 3.9.
 * Updates to spaCy 3.8.
 * Removes experimental FCA features.
 * Adds a ``max_docs`` option (contributed by McWashr in `#62
   <https://github.com/jboynyc/textnets/pull/62>`__).
+* Enables proper tokenization of Chinese text. (In response to `#65
+  <https://github.com/jboynyc/textnets/issues/65>`__.)
 * Switches from Poetry to PDM to handle project dependencies and builds.
 
 0.9.5 (2024-02-20)
