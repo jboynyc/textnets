@@ -114,7 +114,10 @@ class Corpus:
     @memoize
     def _nlp(self, lang: str) -> pd.Series:
         try:
-            nlp = spacy.load(lang, exclude=["ner", "textcat"])
+            params: dict[str, dict | list] = {"exclude": ["ner", "textcat"]}
+            if lang.startswith("zh"):
+                params["config"] = {"nlp": {"tokenizer": {"segmenter": "jieba"}}}
+            nlp = spacy.load(lang, **params)  # type:ignore
         except OSError as err:
             if tn.params["autodownload"]:
                 try:
