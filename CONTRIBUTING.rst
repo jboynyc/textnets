@@ -68,8 +68,7 @@ Ready to contribute? Here's how to set up **textnets** for local development.
    your fork for local development::
 
     $ cd textnets/
-    $ poetry install
-    $ poetry install -E doc
+    $ pdm install -d
 
    If you use `nix <https://nixos.org/nix>`__, you can also invoke
    ``nix-shell`` in the repository to quickly create a development environment
@@ -121,9 +120,8 @@ A reminder for the maintainers on how to deploy.
 Make sure all your changes are committed (including an entry in HISTORY.rst).
 Then run::
 
-$ poetry version patch # possible: major / minor / patch
-$ git commit -a -m "Bump to version $(poetry version -s)"
-$ git tag -a v$(poetry version -s)
+$ pdm bump patch --commit # possible: major / minor / patch
+$ pdm bump tag
 $ make push
 
 Tagged releases are immediately published to PyPI. ``nixpkgs`` may lag behind

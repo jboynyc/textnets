@@ -1,10 +1,9 @@
-import os
-from distutils.core import Extension
+from setuptools import Extension
 
 from Cython.Build import cythonize
 
 
-def build(setup_kwargs):
+def pdm_build_update_setup_kwargs(_, setup_kwargs):
     cy_ext = cythonize(
         Extension(
             name="textnets._ext",

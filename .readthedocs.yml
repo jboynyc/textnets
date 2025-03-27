@@ -10,6 +10,5 @@ build:
     python: "3.12"
   jobs:
     post_install:
-      - pip install poetry==1.8.4
-      - poetry config virtualenvs.create false
-      - poetry install --with doc
+      - pip install pdm==2.19.3
+      - pdm install -G doc

@@ -5,13 +5,12 @@ with pkgs;
 mkShell {
   packages = [
     graphviz
-    poetry
-    python311.pkgs.venvShellHook
+    pdm
+    python312Packages.venvShellHook
   ];
-  venvDir = "./.VENV";
+  venvDir = "./.venv";
   postShellHook = ''
     export LD_LIBRARY_PATH=${stdenv.cc.cc.lib}/lib/:${zlib}/lib:$LD_LIBRARY_PATH
-    poetry config virtualenvs.prefer-active-python true
-    poetry install --with doc --all-extras
+    pdm install -d
   '';
 }

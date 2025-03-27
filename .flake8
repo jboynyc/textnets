@@ -1,5 +1,5 @@
 [flake8]
-exclude = docs
+exclude = docs,.venv,.git,__pycache__
 max-line-length = 88
 extend-ignore = E203
 show-source = True

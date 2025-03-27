@@ -23,7 +23,7 @@ export PRINT_HELP_PYSCRIPT
 
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
-COMMAND_PREFIX = poetry run
+COMMAND_PREFIX = pdm run
 
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
@@ -52,7 +52,7 @@ push: ## push code and tags to remote repository
 	git push && git push --tag
 
 lint: format ## check style with flake8
-	$(COMMAND_PREFIX) flake8 textnets tests
+	$(COMMAND_PREFIX) flake8
 
 format: ## format code
 	$(COMMAND_PREFIX) ufmt format textnets tests
@@ -73,4 +73,4 @@ docs: ## generate Sphinx HTML documentation, including API docs
 	$(BROWSER) docs/_build/html/index.html
 
 install: clean ## install the package and its dependencies
-	poetry install
+	pdm install
