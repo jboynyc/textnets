@@ -2,10 +2,10 @@
 # It is not intended for manual editing.
 
 [metadata]
-groups = ["default", "dev", "doc", "lint", "test", "typing", "zh"]
+groups = ["default", "cjk", "dev", "doc", "lint", "test", "typing", "zh"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:cc9c9563f1a934da1fb7e87a49552e5bc0fa89d07f55a2381a08cf8dac6ec67a"
+content_hash = "sha256:d8ef89110b48875e75b427c4aac9c29d785d56949880a0cb233abc80ce1212f0"
 
 [[metadata.targets]]
 requires_python = ">=3.10,<3.13"
@@ -424,7 +424,7 @@ name = "contourpy"
 version = "1.3.1"
 requires_python = ">=3.10"
 summary = "Python library for calculating contours of 2D quadrilateral grids"
-groups = ["default"]
+groups = ["default", "cjk"]
 dependencies = [
     "numpy>=1.23",
 ]
@@ -512,7 +512,7 @@ name = "cycler"
 version = "0.12.1"
 requires_python = ">=3.8"
 summary = "Composable style cycles"
-groups = ["default"]
+groups = ["default", "cjk"]
 files = [
     {file = "cycler-0.12.1-py3-none-any.whl", hash = "sha256:85cef7cff222d8644161529808465972e51340599459b8ac3ccbac5a854e0d30"},
     {file = "cycler-0.12.1.tar.gz", hash = "sha256:88bb128f02ba341da8ef447245a9e138fae777f6a23943da4540077d3601eb1c"},
@@ -717,7 +717,7 @@ name = "fonttools"
 version = "4.56.0"
 requires_python = ">=3.8"
 summary = "Tools to manipulate font files"
-groups = ["default"]
+groups = ["default", "cjk"]
 files = [
     {file = "fonttools-4.56.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:331954d002dbf5e704c7f3756028e21db07097c19722569983ba4d74df014000"},
     {file = "fonttools-4.56.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:8d1613abd5af2f93c05867b3a3759a56e8bf97eb79b1da76b2bc10892f96ff16"},
@@ -1115,7 +1115,7 @@ name = "kiwisolver"
 version = "1.4.8"
 requires_python = ">=3.10"
 summary = "A fast implementation of the Cassowary constraint solver"
-groups = ["default"]
+groups = ["default", "cjk"]
 files = [
     {file = "kiwisolver-1.4.8-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:88c6f252f6816a73b1f8c904f7bbe02fd67c09a69f7cb8a0eecdbf5ce78e63db"},
     {file = "kiwisolver-1.4.8-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:c72941acb7b67138f35b879bbe85be0f6c6a70cab78fe3ef6db9c024d9223e5b"},
@@ -1374,7 +1374,7 @@ name = "matplotlib"
 version = "3.10.1"
 requires_python = ">=3.10"
 summary = "Python plotting package"
-groups = ["default"]
+groups = ["default", "cjk"]
 dependencies = [
     "contourpy>=1.0.1",
     "cycler>=0.10",
@@ -1474,6 +1474,18 @@ dependencies = [
 files = [
     {file = "moreorless-0.4.0-py2.py3-none-any.whl", hash = "sha256:17f1fbef60fd21c84ee085a929fe3acefcaddca30df5dd09c024e9939a9e6a00"},
     {file = "moreorless-0.4.0.tar.gz", hash = "sha256:85e19972c1a0b3a49f8543914f57bd83f6e1b10df144d5b97b8c5e9744d9c08c"},
+]
+
+[[package]]
+name = "mpl-font"
+version = "1.1.0"
+summary = "CJK font selector for matplotlib"
+groups = ["cjk"]
+dependencies = [
+    "matplotlib>=3.2.0",
+]
+files = [
+    {file = "mpl_font-1.1.0-py2.py3-none-any.whl", hash = "sha256:b40852bfec10e3edbff00d06be3aae858a00d48843485153ee2e139581469013"},
 ]
 
 [[package]]
@@ -1673,7 +1685,7 @@ name = "numpy"
 version = "2.2.4"
 requires_python = ">=3.10"
 summary = "Fundamental package for array computing in Python"
-groups = ["default", "typing"]
+groups = ["default", "cjk", "typing"]
 files = [
     {file = "numpy-2.2.4-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:8146f3550d627252269ac42ae660281d673eb6f8b32f113538e0cc2a9aed42b9"},
     {file = "numpy-2.2.4-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:e642d86b8f956098b564a45e6f6ce68a22c2c97a04f5acd3f221f57b8cb850ae"},
@@ -1717,7 +1729,7 @@ name = "packaging"
 version = "24.2"
 requires_python = ">=3.8"
 summary = "Core utilities for Python packages"
-groups = ["default", "dev", "doc", "lint", "test"]
+groups = ["default", "cjk", "dev", "doc", "lint", "test"]
 files = [
     {file = "packaging-24.2-py3-none-any.whl", hash = "sha256:09abb1bccd265c01f4a3aa3f7a7db064b36514d2cba19a2f694fe6150451a759"},
     {file = "packaging-24.2.tar.gz", hash = "sha256:c228a6dc5e932d346bc5739379109d49e8853dd8223571c7c5b55260edc0b97f"},
@@ -1911,7 +1923,7 @@ name = "pillow"
 version = "11.1.0"
 requires_python = ">=3.9"
 summary = "Python Imaging Library (Fork)"
-groups = ["default"]
+groups = ["default", "cjk"]
 files = [
     {file = "pillow-11.1.0-cp310-cp310-macosx_10_10_x86_64.whl", hash = "sha256:e1abe69aca89514737465752b4bcaf8016de61b3be1397a8fc260ba33321b3a8"},
     {file = "pillow-11.1.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:c640e5a06869c75994624551f45e5506e4256562ead981cce820d5ab39ae2192"},
@@ -2261,7 +2273,7 @@ name = "pyparsing"
 version = "3.2.3"
 requires_python = ">=3.9"
 summary = "pyparsing module - Classes and methods to define and execute parsing grammars"
-groups = ["default"]
+groups = ["default", "cjk"]
 files = [
     {file = "pyparsing-3.2.3-py3-none-any.whl", hash = "sha256:a749938e02d6fd0b59b356ca504a24982314bb090c383e3cf201c95ef7e2bfcf"},
     {file = "pyparsing-3.2.3.tar.gz", hash = "sha256:b9c13f1ab8b3b542f72e28f634bad4de758ab3ce4546e4301970ad6fa77c38be"},
@@ -2317,7 +2329,7 @@ name = "python-dateutil"
 version = "2.9.0.post0"
 requires_python = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 summary = "Extensions to the standard Python datetime module"
-groups = ["default", "doc"]
+groups = ["default", "cjk", "doc"]
 dependencies = [
     "six>=1.5",
 ]
@@ -2671,7 +2683,7 @@ name = "six"
 version = "1.17.0"
 requires_python = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 summary = "Python 2 and 3 compatibility utilities"
-groups = ["default", "doc"]
+groups = ["default", "cjk", "doc"]
 files = [
     {file = "six-1.17.0-py2.py3-none-any.whl", hash = "sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"},
     {file = "six-1.17.0.tar.gz", hash = "sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"},
