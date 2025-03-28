@@ -56,7 +56,8 @@ jobs:
       - name: Gather build artifacts
         uses: actions/download-artifact@v4
         with:
-          name: artifact
+          pattern: wheels-*
+          merge-multiple: true
           path: dist
       - name: Upload to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1.12
