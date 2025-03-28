@@ -11,4 +11,4 @@ build:
   jobs:
     post_install:
       - pip install pdm==2.19.3
-      - pdm install -G doc
+      - pdm install -dG doc --venv $READTHEDOCS_VIRTUALENV_PATH
