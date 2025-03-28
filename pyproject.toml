@@ -55,6 +55,9 @@ repository = "https://github.com/jboynyc/textnets"
 zh = [
     "jieba>=0.42.1,<1.0.0",
 ]
+cjk = [
+    "mpl-font==1.1.0",
+]
 
 [build-system]
 requires = [

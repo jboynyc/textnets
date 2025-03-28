@@ -22,6 +22,7 @@ from pandas import Series
 
 import textnets as tn
 
+
 #: Base colors for textnets color palette.
 BASE_COLORS = [
     "tomato",
@@ -63,6 +64,14 @@ class TextnetPalette(PrecalculatedPalette):
 
 def decorate_plot(plot_func: Callable) -> Callable:
     """Style the plot produced by igraph's plot function."""
+
+    # Set CJK font
+    try:
+        import mpl_font.noto  # noqa: F401
+    except ModuleNotFoundError:
+        if tn.params["lang"].startswith(("zh", "ja", "ko")):
+            warn("Could not import CJK font.")
+        pass
 
     # Produce SVG if running inside a Jupyter notebook
     try:

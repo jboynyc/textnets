@@ -2,6 +2,11 @@
 History
 =======
 
+0.10.2 (unreleased)
+-------------------
+* Attempts to avoid the "tofu problem" in visualizations by setting an
+  appropriate font for CJK characters.
+
 0.10.1 (2024-03-28)
 -------------------
 * Fixes version metadata in accordance with PEP 639.
