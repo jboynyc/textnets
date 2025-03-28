@@ -37,6 +37,23 @@ This code would only require the corpus and textnet to be created once.
 Subsequent runs of the script could skip ahead to visualization or analysis.
 This saves time, but also helps ensure the reproducibility of results.
 
+Working with CJK text
+---------------------
+
+If you are working with Chinese, Japanese or Korean text, consider installing
+the ``cjk`` dependency group.
+
+.. code:: sh
+
+   pip install textnets[cjk]
+
+This will ensure that appropriate fonts are available to display appropriate
+glyphs in visualizations. (No tofu!)
+
+For Chinese only, install the ``zh`` dependency group which contains `Jieba
+<https://github.com/fxsjy/jieba>__`, an additional library for Chinese text
+tokenization.
+
 Using alternate community detection algorithms
 ----------------------------------------------
 
