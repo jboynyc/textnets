@@ -107,6 +107,9 @@ typing = [
     "pandas-stubs<3.0.0.0,>=2.2.2.240909",
 ]
 
+[tool.pdm.options]
+lock = ["-G", ":all"]
+
 [tool.pdm.plugin.bump]
 commit_msg_tpl = "Bump to version {to}"
 
