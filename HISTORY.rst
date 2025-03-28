@@ -2,6 +2,10 @@
 History
 =======
 
+0.10.1 (2024-03-28)
+-------------------
+* Fixes version metadata in accordance with PEP 639.
+
 0.10.0 (2025-03-27)
 -------------------
 * Switches to ``matplotlib`` for plotting; removes dependency on Cairo.

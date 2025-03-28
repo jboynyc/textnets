@@ -1,10 +1,10 @@
 [project]
 name = "textnets"
-version = "0.10.0"
+version = "0.10.1"
 authors = [
     {name = "John D. Boy", email = "jboy@bius.moe"},
 ]
-license = "GPL-3.0-only"
+license = {text = "GPL-3.0-only"}
 description = "Automated text analysis with networks"
 readme = "README.rst"
 keywords = [
