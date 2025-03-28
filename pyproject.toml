@@ -76,7 +76,7 @@ includes = [
   "docs/*.svg",
   "LICENSE",
   "*.rst",
-  "tests/*.py"
+  "tests/*.py",
   "textnets/_ext.p*",
   "textnets/_ext*.so",
 ]
