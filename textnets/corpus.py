@@ -109,40 +109,44 @@ class Corpus:
     @property
     def nlp(self) -> pd.Series:
         """Corpus documents with NLP applied."""
-        return self._nlp(self.lang)
+        return self._run_pipeline(self.lang)
 
+    @property
     @memoize
-    def _nlp(self, lang: str) -> pd.Series:
+    def _nlp_pipeline(self) -> spacy.Language:
+        model_opts: dict[str, dict | list] = {"exclude": ["ner", "textcat"]}
+        if self.lang.startswith("zh"):
+            model_opts["config"] = {"nlp": {"tokenizer": {"segmenter": "jieba"}}}
         try:
-            params: dict[str, dict | list] = {"exclude": ["ner", "textcat"]}
-            if lang.startswith("zh"):
-                params["config"] = {"nlp": {"tokenizer": {"segmenter": "jieba"}}}
-            nlp = spacy.load(lang, **params)  # type:ignore
+            return spacy.load(self.lang, **model_opts)  # type:ignore
         except OSError as err:
             if tn.params["autodownload"]:
                 try:
-                    spacy.cli.download(lang)  # type: ignore
-                    _INSTALLED_MODELS.append(lang)
-                    return self._nlp(lang)
+                    spacy.cli.download(self.lang)  # type: ignore
+                    _INSTALLED_MODELS.append(self.lang)
+                    return spacy.load(self.lang, **model_opts)  # type:ignore
                 except (KeyError, OSError):
                     pass
-            elif lang in LANGS.values():
+            elif self.lang in LANGS.values():
                 raise err
-            nlp = spacy.blank(lang)
-            warn(f"Using basic '{lang}' language model.")
+            warn(f"Using basic '{self.lang}' language model.")
+            return spacy.blank(self.lang)
+
+    @memoize
+    def _run_pipeline(self, lang: str) -> pd.Series:
         norm_docs: pd.Series = self.documents.map(_normalize_whitespace)
         max_length = max(map(len, norm_docs))
         if max_length > 1_000_000:
             warn("Corpus contains very long documents. Memory usage will be high.")
-            nlp.max_length = max_length
+            self._nlp_pipeline.max_length = max_length
         tqdm_args = dict(disable=not tn.params["progress_bar"] or None, unit="docs")
         cores = cpu_count() or 1
         if cores > 1 and len(self.documents) >= cores:
-            nlp_ufunc = np.frompyfunc(nlp, 1, 1)
+            nlp_ufunc = np.frompyfunc(self._nlp_pipeline, 1, 1)
             doc_chunks = df_split(norm_docs, cores)
             return pd.concat(thread_map(nlp_ufunc, doc_chunks, **tqdm_args))
         tqdm.pandas(**tqdm_args)
-        return norm_docs.progress_map(nlp)
+        return norm_docs.progress_map(self._nlp_pipeline)
 
     def __len__(self) -> int:
         return len(self.documents)
@@ -398,7 +402,7 @@ class Corpus:
         remove : list of str, optional
             Additional tokens to remove.
         stem : bool, optional
-            Return token stems (default: True).
+            Return token stems (default: True, if available).
         remove_stop_words : bool, optional
             Remove stop words (default: True).
         remove_urls : bool, optional
@@ -420,6 +424,9 @@ class Corpus:
             A data frame with document labels (index), tokens (term), and
             per-document counts (n).
         """
+        # Disable stemming if there is no lemmatizer available
+        stem = "lemmatizer" in self._nlp_pipeline.pipe_names
+
         func = compose(
             (
                 partial(_remove_additional, token_list=remove)

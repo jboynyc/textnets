@@ -4,8 +4,9 @@ History
 
 0.10.2 (unreleased)
 -------------------
-* Attempts to avoid the "tofu problem" in visualizations by setting an
-  appropriate font for CJK characters.
+* Attempts to avoid the "tofu problem" in plots by setting an appropriate font
+  for CJK characters.
+* Skips stemming during tokenization if no lemmatizer is available.
 
 0.10.1 (2024-03-28)
 -------------------
