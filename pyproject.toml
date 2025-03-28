@@ -69,7 +69,6 @@ build-backend = "pdm.backend"
 
 [tool.pdm.build]
 includes = [
-  "textnets/_ext*.so",
   "docs/*.py",
   "docs/refs.bib",
   "docs/*.rst",
@@ -78,6 +77,8 @@ includes = [
   "LICENSE",
   "*.rst",
   "tests/*.py"
+  "textnets/_ext.p*",
+  "textnets/_ext*.so",
 ]
 run-setuptools = true
 
