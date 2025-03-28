@@ -11,4 +11,5 @@ build:
   jobs:
     post_install:
       - pip install pdm==2.19.3
-      - pdm install -G doc
+      - pdm install
+      - pdm install -dG doc
