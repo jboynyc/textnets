@@ -77,8 +77,8 @@ includes = [
   "LICENSE",
   "*.rst",
   "tests/*.py",
-  "textnets/_ext.p*",
   "textnets/_ext*.so",
+  "textnets/*.p*",
 ]
 run-setuptools = true
 
