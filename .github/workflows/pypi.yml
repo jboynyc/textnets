@@ -5,7 +5,7 @@ name: textnets PyPI upload
 
 on:
   release:
-    types: [published, edited]
+    types: [created, published, edited]
 
 jobs:
 
@@ -33,6 +33,7 @@ jobs:
         CIBW_ARCHS_MACOS: "arm64" # removed x86_64 to avoid AlreadyBuiltWheelError
     - uses: actions/upload-artifact@v4
       with:
+        name: wheels-${{ matrix.os }}
         path: ./wheelhouse/*.whl
 
   build_sdist:
