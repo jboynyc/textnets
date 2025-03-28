@@ -1,6 +1,6 @@
 [project]
 name = "textnets"
-version = "0.10.2"
+version = "0.10.3"
 authors = [
     {name = "John D. Boy", email = "jboy@bius.moe"},
 ]

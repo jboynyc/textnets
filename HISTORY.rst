@@ -2,6 +2,10 @@
 History
 =======
 
+0.10.3 (2024-03-29)
+-------------------
+* Fixes deployments.
+
 0.10.2 (2024-03-28)
 -------------------
 * Attempts to avoid the "tofu problem" in plots by setting an appropriate font
