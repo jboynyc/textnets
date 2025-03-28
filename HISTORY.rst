@@ -2,11 +2,12 @@
 History
 =======
 
-0.10.2 (unreleased)
+0.10.2 (2024-03-28)
 -------------------
 * Attempts to avoid the "tofu problem" in plots by setting an appropriate font
   for CJK characters.
 * Skips stemming during tokenization if no lemmatizer is available.
+* Improves documentation.
 
 0.10.1 (2024-03-28)
 -------------------
