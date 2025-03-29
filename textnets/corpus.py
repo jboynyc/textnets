@@ -425,7 +425,7 @@ class Corpus:
             per-document counts (n).
         """
         # Disable stemming if there is no lemmatizer available
-        stem = "lemmatizer" in self._nlp_pipeline.pipe_names
+        stem = all(["lemmatizer" in self._nlp_pipeline.pipe_names, stem])
 
         func = compose(
             (
