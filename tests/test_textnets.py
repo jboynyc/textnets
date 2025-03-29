@@ -13,6 +13,7 @@ import textnets as tn
 
 from pytest import approx
 from toolz import partial
+from wasabi import msg
 
 
 roughly = partial(approx, rel=0.1)
@@ -52,13 +53,11 @@ def test_corpus(corpus):
     assert set(ngrams.columns) == {"term", "n", "term_weight"}
 
 
-def test_corpus_duplicated(testdata, recwarn):
+def test_corpus_duplicated(testdata):
     """Test Corpus class on series with duplicated labels."""
     s = pd.concat([testdata, testdata[:3], testdata[:2]])
     corpus = tn.Corpus(s)
-    assert len([w for w in recwarn if w.category is UserWarning]) == 1
-    w = recwarn.pop(UserWarning)
-    assert str(w.message) == "There are 5 duplicate labels. Concatenating documents."
+    assert msg.counts["info"] == 1
     assert len(corpus.documents) == 7
 
 
@@ -66,9 +65,7 @@ def test_corpus_missing(testdata, recwarn):
     """Test Corpus class on series with missing data."""
     s = pd.concat([testdata, pd.Series([None], index=["Missing"])])
     corpus = tn.Corpus(s)
-    assert len([w for w in recwarn if w.category is UserWarning]) == 1
-    w = recwarn.pop(UserWarning)
-    assert str(w.message) == "Dropping 1 empty document(s)."
+    assert msg.counts["warn"] == 1
     assert len(corpus.documents) == 7
 
 
@@ -86,20 +83,16 @@ def test_corpus_czech(recwarn):
             "zatahá tě za copánek",
         ]
     )
-    # This raises a warning about an uninstalled language model
+    # This outputs a message about an uninstalled language model
     corpus = tn.Corpus(s, lang="cs")
     assert len(corpus.documents) == 8
-    # This raises another warning about lacking a language model
+    # This outputs a message about lacking a language model
     tokenized = corpus.tokenized()
-    assert len([w for w in recwarn if w.category is UserWarning]) == 2
+    assert msg.counts["info"] == 3
     assert tokenized.sum().n > 8
-    w1 = recwarn.pop(UserWarning)
-    assert str(w1.message) == "Language model 'cs' is not yet installed."
-    w2 = recwarn.pop(UserWarning)
-    assert str(w2.message) == "Using basic 'cs' language model."
 
 
-def test_corpus_long(testdata):
+def test_corpus_long():
     """Test parallelized NLP on a long series."""
     s = pd.Series(
         [

@@ -8,7 +8,6 @@ from glob import glob
 
 from os import cpu_count
 from pathlib import Path
-from warnings import warn
 from typing import Any, Callable, Sequence
 
 import numpy as np
@@ -19,6 +18,7 @@ from spacy.tokens.doc import Doc
 from toolz import compose, identity, memoize, partial
 from tqdm.auto import tqdm
 from tqdm.contrib.concurrent import thread_map
+from wasabi import msg
 
 import textnets as tn
 
@@ -93,10 +93,12 @@ class Corpus:
             raise ValueError("Corpus data is empty.")
         documents: pd.Series = data.copy()
         if missings := documents.isna().sum():
-            warn(f"Dropping {missings} empty document(s).")
+            msg.warn(f"Dropping {missings} empty document(s).")
             documents = documents[~documents.isna()]
         if duplicated := documents.index.duplicated().sum():
-            warn(f"There are {duplicated} duplicate labels. Concatenating documents.")
+            msg.info(
+                f"There are {duplicated} duplicate labels. Concatenating documents."
+            )
             documents = documents.groupby(level=0).agg("\n\n".join)
         documents.index = documents.index.set_names(["label"])
         self.documents = documents
@@ -104,7 +106,7 @@ class Corpus:
             lang = tn.params["lang"]
         self.lang = LANGS.get(lang, lang)
         if self.lang not in _INSTALLED_MODELS:
-            warn(f"Language model '{self.lang}' is not yet installed.")
+            msg.info(f"Language model '{self.lang}' is not yet installed.")
 
     @property
     def nlp(self) -> pd.Series:
@@ -129,7 +131,7 @@ class Corpus:
                     pass
             elif self.lang in LANGS.values():
                 raise err
-            warn(f"Using basic '{self.lang}' language model.")
+            msg.info(f"Using basic '{self.lang}' language model.")
             return spacy.blank(self.lang)
 
     @memoize
@@ -137,7 +139,7 @@ class Corpus:
         norm_docs: pd.Series = self.documents.map(_normalize_whitespace)
         max_length = max(map(len, norm_docs))
         if max_length > 1_000_000:
-            warn("Corpus contains very long documents. Memory usage will be high.")
+            msg.info("Corpus contains very long documents. Memory usage will be high.")
             self._nlp_pipeline.max_length = max_length
         tqdm_args = dict(disable=not tn.params["progress_bar"] or None, unit="docs")
         cores = cpu_count() or 1

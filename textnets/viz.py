@@ -6,7 +6,6 @@ from functools import wraps
 from itertools import repeat
 from math import ceil
 from typing import Any, Callable, Iterator
-from warnings import warn
 
 import igraph as ig
 import numpy as np
@@ -19,6 +18,7 @@ from igraph.drawing.colors import (
 )
 from matplotlib.pyplot import subplots
 from pandas import Series
+from wasabi import msg
 
 import textnets as tn
 
@@ -70,7 +70,7 @@ def decorate_plot(plot_func: Callable) -> Callable:
         import mpl_font.noto  # noqa: F401
     except ModuleNotFoundError:
         if tn.params["lang"].startswith(("zh", "ja", "ko")):
-            warn("Could not import CJK font.")
+            msg.warn("Could not import CJK font.")
         pass
 
     # Produce SVG if running inside a Jupyter notebook
@@ -241,7 +241,7 @@ def decorate_plot(plot_func: Callable) -> Callable:
             ]
         # Use matplotlib
         if "target" in kwargs:
-            warn("Please use plt.savefig to save the network plot.")
+            msg.warn("Please use plt.savefig to save the network plot.")
         fig, ax = subplots(figsize=tn.params["figsize"])
         kwargs["target"] = ax
         return plot_func(net, **kwargs)

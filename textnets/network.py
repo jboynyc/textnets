@@ -13,7 +13,6 @@ from functools import cached_property
 from os import cpu_count
 from pathlib import Path
 from typing import Any, Callable, IO, Iterator, Literal
-from warnings import warn
 
 import igraph as ig
 import leidenalg as la
@@ -24,6 +23,7 @@ from scipy.integrate import quad
 from toolz import memoize
 from tqdm.auto import tqdm
 from tqdm.contrib.concurrent import thread_map
+from wasabi import msg
 
 import textnets as tn
 from ._util import df_split, LiteFrame
@@ -41,7 +41,9 @@ except ImportError:
         """Fallback version of integrand function for the disparity filter."""
         return np.float64(1 - x) ** (degree - 2)
 
-    warn("Could not import compiled extension, backbone extraction will be slow.")
+    msg.warn(
+        "Could not import compiled extension. " "Backbone extraction will be slow."
+    )
 
 
 #: Flag to distinguish node types.
@@ -721,9 +723,9 @@ class ProjectedTextnet(TextnetBase):
     def spanning(self) -> pd.Series:
         """Textual spanning measure."""
         if any(self.node_types):
-            warn("Textual spanning is only defined for document nodes.")
+            msg.warn("Textual spanning is only defined for document nodes.")
         if not self.graph.is_connected():
-            warn(
+            msg.warn(
                 "Graph is disconnected. "
                 "The textual spanning measure is not effective on disconnected graphs."
             )
