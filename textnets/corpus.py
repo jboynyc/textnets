@@ -8,8 +8,8 @@ from glob import glob
 
 from os import cpu_count
 from pathlib import Path
-from typing import Any, Callable, Sequence, Union
 from warnings import warn
+from typing import Any, Callable, Sequence
 
 import numpy as np
 import pandas as pd
@@ -54,7 +54,7 @@ LANGS = {
 }
 
 #: Custom type for objects resembling documents (token sequences).
-DocLike = Union[Doc, Sequence[Token]]
+DocLike = Doc | Sequence[Token]
 
 _INSTALLED_MODELS = spacy.util.get_installed_models()
 

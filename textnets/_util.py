@@ -2,14 +2,14 @@
 
 from __future__ import annotations
 
-from typing import Any, Union
+from typing import Any
 
 import numpy as np
 from pandas import DataFrame, Index, Series, SparseDtype
 from scipy.sparse import csr_array
 
 
-def df_split(df: Union[DataFrame, Series[Any]], size: int):
+def df_split(df: DataFrame | Series[Any], size: int):
     for ix in range(0, df.shape[0], size):
         yield df[ix : ix + size]
 
