@@ -2,6 +2,11 @@
 History
 =======
 
+0.10.4 (unreleased)
+-------------------
+* Fixes a bug in `tokenized` that would toggle on ``stem`` even if a user
+  disabled the option.
+
 0.10.3 (2024-03-29)
 -------------------
 * Fixes deployments.

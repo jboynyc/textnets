@@ -48,7 +48,9 @@ except ImportError:
 
 #: Flag to distinguish node types.
 NodeType = Flag("NodeType", [("TERM", True), ("DOC", False)])
+#: Term node type
 TERM = NodeType.TERM
+#: Document node type
 DOC = NodeType.DOC
 
 

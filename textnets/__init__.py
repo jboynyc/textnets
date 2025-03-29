@@ -19,6 +19,8 @@ __all__ = [
     "params",
     "init_seed",
     "examples",
+    "DOC",
+    "TERM",
 ]
 
 __author__ = "John D. Boy"

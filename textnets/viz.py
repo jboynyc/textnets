@@ -70,7 +70,7 @@ def decorate_plot(plot_func: Callable) -> Callable:
         import mpl_font.noto  # noqa: F401
     except ModuleNotFoundError:
         if tn.params["lang"].startswith(("zh", "ja", "ko")):
-            msg.warn("Could not import CJK font.")
+            msg.warn("Could not set CJK font. Set the matplotlib font manually.")
         pass
 
     # Produce SVG if running inside a Jupyter notebook
