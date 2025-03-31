@@ -102,7 +102,7 @@ class TextnetsConfiguration(UserDict):
             ser = c.execute(
                 "SELECT rowid, * FROM params ORDER BY rowid DESC LIMIT 1"
             ).fetchone()[1]
-        params = json.loads(ser)
+        params = json.loads(ser, object_hook=_json_object_hook)
         self.update(params)
         msg.info(f"Updated global parameters with values loaded from '{source}'.")
 
@@ -125,7 +125,7 @@ class TextnetsConfiguration(UserDict):
 
 default_params = {
     "autodownload": False,
-    "figsize": [16, 9],
+    "figsize": (16, 9),
     "lang": "en_core_web_sm",
     "progress_bar": True,
     "resolution_parameter": 0.1,
@@ -139,3 +139,7 @@ params = TextnetsConfiguration(seed=random.randint(0, 10_000), **default_params)
 def init_seed() -> None:
     """Initialize the random seed."""
     random.seed(params["seed"])
+
+
+def _json_object_hook(d):
+    return {k: (tuple(v) if isinstance(v, list) else v) for k, v in d.items()}
