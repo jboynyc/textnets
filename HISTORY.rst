@@ -6,6 +6,8 @@ History
 -------------------
 * Fixes a bug in `tokenized` that would toggle on ``stem`` even if a user
   disabled the option.
+* Introduces `savefig` helper function to avoid having to import matplotlib
+  manually.
 
 0.10.3 (2024-03-29)
 -------------------

@@ -428,17 +428,11 @@ This will create a file in the current directory in Graph Modeling Language
 (GML) format. This can then be opened by Pajek, yEd, Gephi and other programs.
 Consult the docs for `Textnet.save_graph` for a list of supported formats.
 
-If you want to save a plot of a network, use `savefig
-<mp:matplotlib.pyplot.savefig>`.
+If you want to save a plot of a network, use `savefig`.
 
 .. code:: python
 
-   from matplotlib.pyplot import savefig
    words.plot(label_nodes=True, color_clusters=True)
-   savefig("term_network.svg")
+   tn.savefig("term_network.svg")
 
-Supported file formats include PNG, TIFF, EPS and SVG.
-
-When using a Jupyter notebook, note that the call to `savefig
-<mp:matplotlib.pyplot.savefig>` should occur in the same cell as the call of
-the `plot <Textnet.plot>` method.
+Supported file formats include SVG, PNG, TIFF, EPS and PDF.

@@ -16,6 +16,8 @@ from igraph.drawing.colors import (
     lighten,
     PrecalculatedPalette,
 )
+from matplotlib.artist import Artist
+from matplotlib.figure import Figure
 from matplotlib.pyplot import subplots
 from pandas import Series
 from wasabi import msg
@@ -33,6 +35,8 @@ BASE_COLORS = [
     "springgreen",
     "dodgerblue",
 ]
+
+_LAST_FIG: Figure | None = None
 
 
 class TextnetPalette(PrecalculatedPalette):
@@ -81,9 +85,7 @@ def decorate_plot(plot_func: Callable) -> Callable:
         pass
 
     @wraps(plot_func)
-    def wrapper(
-        net: tn.network.TextnetBase, **kwargs
-    ) -> ig.drawing.matplotlib.graph.Artist:
+    def wrapper(net: tn.network.TextnetBase, **kwargs) -> Artist:
         graph = net.graph
         # Rewrite node_* arguments as vertex_* arguments
         node_opts = [k for k, _ in kwargs.items() if k.startswith("node_")]
@@ -243,6 +245,8 @@ def decorate_plot(plot_func: Callable) -> Callable:
         if "target" in kwargs:
             msg.warn("Please use plt.savefig to save the network plot.")
         fig, ax = subplots(figsize=tn.params["figsize"])
+        global _LAST_FIG
+        _LAST_FIG = fig
         kwargs["target"] = ax
         return plot_func(net, **kwargs)
 
@@ -258,3 +262,24 @@ def _cluster_node_indices(vc: ig.VertexClustering) -> Iterator[list[int]]:
     """Return node indices for nodes in each cluster."""
     for n in range(vc._len):
         yield [i for i, x in enumerate(vc.membership) if x == n]
+
+
+def savefig(*args, **kwargs) -> None:
+    """
+    Save the last figure.
+
+    Parameters
+    ----------
+    filename : str or path-like
+        File or path that the figure should be saved to.
+    format : str, optional
+        The file format.
+    dpi : float, optional
+        The image resolution.
+    metadata : dict, optional
+        Image metadata to store in the file.
+    """
+    if _LAST_FIG is None:
+        msg.warn("No figure to save.")
+    else:
+        _LAST_FIG.savefig(*args, **kwargs)

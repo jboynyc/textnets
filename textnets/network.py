@@ -18,6 +18,7 @@ import igraph as ig
 import leidenalg as la
 import numpy as np
 import pandas as pd
+from matplotlib.artist import Artist
 from scipy import LowLevelCallable
 from scipy.integrate import quad
 from toolz import memoize
@@ -146,7 +147,7 @@ class TextnetBase(ABC):
         return [TERM if t == "term" else DOC for t in self.nodes["type"]]
 
     @abstractmethod
-    def plot(self, **kwargs) -> ig.drawing.matplotlib.graph.Artist:
+    def plot(self, **kwargs) -> Artist:
         pass
 
     @abstractmethod
@@ -262,7 +263,7 @@ class TextnetBase(ABC):
     def _plot(
         self,
         **kwargs,
-    ) -> ig.drawing.matplotlib.graph.Artist:
+    ) -> Artist:
         tn.init_seed()
         return ig.plot(self.graph, **kwargs)
 
@@ -525,7 +526,7 @@ class Textnet(TextnetBase):
         edge_label_filter: Callable[[ig.Edge], bool] | None = None,
         scale_nodes_by: str | None = None,
         **kwargs,
-    ) -> ig.drawing.matplotlib.graph.Artist:
+    ) -> Artist:
         """
         Plot the bipartite graph.
 
@@ -755,9 +756,7 @@ class ProjectedTextnet(TextnetBase):
         pruned.delete_edges(pruned.es.select(alpha_ge=alpha))
         return ProjectedTextnet(giant_component(pruned))
 
-    def plot(
-        self, *, alpha: float | None = None, **kwargs
-    ) -> ig.drawing.matplotlib.graph.Artist:
+    def plot(self, *, alpha: float | None = None, **kwargs) -> Artist:
         """
         Plot the projected graph.
 

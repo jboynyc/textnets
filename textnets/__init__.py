@@ -10,6 +10,7 @@ from . import examples  # noqa: F401
 from .config import init_seed, params  # noqa: F401
 from .corpus import Corpus  # noqa: F401
 from .network import DOC, TERM, Textnet  # noqa: F401
+from .viz import savefig
 
 __all__ = [
     "Corpus",
@@ -21,6 +22,7 @@ __all__ = [
     "examples",
     "DOC",
     "TERM",
+    "savefig",
 ]
 
 __author__ = "John D. Boy"
