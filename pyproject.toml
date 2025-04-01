@@ -96,8 +96,7 @@ doc = [
     "sphinxcontrib-bibtex<3.0.0,>=2.6.3",
 ]
 lint = [
-    "flake8<8.0.0,>=7.1.1",
-    "ufmt<3.0.0,>=2.7.3",
+    "ruff<1.0.0,>=0.11.2",
 ]
 test =[
     "en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl",
@@ -121,10 +120,16 @@ warn_unreachable = true
 ignore_missing_imports = true
 pretty = true
 
-[tool.ufmt]
-excludes = [
+[tool.ruff]
+extend-exclude = [
     "textnets/_ext*.so"
 ]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "SIM", "UP"]
+
+[tool.ruff.format]
+docstring-code-format = true
 
 [tool.pytest.ini_options]
 filterwarnings = ["ignore:invalid escape sequence:DeprecationWarning"]

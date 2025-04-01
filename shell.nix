@@ -2,15 +2,16 @@
 
 with pkgs;
 
-mkShell {
+mkShell rec {
   packages = [
-    graphviz
+    autoPatchelfHook
     pdm
     python312Packages.venvShellHook
   ];
   venvDir = "./.venv";
+  LD_LIBRARY_PATH="${stdenv.cc.cc.lib}/lib/:$LD_LIBRARY_PATH";  # needed for numpy
   postShellHook = ''
-    export LD_LIBRARY_PATH=${stdenv.cc.cc.lib}/lib/:${zlib}/lib:$LD_LIBRARY_PATH
+    autoPatchelf ${venvDir}/bin  # needed for ruff
     pdm install -d
   '';
 }

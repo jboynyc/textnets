@@ -51,11 +51,11 @@ clean-test: ## remove test and coverage artifacts
 push: ## push code and tags to remote repository
 	git push && git push --tag
 
-lint: format ## check style with flake8
-	$(COMMAND_PREFIX) flake8
+lint: format ## check style
+	$(COMMAND_PREFIX) ruff check
 
 format: ## format code
-	$(COMMAND_PREFIX) ufmt format textnets tests
+	$(COMMAND_PREFIX) ruff format
 
 test: ## run tests quickly with the default Python
 	$(COMMAND_PREFIX) pytest
