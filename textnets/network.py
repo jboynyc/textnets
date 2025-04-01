@@ -8,11 +8,12 @@ import sqlite3
 import warnings
 from abc import ABC, abstractmethod
 from collections import Counter
+from collections.abc import Callable, Iterator
 from enum import Flag
 from functools import cached_property
 from os import cpu_count
 from pathlib import Path
-from typing import Any, Callable, IO, Iterator, Literal
+from typing import IO, Any, Literal
 
 import igraph as ig
 import leidenalg as la
@@ -27,8 +28,8 @@ from tqdm.contrib.concurrent import thread_map
 from wasabi import msg
 
 import textnets as tn
-from ._util import df_split, LiteFrame
 
+from ._util import LiteFrame, df_split
 from .corpus import TidyText
 from .viz import decorate_plot
 
@@ -42,9 +43,7 @@ except ImportError:
         """Fallback version of integrand function for the disparity filter."""
         return np.float64(1 - x) ** (degree - 2)
 
-    msg.warn(
-        "Could not import compiled extension. " "Backbone extraction will be slow."
-    )
+    msg.warn("Could not import compiled extension. Backbone extraction will be slow.")
 
 
 #: Flag to distinguish node types.
@@ -365,7 +364,7 @@ class Textnet(TextnetBase):
             raise ValueError("Data is empty.")
         if isinstance(data, BiadjacencyMatrix):
             self._matrix = data
-        elif isinstance(data, (TidyText, pd.DataFrame)):
+        elif isinstance(data, TidyText | pd.DataFrame):
             self._matrix = _matrix_from_tidy_text(data, min_docs, max_docs)
         if remove_weak_edges:
             pairs: pd.Series = self._matrix.stack()
@@ -785,10 +784,7 @@ class ProjectedTextnet(TextnetBase):
         kwargs
             Additional arguments to pass to `igraph.drawing.plot`.
         """
-        if alpha is not None:
-            to_plot = self.alpha_cut(alpha)
-        else:
-            to_plot = self
+        to_plot = self.alpha_cut(alpha) if alpha is not None else self
         return to_plot._plot(**kwargs)
 
     def _partition_graph(self, resolution: float, seed: int) -> ig.VertexClustering:

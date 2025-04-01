@@ -3,6 +3,7 @@
 """Configure tests for `textnets` package."""
 
 import pytest
+
 from textnets import Corpus, examples
 
 

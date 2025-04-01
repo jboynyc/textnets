@@ -2,19 +2,20 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable, Iterator
 from functools import wraps
 from itertools import repeat
 from math import ceil
-from typing import Any, Callable, Iterator
+from typing import Any
 
 import igraph as ig
 import numpy as np
 from igraph.drawing.colors import (
+    PrecalculatedPalette,
     color_name_to_rgb,
     color_name_to_rgba,
     darken,
     lighten,
-    PrecalculatedPalette,
 )
 from matplotlib.artist import Artist
 from matplotlib.figure import Figure
@@ -23,7 +24,6 @@ from pandas import Series
 from wasabi import msg
 
 import textnets as tn
-
 
 #: Base colors for textnets color palette.
 BASE_COLORS = [

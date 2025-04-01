@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import os
 import sqlite3
+from collections.abc import Callable, Sequence
 from glob import glob
-
 from os import cpu_count
 from pathlib import Path
-from typing import Any, Callable, Sequence
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -22,8 +22,7 @@ from wasabi import msg
 
 import textnets as tn
 
-from ._util import df_split, LiteFrame
-
+from ._util import LiteFrame, df_split
 
 #: Mapping of language codes to spaCy language model names.
 LANGS = {

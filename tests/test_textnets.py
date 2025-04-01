@@ -5,14 +5,12 @@
 import sqlite3
 
 import numpy as np
-
 import pandas as pd
-import textnets as tn
-
 from pytest import approx
 from toolz import partial
 from wasabi import msg
 
+import textnets as tn
 
 roughly = partial(approx, rel=0.1)
 
