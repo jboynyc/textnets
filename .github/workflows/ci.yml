@@ -23,8 +23,8 @@ jobs:
       - name: Install linter
         shell: bash
         run: pdm install -G lint
-      - name: Lint with flake8
-        run: pdm run flake8
+      - name: Lint
+        run: make lint
 
   test:
     runs-on: ${{ matrix.os }}
@@ -51,6 +51,6 @@ jobs:
       uses: pdm-project/setup-pdm@v4
     - name: Install dependencies
       shell: bash
-      run: pdm install -G test
+      run: pdm install -G test,typing
     - name: Test with pytest
-      run: pdm run pytest
+      run: make test
