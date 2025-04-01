@@ -4,8 +4,6 @@
 
 import sqlite3
 
-import matplotlib.pyplot as plt
-
 import numpy as np
 
 import pandas as pd
@@ -17,6 +15,10 @@ from wasabi import msg
 
 
 roughly = partial(approx, rel=0.1)
+
+
+def dir_contains_one_file(path):
+    return len(list(path.iterdir())) == 1
 
 
 def test_corpus(corpus):
@@ -298,7 +300,9 @@ def test_save(tmp_path, corpus):
     n_np = tn.Textnet(noun_phrases)
     out = tmp_path / "graph.graphml"
     n_np.save_graph(str(out))
-    assert len(list(tmp_path.iterdir())) == 1
+    assert out.exists()
+    assert out.stat().st_size > 1000
+    assert dir_contains_one_file(tmp_path)
 
 
 def test_plot(tmp_path, corpus):
@@ -308,8 +312,10 @@ def test_plot(tmp_path, corpus):
     n_np = tn.Textnet(noun_phrases)
     out = tmp_path / "plot-0.png"
     n_np.plot()
-    plt.savefig(out)
-    assert len(list(tmp_path.iterdir())) == 1
+    tn.savefig(out)
+    assert out.exists()
+    assert out.stat().st_size > 10_000
+    assert dir_contains_one_file(tmp_path)
 
 
 def test_plot_layout(tmp_path, corpus):
@@ -319,8 +325,10 @@ def test_plot_layout(tmp_path, corpus):
     n_np = tn.Textnet(noun_phrases)
     out = tmp_path / "plot-1.png"
     n_np.plot(bipartite_layout=True, label_nodes=True)
-    plt.savefig(out)
-    assert len(list(tmp_path.iterdir())) == 1
+    tn.savefig(out)
+    assert out.exists()
+    assert out.stat().st_size > 10_000
+    assert dir_contains_one_file(tmp_path)
 
 
 def test_plot_projected(tmp_path, corpus):
@@ -330,8 +338,10 @@ def test_plot_projected(tmp_path, corpus):
     papers = n.project(node_type=tn.DOC)
     out = tmp_path / "plot-2.png"
     papers.plot(show_clusters=True, label_nodes=True)
-    plt.savefig(out)
-    assert len(list(tmp_path.iterdir())) == 1
+    tn.savefig(out)
+    assert out.exists()
+    assert out.stat().st_size > 10_000
+    assert dir_contains_one_file(tmp_path)
 
 
 def test_plot_backbone(tmp_path, corpus):
@@ -341,8 +351,10 @@ def test_plot_backbone(tmp_path, corpus):
     papers = n.project(node_type=tn.DOC)
     out = tmp_path / "plot-3.png"
     papers.plot(alpha=0.4, label_nodes=True)
-    plt.savefig(out)
-    assert len(list(tmp_path.iterdir())) == 1
+    tn.savefig(out)
+    assert out.exists()
+    assert out.stat().st_size > 10_000
+    assert dir_contains_one_file(tmp_path)
 
 
 def test_plot_scaled(tmp_path, corpus):
@@ -352,8 +364,10 @@ def test_plot_scaled(tmp_path, corpus):
     papers = n.project(node_type=tn.DOC)
     out = tmp_path / "plot-4.png"
     papers.plot(scale_nodes_by="betweenness", label_nodes=True)
-    plt.savefig(out)
-    assert len(list(tmp_path.iterdir())) == 1
+    tn.savefig(out)
+    assert out.exists()
+    assert out.stat().st_size > 10_000
+    assert dir_contains_one_file(tmp_path)
 
 
 def test_plot_filtered(tmp_path, corpus):
@@ -368,8 +382,10 @@ def test_plot_filtered(tmp_path, corpus):
         node_label_filter=lambda v: v.degree() > 2,
         edge_label_filter=lambda e: e["weight"] > 0.1,
     )
-    plt.savefig(out)
-    assert len(list(tmp_path.iterdir())) == 1
+    tn.savefig(out)
+    assert out.exists()
+    assert out.stat().st_size > 10_000
+    assert dir_contains_one_file(tmp_path)
 
 
 def test_html_repr(corpus):
