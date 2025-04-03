@@ -16,12 +16,12 @@ roughly = partial(approx, rel=0.1)
 
 
 def dir_contains_one_file(path):
+    """Check that provided directory contains one file."""
     return len(list(path.iterdir())) == 1
 
 
 def test_corpus(corpus):
     """Test Corpus class using small data frame."""
-
     assert len(corpus.documents) == 7
 
     noun_phrases = corpus.noun_phrases()
@@ -172,6 +172,7 @@ def test_corpus_save_and_load(corpus, tmp_path):
 
 
 def test_corpus_sublinear_false(corpus):
+    """Test corpus methods without using sublinear scaling for tf-idf."""
     noun_phrases = corpus.noun_phrases(sublinear=False)
     assert noun_phrases.sum().n == roughly(26)
     assert set(noun_phrases.columns) == {"term", "n", "term_weight"}
@@ -248,6 +249,7 @@ def test_textnet_max_docs(corpus):
 
 
 def test_textnet_cluster_strength(corpus):
+    """Test cluster strength."""
     noun_phrases = corpus.noun_phrases()
 
     n_np = tn.Textnet(noun_phrases)
@@ -255,8 +257,7 @@ def test_textnet_cluster_strength(corpus):
 
 
 def test_textnet_birank(corpus):
-    """Test calculating BiRank."""
-
+    """Test calculating bipartite centrality measures."""
     noun_phrases = corpus.noun_phrases()
     n_np = tn.Textnet(noun_phrases)
 
@@ -268,6 +269,7 @@ def test_textnet_birank(corpus):
 
 
 def test_textnet_birank_connected(corpus):
+    """Test BiRank in a connected graph."""
     n_np = tn.Textnet(corpus.tokenized(), min_docs=1, connected=True)
 
     assert len(n_np.birank) == n_np.graph.vcount()
@@ -275,7 +277,6 @@ def test_textnet_birank_connected(corpus):
 
 def test_textnet_clustering(corpus):
     """Test calculating bipartite clustering coefficient."""
-
     noun_phrases = corpus.noun_phrases()
     n_np = tn.Textnet(noun_phrases, connected=True)
 
@@ -284,7 +285,6 @@ def test_textnet_clustering(corpus):
 
 def test_textnet_spanning(corpus):
     """Test calculating textual spanning measure."""
-
     noun_phrases = corpus.noun_phrases()
     n_np = tn.Textnet(noun_phrases, connected=True)
     g_np_groups = n_np.project(node_type=tn.DOC)
@@ -293,7 +293,6 @@ def test_textnet_spanning(corpus):
 
 def test_save(tmp_path, corpus):
     """Test Textnet graph saving."""
-
     noun_phrases = corpus.noun_phrases()
     n_np = tn.Textnet(noun_phrases)
     out = tmp_path / "graph.graphml"
@@ -305,7 +304,6 @@ def test_save(tmp_path, corpus):
 
 def test_plot(tmp_path, corpus):
     """Test Textnet plotting."""
-
     noun_phrases = corpus.noun_phrases()
     n_np = tn.Textnet(noun_phrases)
     out = tmp_path / "plot-0.png"
@@ -318,7 +316,6 @@ def test_plot(tmp_path, corpus):
 
 def test_plot_layout(tmp_path, corpus):
     """Test Textnet plotting with bipartite layout and node labels."""
-
     noun_phrases = corpus.noun_phrases()
     n_np = tn.Textnet(noun_phrases)
     out = tmp_path / "plot-1.png"
@@ -331,7 +328,6 @@ def test_plot_layout(tmp_path, corpus):
 
 def test_plot_projected(tmp_path, corpus):
     """Test ProjectedTextnet plotting."""
-
     n = tn.Textnet(corpus.tokenized())
     papers = n.project(node_type=tn.DOC)
     out = tmp_path / "plot-2.png"
@@ -344,7 +340,6 @@ def test_plot_projected(tmp_path, corpus):
 
 def test_plot_backbone(tmp_path, corpus):
     """Test ProjectedTextnet plotting with alpha cut."""
-
     n = tn.Textnet(corpus.tokenized())
     papers = n.project(node_type=tn.DOC)
     out = tmp_path / "plot-3.png"
@@ -357,7 +352,6 @@ def test_plot_backbone(tmp_path, corpus):
 
 def test_plot_scaled(tmp_path, corpus):
     """Test ProjectedTextnet plotting with scaled nodes."""
-
     n = tn.Textnet(corpus.tokenized())
     papers = n.project(node_type=tn.DOC)
     out = tmp_path / "plot-4.png"
@@ -370,7 +364,6 @@ def test_plot_scaled(tmp_path, corpus):
 
 def test_plot_filtered(tmp_path, corpus):
     """Test ProjectedTextnet plotting filtered labels."""
-
     n = tn.Textnet(corpus.tokenized())
     papers = n.project(node_type=tn.DOC)
     out = tmp_path / "plot-5.png"

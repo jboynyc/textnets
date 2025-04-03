@@ -19,8 +19,8 @@ means you can install the package using `pip`_ or `nix`_.
 Using pip
 ---------
 
-Alternately, if you already have Python installed, you can use its package
-manger to install **textnets**. In a `virtual environment`_, run::
+If you already have Python installed, you can use its package manger to install
+**textnets**. In a `virtual environment`_, run::
 
    $ python -m pip install textnets
 

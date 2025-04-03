@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-#
+"""Configure build of Sphinx documentation for textnets."""
+
 # textnets documentation build configuration file, created by
 # sphinx-quickstart on Fri Jun  9 13:47:02 2017.
 #
@@ -16,11 +16,12 @@
 # directory, add these directories to sys.path here. If the directory is
 # relative to the documentation root, use os.path.abspath to make it
 # absolute, like shown here.
-#
+
 import os
 import sys
+from pathlib import Path
 
-sys.path.insert(0, os.path.abspath(".."))
+sys.path.insert(0, Path("..").resolve())
 
 import textnets
 
@@ -70,9 +71,6 @@ default_role = "any"
 templates_path = ["_templates"]
 
 # The suffix(es) of source filenames.
-# You can specify multiple suffix as a list of string:
-#
-# source_suffix = ['.rst', '.md']
 source_suffix = ".rst"
 
 # The master toctree document.
@@ -105,7 +103,7 @@ language = "en"
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = "sphinx"
+pygments_style = "bw"
 
 # -- Options for HTML output -------------------------------------------
 
@@ -113,8 +111,9 @@ pygments_style = "sphinx"
 # a list of builtin themes.
 html_theme = "shibuya"
 html_theme_options = {
-    "dark_code": True,
+    "accent_color": "lime",
     "github_url": "https://github.com/jboynyc/textnets",
+    "mastodon_url": "https://post.lurk.org/@jboy",
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -128,53 +127,3 @@ html_logo = "_static/textnets-logo.svg"
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = "textnetsdoc"
-
-
-# -- Options for LaTeX output ------------------------------------------
-
-latex_elements = {
-    # The paper size ('letterpaper' or 'a4paper').
-    #
-    # 'papersize': 'letterpaper',
-    # The font size ('10pt', '11pt' or '12pt').
-    #
-    # 'pointsize': '10pt',
-    # Additional stuff for the LaTeX preamble.
-    #
-    # 'preamble': '',
-    # Latex figure (float) alignment
-    #
-    # 'figure_align': 'htbp',
-}
-
-# Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title, author, documentclass
-# [howto, manual, or own class]).
-latex_documents = [
-    (master_doc, "textnets.tex", "textnets Documentation", "John D. Boy", "manual")
-]
-
-
-# -- Options for manual page output ------------------------------------
-
-# One entry per manual page. List of tuples
-# (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "textnets", "textnets Documentation", [author], 1)]
-
-
-# -- Options for Texinfo output ----------------------------------------
-
-# Grouping the document tree into Texinfo files. List of tuples
-# (source start file, target name, title, author,
-#  dir menu entry, description, category)
-texinfo_documents = [
-    (
-        master_doc,
-        "textnets",
-        "textnets Documentation",
-        author,
-        "textnets",
-        "Automated text analysis with networks.",
-        "Miscellaneous",
-    )
-]

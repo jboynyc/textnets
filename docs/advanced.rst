@@ -51,7 +51,7 @@ This will ensure that appropriate fonts are available to display appropriate
 glyphs in visualizations. (No tofu!)
 
 For Chinese only, install the ``zh`` dependency group which contains `Jieba
-<https://github.com/fxsjy/jieba>__`, an additional library for Chinese text
+<https://github.com/fxsjy/jieba>`__, an additional library for Chinese text
 tokenization.
 
 Using alternate community detection algorithms

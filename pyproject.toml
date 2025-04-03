@@ -91,9 +91,9 @@ doc = [
     "en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl",
     "ipykernel<7.0.0,>=6.29.5",
     "jupyter-sphinx>=0.5.0",
-    "shibuya<2026.0.0,>=2025.3.24",
     "sphinx<8.0.0,>=7.4.7",
     "sphinxcontrib-bibtex<3.0.0,>=2.6.3",
+    "shibuya>=2025.3.24",
 ]
 lint = [
     "ruff<1.0.0,>=0.11.2",

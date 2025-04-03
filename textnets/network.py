@@ -54,8 +54,7 @@ TERM = NodeType.TERM
 DOC = NodeType.DOC
 
 
-def _make_top(prop, desc):
-    """Helper function to create top_* methods for Textnet classes."""
+    """Create top_* methods for Textnet classes."""
 
     def method(cls, n=10):
         return getattr(cls, prop).sort_values(ascending=False).head(n)
