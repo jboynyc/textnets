@@ -121,12 +121,37 @@ ignore_missing_imports = true
 pretty = true
 
 [tool.ruff]
+preview = true
 extend-exclude = [
     "textnets/_ext*.so"
 ]
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "SIM", "UP"]
+select = [
+    "ARG",
+    "D",
+    "DOC",
+    "E",
+    "ERA",
+    "F",
+    "I",
+    "NPY",
+    "PERF",
+    "PIE",
+    "PLW0",
+    "PTH",
+    "Q",
+    "RET",
+    "RUF",
+    "SIM",
+    "T",
+    "TID",
+    "UP",
+    "W",
+]
+extend-ignore = ["D105"]
+pydocstyle.convention = "numpy"
+pydoclint.ignore-one-line-docstrings = true
 
 [tool.ruff.format]
 docstring-code-format = true
