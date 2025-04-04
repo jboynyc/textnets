@@ -61,7 +61,7 @@ def test_corpus_duplicated(testdata):
     assert len(corpus.documents) == 7
 
 
-def test_corpus_missing(testdata, recwarn):
+def test_corpus_missing(testdata):
     """Test Corpus class on series with missing data."""
     s = pd.concat([testdata, pd.Series([None], index=["Missing"])])
     corpus = tn.Corpus(s)
@@ -69,20 +69,18 @@ def test_corpus_missing(testdata, recwarn):
     assert len(corpus.documents) == 7
 
 
-def test_corpus_czech(recwarn):
+def test_corpus_czech():
     """Test Corpus class using Czech language documents."""
-    s = pd.Series(
-        [
-            "Holka modrooká nesedávej tam",
-            "Holka modrooká nesedávej u potoka",
-            "podemele tvoje oči",
-            "vezme li tě bude škoda",
-            "V potoce je hastrmánek",
-            "V potoce je velká voda",
-            "V potoce se voda točí",
-            "zatahá tě za copánek",
-        ]
-    )
+    s = pd.Series([
+        "Holka modrooká nesedávej tam",
+        "Holka modrooká nesedávej u potoka",
+        "podemele tvoje oči",
+        "vezme li tě bude škoda",
+        "V potoce je hastrmánek",
+        "V potoce je velká voda",
+        "V potoce se voda točí",
+        "zatahá tě za copánek",
+    ])
     # This outputs a message about an uninstalled language model
     corpus = tn.Corpus(s, lang="cs")
     assert len(corpus.documents) == 8
@@ -125,8 +123,8 @@ def test_corpus_long():
 
 def test_corpus_df(testdata):
     """Test creating a corpus from a data frame."""
-    df = pd.DataFrame({"headlines": testdata, "meta": list("ABCDEFG")})
-    c = tn.Corpus.from_df(df, doc_col="headlines")
+    d = pd.DataFrame({"headlines": testdata, "meta": list("ABCDEFG")})
+    c = tn.Corpus.from_df(d, doc_col="headlines")
     assert len(c.documents) == 7
 
 
@@ -381,6 +379,6 @@ def test_plot_filtered(tmp_path, corpus):
 
 def test_html_repr(corpus):
     """Test HTML representations of the top-level module and core classes."""
-    assert tn._repr_html_() != ""
-    assert corpus._repr_html_() != ""
-    assert tn.Textnet(corpus.tokenized())._repr_html_() != ""
+    assert tn._repr_html_()
+    assert corpus._repr_html_()
+    assert tn.Textnet(corpus.tokenized())._repr_html_()
