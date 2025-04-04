@@ -6,22 +6,22 @@ Functionality based on :cite:t:`Bail2016`.
 
 from importlib.metadata import version
 
-from . import examples  # noqa: F401
-from .config import init_seed, params  # noqa: F401
-from .corpus import Corpus  # noqa: F401
-from .network import DOC, TERM, Textnet  # noqa: F401
+from . import examples
+from .config import init_seed, params
+from .corpus import Corpus
+from .network import DOC, TERM, Textnet
 from .viz import savefig
 
 __all__ = [
-    "Corpus",
-    "load_corpus",
-    "Textnet",
-    "load_textnet",
-    "params",
-    "init_seed",
-    "examples",
     "DOC",
     "TERM",
+    "Corpus",
+    "Textnet",
+    "examples",
+    "init_seed",
+    "load_corpus",
+    "load_textnet",
+    "params",
     "savefig",
 ]
 
@@ -47,9 +47,9 @@ def _repr_html_() -> str:
         **dict(zip(packages, package_versions)),
         **dict(zip(language_models, model_versions)),
     )
-    dl = "\n".join(
-        [f"<dt><tt>{pkg}</tt></dt><dd>{ver}</dd>" for pkg, ver in pairs.items()]
-    )
+    dl = "\n".join([
+        f"<dt><tt>{pkg}</tt></dt><dd>{ver}</dd>" for pkg, ver in pairs.items()
+    ])
     return f"""
     <style scoped>
       .full-width {{ width: 100%; }}

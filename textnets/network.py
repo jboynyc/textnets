@@ -8,19 +8,16 @@ import sqlite3
 import warnings
 from abc import ABC, abstractmethod
 from collections import Counter
-from collections.abc import Callable, Iterator
 from enum import Flag
 from functools import cached_property
 from os import cpu_count
 from pathlib import Path
-from typing import IO, Any, Literal
+from typing import IO, TYPE_CHECKING, Any, Literal
 
 import igraph as ig
 import leidenalg as la
 import numpy as np
 import pandas as pd
-from matplotlib.artist import Artist
-from scipy import LowLevelCallable
 from scipy.integrate import quad
 from toolz import memoize
 from tqdm.auto import tqdm
@@ -33,7 +30,14 @@ from ._util import LiteFrame, df_split
 from .corpus import TidyText
 from .viz import decorate_plot
 
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterator
+
+    from matplotlib.artist import Artist
+
 try:
+    from scipy import LowLevelCallable
+
     from . import _ext  # type: ignore
 
     integrand = LowLevelCallable.from_cython(_ext, "df_integrand")
@@ -54,9 +58,10 @@ TERM = NodeType.TERM
 DOC = NodeType.DOC
 
 
+def _make_top(prop: str, desc: str) -> Callable:
     """Create top_* methods for Textnet classes."""
 
-    def method(cls, n=10):
+    def method(cls: TextnetBase, n: int = 10) -> Callable:
         return getattr(cls, prop).sort_values(ascending=False).head(n)
 
     method.__doc__ = f"""
@@ -145,12 +150,12 @@ class TextnetBase(ABC):
         return [TERM if t == "term" else DOC for t in self.nodes["type"]]
 
     @abstractmethod
-    def plot(self, **kwargs) -> Artist:
-        pass
+    def plot(self, **kwargs) -> Artist:  # noqa:D102
+        raise NotImplementedError
 
     @abstractmethod
-    def _partition_graph(self, resolution: float, seed: int) -> ig.VertexClustering:
-        pass
+    def _partition_graph(self) -> ig.VertexClustering:
+        raise NotImplementedError
 
     _partition: ig.VertexClustering | None = None
 
@@ -163,10 +168,7 @@ class TextnetBase(ABC):
         partition that was supplied to the setter.
         """
         if self._partition is None:
-            self._partition = self._partition_graph(
-                resolution=tn.params["resolution_parameter"],
-                seed=tn.params["seed"],
-            )
+            self._partition = self._partition_graph()
         return self._partition
 
     @clusters.setter
@@ -244,13 +246,11 @@ class TextnetBase(ABC):
             Clusters with representative nodes.
         """
         return (
-            pd.DataFrame(
-                {
-                    "nodes": self.nodes["id"],
-                    "metric": getattr(self, rank_nodes_by),
-                    "cluster": self.clusters.membership,
-                }
-            )
+            pd.DataFrame({
+                "nodes": self.nodes["id"],
+                "metric": getattr(self, rank_nodes_by),
+                "cluster": self.clusters.membership,
+            })
             .sort_values("metric", ascending=False)
             .groupby("cluster")
             .agg({"nodes": lambda x: x[:n], "metric": len})
@@ -366,7 +366,7 @@ class Textnet(TextnetBase):
         elif isinstance(data, TidyText | pd.DataFrame):
             self._matrix = _matrix_from_tidy_text(data, min_docs, max_docs)
         if remove_weak_edges:
-            pairs: pd.Series = self._matrix.stack()
+            pairs: pd.Series = self._matrix.stack(future_stack=True)
             edge_weights: pd.Series = pairs[pairs > 0]
             iqr: float = edge_weights.quantile(0.75) - edge_weights.quantile(0.25)
             cutoff: float = edge_weights.median() - 1.5 * iqr
@@ -647,12 +647,14 @@ class Textnet(TextnetBase):
             ccs.append(cc)
         return pd.Series(ccs, index=self.nodes["id"])
 
-    def _partition_graph(self, resolution: float, seed: int) -> ig.VertexClustering:
+    def _partition_graph(self) -> ig.VertexClustering:
         part, part0, part1 = la.CPMVertexPartition.Bipartite(
-            self.graph, resolution_parameter_01=resolution, weights="weight"
+            self.graph,
+            resolution_parameter_01=tn.params["resolution_parameter"],
+            weights="weight",
         )
         opt = la.Optimiser()
-        opt.set_rng_seed(seed)
+        opt.set_rng_seed(tn.params["seed"])
         opt.optimise_partition_multiplex(
             [part, part0, part1], layer_weights=[1, -1, -1], n_iterations=-1
         )
@@ -786,15 +788,14 @@ class ProjectedTextnet(TextnetBase):
         to_plot = self.alpha_cut(alpha) if alpha is not None else self
         return to_plot._plot(**kwargs)
 
-    def _partition_graph(self, resolution: float, seed: int) -> ig.VertexClustering:
-        part = la.find_partition(
+    def _partition_graph(self) -> ig.VertexClustering:
+        return la.find_partition(
             self.graph,
             la.ModularityVertexPartition,
             weights="weight",
             n_iterations=-1,
-            seed=seed,
+            seed=tn.params["seed"],
         )
-        return part
 
 
 for prop, desc in [
@@ -958,7 +959,7 @@ def bipartite_rank(
     ----------
     :cite:`He2017`
     """
-    if normalizer not in ("HITS", "CoHITS", "BGRM", "BiRank"):
+    if normalizer not in {"HITS", "CoHITS", "BGRM", "BiRank"}:
         raise ValueError(f"'{normalizer}' is not a valid normalization option.")
 
     W = net.m.to_numpy()
@@ -999,8 +1000,8 @@ def bipartite_rank(
         d = beta * (Sd.dot(p_last)) + (1 - beta) * d0
 
         if normalizer == "HITS":
-            p = p / p.sum()
-            d = d / d.sum()
+            p /= p.sum()
+            d /= d.sum()
 
         err_p = np.absolute(p - p_last).sum()
         err_d = np.absolute(d - d_last).sum()
@@ -1051,8 +1052,7 @@ def textual_spanning(m: np.ndarray, alpha: float = 1.0) -> np.ndarray:
     ps2 = eps @ ps
     sp = (ps + ps2) ** 2
     csp = sp.sum(axis=1)
-    csp_norm = ((csp - csp.mean()) / csp.std(ddof=1)) * -1
-    return csp_norm
+    return ((csp - csp.mean()) / csp.std(ddof=1)) * -1
 
 
 class BiadjacencyMatrix(LiteFrame):

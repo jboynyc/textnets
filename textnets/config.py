@@ -41,7 +41,7 @@ import random
 import sqlite3
 from collections import UserDict
 from pathlib import Path
-from typing import Any
+from typing import Any, ClassVar
 from warnings import warn
 
 from wasabi import msg, table
@@ -50,7 +50,7 @@ from wasabi import msg, table
 class TextnetsConfiguration(UserDict):
     """Container for global parameters."""
 
-    _valid = {
+    _valid: ClassVar[set[str]] = {
         "autodownload",
         "figsize",
         "lang",
@@ -141,5 +141,5 @@ def init_seed() -> None:
     random.seed(params["seed"])
 
 
-def _json_object_hook(d):
+def _json_object_hook(d: dict) -> dict:
     return {k: (tuple(v) if isinstance(v, list) else v) for k, v in d.items()}

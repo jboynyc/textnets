@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-import numpy as np
 from pandas import DataFrame, Index, Series, SparseDtype
 from scipy.sparse import csr_array
+
+if TYPE_CHECKING:
+    from numpy import ndarray
 
 
 def df_split(df: DataFrame | Series[Any], size: int):
@@ -57,7 +59,7 @@ class LiteFrame:
     def sum(self, *args, **kwargs) -> Series[Any]:
         return self._df.sum(*args, **kwargs)
 
-    def to_numpy(self, *args, **kwargs) -> np.ndarray:
+    def to_numpy(self, *args, **kwargs) -> ndarray:
         return self._df.to_numpy(*args, **kwargs)
 
     def __getitem__(self, *args, **kwargs):
@@ -78,10 +80,12 @@ class LiteFrame:
     def __eq__(self, *args):
         return self._df.__eq__(*args)
 
-    def __array__(self, dtype=None) -> np.ndarray:
+    def __array__(self, dtype=None) -> ndarray:
         return self._df.__array__(dtype=dtype)
 
-    def to_array(self) -> np.ndarray:
+    __hash__ = None
+
+    def to_array(self) -> ndarray:
         """Return numpy array with float32 numeric data."""
         a = self.to_numpy()
         return a.astype("float32")

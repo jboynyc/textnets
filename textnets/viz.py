@@ -2,11 +2,10 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterator
 from functools import wraps
 from itertools import repeat
 from math import ceil
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import igraph as ig
 import numpy as np
@@ -17,13 +16,17 @@ from igraph.drawing.colors import (
     darken,
     lighten,
 )
-from matplotlib.artist import Artist
-from matplotlib.figure import Figure
 from matplotlib.pyplot import subplots
 from pandas import Series
 from wasabi import msg
 
 import textnets as tn
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterator
+
+    from matplotlib.artist import Artist
+    from matplotlib.figure import Figure
 
 #: Base colors for textnets color palette.
 BASE_COLORS = [
@@ -42,7 +45,7 @@ _LAST_FIG: Figure | None = None
 class TextnetPalette(PrecalculatedPalette):
     """Color palette for textnets."""
 
-    def __init__(self, n: int):
+    def __init__(self, n: int) -> None:
         base_colors = [color_name_to_rgba(c) for c in BASE_COLORS]
 
         num_base_colors = len(base_colors)
@@ -68,14 +71,12 @@ class TextnetPalette(PrecalculatedPalette):
 
 def decorate_plot(plot_func: Callable) -> Callable:
     """Style the plot produced by igraph's plot function."""
-
     # Set CJK font
     try:
         import mpl_font.noto  # noqa: F401
     except ModuleNotFoundError:
         if tn.params["lang"].startswith(("zh", "ja", "ko")):
             msg.warn("Could not set CJK font. Set the matplotlib font manually.")
-        pass
 
     # Produce SVG if running inside a Jupyter notebook
     try:
@@ -245,7 +246,7 @@ def decorate_plot(plot_func: Callable) -> Callable:
         if "target" in kwargs:
             msg.warn("Please use plt.savefig to save the network plot.")
         fig, ax = subplots(figsize=tn.params["figsize"])
-        global _LAST_FIG
+        global _LAST_FIG  # noqa:PLW0603
         _LAST_FIG = fig
         kwargs["target"] = ax
         return plot_func(net, **kwargs)

@@ -4,17 +4,13 @@ from __future__ import annotations
 
 import os
 import sqlite3
-from collections.abc import Callable, Sequence
-from glob import glob
 from os import cpu_count
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pandas as pd
 import spacy
-from spacy.tokens import Token
-from spacy.tokens.doc import Doc
 from toolz import compose, identity, memoize, partial
 from tqdm.auto import tqdm
 from tqdm.contrib.concurrent import thread_map
@@ -23,6 +19,15 @@ from wasabi import msg
 import textnets as tn
 
 from ._util import LiteFrame, df_split
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Generator, Sequence
+
+    from spacy.tokens import Token
+    from spacy.tokens.doc import Doc
+
+    #: Custom type for objects resembling documents (token sequences).
+    DocLike = Doc | Sequence[Token]
 
 #: Mapping of language codes to spaCy language model names.
 LANGS = {
@@ -51,9 +56,6 @@ LANGS = {
     "uk": "uk_core_news_sm",  # Ukrainian
     "zh": "zh_core_web_sm",  # Chinese
 }
-
-#: Custom type for objects resembling documents (token sequences).
-DocLike = Doc | Sequence[Token]
 
 _INSTALLED_MODELS = spacy.util.get_installed_models()
 
@@ -108,9 +110,22 @@ class Corpus:
             msg.info(f"Language model '{self.lang}' is not yet installed.")
 
     @property
+    @memoize
     def nlp(self) -> pd.Series:
         """Corpus documents with NLP applied."""
-        return self._run_pipeline(self.lang)
+        norm_docs: pd.Series = self.documents.map(_normalize_whitespace)
+        max_length = max(map(len, norm_docs))
+        if max_length > 1_000_000:
+            msg.info("Corpus contains very long documents. Memory usage will be high.")
+            self._nlp_pipeline.max_length = max_length
+        tqdm_args = dict(disable=not tn.params["progress_bar"] or None, unit="docs")
+        cores = cpu_count() or 1
+        if cores > 1 and len(self.documents) >= cores:
+            nlp_ufunc = np.frompyfunc(self._nlp_pipeline, 1, 1)
+            doc_chunks = df_split(norm_docs, cores)
+            return pd.concat(thread_map(nlp_ufunc, doc_chunks, **tqdm_args))
+        tqdm.pandas(**tqdm_args)
+        return norm_docs.progress_map(self._nlp_pipeline)
 
     @property
     @memoize
@@ -132,22 +147,6 @@ class Corpus:
                 raise err
             msg.info(f"Using basic '{self.lang}' language model.")
             return spacy.blank(self.lang)
-
-    @memoize
-    def _run_pipeline(self, lang: str) -> pd.Series:
-        norm_docs: pd.Series = self.documents.map(_normalize_whitespace)
-        max_length = max(map(len, norm_docs))
-        if max_length > 1_000_000:
-            msg.info("Corpus contains very long documents. Memory usage will be high.")
-            self._nlp_pipeline.max_length = max_length
-        tqdm_args = dict(disable=not tn.params["progress_bar"] or None, unit="docs")
-        cores = cpu_count() or 1
-        if cores > 1 and len(self.documents) >= cores:
-            nlp_ufunc = np.frompyfunc(self._nlp_pipeline, 1, 1)
-            doc_chunks = df_split(norm_docs, cores)
-            return pd.concat(thread_map(nlp_ufunc, doc_chunks, **tqdm_args))
-        tqdm.pandas(**tqdm_args)
-        return norm_docs.progress_map(self._nlp_pipeline)
 
     def __len__(self) -> int:
         return len(self.documents)
@@ -218,7 +217,7 @@ class Corpus:
     @classmethod
     def from_files(
         cls,
-        files: str | list[str] | list[Path],
+        files: str | list[str] | list[Path] | Generator[Path],
         doc_labels: list[str] | None = None,
         lang: str | None = None,
     ) -> Corpus:
@@ -245,7 +244,8 @@ class Corpus:
         `Corpus`
         """
         if isinstance(files, str):
-            files = glob(os.path.expanduser(files))
+            p = Path(files).expanduser()
+            files = Path(p.parent).glob(p.name)
         files = [Path(f) for f in files]
         for file in files:
             if file.expanduser().is_file():
