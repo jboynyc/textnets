@@ -83,8 +83,6 @@ class LiteFrame:
     def __array__(self, dtype=None) -> ndarray:
         return self._df.__array__(dtype=dtype)
 
-    __hash__ = None
-
     def to_array(self) -> ndarray:
         """Return numpy array with float32 numeric data."""
         a = self.to_numpy()
