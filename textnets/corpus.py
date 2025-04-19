@@ -6,7 +6,7 @@ import os
 import sqlite3
 from os import cpu_count
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Self
 
 import numpy as np
 import pandas as pd
@@ -160,7 +160,7 @@ class Corpus:
         data: pd.DataFrame,
         doc_col: str | None = None,
         lang: str | None = None,
-    ) -> Corpus:
+    ) -> Self:
         """
         Create corpus from data frame.
 
@@ -196,7 +196,7 @@ class Corpus:
         cls,
         data: dict[Any, str],
         lang: str | None = None,
-    ) -> Corpus:
+    ) -> Self:
         """
         Create corpus from dictionary.
 
@@ -220,7 +220,7 @@ class Corpus:
         files: str | list[str] | list[Path] | Generator[Path],
         doc_labels: list[str] | None = None,
         lang: str | None = None,
-    ) -> Corpus:
+    ) -> Self:
         """Construct corpus from files.
 
         Parameters
@@ -268,7 +268,7 @@ class Corpus:
         doc_col: str | None = None,
         lang: str | None = None,
         **kwargs,
-    ) -> Corpus:
+    ) -> Self:
         """Read corpus from comma-separated value file.
 
         Parameters
@@ -305,7 +305,7 @@ class Corpus:
         doc_col: str | None = None,
         lang: str | None = None,
         **kwargs,
-    ) -> Corpus:
+    ) -> Self:
         """Read corpus from SQL database.
 
         Parameters
@@ -354,7 +354,7 @@ class Corpus:
             )
 
     @classmethod
-    def load(cls, source: os.PathLike[Any] | str) -> Corpus:
+    def load(cls, source: os.PathLike[Any] | str) -> Self:
         """
         Load a corpus from file.
 

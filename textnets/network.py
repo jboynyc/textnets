@@ -12,7 +12,7 @@ from enum import Flag
 from functools import cached_property
 from os import cpu_count
 from pathlib import Path
-from typing import IO, TYPE_CHECKING, Any, Literal
+from typing import IO, TYPE_CHECKING, Any, Literal, Self
 
 import igraph as ig
 import leidenalg as la
@@ -473,7 +473,7 @@ class Textnet(TextnetBase):
             )
 
     @classmethod
-    def load(cls, source: os.PathLike[Any] | str) -> Textnet:
+    def load(cls, source: os.PathLike[Any] | str) -> Self:
         """
         Load a textnet from file.
 
