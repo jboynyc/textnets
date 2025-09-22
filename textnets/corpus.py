@@ -21,7 +21,7 @@ import textnets as tn
 from ._util import LiteFrame, df_split
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Generator, Sequence
+    from collections.abc import Callable, Iterator, Sequence
 
     from spacy.tokens import Token
     from spacy.tokens.doc import Doc
@@ -217,7 +217,7 @@ class Corpus:
     @classmethod
     def from_files(
         cls,
-        files: str | list[str] | list[Path] | Generator[Path],
+        files: str | list[str] | list[Path] | Iterator[Path],
         doc_labels: list[str] | None = None,
         lang: str | None = None,
     ) -> Self:
