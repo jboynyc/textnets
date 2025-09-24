@@ -2,12 +2,13 @@
 History
 =======
 
-0.10.4 (unreleased)
+0.10.4 (2025-09-24)
 -------------------
 * Fixes a bug in `tokenized` that would toggle on ``stem`` even if a user
   disabled the option.
 * Introduces `savefig` helper function to avoid having to import matplotlib
   manually.
+* Test for Python 3.13 compatibility.
 
 0.10.3 (2024-03-29)
 -------------------

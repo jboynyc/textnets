@@ -1,6 +1,6 @@
 [project]
 name = "textnets"
-version = "0.10.3"
+version = "0.10.4"
 authors = [
     {name = "John D. Boy", email = "jboy@bius.moe"},
 ]
@@ -36,7 +36,7 @@ dependencies = [
     "leidenalg",
     "pandas<3.0.0,>=2.2.3",
     "scipy<2.0.0,>=1.14.1",
-    "spacy<4.0.0,>=3.8.3",
+    "spacy<4.0.0,>=3.8.5",
     "spacy-lookups-data<2.0.0,>=1.0.5",
     "toolz<1.0.0,>=0.12.1",
     "tqdm<5.0.0,>=4.66.5",
@@ -94,7 +94,7 @@ doc = [
     "jupyter-sphinx>=0.5.0",
     "sphinx<8.3.2,>=7.4.7",
     "sphinxcontrib-bibtex<3.0.0,>=2.6.3",
-    "shibuya>=2025.8.16",
+    "shibuya>=2025.8.16,<2025.9.22",
 ]
 lint = [
     "ruff<1.0.0,>=0.11.2",

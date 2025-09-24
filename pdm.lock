@@ -5,7 +5,7 @@
 groups = ["default", "cjk", "dev", "doc", "lint", "test", "typing", "zh"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:3bc4bc347f2b565edf08f618ff084125ad0c757a670d7c8ee2d2deab39027aac"
+content_hash = "sha256:e714d1cde777f303b5e3659d828539ea2f0d8aaf3ee6044d96c1a6dd3c75ec62"
 
 [[metadata.targets]]
 requires_python = ">=3.10,<3.14"
@@ -3584,15 +3584,13 @@ files = [
 
 [[package]]
 name = "wcwidth"
-version = "0.2.13"
+version = "0.2.14"
+requires_python = ">=3.6"
 summary = "Measures the displayed width of unicode strings in a terminal"
 groups = ["doc"]
-dependencies = [
-    "backports-functools-lru-cache>=1.2.1; python_version < \"3.2\"",
-]
 files = [
-    {file = "wcwidth-0.2.13-py2.py3-none-any.whl", hash = "sha256:3da69048e4540d84af32131829ff948f1e022c1c6bdb8d6102117aac784f6859"},
-    {file = "wcwidth-0.2.13.tar.gz", hash = "sha256:72ea0c06399eb286d978fdedb6923a9eb47e1c486ce63e9b4e64fc18303972b5"},
+    {file = "wcwidth-0.2.14-py2.py3-none-any.whl", hash = "sha256:a7bb560c8aee30f9957e5f9895805edd20602f2d7f720186dfd906e82b4982e1"},
+    {file = "wcwidth-0.2.14.tar.gz", hash = "sha256:4d478375d31bc5395a3c55c40ccdf3354688364cd61c4f6adacaa9215d0b3605"},
 ]
 
 [[package]]
