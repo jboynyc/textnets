@@ -2,6 +2,9 @@
 History
 =======
 
+0.10.5 (unreleased)
+-------------------
+
 0.10.4 (2025-09-24)
 -------------------
 * Fixes a bug in `tokenized` that would toggle on ``stem`` even if a user
@@ -10,18 +13,18 @@ History
   manually.
 * Test for Python 3.13 compatibility.
 
-0.10.3 (2024-03-29)
+0.10.3 (2025-03-29)
 -------------------
 * Fixes deployments.
 
-0.10.2 (2024-03-28)
+0.10.2 (2025-03-28)
 -------------------
 * Attempts to avoid the "tofu problem" in plots by setting an appropriate font
   for CJK characters.
 * Skips stemming during tokenization if no lemmatizer is available.
 * Improves documentation.
 
-0.10.1 (2024-03-28)
+0.10.1 (2025-03-28)
 -------------------
 * Fixes version metadata in accordance with PEP 639.
 

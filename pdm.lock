@@ -5,7 +5,7 @@
 groups = ["default", "cjk", "dev", "doc", "lint", "test", "typing", "zh"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:e714d1cde777f303b5e3659d828539ea2f0d8aaf3ee6044d96c1a6dd3c75ec62"
+content_hash = "sha256:6593d2f5f5c3ddeecc59bba1867c1133d85e3fcbeb3cafede9fd434b3f81d35b"
 
 [[metadata.targets]]
 requires_python = ">=3.10,<3.14"
@@ -2411,6 +2411,20 @@ files = [
 ]
 
 [[package]]
+name = "pygments-styles"
+version = "0.1.1"
+requires_python = ">=3.9"
+summary = "A curated collection of Pygments styles based on VS Code themes."
+groups = ["doc"]
+dependencies = [
+    "pygments",
+]
+files = [
+    {file = "pygments_styles-0.1.1-py3-none-any.whl", hash = "sha256:57dee9fb8b6956c6b8ce59210313668b8925138f249ecfac4c660fe4ebdbe66c"},
+    {file = "pygments_styles-0.1.1.tar.gz", hash = "sha256:2b6c0468ba5055d0550df77a0c7c7bac7cb21a69c73dec4517abcd16a3397ef6"},
+]
+
+[[package]]
 name = "pyparsing"
 version = "3.2.5"
 requires_python = ">=3.9"
@@ -2911,16 +2925,17 @@ files = [
 
 [[package]]
 name = "shibuya"
-version = "2025.8.16"
+version = "2025.9.25"
 requires_python = ">=3.9"
 summary = "A clean, responsive, and customizable Sphinx documentation theme with light/dark mode."
 groups = ["doc"]
 dependencies = [
     "Sphinx",
+    "pygments-styles",
 ]
 files = [
-    {file = "shibuya-2025.8.16-py3-none-any.whl", hash = "sha256:90739b5d14ac38b44b99a392b9b0be7e83137890f36420d52a2079cc29fc1a74"},
-    {file = "shibuya-2025.8.16.tar.gz", hash = "sha256:1c639cf646a33026b48eee5c29fd51476e767709f7a87f5656d21d2665d7ee22"},
+    {file = "shibuya-2025.9.25-py3-none-any.whl", hash = "sha256:93e439181167936dd1950874880c23920d551f90ff475888ce278af1d2efa4eb"},
+    {file = "shibuya-2025.9.25.tar.gz", hash = "sha256:03131beb0f8e31cf4f501a4b744cd9c3f387cf23696259476d141b9ca976156b"},
 ]
 
 [[package]]

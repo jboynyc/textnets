@@ -1,6 +1,6 @@
 [project]
 name = "textnets"
-version = "0.10.4"
+version = "0.10.5"
 authors = [
     {name = "John D. Boy", email = "jboy@bius.moe"},
 ]
@@ -94,7 +94,7 @@ doc = [
     "jupyter-sphinx>=0.5.0",
     "sphinx<8.3.2,>=7.4.7",
     "sphinxcontrib-bibtex<3.0.0,>=2.6.3",
-    "shibuya>=2025.8.16,<2025.9.22",
+    "shibuya>=2025.9.25",
 ]
 lint = [
     "ruff<1.0.0,>=0.11.2",
