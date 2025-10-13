@@ -10,6 +10,6 @@ build:
     python: "3.12"
   jobs:
     post_install:
-      - pip install pdm==2.24.1
+      - pip install pdm==2.25.9
       - pdm use -f $READTHEDOCS_VIRTUALENV_PATH
       - pdm install -dG doc
