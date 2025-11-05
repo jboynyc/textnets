@@ -47,7 +47,7 @@ autoclass_content = "both"
 napoleon_numpy_docstring = True
 
 intersphinx_mapping = {
-    "ig": ("https://igraph.org/python/api/latest/", None),
+    "ig": ("https://python.igraph.org/en/stable/", None),
     "la": ("https://leidenalg.readthedocs.io/en/stable/", None),
     "mp": ("https://matplotlib.org/stable/", None),
     "np": ("https://numpy.org/doc/stable/", None),
