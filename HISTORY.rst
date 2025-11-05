@@ -4,6 +4,7 @@ History
 
 0.10.5 (unreleased)
 -------------------
+* Ensures compatibility with igraph 1.0.
 
 0.10.4 (2025-09-24)
 -------------------
