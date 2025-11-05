@@ -187,7 +187,8 @@ def test_textnet_save_and_load(corpus, tmp_path):
     net.save(out)
     loaded = tn.load_textnet(out)
     assert net.nodes["id"] == loaded.nodes["id"]
-    assert net.edges["weight"] == loaded.edges["weight"]
+    # order of edges is not guaranteed
+    assert set(net.edges["weight"]) == set(loaded.edges["weight"])
     assert net.summary == loaded.summary
 
 

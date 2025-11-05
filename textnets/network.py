@@ -466,7 +466,6 @@ class Textnet(TextnetBase):
         conn = sqlite3.connect(Path(target))
         meta = {"connected": self._connected, "doc_attrs": json.dumps(self._doc_attrs)}
         with conn, warnings.catch_warnings():
-            warnings.simplefilter("ignore")  # catch warning from pandas.to_sql
             self.m.T.to_sql("textnet_im", conn, if_exists="replace")
             pd.Series(meta, name="values").to_sql(
                 "textnet_meta", conn, if_exists="replace", index_label="keys"
@@ -836,7 +835,7 @@ def _matrix_from_tidy_text(
 
 
 def _graph_from_matrix(m: BiadjacencyMatrix) -> ig.Graph:
-    g = ig.Graph.Biadjacency(m.to_numpy().tolist(), directed=False, weighted=True)
+    g = ig.Graph.Biadjacency(m.to_numpy(), directed=False, weighted=True)
     g.vs["id"] = np.append(m.index, m.columns).tolist()
     g.es["cost"] = [1 / pow(w, tn.params["tuning_parameter"]) for w in g.es["weight"]]
     g.vs["type"] = ["term" if t else "doc" for t in g.vs["type"]]
