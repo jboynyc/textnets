@@ -105,7 +105,7 @@ test =[
 ]
 typing = [
     "mypy<2.0.0,>=1.11.2",
-    "pandas-stubs<3.0.0.0,>=2.2.2.240909",
+    "pandas-stubs<2.3.3.251201,>=2.2.2.240909",
 ]
 
 [tool.pdm.options]
