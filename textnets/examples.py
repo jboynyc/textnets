@@ -23,7 +23,7 @@ moon_landing = Series(
         "Los Angeles Times",
     ],
     name="headlines",
-    dtype="object",
+    dtype="str",
 )
 
 #: Example dataset with statements by five major German parties on digitization
@@ -100,5 +100,5 @@ digitalisierung = Series(
             zu Lasten der Forscher*innen oder ihrer Einrichtungen gehen.""",
     },
     name="statements",
-    dtype="object",
+    dtype="str",
 )
