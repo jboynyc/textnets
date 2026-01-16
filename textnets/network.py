@@ -1042,6 +1042,7 @@ def textual_spanning(m: np.ndarray, alpha: float = 1.0) -> np.ndarray:
     ----------
     :cite:`Stoltz2019`
     """
+    m.flags.writeable = True
     np.fill_diagonal(m, 0)
     k = np.sum(m != 0, axis=1)
     den = k * (m.sum(axis=1) / k**alpha)

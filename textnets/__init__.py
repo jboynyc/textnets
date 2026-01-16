@@ -6,6 +6,8 @@ Functionality based on :cite:t:`Bail2016`.
 
 from importlib.metadata import version
 
+from pandas import options
+
 from . import examples
 from .config import init_seed, params
 from .corpus import Corpus
@@ -34,6 +36,9 @@ load_corpus = Corpus.load
 
 #: Load a textnet from file.
 load_textnet = Textnet.load
+
+
+options.mode.copy_on_write = True
 
 
 def _repr_html_() -> str:
