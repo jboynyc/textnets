@@ -150,7 +150,7 @@ select = [
     "UP",
     "W",
 ]
-extend-ignore = ["D105"]
+extend-ignore = ["D105", "RUF067"]
 pydocstyle.convention = "numpy"
 pydoclint.ignore-one-line-docstrings = true
 
