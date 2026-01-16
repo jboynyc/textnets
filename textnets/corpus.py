@@ -541,7 +541,8 @@ class Corpus:
 
     def _make_tidy_text(self, func: Callable[[Doc], list[str]]) -> TidyText:
         tt = (
-            pd.melt(
+            pd
+            .melt(
                 self.nlp.map(func).apply(pd.Series).reset_index(),
                 id_vars=["label"],
                 value_name="term",
@@ -677,7 +678,8 @@ def _tf_idf(tidy_text: pd.DataFrame | TidyText, sublinear: bool) -> TidyText:
         tidy_text["tf"] = tidy_text["n"].map(_sublinear_scaling)
     else:
         totals = (
-            tidy_text.groupby(tidy_text.index)
+            tidy_text
+            .groupby(tidy_text.index)
             .sum()
             .rename(columns={"n": "total"})
             .drop("term", axis=1)

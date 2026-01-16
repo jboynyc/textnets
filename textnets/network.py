@@ -246,7 +246,8 @@ class TextnetBase(ABC):
             Clusters with representative nodes.
         """
         return (
-            pd.DataFrame({
+            pd
+            .DataFrame({
                 "nodes": self.nodes["id"],
                 "metric": getattr(self, rank_nodes_by),
                 "cluster": self.clusters.membership,
@@ -820,7 +821,8 @@ def _matrix_from_tidy_text(
     count = tidy_text.groupby("term").count()["n"]
     filter_condition = (count >= min_docs) & (count <= max_docs)
     tt = (
-        tidy_text.reset_index()
+        tidy_text
+        .reset_index()
         .merge(filter_condition, on="term", how="left")
         .rename(columns={"n_y": "keep", "n_x": "n"})
     )
