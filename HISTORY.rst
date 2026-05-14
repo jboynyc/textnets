@@ -2,7 +2,7 @@
 History
 =======
 
-0.10.5 (unreleased)
+0.10.5 (2026-05-14)
 -------------------
 * Ensures compatibility with igraph 1.0.
 * This project is now officially `casually maintained <https://casuallymaintained.tech/>`_.
