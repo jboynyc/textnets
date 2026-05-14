@@ -72,17 +72,17 @@ class Corpus:
     lang : str, optional
         The langugage model to use (default set by "lang" parameter).
 
-    Raises
-    ------
-    ValueError
-        If the supplied data is empty.
-
     Attributes
     ----------
     documents : Series
         The corpus documents.
     lang : str
         The language model used (ISO code or spaCy model name).
+
+    Raises
+    ------
+    ValueError
+        If the supplied data is empty.
     """
 
     def __init__(
@@ -175,14 +175,14 @@ class Corpus:
         lang : str, optional
             The langugage model to use (default set by "lang" parameter).
 
+        Returns
+        -------
+        `Corpus`
+
         Raises
         ------
         NoDocumentColumnException
             If no document column can be detected.
-
-        Returns
-        -------
-        `Corpus`
         """
         object_cols = data.select_dtypes(include="object").columns
         if doc_col is None and object_cols.empty:
@@ -232,16 +232,16 @@ class Corpus:
         lang : str, optional
             The langugage model to use (default set by "lang" parameter).
 
+        Returns
+        -------
+        `Corpus`
+
         Raises
         ------
         IsADirectoryError
             If the provided path is a directory. (Use globbing.)
         FileNotFoundError
             If the provided path does not exist.
-
-        Returns
-        -------
-        `Corpus`
         """
         if isinstance(files, str):
             p = Path(files).expanduser()
@@ -364,14 +364,14 @@ class Corpus:
             File to read the corpus from. This should be a file created by
             `Corpus.save`.
 
+        Returns
+        -------
+        `Corpus`
+
         Raises
         ------
         FileNotFoundError
             If the specified path does not exist.
-
-        Returns
-        -------
-        `Corpus`
         """
         if not Path(source).exists():
             raise FileNotFoundError(f"File '{source}' does not exist.")

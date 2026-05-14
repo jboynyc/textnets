@@ -420,15 +420,15 @@ class Textnet(TextnetBase):
             Keep only the largest connected component of the projected network
             (default: False).
 
-        Raises
-        ------
-        ValueError
-            If no valid node type is specified.
-
         Returns
         -------
         `ProjectedTextnet`
             A one-mode textnet.
+
+        Raises
+        ------
+        ValueError
+            If no valid node type is specified.
         """
         if not isinstance(node_type, NodeType) and node_type not in {"doc", "term"}:
             raise ValueError("No valid node_type specified.")
@@ -483,14 +483,14 @@ class Textnet(TextnetBase):
             File to read the corpus from. This should be a file created by
             `Textnet.save`.
 
+        Returns
+        -------
+        `Textnet`
+
         Raises
         ------
         FileNotFoundError
             If the provided path does not exist.
-
-        Returns
-        -------
-        `Textnet`
         """
         if not Path(source).exists():
             raise FileNotFoundError(f"File '{source}' does not exist.")
@@ -583,18 +583,18 @@ class Textnet(TextnetBase):
             Possible values: ``degree``, ``strength``, ``hits``, ``cohits``,
             ``birank`` or any node attribute (default: None).
 
+        Returns
+        -------
+        `igraph.drawing.Plot`
+            The plot can be directly displayed in a Jupyter notebook or saved
+            as an image file.
+
         Other Parameters
         ----------------
         target : str or file, optional
             File or path that the plot should be saved to (e.g., ``plot.png``).
         kwargs
             Additional arguments to pass to `igraph.drawing.plot`.
-
-        Returns
-        -------
-        `igraph.drawing.Plot`
-            The plot can be directly displayed in a Jupyter notebook or saved
-            as an image file.
         """
         args = locals()
         del args["self"], args["kwargs"]
@@ -942,15 +942,15 @@ def bipartite_rank(
     tolerance : float, optional
         Error tolerance when checking for convergence.
 
-    Raises
-    ------
-    ValueError
-        If an invalid normalizer is specified.
-
     Returns
     -------
     `pandas.Series`
         The BiRank for both sets of nodes indexed by node label.
+
+    Raises
+    ------
+    ValueError
+        If an invalid normalizer is specified.
 
     Notes
     -----
