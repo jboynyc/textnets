@@ -89,7 +89,7 @@ def decorate_plot(plot_func: Callable) -> Callable:
     def wrapper(net: tn.network.TextnetBase, **kwargs) -> Artist:
         graph = net.graph
         # Rewrite node_* arguments as vertex_* arguments
-        node_opts = [k for k, _ in kwargs.items() if k.startswith("node_")]
+        node_opts = [k for k in kwargs if k.startswith("node_")]
         for opt in node_opts:
             val = kwargs.pop(opt)
             kwargs[opt.replace("node_", "vertex_")] = val
