@@ -5,6 +5,7 @@ History
 0.10.5 (unreleased)
 -------------------
 * Ensures compatibility with igraph 1.0.
+* This project is now officially `casually maintained <https://casuallymaintained.tech/>`_.
 
 0.10.4 (2025-09-24)
 -------------------

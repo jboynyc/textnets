@@ -18,6 +18,10 @@ Textnets: text analysis with networks
    :target: https://doi.org/10.21105/joss.02594
    :alt: Published in Journal of Open Source Software
 
+.. image:: https://casuallymaintained.tech/badge.svg
+  :target: https://casuallymaintained.tech
+  :alt: Casual Maintenance Intended
+
 **textnets** represents collections of texts as networks of documents and
 words. This provides novel possibilities for the visualization and analysis of
 texts.
